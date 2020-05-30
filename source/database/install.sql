@@ -90,6 +90,9 @@ prompt
 @@tables/t_correo_adjuntos.tab
 @@tables/t_mensajes.tab
 
+@@tables/t_divisiones.tab
+@@tables/t_clubes.tab
+
 prompt
 prompt Creando types...
 prompt -----------------------------------
@@ -159,6 +162,9 @@ prompt
 @@scripts/ins_t_servicio_parametros.sql
 @@scripts/ins_t_roles.sql
 @@scripts/ins_t_paises.sql
+
+@@scripts/ins_t_divisiones.sql
+@@scripts/ins_t_clubes.sql
 commit;
 /
 

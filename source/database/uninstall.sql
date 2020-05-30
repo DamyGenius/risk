@@ -83,6 +83,9 @@ prompt
 prompt Borrando tablas...
 prompt -----------------------------------
 prompt
+drop table t_clubes cascade constraints;
+drop table t_divisiones cascade constraints;
+
 drop table t_mensajes cascade constraints;
 drop table t_correo_adjuntos cascade constraints;
 drop table t_correos cascade constraints;

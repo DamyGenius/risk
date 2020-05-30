@@ -1,0 +1,16 @@
+create table T_DIVISIONES
+(
+  id_division VARCHAR2(3) not null,
+  descripcion VARCHAR2(50) not null,
+  imagen      BLOB,
+  id_pais     NUMBER(3)
+)
+;
+comment on table T_DIVISIONES
+  is 'Divisiones.';
+alter table T_DIVISIONES
+  add constraint PK_DIVISIONES primary key (ID_DIVISION);
+alter table T_DIVISIONES
+  add constraint FK_DIVISIONES_PAISES foreign key (ID_PAIS)
+  references T_PAISES (ID_PAIS);
+
