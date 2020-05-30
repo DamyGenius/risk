@@ -150,6 +150,8 @@ prompt
 @@triggers/gb_sesiones.trg
 @@triggers/gb_personas.trg
 
+@@triggers/gf_planteles.trg
+
 prompt
 prompt Ejecutando scripts...
 prompt -----------------------------------
