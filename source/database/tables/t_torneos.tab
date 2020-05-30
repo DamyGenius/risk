@@ -1,0 +1,19 @@
+create table T_TORNEOS
+(
+  id_torneo            VARCHAR2(12) not null,
+  id_division          VARCHAR2(3),
+  temporada            NUMBER(4),
+  titulo               VARCHAR2(50),
+  denominacion_oficial VARCHAR2(100),
+  saldo_inicial        NUMBER(18,3),
+  actual               VARCHAR2(1) default 'N' not null
+)
+;
+comment on table T_TORNEOS
+  is 'Torneos';
+alter table T_TORNEOS
+  add constraint PK_TORNEOS primary key (ID_TORNEO);
+alter table T_TORNEOS
+  add constraint FK_TORNEOS_DIVISIONES foreign key (ID_DIVISION)
+  references T_DIVISIONES (ID_DIVISION);
+

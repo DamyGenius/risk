@@ -93,6 +93,7 @@ prompt
 @@tables/t_divisiones.tab
 @@tables/t_clubes.tab
 @@tables/t_estadios.tab
+@@tables/t_torneos.tab
 
 prompt
 prompt Creando types...
@@ -167,6 +168,7 @@ prompt
 @@scripts/ins_t_divisiones.sql
 @@scripts/ins_t_clubes.sql
 @@scripts/ins_t_estadios.sql
+@@scripts/ins_t_torneos.sql
 commit;
 /
 
