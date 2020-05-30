@@ -9,13 +9,12 @@ create table T_CLUBES
   twitter        VARCHAR2(100),
   facebook       VARCHAR2(100),
   id_division    VARCHAR2(3),
-  imagen         BLOB,
   nombre_corto   VARCHAR2(100),
   id_importacion NUMBER(10)
 )
 ;
 comment on table T_CLUBES
-  is 'Clubes.';
+  is 'Clubes';
 alter table T_CLUBES
   add constraint PK_CLUBES primary key (ID_CLUB);
 alter table T_CLUBES

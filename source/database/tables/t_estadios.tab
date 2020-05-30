@@ -1,0 +1,28 @@
+create table T_ESTADIOS
+(
+  id_estadio     NUMBER(5) not null,
+  nombre_oficial VARCHAR2(100) not null,
+  otros_nombres  VARCHAR2(100),
+  capacidad      NUMBER(6),
+  estado         VARCHAR2(1) not null,
+  id_pais        NUMBER(3),
+  id_ciudad      NUMBER(3),
+  direccion      VARCHAR2(100),
+  altura         NUMBER(6),
+  id_club        VARCHAR2(5)
+)
+;
+comment on table T_ESTADIOS
+  is 'Estadios';
+alter table T_ESTADIOS
+  add constraint PK_ESTADIOS primary key (ID_ESTADIO);
+alter table T_ESTADIOS
+  add constraint FK_ESTADIOS_CIUDADES foreign key (ID_PAIS, ID_CIUDAD)
+  references T_CIUDADES (ID_PAIS, ID_CIUDAD);
+alter table T_ESTADIOS
+  add constraint FK_ESTADIOS_CLUBES foreign key (ID_CLUB)
+  references T_CLUBES (ID_CLUB);
+alter table T_ESTADIOS
+  add constraint FK_ESTADIOS_PAISES foreign key (ID_PAIS)
+  references T_PAISES (ID_PAIS);
+
