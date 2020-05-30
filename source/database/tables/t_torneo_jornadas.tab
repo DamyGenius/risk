@@ -1,0 +1,26 @@
+create table T_TORNEO_JORNADAS
+(
+  id_torneo  VARCHAR2(12) not null,
+  id_jornada NUMBER(3) not null,
+  titulo     VARCHAR2(50),
+  fecha_tope DATE,
+  hora_tope  VARCHAR2(8),
+  actual     VARCHAR2(1) default 'N' not null,
+  estado     VARCHAR2(1) default 'A' not null,
+  situacion  VARCHAR2(1) default 'P' not null
+)
+;
+comment on table T_TORNEO_JORNADAS
+  is 'Jornadas por Torneo';
+comment on column T_TORNEO_JORNADAS.actual
+  is 'Actual. S-Sí, N-No';
+comment on column T_TORNEO_JORNADAS.estado
+  is 'Estado. A-Abierta, C-Cerrada';
+comment on column T_TORNEO_JORNADAS.situacion
+  is 'Situación. P-Pendiente de juego, J-En juego, F-Finalizada';
+alter table T_TORNEO_JORNADAS
+  add constraint PK_TORNEO_JORNADAS primary key (ID_TORNEO, ID_JORNADA);
+alter table T_TORNEO_JORNADAS
+  add constraint FK_TORNEO_JORNADAS_TORNEOS foreign key (ID_TORNEO)
+  references T_TORNEOS (ID_TORNEO);
+

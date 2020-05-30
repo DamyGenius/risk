@@ -95,6 +95,7 @@ prompt
 @@tables/t_estadios.tab
 @@tables/t_torneos.tab
 @@tables/t_planteles.tab
+@@tables/t_torneo_jornadas.tab
 
 prompt
 prompt Creando types...
@@ -173,6 +174,7 @@ prompt
 @@scripts/ins_t_estadios.sql
 @@scripts/ins_t_torneos.sql
 @@scripts/ins_t_planteles.sql
+@@scripts/ins_t_torneo_jornadas.sql
 commit;
 /
 
