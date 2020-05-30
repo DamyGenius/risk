@@ -1,0 +1,24 @@
+create table T_PLANTELES
+(
+  id_torneo          VARCHAR2(12) not null,
+  id_club            VARCHAR2(5) not null,
+  puntos             NUMBER(5),
+  partidos_jugados   NUMBER(5),
+  partidos_ganados   NUMBER(5),
+  partidos_empatados NUMBER(5),
+  partidos_perdidos  NUMBER(5),
+  goles_favor        NUMBER(5),
+  goles_contra       NUMBER(5),
+  diferencia_goles   NUMBER(5),
+  penales_favor      NUMBER(5),
+  penales_contra     NUMBER(5)
+)
+;
+comment on table T_PLANTELES
+  is 'Planteles';
+alter table T_PLANTELES
+  add constraint PK_PLANTELES primary key (ID_TORNEO, ID_CLUB);
+alter table T_PLANTELES
+  add constraint FK_PLANTELES_TORNEOS foreign key (ID_TORNEO)
+  references T_TORNEOS (ID_TORNEO);
+

@@ -83,6 +83,7 @@ prompt
 prompt Borrando tablas...
 prompt -----------------------------------
 prompt
+drop table t_planteles cascade constraints;
 drop table t_torneos cascade constraints;
 drop table t_estadios cascade constraints;
 drop table t_clubes cascade constraints;
