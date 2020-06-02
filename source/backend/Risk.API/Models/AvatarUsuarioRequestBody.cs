@@ -22,17 +22,14 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-using Risk.API.Models;
+using Microsoft.AspNetCore.Http;
 
-namespace Risk.API.Services
+namespace Risk.API.Models
 {
-    public interface IGenService
+    public class AvatarUsuarioRequestBody
     {
-        Respuesta<Dato> VersionSistema();
-        Respuesta<Dato> ValorParametro(string parametro);
-        Respuesta<Dato> SignificadoCodigo(string dominio, string codigo);
-        Respuesta<Pagina<Pais>> ListarPaises(int? idPais = null);
-        Respuesta<Archivo> RecuperarArchivo(string tabla, string campo, string referencia);
-        Respuesta<Dato> GuardarArchivo(string tabla, string campo, string referencia, Archivo archivo);
+        public IFormFile Archivo { get; set; }
+        public string Nombre { get; set; }
+        public string Extension { get; set; }
     }
 }

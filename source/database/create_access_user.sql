@@ -35,7 +35,7 @@ GRANT CREATE SESSION TO &v_user;
 GRANT SELECT ON sys.v_$session  TO &v_user;
 GRANT SELECT ON sys.v_$sesstat  TO &v_user;
 GRANT SELECT ON sys.v_$statname TO &v_user;
--- GRANT EXECUTE ON k_servicio TO api;
--- CREATE OR REPLACE PUBLIC SYNONYM k_servicio FOR risk.k_servicio;
+-- GRANT EXECUTE ON risk.k_servicio TO api;
+-- CREATE OR REPLACE SYNONYM api.k_servicio FOR risk.k_servicio;
 
 set define off
