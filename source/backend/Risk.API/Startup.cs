@@ -140,8 +140,8 @@ namespace Risk.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "Risk.API",
-                    Description = "Risk Web API",
+                    Title = "NE.API",
+                    Description = "API Web del Proyecto NE",
                     Version = "v1",
                     Contact = new OpenApiContact
                     {
@@ -183,9 +183,9 @@ namespace Risk.API
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.DocumentTitle = "Risk.API";
+                c.DocumentTitle = "NE.API";
                 c.RoutePrefix = string.Empty;
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Risk.API v1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "NE.API v1");
                 c.DocExpansion(DocExpansion.None);
                 c.InjectStylesheet("/swagger-ui/custom.css");
             });

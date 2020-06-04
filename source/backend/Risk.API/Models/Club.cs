@@ -32,7 +32,7 @@ namespace Risk.API.Models
         public string NombreOficial { get; set; }
         public string NombreCorto { get; set; }
         public string OtrosNombres { get; set; }
-        public DateTime Fundacion { get; set; }
+        public DateTime? Fundacion { get; set; }
         public string PaginaWeb { get; set; }
         public string Twitter { get; set; }
         public string Facebook { get; set; }

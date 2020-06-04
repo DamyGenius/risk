@@ -38,7 +38,7 @@ namespace Risk.API.Entities
         [JsonProperty("otros_nombres")]
         public string OtrosNombres { get; set; }
         [JsonProperty("fundacion")]
-        public DateTime Fundacion { get; set; }
+        public DateTime? Fundacion { get; set; }
         [JsonProperty("pagina_web")]
         public string PaginaWeb { get; set; }
         [JsonProperty("twitter")]
