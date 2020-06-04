@@ -118,6 +118,8 @@ prompt
 @@types/y_pagina.typ
 @@types/y_pais.typ
 
+@@types/y_club.typ
+
 prompt
 prompt Creando paquetes...
 prompt -----------------------------------
@@ -133,6 +135,8 @@ prompt
 @@packages/k_servicio_gen.pck
 @@packages/k_mensajeria.pck
 @@packages/k_archivo.pck
+
+@@packages/k_servicio_fan.pck
 
 prompt
 prompt Creando triggers...

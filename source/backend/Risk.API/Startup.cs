@@ -103,6 +103,7 @@ namespace Risk.API
             services.AddDbContext<RiskDbContext>(options => options.UseOracle(oracleConnection));
             services.AddScoped<IGenService, GenService>();
             services.AddScoped<IAutService, AutService>();
+            services.AddScoped<IFanService, FanService>();
 
             var serviceProvider = services.BuildServiceProvider();
             IGenService genService = serviceProvider.GetService<IGenService>();

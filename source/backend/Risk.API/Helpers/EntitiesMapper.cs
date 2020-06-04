@@ -197,5 +197,40 @@ namespace Risk.API.Helpers
                 Elementos = elementos
             };
         }
+
+        public static Club GetClubFromEntity(YClub entity)
+        {
+            Club model;
+            if (entity == null)
+            {
+                model = null;
+            }
+            else
+            {
+                model = new Club
+                {
+                    IdClub = entity.IdClub,
+                    NombreOficial = entity.NombreOficial,
+                    NombreCorto = entity.NombreCorto,
+                    OtrosNombres = entity.OtrosNombres,
+                    Fundacion = entity.Fundacion,
+                    PaginaWeb = entity.PaginaWeb,
+                    Twitter = entity.Twitter,
+                    Facebook = entity.Facebook,
+                    IdDivision = entity.IdDivision,
+                };
+            }
+            return model;
+        }
+
+        public static List<Club> GetClubListFromEntity(List<YClub> entityList)
+        {
+            List<Club> modelList = new List<Club>();
+            foreach (var item in entityList)
+            {
+                modelList.Add(GetClubFromEntity(item));
+            }
+            return modelList;
+        }
     }
 }
