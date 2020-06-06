@@ -15,9 +15,9 @@ java -jar swagger-codegen-cli.jar version
 
 ## Generación de clientes
 ```
-java -jar openapi-generator-cli.jar generate -i https://risk-project.azurewebsites.net/swagger/v1/swagger.json -o Risk.API.Client -g csharp-netcore -c config-csharp-netcore.json
-java -jar openapi-generator-cli.jar generate -i https://risk-project.azurewebsites.net/swagger/v1/swagger.json -o Risk.API.KotlinClient -g kotlin -c config-kotlin.json
-java -jar swagger-codegen-cli.jar generate -i https://risk-project.azurewebsites.net/swagger/v1/swagger.json -o Risk.API.JavaClient -l java -c config-java.json
+java -jar openapi-generator-cli.jar generate -i https://ne-project.azurewebsites.net/swagger/v1/swagger.json -o Risk.API.Client -g csharp-netcore -c config-csharp-netcore.json
+java -jar openapi-generator-cli.jar generate -i https://ne-project.azurewebsites.net/swagger/v1/swagger.json -o Risk.API.KotlinClient -g kotlin -c config-kotlin.json
+java -jar swagger-codegen-cli.jar generate -i https://ne-project.azurewebsites.net/swagger/v1/swagger.json -o Risk.API.JavaClient -l java -c config-java.json
 ```
 
 
