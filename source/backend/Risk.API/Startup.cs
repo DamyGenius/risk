@@ -34,6 +34,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Oracle.ManagedDataAccess.Client;
 using Risk.API.Entities;
@@ -69,6 +70,7 @@ namespace Risk.API
                 {
                     NamingStrategy = null
                 };
+                opt.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
             });
 
             services.AddCors();
@@ -93,18 +95,20 @@ namespace Risk.API
 
             // Connection Pooling Configuration
             connStrBuilder.Pooling = true; // Connection pooling.
-            connStrBuilder.MinPoolSize = 0; // Minimum number of connections in a pool.
-            connStrBuilder.MaxPoolSize = 4; // Maximum number of connections in a pool.
+            connStrBuilder.MinPoolSize = 6; // Minimum number of connections in a pool.
+            connStrBuilder.MaxPoolSize = 6; // Maximum number of connections in a pool.
             //connStrBuilder.ConnectionLifeTime = 300; // Maximum life time (in seconds) of the connection.
-            //connStrBuilder.ConnectionTimeout = 30; // Maximum time (in seconds) to wait for a free connection from the pool.
+            connStrBuilder.ConnectionTimeout = 60; // Maximum time (in seconds) to wait for a free connection from the pool.
 
             oracleConnection = new OracleConnection(connStrBuilder.ToString());
-            //oracleConnection.KeepAlive = true;
+            oracleConnection.KeepAlive = true;
 
-            services.AddDbContext<RiskDbContext>(options => options.UseOracle(oracleConnection));
-            services.AddScoped<IGenService, GenService>();
-            services.AddScoped<IAutService, AutService>();
-            services.AddScoped<IFanService, FanService>();
+            services.AddDbContext<RiskDbContext>(options => options.UseOracle(oracleConnection), ServiceLifetime.Singleton);
+            //services.AddScoped<IGenService, GenService>();
+            //services.AddScoped<IAutService, AutService>();
+            services.AddSingleton<IGenService, GenService>();
+            services.AddSingleton<IAutService, AutService>();
+            services.AddSingleton<IFanService, FanService>();
 
             var serviceProvider = services.BuildServiceProvider();
             IGenService genService = serviceProvider.GetService<IGenService>();
