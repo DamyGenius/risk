@@ -22,12 +22,14 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
+using System;
 using System.Net.Mime;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Risk.API.Attributes;
+using Risk.API.Helpers;
 using Risk.API.Models;
 using Risk.API.Services;
 using Swashbuckle.AspNetCore.Annotations;
@@ -77,6 +79,29 @@ namespace Risk.API.Controllers
         {
             var respuesta = _fanService.ListarClubes(idClub, null);
             return ProcesarRespuesta(respuesta);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("RecuperarEscudoClub")]
+        [SwaggerOperation(OperationId = "RecuperarEscudoClub", Summary = "RecuperarEscudoClub", Description = "Permite recuperar el escudo de un club")]
+        [Produces(MediaTypeNames.Application.Json, new[] { "application/octet-stream" })]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(FileContentResult))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Operación con error", typeof(Respuesta<Dato>))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error inesperado", typeof(Respuesta<Dato>))]
+        [SwaggerResponse(StatusCodes.Status501NotImplemented, "Servicio no implementado o inactivo", typeof(Respuesta<Dato>))]
+        public IActionResult RecuperarEscudoClub([FromQuery, SwaggerParameter(Description = "Identificador del club", Required = true)] string idClub)
+        {
+            var respuesta = _genService.RecuperarArchivo("T_CLUBES", "ESCUDO", idClub);
+
+            if (!respuesta.Codigo.Equals(RiskDbConstants.CODIGO_OK))
+            {
+                return ProcesarRespuesta(respuesta);
+            }
+
+            var archivo = respuesta.Datos;
+            byte[] contenido = GZipHelper.Decompress(Convert.FromBase64String(archivo.Contenido));
+
+            return File(contenido, archivo.TipoMime, string.Concat(archivo.Nombre, ".", archivo.Extension));
         }
     }
 }
