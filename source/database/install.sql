@@ -62,6 +62,8 @@ prompt
 @@sequences/s_id_correo_adjunto.seq
 @@sequences/s_id_mensaje.seq
 
+@@sequences/s_id_grupo.seq
+
 prompt
 prompt Creando tablas...
 prompt -----------------------------------
@@ -162,6 +164,7 @@ prompt
 @@triggers/gb_archivos.trg
 
 @@triggers/gf_planteles.trg
+@@triggers/gs_grupos.trg
 
 prompt
 prompt Ejecutando scripts...

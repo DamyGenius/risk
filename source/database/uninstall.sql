@@ -126,6 +126,8 @@ prompt
 prompt Borrando secuencias...
 prompt -----------------------------------
 prompt
+drop sequence s_id_grupo;
+
 drop sequence s_id_ciudad;
 drop sequence s_id_pais;
 drop sequence s_id_persona;

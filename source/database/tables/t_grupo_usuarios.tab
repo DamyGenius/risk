@@ -1,7 +1,6 @@
 create table T_GRUPO_USUARIOS
 (
-  id_torneo        VARCHAR2(12) not null,
-  id_grupo         VARCHAR2(20) not null,
+  id_grupo         NUMBER not null,
   id_usuario       NUMBER(10) not null,
   puntos           NUMBER(15),
   ranking          NUMBER(6),
@@ -15,10 +14,10 @@ comment on table T_GRUPO_USUARIOS
 comment on column T_GRUPO_USUARIOS.aceptado
   is 'Invitación aceptada? (S/N)';
 alter table T_GRUPO_USUARIOS
-  add constraint PK_GRUPO_USUARIOS primary key (ID_TORNEO, ID_GRUPO, ID_USUARIO);
+  add constraint PK_GRUPO_USUARIOS primary key (ID_GRUPO, ID_USUARIO);
 alter table T_GRUPO_USUARIOS
-  add constraint FK_GRUPO_USUARIOS_GRUPOS foreign key (ID_TORNEO, ID_GRUPO)
-  references T_GRUPOS (ID_TORNEO, ID_GRUPO);
+  add constraint FK_GRUPO_USUARIOS_GRUPOS foreign key (ID_GRUPO)
+  references T_GRUPOS (ID_GRUPO);
 alter table T_GRUPO_USUARIOS
   add constraint FK_GRUPO_USUARIOS_USUARIOS foreign key (ID_USUARIO)
   references T_USUARIOS (ID_USUARIO);
