@@ -1,0 +1,34 @@
+create table T_GRUPOS
+(
+  id_torneo         VARCHAR2(12) not null,
+  id_grupo          VARCHAR2(20) not null,
+  descripcion       VARCHAR2(150),
+  tipo              VARCHAR2(3) default 'GLO' not null,
+  id_usuario_admin  NUMBER(10),
+  fecha_creacion    DATE,
+  id_jornada_inicio NUMBER(3),
+  estado            VARCHAR2(1),
+  situacion         VARCHAR2(1),
+  codigo            NUMBER(9),
+  id_club           VARCHAR2(5),
+  todos_invitan     VARCHAR2(1) default 'N'
+)
+;
+comment on table T_GRUPOS
+  is 'Grupos de Predicciones';
+comment on column T_GRUPOS.todos_invitan
+  is 'Todos los usuarios pueden invitar? (S/N)';
+alter table T_GRUPOS
+  add constraint PK_GRUPOS primary key (ID_TORNEO, ID_GRUPO);
+alter table T_GRUPOS
+  add constraint UK_GRUPOS_ID_TORNEO_CODIGO unique (ID_TORNEO, CODIGO);
+alter table T_GRUPOS
+  add constraint FK_GRUPOS_CLUBES foreign key (ID_CLUB)
+  references T_CLUBES (ID_CLUB);
+alter table T_GRUPOS
+  add constraint FK_GRUPOS_TORNEO_JORNADAS foreign key (ID_TORNEO, ID_JORNADA_INICIO)
+  references T_TORNEO_JORNADAS (ID_TORNEO, ID_JORNADA);
+alter table T_GRUPOS
+  add constraint FK_GRUPOS_USUARIOS foreign key (ID_USUARIO_ADMIN)
+  references T_USUARIOS (ID_USUARIO);
+

@@ -98,6 +98,8 @@ prompt
 @@tables/t_torneos.tab
 @@tables/t_planteles.tab
 @@tables/t_torneo_jornadas.tab
+@@tables/t_grupos.tab
+@@tables/t_grupo_usuarios.tab
 
 prompt
 prompt Creando types...
