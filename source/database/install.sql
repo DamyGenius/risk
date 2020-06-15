@@ -190,6 +190,7 @@ prompt
 @@scripts/ins_t_torneos.sql
 @@scripts/ins_t_planteles.sql
 @@scripts/ins_t_torneo_jornadas.sql
+@@scripts/ins_t_grupos.sql
 commit;
 /
 
