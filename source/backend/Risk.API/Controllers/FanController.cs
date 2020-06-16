@@ -135,7 +135,7 @@ namespace Risk.API.Controllers
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Operación con error", typeof(Respuesta<Dato>))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error inesperado", typeof(Respuesta<Dato>))]
         [SwaggerResponse(StatusCodes.Status501NotImplemented, "Servicio no implementado o inactivo", typeof(Respuesta<Dato>))]
-        public IActionResult GuardarLogoGrupo([FromQuery, SwaggerParameter(Description = "Identificador del grupo", Required = true)] int idGrupo, [FromForm] GuardarAvatarUsuarioRequestBody requestBody)
+        public IActionResult GuardarLogoGrupo([FromQuery, SwaggerParameter(Description = "Identificador del grupo", Required = true)] int idGrupo, [FromForm] GuardarArchivoRequestBody requestBody)
         {
             string contenido = string.Empty;
 
