@@ -23,6 +23,7 @@ SOFTWARE.
 */
 
 using System;
+using System.IO;
 using System.Net.Mime;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -102,6 +103,60 @@ namespace Risk.API.Controllers
             byte[] contenido = GZipHelper.Decompress(Convert.FromBase64String(archivo.Contenido));
 
             return File(contenido, archivo.TipoMime, string.Concat(archivo.Nombre, ".", archivo.Extension));
+        }
+
+        [HttpGet("RecuperarLogoGrupo")]
+        [SwaggerOperation(OperationId = "RecuperarLogoGrupo", Summary = "RecuperarLogoGrupo", Description = "Permite recuperar el logo de un grupo")]
+        [Produces(MediaTypeNames.Application.Json, new[] { "application/octet-stream" })]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(FileContentResult))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Operación con error", typeof(Respuesta<Dato>))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error inesperado", typeof(Respuesta<Dato>))]
+        [SwaggerResponse(StatusCodes.Status501NotImplemented, "Servicio no implementado o inactivo", typeof(Respuesta<Dato>))]
+        public IActionResult RecuperarLogoGrupo([FromQuery, SwaggerParameter(Description = "Identificador del grupo", Required = true)] int idGrupo)
+        {
+            var respuesta = _genService.RecuperarArchivo("T_GRUPOS", "LOGO", idGrupo.ToString());
+
+            if (!respuesta.Codigo.Equals(RiskDbConstants.CODIGO_OK))
+            {
+                return ProcesarRespuesta(respuesta);
+            }
+
+            var archivo = respuesta.Datos;
+            byte[] contenido = GZipHelper.Decompress(Convert.FromBase64String(archivo.Contenido));
+
+            return File(contenido, archivo.TipoMime, string.Concat(archivo.Nombre, ".", archivo.Extension));
+        }
+
+        [HttpPost("GuardarLogoGrupo")]
+        [SwaggerOperation(OperationId = "GuardarLogoGrupo", Summary = "GuardarLogoGrupo", Description = "Permite guardar el logo de un grupo")]
+        [Consumes("multipart/form-data")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Operación con error", typeof(Respuesta<Dato>))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error inesperado", typeof(Respuesta<Dato>))]
+        [SwaggerResponse(StatusCodes.Status501NotImplemented, "Servicio no implementado o inactivo", typeof(Respuesta<Dato>))]
+        public IActionResult GuardarLogoGrupo([FromQuery, SwaggerParameter(Description = "Identificador del grupo", Required = true)] int idGrupo, [FromForm] GuardarAvatarUsuarioRequestBody requestBody)
+        {
+            string contenido = string.Empty;
+
+            if (requestBody.Archivo.Length > 0)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    requestBody.Archivo.CopyTo(ms);
+                    contenido = Convert.ToBase64String(GZipHelper.Compress(ms.ToArray()));
+                }
+            }
+
+            Archivo archivo = new Archivo
+            {
+                Contenido = contenido,
+                Nombre = requestBody.Nombre,
+                Extension = requestBody.Extension
+            };
+
+            var respuesta = _genService.GuardarArchivo("T_GRUPOS", "LOGO", idGrupo.ToString(), archivo);
+            return ProcesarRespuesta(respuesta);
         }
     }
 }
