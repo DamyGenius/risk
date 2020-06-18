@@ -59,4 +59,10 @@ values (19, 'GUARDAR_ARCHIVO', 'R', 'S', 'GEN', null, null, null, null);
 insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
 values (20, 'LISTAR_CLUBES', 'R', 'S', 'FAN', null, null, null, null);
 
+insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
+values (30, 'LISTAR_MENSAJES_PENDIENTES', 'R', 'S', 'MSJ', null, null, null, null);
+
+insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
+values (31, 'CAMBIAR_ESTADO_MENSAJE', 'R', 'S', 'MSJ', null, null, null, null);
+
 prompt Done.

@@ -109,6 +109,8 @@ namespace Risk.API
             //services.AddScoped<IAutService, AutService>();
             services.AddSingleton<IGenService, GenService>();
             services.AddSingleton<IAutService, AutService>();
+            services.AddSingleton<IMsjService, MsjService>();
+
             services.AddSingleton<IFanService, FanService>();
 
             var serviceProvider = services.BuildServiceProvider();

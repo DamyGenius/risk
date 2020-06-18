@@ -22,17 +22,12 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-using Risk.API.Models;
-
-namespace Risk.API.Services
+namespace Risk.API.Models
 {
-    public interface IGenService
+    public class CambiarEstadoMensajeRequestBody
     {
-        Respuesta<Dato> VersionSistema();
-        Respuesta<Dato> ValorParametro(string parametro);
-        Respuesta<Dato> SignificadoCodigo(string dominio, string codigo);
-        Respuesta<Pagina<Pais>> ListarPaises(int? idPais = null, int? pagina = null, int? porPagina = null, string noPaginar = null);
-        Respuesta<Archivo> RecuperarArchivo(string tabla, string campo, string referencia);
-        Respuesta<Dato> GuardarArchivo(string tabla, string campo, string referencia, Archivo archivo);
+        public int IdMensaje { get; set; }
+        public string Estado { get; set; }
+        public string RespuestaEnvio { get; set; }
     }
 }

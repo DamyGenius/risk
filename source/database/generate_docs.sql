@@ -91,9 +91,11 @@ prompt
 plugin plsqldoc generate y_archivo;
 plugin plsqldoc generate y_dato;
 plugin plsqldoc generate y_dispositivo;
+plugin plsqldoc generate y_mensaje;
 plugin plsqldoc generate y_objeto;
 plugin plsqldoc generate y_objetos;
 plugin plsqldoc generate y_pagina;
+plugin plsqldoc generate y_pagina_parametros;
 plugin plsqldoc generate y_pais;
 plugin plsqldoc generate y_parametro;
 plugin plsqldoc generate y_parametros;
@@ -116,6 +118,7 @@ plugin plsqldoc generate k_mensajeria;
 plugin plsqldoc generate k_servicio;
 plugin plsqldoc generate k_servicio_aut;
 plugin plsqldoc generate k_servicio_gen;
+plugin plsqldoc generate k_servicio_msj;
 plugin plsqldoc generate k_sistema;
 plugin plsqldoc generate k_util;
 

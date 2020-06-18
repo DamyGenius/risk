@@ -120,7 +120,9 @@ prompt
 @@types/y_sesion.typ
 @@types/y_dispositivo.typ
 @@types/y_pagina.typ
+@@types/y_pagina_parametros.typ
 @@types/y_pais.typ
+@@types/y_mensaje.typ
 
 @@types/y_club.typ
 
@@ -138,6 +140,7 @@ prompt
 @@packages/k_servicio_aut.pck
 @@packages/k_servicio_gen.pck
 @@packages/k_mensajeria.pck
+@@packages/k_servicio_msj.pck
 @@packages/k_archivo.pck
 
 @@packages/k_servicio_fan.pck
@@ -162,6 +165,7 @@ prompt
 @@triggers/gb_sesiones.trg
 @@triggers/gb_personas.trg
 @@triggers/gb_archivos.trg
+@@triggers/gb_mensajes.trg
 
 @@triggers/gf_planteles.trg
 @@triggers/gs_grupos.trg

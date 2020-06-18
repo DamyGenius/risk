@@ -51,6 +51,8 @@ prompt -----------------------------------
 prompt
 drop package k_servicio_fan;
 
+drop package k_archivo;
+drop package k_servicio_msj;
 drop package k_mensajeria;
 drop package k_servicio_gen;
 drop package k_servicio_aut;
@@ -68,7 +70,9 @@ prompt -----------------------------------
 prompt
 drop type y_club force;
 
+drop type y_mensaje force;
 drop type y_pais force;
+drop type y_pagina_parametros force;
 drop type y_pagina force;
 drop type y_dispositivo force;
 drop type y_sesion force;

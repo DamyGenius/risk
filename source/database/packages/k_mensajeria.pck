@@ -46,9 +46,16 @@ CREATE OR REPLACE PACKAGE k_mensajeria IS
 
   FUNCTION f_numero_telefono_usuario(i_id_usuario IN NUMBER) RETURN VARCHAR2;
 
+  PROCEDURE p_enviar_mensaje(i_id_usuario      IN NUMBER,
+                             i_mensaje         IN VARCHAR2,
+                             i_numero_telefono IN VARCHAR2 DEFAULT NULL);
+
 END;
 /
 CREATE OR REPLACE PACKAGE BODY k_mensajeria IS
+
+  g_direccion_correo_pruebas t_parametros.valor%TYPE := k_util.f_valor_parametro('DIRECCION_CORREO_PRUEBAS');
+  g_numero_telefono_pruebas  t_parametros.valor%TYPE := k_util.f_valor_parametro('NUMERO_TELEFONO_PRUEBAS');
 
   FUNCTION f_validar_direccion_correo(i_direccion_correo VARCHAR2)
     RETURN BOOLEAN IS
@@ -92,6 +99,33 @@ CREATE OR REPLACE PACKAGE BODY k_mensajeria IS
         l_numero_telefono := NULL;
     END;
     RETURN l_numero_telefono;
+  END;
+
+  PROCEDURE p_enviar_mensaje(i_id_usuario      IN NUMBER,
+                             i_mensaje         IN VARCHAR2,
+                             i_numero_telefono IN VARCHAR2 DEFAULT NULL) IS
+    l_numero_telefono t_usuarios.numero_telefono%TYPE;
+  BEGIN
+    l_numero_telefono := nvl(i_numero_telefono,
+                             f_numero_telefono_usuario(i_id_usuario));
+  
+    IF l_numero_telefono IS NULL THEN
+      raise_application_error(-20000,
+                              'Número de teléfono destino obligatorio');
+    END IF;
+  
+    IF i_mensaje IS NULL THEN
+      raise_application_error(-20000, 'Contenido del mensaje obligatorio');
+    END IF;
+  
+    IF NOT k_sistema.f_es_produccion THEN
+      l_numero_telefono := g_numero_telefono_pruebas;
+    END IF;
+  
+    INSERT INTO t_mensajes
+      (id_usuario, numero_telefono, mensaje, estado)
+    VALUES
+      (i_id_usuario, l_numero_telefono, substr(i_mensaje, 1, 160), 'P');
   END;
 
 END;

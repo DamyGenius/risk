@@ -22,17 +22,17 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-using Risk.API.Models;
+using Newtonsoft.Json;
 
-namespace Risk.API.Services
+namespace Risk.API.Entities
 {
-    public interface IGenService
+    public class YMensaje
     {
-        Respuesta<Dato> VersionSistema();
-        Respuesta<Dato> ValorParametro(string parametro);
-        Respuesta<Dato> SignificadoCodigo(string dominio, string codigo);
-        Respuesta<Pagina<Pais>> ListarPaises(int? idPais = null, int? pagina = null, int? porPagina = null, string noPaginar = null);
-        Respuesta<Archivo> RecuperarArchivo(string tabla, string campo, string referencia);
-        Respuesta<Dato> GuardarArchivo(string tabla, string campo, string referencia, Archivo archivo);
+        [JsonProperty("id_mensaje")]
+        public int IdMensaje { get; set; }
+        [JsonProperty("numero_telefono")]
+        public string NumeroTelefono { get; set; }
+        [JsonProperty("contenido")]
+        public string Contenido { get; set; }
     }
 }
