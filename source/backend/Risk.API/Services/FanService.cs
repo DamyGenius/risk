@@ -33,7 +33,7 @@ namespace Risk.API.Services
 {
     public class FanService : ServiceBase, IFanService
     {
-        private const int ID_LISTAR_CLUBES = 20;
+        private const int ID_LISTAR_CLUBES = 40;
 
         public FanService(RiskDbContext dbContext, IConfiguration configuration) : base(dbContext, configuration)
         {

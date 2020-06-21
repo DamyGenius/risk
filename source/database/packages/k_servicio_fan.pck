@@ -32,6 +32,8 @@ CREATE OR REPLACE PACKAGE k_servicio_fan IS
 
   FUNCTION listar_clubes(i_parametros IN y_parametros) RETURN y_respuesta;
 
+  FUNCTION registrar_grupo(i_parametros IN y_parametros) RETURN y_respuesta;
+
 END;
 /
 CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
@@ -95,6 +97,57 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
     l_pagina.elementos          := l_objetos;
   
     k_servicio.p_respuesta_ok(l_rsp, l_pagina);
+    RETURN l_rsp;
+  EXCEPTION
+    WHEN k_servicio.ex_error_parametro THEN
+      RETURN l_rsp;
+    WHEN k_servicio.ex_error_general THEN
+      RETURN l_rsp;
+    WHEN OTHERS THEN
+      k_servicio.p_respuesta_excepcion(l_rsp,
+                                       utl_call_stack.error_number(1),
+                                       utl_call_stack.error_msg(1),
+                                       dbms_utility.format_error_stack);
+      RETURN l_rsp;
+  END;
+
+  FUNCTION registrar_grupo(i_parametros IN y_parametros) RETURN y_respuesta IS
+    l_rsp y_respuesta;
+  BEGIN
+    -- Inicializa respuesta
+    l_rsp := NEW y_respuesta();
+  
+    l_rsp.lugar := 'Validando parametros';
+    IF anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros, '')) IS NULL THEN
+      k_servicio.p_respuesta_error(l_rsp, 'fan0001', 'Debe ingresar ');
+      RAISE k_servicio.ex_error_parametro;
+    END IF;
+  
+    l_rsp.lugar := 'Registrando grupo';
+    INSERT INTO t_grupos
+      (id_torneo,
+       descripcion,
+       tipo,
+       id_usuario_administrador,
+       fecha_creacion,
+       id_jornada_inicio,
+       estado,
+       situacion,
+       id_club,
+       todos_invitan)
+    VALUES
+      ('PRI-APE20',
+       'Cerristas',
+       'GLO',
+       NULL,
+       SYSDATE, -- ok
+       1,
+       'A', -- ok
+       'A', -- ok
+       'CER',
+       'N');
+  
+    k_servicio.p_respuesta_ok(l_rsp);
     RETURN l_rsp;
   EXCEPTION
     WHEN k_servicio.ex_error_parametro THEN

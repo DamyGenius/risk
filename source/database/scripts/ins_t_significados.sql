@@ -1,6 +1,7 @@
 prompt Importing table t_significados...
 set feedback off
 set define off
+
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('EXTENSION_IMAGEN', 'WEBP', 'IMAGEN WEBP', 'image/webp', 'S');
 
@@ -165,5 +166,14 @@ values ('ESTADO_CORREO', 'R', 'PROCESADO CON ERROR', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('ESTADO_CORREO', 'A', 'ANULADO', null, 'S');
+
+insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
+values ('TIPO_GRUPO', 'PRI', 'PRIVADO', null, 'S');
+
+insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
+values ('TIPO_GRUPO', 'GLO', 'GLOBAL', null, 'S');
+
+insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
+values ('TIPO_GRUPO', 'PUB', 'PÚBLICO', null, 'S');
 
 prompt Done.
