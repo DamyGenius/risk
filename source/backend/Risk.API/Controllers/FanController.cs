@@ -45,13 +45,11 @@ namespace Risk.API.Controllers
     {
         private readonly IFanService _fanService;
         private readonly IGenService _genService;
-        private readonly IConfiguration _configuration;
 
-        public FanController(IFanService fanService, IGenService genService, IConfiguration configuration)
+        public FanController(IFanService fanService, IGenService genService, IConfiguration configuration) : base(configuration)
         {
             _fanService = fanService;
             _genService = genService;
-            _configuration = configuration;
         }
 
         [AllowAnonymous]
