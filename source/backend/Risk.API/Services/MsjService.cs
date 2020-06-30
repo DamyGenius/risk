@@ -31,10 +31,12 @@ using Risk.API.Models;
 
 namespace Risk.API.Services
 {
-    public class MsjService : ServiceBase, IMsjService
+    public class MsjService : RiskServiceBase, IMsjService
     {
         private const int ID_LISTAR_MENSAJES_PENDIENTES = 30;
         private const int ID_CAMBIAR_ESTADO_MENSAJE = 31;
+        private const int ID_LISTAR_CORREOS_PENDIENTES = 32;
+        private const int ID_CAMBIAR_ESTADO_CORREO = 33;
 
         public MsjService(RiskDbContext dbContext, IConfiguration configuration) : base(dbContext, configuration)
         {
@@ -52,7 +54,7 @@ namespace Risk.API.Services
             };
             prms.Add("pagina_parametros", JToken.FromObject(paginaParametros));
 
-            string rsp = base.ApiProcesarServicio(ID_LISTAR_MENSAJES_PENDIENTES, prms.ToString(Formatting.None));
+            string rsp = base.ProcesarServicio(ID_LISTAR_MENSAJES_PENDIENTES, prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YPagina<YMensaje>>>(rsp);
 
             Pagina<Mensaje> datos = null;
@@ -71,7 +73,44 @@ namespace Risk.API.Services
             prms.Add("estado", estado);
             prms.Add("respuesta_envio", respuestaEnvio);
 
-            string rsp = base.ApiProcesarServicio(ID_CAMBIAR_ESTADO_MENSAJE, prms.ToString(Formatting.None));
+            string rsp = base.ProcesarServicio(ID_CAMBIAR_ESTADO_MENSAJE, prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
+
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
+        }
+
+        public Respuesta<Pagina<Correo>> ListarCorreosPendientes(int? pagina = null, int? porPagina = null, string noPaginar = null)
+        {
+            JObject prms = new JObject();
+
+            YPaginaParametros paginaParametros = new YPaginaParametros
+            {
+                Pagina = pagina,
+                PorPagina = porPagina,
+                NoPaginar = noPaginar
+            };
+            prms.Add("pagina_parametros", JToken.FromObject(paginaParametros));
+
+            string rsp = base.ProcesarServicio(ID_LISTAR_CORREOS_PENDIENTES, prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YPagina<YCorreo>>>(rsp);
+
+            Pagina<Correo> datos = null;
+            if (entityRsp.Datos != null)
+            {
+                datos = EntitiesMapper.GetPaginaFromEntity<Correo, YCorreo>(entityRsp.Datos, EntitiesMapper.GetCorreoListFromEntity(entityRsp.Datos.Elementos));
+            }
+
+            return EntitiesMapper.GetRespuestaFromEntity<Pagina<Correo>, YPagina<YCorreo>>(entityRsp, datos);
+        }
+
+        public Respuesta<Dato> CambiarEstadoCorreo(int idCorreo, string estado, string respuestaEnvio)
+        {
+            JObject prms = new JObject();
+            prms.Add("id_correo", idCorreo);
+            prms.Add("estado", estado);
+            prms.Add("respuesta_envio", respuestaEnvio);
+
+            string rsp = base.ProcesarServicio(ID_CAMBIAR_ESTADO_CORREO, prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
 
             return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
