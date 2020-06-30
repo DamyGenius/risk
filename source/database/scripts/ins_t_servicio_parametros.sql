@@ -1,7 +1,6 @@
 prompt Importing table t_servicio_parametros...
 set feedback off
 set define off
-
 insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN)
 values (1, 'USUARIO', 'I', 'S', null, 'S', null, 'S', 1);
 
@@ -157,5 +156,35 @@ values (40, 'ID_CLUB', 'I', 'S', null, 'N', null, 'S', 1);
 
 insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN)
 values (40, 'ID_DIVISION', 'I', 'S', null, 'N', null, 'S', 2);
+
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN)
+values (32, 'PAGINA_PARAMETROS', 'I', 'O', 'Y_PAGINA_PARAMETROS', 'N', null, 'S', 10);
+
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN)
+values (33, 'ID_CORREO', 'I', 'N', null, 'S', null, 'S', 1);
+
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN)
+values (33, 'ESTADO', 'I', 'S', null, 'S', null, 'S', 2);
+
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN)
+values (33, 'RESPUESTA_ENVIO', 'I', 'S', null, 'S', null, 'S', 3);
+
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN)
+values (42, 'USUARIO_ANTIGUO', 'I', 'S', null, 'S', null, 'S', 1);
+
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN)
+values (42, 'USUARIO_NUEVO', 'I', 'S', null, 'N', null, 'S', 2);
+
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN)
+values (42, 'NOMBRE', 'I', 'S', null, 'N', null, 'S', 3);
+
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN)
+values (42, 'APELLIDO', 'I', 'S', null, 'N', null, 'S', 4);
+
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN)
+values (42, 'DIRECCION_CORREO', 'I', 'S', null, 'N', null, 'S', 5);
+
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN)
+values (42, 'NUMERO_TELEFONO', 'I', 'S', null, 'N', null, 'S', 6);
 
 prompt Done.

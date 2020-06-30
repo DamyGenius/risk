@@ -41,6 +41,11 @@ Program units
 
 </TD></TR>
 <TR><TD VALIGN="TOP" CLASS="TYPE_ITEM">
+<A HREF="#P_VALIDAR_PARAMETRO">p_validar_parametro</A>&nbsp;&nbsp;
+</TD><TD CLASS="DESC_TEXT" WIDTH=95%>
+
+</TD></TR>
+<TR><TD VALIGN="TOP" CLASS="TYPE_ITEM">
 <A HREF="#P_RESPUESTA_OK">p_respuesta_ok</A>&nbsp;&nbsp;
 </TD><TD CLASS="DESC_TEXT" WIDTH=95%>
 
@@ -76,6 +81,31 @@ Program units
 
 </TD></TR>
 <TR><TD VALIGN="TOP" CLASS="TYPE_ITEM">
+<A HREF="#F_VALOR_PARAMETRO_STRING">f_valor_parametro_string</A>&nbsp;&nbsp;
+</TD><TD CLASS="DESC_TEXT" WIDTH=95%>
+
+</TD></TR>
+<TR><TD VALIGN="TOP" CLASS="TYPE_ITEM">
+<A HREF="#F_VALOR_PARAMETRO_NUMBER">f_valor_parametro_number</A>&nbsp;&nbsp;
+</TD><TD CLASS="DESC_TEXT" WIDTH=95%>
+
+</TD></TR>
+<TR><TD VALIGN="TOP" CLASS="TYPE_ITEM">
+<A HREF="#F_VALOR_PARAMETRO_BOOLEAN">f_valor_parametro_boolean</A>&nbsp;&nbsp;
+</TD><TD CLASS="DESC_TEXT" WIDTH=95%>
+
+</TD></TR>
+<TR><TD VALIGN="TOP" CLASS="TYPE_ITEM">
+<A HREF="#F_VALOR_PARAMETRO_DATE">f_valor_parametro_date</A>&nbsp;&nbsp;
+</TD><TD CLASS="DESC_TEXT" WIDTH=95%>
+
+</TD></TR>
+<TR><TD VALIGN="TOP" CLASS="TYPE_ITEM">
+<A HREF="#F_VALOR_PARAMETRO_OBJECT">f_valor_parametro_object</A>&nbsp;&nbsp;
+</TD><TD CLASS="DESC_TEXT" WIDTH=95%>
+
+</TD></TR>
+<TR><TD VALIGN="TOP" CLASS="TYPE_ITEM">
 <A HREF="#F_PAGINAR_ELEMENTOS">f_paginar_elementos</A>&nbsp;&nbsp;
 </TD><TD CLASS="DESC_TEXT" WIDTH=95%>
 
@@ -93,7 +123,7 @@ Exceptions
 </TD></TR></TABLE>
 <TABLE CLASS="SUB_TABLE">
 <TR><TD VALIGN="TOP" CLASS="TYPE_ITEM">
-<A HREF="#EX_ERROR_GENERAL">ex_error_general</A>&nbsp;&nbsp;
+<A HREF="#EX_SERVICIO_NO_IMPLEMENTADO">ex_servicio_no_implementado</A>&nbsp;&nbsp;
 </TD><TD CLASS="DESC_TEXT" WIDTH=95%>
 
 </TD></TR>
@@ -103,7 +133,7 @@ Exceptions
 
 </TD></TR>
 <TR><TD VALIGN="TOP" CLASS="TYPE_ITEM">
-<A HREF="#EX_SERVICIO_NO_IMPLEMENTADO">ex_servicio_no_implementado</A>&nbsp;&nbsp;
+<A HREF="#EX_ERROR_GENERAL">ex_error_general</A>&nbsp;&nbsp;
 </TD><TD CLASS="DESC_TEXT" WIDTH=95%>
 
 </TD></TR>
@@ -120,12 +150,22 @@ Constants
 
 </TD></TR>
 <TR><TD VALIGN="TOP" CLASS="TYPE_ITEM">
-<A HREF="#C_ERROR_INESPERADO">c_error_inesperado</A>&nbsp;&nbsp;
+<A HREF="#C_SERVICIO_NO_IMPLEMENTADO">c_servicio_no_implementado</A>&nbsp;&nbsp;
 </TD><TD CLASS="DESC_TEXT" WIDTH=95%>
 
 </TD></TR>
 <TR><TD VALIGN="TOP" CLASS="TYPE_ITEM">
-<A HREF="#C_SERVICIO_NO_IMPLEMENTADO">c_servicio_no_implementado</A>&nbsp;&nbsp;
+<A HREF="#C_ERROR_PARAMETRO">c_error_parametro</A>&nbsp;&nbsp;
+</TD><TD CLASS="DESC_TEXT" WIDTH=95%>
+
+</TD></TR>
+<TR><TD VALIGN="TOP" CLASS="TYPE_ITEM">
+<A HREF="#C_ERROR_GENERAL">c_error_general</A>&nbsp;&nbsp;
+</TD><TD CLASS="DESC_TEXT" WIDTH=95%>
+
+</TD></TR>
+<TR><TD VALIGN="TOP" CLASS="TYPE_ITEM">
+<A HREF="#C_ERROR_INESPERADO">c_error_inesperado</A>&nbsp;&nbsp;
 </TD><TD CLASS="DESC_TEXT" WIDTH=95%>
 
 </TD></TR>
@@ -140,14 +180,6 @@ c_ok
 c_ok                       CONSTANT VARCHAR2(10) := '0';
 </PRE>
 <HR>
-<A NAME="C_ERROR_INESPERADO"></A>
-<P CLASS="TYPE_TITLE">
-c_error_inesperado
-</P>
-<PRE CLASS="DECL_TEXT">
-c_error_inesperado         CONSTANT VARCHAR2(10) := 'api9999';
-</PRE>
-<HR>
 <A NAME="C_SERVICIO_NO_IMPLEMENTADO"></A>
 <P CLASS="TYPE_TITLE">
 c_servicio_no_implementado
@@ -156,12 +188,36 @@ c_servicio_no_implementado
 c_servicio_no_implementado CONSTANT VARCHAR2(10) := 'api0001';
 </PRE>
 <HR>
-<A NAME="EX_ERROR_GENERAL"></A>
+<A NAME="C_ERROR_PARAMETRO"></A>
 <P CLASS="TYPE_TITLE">
-ex_error_general
+c_error_parametro
 </P>
 <PRE CLASS="DECL_TEXT">
-ex_error_general            EXCEPTION;
+c_error_parametro          CONSTANT VARCHAR2(10) := 'api0002';
+</PRE>
+<HR>
+<A NAME="C_ERROR_GENERAL"></A>
+<P CLASS="TYPE_TITLE">
+c_error_general
+</P>
+<PRE CLASS="DECL_TEXT">
+c_error_general            CONSTANT VARCHAR2(10) := 'api0099';
+</PRE>
+<HR>
+<A NAME="C_ERROR_INESPERADO"></A>
+<P CLASS="TYPE_TITLE">
+c_error_inesperado
+</P>
+<PRE CLASS="DECL_TEXT">
+c_error_inesperado         CONSTANT VARCHAR2(10) := 'api9999';
+</PRE>
+<HR>
+<A NAME="EX_SERVICIO_NO_IMPLEMENTADO"></A>
+<P CLASS="TYPE_TITLE">
+ex_servicio_no_implementado
+</P>
+<PRE CLASS="DECL_TEXT">
+ex_servicio_no_implementado EXCEPTION;
 </PRE>
 <HR>
 <A NAME="EX_ERROR_PARAMETRO"></A>
@@ -172,12 +228,12 @@ ex_error_parametro
 ex_error_parametro          EXCEPTION;
 </PRE>
 <HR>
-<A NAME="EX_SERVICIO_NO_IMPLEMENTADO"></A>
+<A NAME="EX_ERROR_GENERAL"></A>
 <P CLASS="TYPE_TITLE">
-ex_servicio_no_implementado
+ex_error_general
 </P>
 <PRE CLASS="DECL_TEXT">
-ex_servicio_no_implementado EXCEPTION;
+ex_error_general            EXCEPTION;
 </PRE>
 <HR>
 <A NAME="P_LIMPIAR_HISTORIAL"></A>
@@ -189,12 +245,23 @@ PROCEDURE p_limpiar_historial
 
 </PRE>
 <HR>
+<A NAME="P_VALIDAR_PARAMETRO"></A>
+<P CLASS="TYPE_TITLE">
+p_validar_parametro
+</P>
+<PRE CLASS="DECL_TEXT">
+PROCEDURE p_validar_parametro(io_respuesta IN OUT NOCOPY y_respuesta,
+                              i_expresion  IN BOOLEAN,
+                              i_mensaje    IN VARCHAR2)
+
+</PRE>
+<HR>
 <A NAME="P_RESPUESTA_OK"></A>
 <P CLASS="TYPE_TITLE">
 p_respuesta_ok
 </P>
 <PRE CLASS="DECL_TEXT">
-PROCEDURE p_respuesta_ok(io_respuesta IN OUT y_respuesta,
+PROCEDURE p_respuesta_ok(io_respuesta IN OUT NOCOPY y_respuesta,
                          i_datos      IN y_objeto DEFAULT NULL)
 
 </PRE>
@@ -204,7 +271,7 @@ PROCEDURE p_respuesta_ok(io_respuesta IN OUT y_respuesta,
 p_respuesta_error
 </P>
 <PRE CLASS="DECL_TEXT">
-PROCEDURE p_respuesta_error(io_respuesta IN OUT y_respuesta,
+PROCEDURE p_respuesta_error(io_respuesta IN OUT NOCOPY y_respuesta,
                             i_codigo     IN VARCHAR2,
                             i_mensaje    IN VARCHAR2,
                             i_mensaje_bd IN VARCHAR2 DEFAULT NULL)
@@ -216,7 +283,7 @@ PROCEDURE p_respuesta_error(io_respuesta IN OUT y_respuesta,
 p_respuesta_excepcion
 </P>
 <PRE CLASS="DECL_TEXT">
-PROCEDURE p_respuesta_excepcion(io_respuesta   IN OUT y_respuesta,
+PROCEDURE p_respuesta_excepcion(io_respuesta   IN OUT NOCOPY y_respuesta,
                                 i_error_number IN NUMBER,
                                 i_error_msg    IN VARCHAR2,
                                 i_error_stack  IN VARCHAR2)
@@ -259,6 +326,56 @@ f_valor_parametro
 <PRE CLASS="DECL_TEXT">
 FUNCTION f_valor_parametro(i_parametros IN y_parametros,
                            i_nombre     IN VARCHAR2) RETURN anydata
+
+</PRE>
+<HR>
+<A NAME="F_VALOR_PARAMETRO_STRING"></A>
+<P CLASS="TYPE_TITLE">
+f_valor_parametro_string
+</P>
+<PRE CLASS="DECL_TEXT">
+FUNCTION f_valor_parametro_string(i_parametros IN y_parametros,
+                                  i_nombre     IN VARCHAR2) RETURN VARCHAR2
+
+</PRE>
+<HR>
+<A NAME="F_VALOR_PARAMETRO_NUMBER"></A>
+<P CLASS="TYPE_TITLE">
+f_valor_parametro_number
+</P>
+<PRE CLASS="DECL_TEXT">
+FUNCTION f_valor_parametro_number(i_parametros IN y_parametros,
+                                  i_nombre     IN VARCHAR2) RETURN NUMBER
+
+</PRE>
+<HR>
+<A NAME="F_VALOR_PARAMETRO_BOOLEAN"></A>
+<P CLASS="TYPE_TITLE">
+f_valor_parametro_boolean
+</P>
+<PRE CLASS="DECL_TEXT">
+FUNCTION f_valor_parametro_boolean(i_parametros IN y_parametros,
+                                   i_nombre     IN VARCHAR2) RETURN BOOLEAN
+
+</PRE>
+<HR>
+<A NAME="F_VALOR_PARAMETRO_DATE"></A>
+<P CLASS="TYPE_TITLE">
+f_valor_parametro_date
+</P>
+<PRE CLASS="DECL_TEXT">
+FUNCTION f_valor_parametro_date(i_parametros IN y_parametros,
+                                i_nombre     IN VARCHAR2) RETURN DATE
+
+</PRE>
+<HR>
+<A NAME="F_VALOR_PARAMETRO_OBJECT"></A>
+<P CLASS="TYPE_TITLE">
+f_valor_parametro_object
+</P>
+<PRE CLASS="DECL_TEXT">
+FUNCTION f_valor_parametro_object(i_parametros IN y_parametros,
+                                  i_nombre     IN VARCHAR2) RETURN y_objeto
 
 </PRE>
 <HR>

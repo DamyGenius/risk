@@ -32,26 +32,32 @@ CREATE OR REPLACE PACKAGE k_servicio IS
 
   -- Códigos de respuesta
   c_ok                       CONSTANT VARCHAR2(10) := '0';
-  c_error_inesperado         CONSTANT VARCHAR2(10) := 'api9999';
   c_servicio_no_implementado CONSTANT VARCHAR2(10) := 'api0001';
+  c_error_parametro          CONSTANT VARCHAR2(10) := 'api0002';
+  c_error_general            CONSTANT VARCHAR2(10) := 'api0099';
+  c_error_inesperado         CONSTANT VARCHAR2(10) := 'api9999';
 
   -- Excepciones
-  ex_error_general            EXCEPTION;
-  ex_error_parametro          EXCEPTION;
   ex_servicio_no_implementado EXCEPTION;
+  ex_error_parametro          EXCEPTION;
+  ex_error_general            EXCEPTION;
   PRAGMA EXCEPTION_INIT(ex_servicio_no_implementado, -6550);
 
   PROCEDURE p_limpiar_historial;
 
-  PROCEDURE p_respuesta_ok(io_respuesta IN OUT y_respuesta,
+  PROCEDURE p_validar_parametro(io_respuesta IN OUT NOCOPY y_respuesta,
+                                i_expresion  IN BOOLEAN,
+                                i_mensaje    IN VARCHAR2);
+
+  PROCEDURE p_respuesta_ok(io_respuesta IN OUT NOCOPY y_respuesta,
                            i_datos      IN y_objeto DEFAULT NULL);
 
-  PROCEDURE p_respuesta_error(io_respuesta IN OUT y_respuesta,
+  PROCEDURE p_respuesta_error(io_respuesta IN OUT NOCOPY y_respuesta,
                               i_codigo     IN VARCHAR2,
                               i_mensaje    IN VARCHAR2,
                               i_mensaje_bd IN VARCHAR2 DEFAULT NULL);
 
-  PROCEDURE p_respuesta_excepcion(io_respuesta   IN OUT y_respuesta,
+  PROCEDURE p_respuesta_excepcion(io_respuesta   IN OUT NOCOPY y_respuesta,
                                   i_error_number IN NUMBER,
                                   i_error_msg    IN VARCHAR2,
                                   i_error_stack  IN VARCHAR2);
@@ -66,6 +72,21 @@ CREATE OR REPLACE PACKAGE k_servicio IS
 
   FUNCTION f_valor_parametro(i_parametros IN y_parametros,
                              i_nombre     IN VARCHAR2) RETURN anydata;
+
+  FUNCTION f_valor_parametro_string(i_parametros IN y_parametros,
+                                    i_nombre     IN VARCHAR2) RETURN VARCHAR2;
+
+  FUNCTION f_valor_parametro_number(i_parametros IN y_parametros,
+                                    i_nombre     IN VARCHAR2) RETURN NUMBER;
+
+  FUNCTION f_valor_parametro_boolean(i_parametros IN y_parametros,
+                                     i_nombre     IN VARCHAR2) RETURN BOOLEAN;
+
+  FUNCTION f_valor_parametro_date(i_parametros IN y_parametros,
+                                  i_nombre     IN VARCHAR2) RETURN DATE;
+
+  FUNCTION f_valor_parametro_object(i_parametros IN y_parametros,
+                                    i_nombre     IN VARCHAR2) RETURN y_objeto;
 
   FUNCTION f_paginar_elementos(i_elementos           IN y_objetos,
                                i_numero_pagina       IN INTEGER DEFAULT NULL,
@@ -139,13 +160,13 @@ CREATE OR REPLACE PACKAGE BODY k_servicio IS
     EXCEPTION
       WHEN OTHERS THEN
         p_respuesta_error(l_rsp,
-                          'api0002',
+                          c_error_parametro,
                           CASE
                           k_error.f_tipo_excepcion(utl_call_stack.error_number(1)) WHEN
                           k_error.c_user_defined_error THEN
                           utl_call_stack.error_msg(1) WHEN
                           k_error.c_oracle_predefined_error THEN
-                          'Error al procesar parametros del servicio' END,
+                          k_error.f_mensaje_error(c_error_parametro) END,
                           dbms_utility.format_error_stack);
         RAISE ex_error_parametro;
     END;
@@ -204,16 +225,30 @@ CREATE OR REPLACE PACKAGE BODY k_servicio IS
        SET cantidad_ejecuciones = NULL, fecha_ultima_ejecucion = NULL;
   END;
 
-  PROCEDURE p_respuesta_ok(io_respuesta IN OUT y_respuesta,
+  PROCEDURE p_validar_parametro(io_respuesta IN OUT NOCOPY y_respuesta,
+                                i_expresion  IN BOOLEAN,
+                                i_mensaje    IN VARCHAR2) IS
+  BEGIN
+    IF NOT nvl(i_expresion, FALSE) THEN
+      p_respuesta_error(io_respuesta,
+                        c_error_parametro,
+                        nvl(i_mensaje,
+                            k_error.f_mensaje_error(c_error_parametro)));
+      RAISE ex_error_parametro;
+    END IF;
+  END;
+
+  PROCEDURE p_respuesta_ok(io_respuesta IN OUT NOCOPY y_respuesta,
                            i_datos      IN y_objeto DEFAULT NULL) IS
   BEGIN
     io_respuesta.codigo     := c_ok;
     io_respuesta.mensaje    := 'OK';
     io_respuesta.mensaje_bd := NULL;
+    io_respuesta.lugar      := NULL;
     io_respuesta.datos      := i_datos;
   END;
 
-  PROCEDURE p_respuesta_error(io_respuesta IN OUT y_respuesta,
+  PROCEDURE p_respuesta_error(io_respuesta IN OUT NOCOPY y_respuesta,
                               i_codigo     IN VARCHAR2,
                               i_mensaje    IN VARCHAR2,
                               i_mensaje_bd IN VARCHAR2 DEFAULT NULL) IS
@@ -229,7 +264,7 @@ CREATE OR REPLACE PACKAGE BODY k_servicio IS
     io_respuesta.datos      := NULL;
   END;
 
-  PROCEDURE p_respuesta_excepcion(io_respuesta   IN OUT y_respuesta,
+  PROCEDURE p_respuesta_excepcion(io_respuesta   IN OUT NOCOPY y_respuesta,
                                   i_error_number IN NUMBER,
                                   i_error_msg    IN VARCHAR2,
                                   i_error_stack  IN VARCHAR2) IS
@@ -237,7 +272,7 @@ CREATE OR REPLACE PACKAGE BODY k_servicio IS
     IF k_error.f_tipo_excepcion(i_error_number) =
        k_error.c_user_defined_error THEN
       p_respuesta_error(io_respuesta,
-                        'api0099',
+                        c_error_general,
                         i_error_msg,
                         i_error_stack);
     ELSIF k_error.f_tipo_excepcion(i_error_number) =
@@ -293,7 +328,7 @@ END;'
     l_json_object  json_object_t;
     l_json_element json_element_t;
   
-    CURSOR c_servicio_parametros IS
+    CURSOR cr_servicio_parametros IS
       SELECT id_servicio,
              lower(nombre) nombre,
              direccion,
@@ -315,60 +350,123 @@ END;'
       l_json_object := json_object_t.parse(i_parametros);
     END IF;
   
-    FOR par IN c_servicio_parametros LOOP
+    FOR par IN cr_servicio_parametros LOOP
+      l_parametro        := NEW y_parametro();
+      l_parametro.nombre := par.nombre;
+    
+      l_json_element := l_json_object.get(par.nombre);
+    
       IF par.obligatorio = 'S' THEN
         IF NOT l_json_object.has(par.nombre) THEN
           raise_application_error(-20000,
-                                  'Parametro ' || par.nombre ||
+                                  'Parámetro ' || par.nombre ||
                                   ' obligatorio');
         ELSE
-          l_json_element := l_json_object.get(par.nombre);
           IF l_json_element.is_null THEN
             raise_application_error(-20000,
-                                    'Parametro ' || par.nombre ||
+                                    'Parámetro ' || par.nombre ||
                                     ' debe tener valor');
           END IF;
         END IF;
       END IF;
     
-      l_parametro        := NEW y_parametro();
-      l_parametro.nombre := par.nombre;
-    
       CASE par.tipo_dato
+      
         WHEN 'S' THEN
           -- String
+          IF l_json_element IS NOT NULL AND NOT l_json_element.is_null AND
+             NOT l_json_element.is_string THEN
+            raise_application_error(-20000,
+                                    'Parámetro ' || par.nombre ||
+                                    ' de tipo incorrecto');
+          END IF;
+        
           l_parametro.valor := anydata.convertvarchar2(l_json_object.get_string(par.nombre));
           IF l_parametro.valor.accessvarchar2 IS NULL AND
              par.valor_defecto IS NOT NULL THEN
             l_parametro.valor := anydata.convertvarchar2(par.valor_defecto);
           END IF;
+          IF l_parametro.valor.accessvarchar2 IS NULL AND
+             par.obligatorio = 'S' THEN
+            raise_application_error(-20000,
+                                    'Parámetro ' || par.nombre ||
+                                    ' debe tener valor');
+          END IF;
+        
         WHEN 'N' THEN
           -- Number
+          IF l_json_element IS NOT NULL AND NOT l_json_element.is_null AND
+             NOT l_json_element.is_number THEN
+            raise_application_error(-20000,
+                                    'Parámetro ' || par.nombre ||
+                                    ' de tipo incorrecto');
+          END IF;
+        
           l_parametro.valor := anydata.convertnumber(l_json_object.get_number(par.nombre));
           IF l_parametro.valor.accessnumber IS NULL AND
              par.valor_defecto IS NOT NULL THEN
             l_parametro.valor := anydata.convertnumber(to_number(par.valor_defecto));
           END IF;
+          IF l_parametro.valor.accessnumber IS NULL AND
+             par.obligatorio = 'S' THEN
+            raise_application_error(-20000,
+                                    'Parámetro ' || par.nombre ||
+                                    ' debe tener valor');
+          END IF;
+        
         WHEN 'B' THEN
           -- Boolean
+          IF l_json_element IS NOT NULL AND NOT l_json_element.is_null AND
+             NOT l_json_element.is_boolean THEN
+            raise_application_error(-20000,
+                                    'Parámetro ' || par.nombre ||
+                                    ' de tipo incorrecto');
+          END IF;
+        
           l_parametro.valor := anydata.convertnumber(sys.diutil.bool_to_int(l_json_object.get_boolean(par.nombre)));
           IF l_parametro.valor.accessnumber IS NULL AND
              par.valor_defecto IS NOT NULL THEN
             l_parametro.valor := anydata.convertnumber(to_number(par.valor_defecto));
           END IF;
+          IF l_parametro.valor.accessnumber IS NULL AND
+             par.obligatorio = 'S' THEN
+            raise_application_error(-20000,
+                                    'Parámetro ' || par.nombre ||
+                                    ' debe tener valor');
+          END IF;
+        
         WHEN 'D' THEN
           -- Date
+          IF l_json_element IS NOT NULL AND NOT l_json_element.is_null AND
+             NOT l_json_element.is_date THEN
+            raise_application_error(-20000,
+                                    'Parámetro ' || par.nombre ||
+                                    ' de tipo incorrecto');
+          END IF;
+        
           l_parametro.valor := anydata.convertdate(l_json_object.get_date(par.nombre));
           IF l_parametro.valor.accessdate IS NULL AND
              par.valor_defecto IS NOT NULL THEN
             l_parametro.valor := anydata.convertdate(to_date(par.valor_defecto,
-                                                             'YYYY-MM-DD'));
+                                                             par.formato));
           END IF;
+          IF l_parametro.valor.accessdate IS NULL AND par.obligatorio = 'S' THEN
+            raise_application_error(-20000,
+                                    'Parámetro ' || par.nombre ||
+                                    ' debe tener valor');
+          END IF;
+        
         WHEN 'O' THEN
           -- Object
-          IF l_json_object.get(par.nombre) IS NOT NULL THEN
-            l_parametro.valor := f_objeto_parse_json(l_json_object.get(par.nombre)
-                                                     .to_clob,
+          IF l_json_element IS NOT NULL AND NOT l_json_element.is_null AND
+             NOT l_json_element.is_object THEN
+            raise_application_error(-20000,
+                                    'Parámetro ' || par.nombre ||
+                                    ' de tipo incorrecto');
+          END IF;
+        
+          IF l_json_element IS NOT NULL THEN
+            l_parametro.valor := f_objeto_parse_json(l_json_element.to_clob,
                                                      par.formato);
           END IF;
         
@@ -376,8 +474,15 @@ END;'
             l_parametro.valor := f_objeto_parse_json(par.valor_defecto,
                                                      par.formato);
           END IF;
+          IF l_parametro.valor IS NULL AND par.obligatorio = 'S' THEN
+            raise_application_error(-20000,
+                                    'Parámetro ' || par.nombre ||
+                                    ' debe tener valor');
+          END IF;
+        
         ELSE
           raise_application_error(-20000, 'Tipo de dato no soportado');
+        
       END CASE;
     
       l_parametros.extend;
@@ -391,14 +496,68 @@ END;'
     l_valor anydata;
     i       INTEGER;
   BEGIN
-    i := i_parametros.first;
-    WHILE i IS NOT NULL AND l_valor IS NULL LOOP
-      IF lower(i_parametros(i).nombre) = lower(i_nombre) THEN
-        l_valor := i_parametros(i).valor;
-      END IF;
-      i := i_parametros.next(i);
-    END LOOP;
+    IF i_parametros IS NOT NULL THEN
+      -- Busca el parámetro en la lista
+      i := i_parametros.first;
+      WHILE i IS NOT NULL AND l_valor IS NULL LOOP
+        IF lower(i_parametros(i).nombre) = lower(i_nombre) THEN
+          l_valor := i_parametros(i).valor;
+        END IF;
+        i := i_parametros.next(i);
+      END LOOP;
+    END IF;
+  
+    -- Si el parámetro no se encuentra en la lista carga un valor nulo de tipo
+    -- VARCHAR2 para evitar el error ORA-30625 al acceder al valor a través de
+    -- AnyData.Access*
+    IF l_valor IS NULL THEN
+      l_valor := anydata.convertvarchar2(NULL);
+    END IF;
+  
     RETURN l_valor;
+  END;
+
+  FUNCTION f_valor_parametro_string(i_parametros IN y_parametros,
+                                    i_nombre     IN VARCHAR2) RETURN VARCHAR2 IS
+  BEGIN
+    RETURN anydata.accessvarchar2(f_valor_parametro(i_parametros, i_nombre));
+  END;
+
+  FUNCTION f_valor_parametro_number(i_parametros IN y_parametros,
+                                    i_nombre     IN VARCHAR2) RETURN NUMBER IS
+  BEGIN
+    RETURN anydata.accessnumber(f_valor_parametro(i_parametros, i_nombre));
+  END;
+
+  FUNCTION f_valor_parametro_boolean(i_parametros IN y_parametros,
+                                     i_nombre     IN VARCHAR2) RETURN BOOLEAN IS
+  BEGIN
+    RETURN sys.diutil.int_to_bool(anydata.accessnumber(f_valor_parametro(i_parametros,
+                                                                         i_nombre)));
+  END;
+
+  FUNCTION f_valor_parametro_date(i_parametros IN y_parametros,
+                                  i_nombre     IN VARCHAR2) RETURN DATE IS
+  BEGIN
+    RETURN anydata.accessdate(f_valor_parametro(i_parametros, i_nombre));
+  END;
+
+  FUNCTION f_valor_parametro_object(i_parametros IN y_parametros,
+                                    i_nombre     IN VARCHAR2) RETURN y_objeto IS
+    l_objeto   y_objeto;
+    l_anydata  anydata;
+    l_result   PLS_INTEGER;
+    l_typeinfo anytype;
+    l_typecode PLS_INTEGER;
+  BEGIN
+    l_anydata := f_valor_parametro(i_parametros, i_nombre);
+  
+    l_typecode := l_anydata.gettype(l_typeinfo);
+    IF l_typecode = dbms_types.typecode_object THEN
+      l_result := l_anydata.getobject(l_objeto);
+    END IF;
+  
+    RETURN l_objeto;
   END;
 
   FUNCTION f_paginar_elementos(i_elementos           IN y_objetos,

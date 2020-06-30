@@ -59,6 +59,8 @@ CREATE OR REPLACE PACKAGE k_servicio_aut IS
   FUNCTION tiempo_expiracion_token(i_parametros IN y_parametros)
     RETURN y_respuesta;
 
+  FUNCTION editar_usuario(i_parametros IN y_parametros) RETURN y_respuesta;
+
 END;
 /
 CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
@@ -70,43 +72,30 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
     l_rsp := NEW y_respuesta();
   
     l_rsp.lugar := 'Validando parametros';
-    IF anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
-                                                           'usuario')) IS NULL THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'aut0001',
+    k_servicio.p_validar_parametro(l_rsp,
+                                   anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                       'usuario')) IS NOT NULL,
                                    'Debe ingresar usuario');
-      RAISE k_servicio.ex_error_general;
-    END IF;
   
-    IF anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
-                                                           'clave')) IS NULL THEN
-      k_servicio.p_respuesta_error(l_rsp, 'aut0002', 'Debe ingresar clave');
-      RAISE k_servicio.ex_error_general;
-    END IF;
+    k_servicio.p_validar_parametro(l_rsp,
+                                   anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                       'clave')) IS NOT NULL,
+                                   'Debe ingresar clave');
   
-    IF anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
-                                                           'nombre')) IS NULL THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'aut0003',
+    k_servicio.p_validar_parametro(l_rsp,
+                                   anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                       'nombre')) IS NOT NULL,
                                    'Debe ingresar nombre');
-      RAISE k_servicio.ex_error_general;
-    END IF;
   
-    IF anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
-                                                           'apellido')) IS NULL THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'aut0004',
+    k_servicio.p_validar_parametro(l_rsp,
+                                   anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                       'apellido')) IS NOT NULL,
                                    'Debe ingresar apellido');
-      RAISE k_servicio.ex_error_general;
-    END IF;
   
-    IF anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
-                                                           'direccion_correo')) IS NULL THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'aut0005',
-                                   'Debe ingresar direccion de correo');
-      RAISE k_servicio.ex_error_general;
-    END IF;
+    k_servicio.p_validar_parametro(l_rsp,
+                                   anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                       'direccion_correo')) IS NOT NULL,
+                                   'Debe ingresar direccion_correo');
   
     l_rsp.lugar := 'Registrando usuario';
     k_autenticacion.p_registrar_usuario(anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
@@ -125,6 +114,8 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
     k_servicio.p_respuesta_ok(l_rsp);
     RETURN l_rsp;
   EXCEPTION
+    WHEN k_servicio.ex_error_parametro THEN
+      RETURN l_rsp;
     WHEN k_servicio.ex_error_general THEN
       RETURN l_rsp;
     WHEN OTHERS THEN
@@ -154,6 +145,8 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
     k_servicio.p_respuesta_ok(l_rsp);
     RETURN l_rsp;
   EXCEPTION
+    WHEN k_servicio.ex_error_parametro THEN
+      RETURN l_rsp;
     WHEN k_servicio.ex_error_general THEN
       RETURN l_rsp;
     WHEN OTHERS THEN
@@ -185,6 +178,8 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
     k_servicio.p_respuesta_ok(l_rsp);
     RETURN l_rsp;
   EXCEPTION
+    WHEN k_servicio.ex_error_parametro THEN
+      RETURN l_rsp;
     WHEN k_servicio.ex_error_general THEN
       RETURN l_rsp;
     WHEN OTHERS THEN
@@ -203,19 +198,15 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
     l_rsp := NEW y_respuesta();
   
     l_rsp.lugar := 'Validando parametros';
-    IF anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
-                                                           'usuario')) IS NULL THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'aut0001',
+    k_servicio.p_validar_parametro(l_rsp,
+                                   anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                       'usuario')) IS NOT NULL,
                                    'Debe ingresar usuario');
-      RAISE k_servicio.ex_error_general;
-    END IF;
   
-    IF anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
-                                                           'clave')) IS NULL THEN
-      k_servicio.p_respuesta_error(l_rsp, 'aut0002', 'Debe ingresar clave');
-      RAISE k_servicio.ex_error_general;
-    END IF;
+    k_servicio.p_validar_parametro(l_rsp,
+                                   anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                       'clave')) IS NOT NULL,
+                                   'Debe ingresar clave');
   
     l_rsp.lugar := 'Validando credenciales';
     IF NOT
@@ -234,6 +225,8 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
     k_servicio.p_respuesta_ok(l_rsp);
     RETURN l_rsp;
   EXCEPTION
+    WHEN k_servicio.ex_error_parametro THEN
+      RETURN l_rsp;
     WHEN k_servicio.ex_error_general THEN
       RETURN l_rsp;
     WHEN OTHERS THEN
@@ -252,13 +245,10 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
     l_rsp := NEW y_respuesta();
   
     l_rsp.lugar := 'Validando parametros';
-    IF anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
-                                                           'clave_aplicacion')) IS NULL THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'aut0001',
+    k_servicio.p_validar_parametro(l_rsp,
+                                   anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                       'clave_aplicacion')) IS NOT NULL,
                                    'Debe ingresar clave_aplicacion');
-      RAISE k_servicio.ex_error_general;
-    END IF;
   
     l_rsp.lugar := 'Validando clave de aplicacion';
     IF NOT
@@ -273,6 +263,8 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
     k_servicio.p_respuesta_ok(l_rsp);
     RETURN l_rsp;
   EXCEPTION
+    WHEN k_servicio.ex_error_parametro THEN
+      RETURN l_rsp;
     WHEN k_servicio.ex_error_general THEN
       RETURN l_rsp;
     WHEN OTHERS THEN
@@ -290,11 +282,10 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
     l_rsp := NEW y_respuesta();
   
     l_rsp.lugar := 'Validando parametros';
-    IF anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
-                                                           'access_token')) IS NULL THEN
-      k_servicio.p_respuesta_error(l_rsp, 'aut0001', 'Debe ingresar token');
-      RAISE k_servicio.ex_error_general;
-    END IF;
+    k_servicio.p_validar_parametro(l_rsp,
+                                   anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                       'access_token')) IS NOT NULL,
+                                   'Debe ingresar access_token');
   
     l_rsp.lugar := 'Validando sesion';
     IF NOT
@@ -309,6 +300,8 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
     k_servicio.p_respuesta_ok(l_rsp);
     RETURN l_rsp;
   EXCEPTION
+    WHEN k_servicio.ex_error_parametro THEN
+      RETURN l_rsp;
     WHEN k_servicio.ex_error_general THEN
       RETURN l_rsp;
     WHEN OTHERS THEN
@@ -329,37 +322,25 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
     l_sesion := NEW y_sesion();
   
     l_rsp.lugar := 'Validando parametros';
-    IF anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
-                                                           'clave_aplicacion')) IS NULL THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'aut0001',
+    k_servicio.p_validar_parametro(l_rsp,
+                                   anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                       'clave_aplicacion')) IS NOT NULL,
                                    'Debe ingresar clave_aplicacion');
-      RAISE k_servicio.ex_error_parametro;
-    END IF;
   
-    IF anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
-                                                           'usuario')) IS NULL THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'aut0002',
+    k_servicio.p_validar_parametro(l_rsp,
+                                   anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                       'usuario')) IS NOT NULL,
                                    'Debe ingresar usuario');
-      RAISE k_servicio.ex_error_parametro;
-    END IF;
   
-    IF anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
-                                                           'access_token')) IS NULL THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'aut0003',
-                                   'Debe ingresar Access Token');
-      RAISE k_servicio.ex_error_parametro;
-    END IF;
+    k_servicio.p_validar_parametro(l_rsp,
+                                   anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                       'access_token')) IS NOT NULL,
+                                   'Debe ingresar access_token');
   
-    IF anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
-                                                           'refresh_token')) IS NULL THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'aut0004',
-                                   'Debe ingresar Refresh Token');
-      RAISE k_servicio.ex_error_parametro;
-    END IF;
+    k_servicio.p_validar_parametro(l_rsp,
+                                   anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                       'refresh_token')) IS NOT NULL,
+                                   'Debe ingresar refresh_token');
   
     l_rsp.lugar := 'Iniciando sesion';
     l_id_sesion := k_autenticacion.f_iniciar_sesion(anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
@@ -424,45 +405,30 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
     l_sesion := NEW y_sesion();
   
     l_rsp.lugar := 'Validando parametros';
-    IF anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
-                                                           'clave_aplicacion')) IS NULL THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'aut0001',
+    k_servicio.p_validar_parametro(l_rsp,
+                                   anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                       'clave_aplicacion')) IS NOT NULL,
                                    'Debe ingresar clave_aplicacion');
-      RAISE k_servicio.ex_error_parametro;
-    END IF;
   
-    IF anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
-                                                           'access_token_antiguo')) IS NULL THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'aut0001',
+    k_servicio.p_validar_parametro(l_rsp,
+                                   anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                       'access_token_antiguo')) IS NOT NULL,
                                    'Debe ingresar antiguo Access Token');
-      RAISE k_servicio.ex_error_parametro;
-    END IF;
   
-    IF anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
-                                                           'refresh_token_antiguo')) IS NULL THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'aut0002',
+    k_servicio.p_validar_parametro(l_rsp,
+                                   anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                       'refresh_token_antiguo')) IS NOT NULL,
                                    'Debe ingresar antiguo Refresh Token');
-      RAISE k_servicio.ex_error_parametro;
-    END IF;
   
-    IF anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
-                                                           'access_token_nuevo')) IS NULL THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'aut0003',
+    k_servicio.p_validar_parametro(l_rsp,
+                                   anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                       'access_token_nuevo')) IS NOT NULL,
                                    'Debe ingresar nuevo Access Token');
-      RAISE k_servicio.ex_error_parametro;
-    END IF;
   
-    IF anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
-                                                           'refresh_token_nuevo')) IS NULL THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'aut0004',
+    k_servicio.p_validar_parametro(l_rsp,
+                                   anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                       'refresh_token_nuevo')) IS NOT NULL,
                                    'Debe ingresar nuevo Refresh Token');
-      RAISE k_servicio.ex_error_parametro;
-    END IF;
   
     l_rsp.lugar := 'Refrescando sesion';
     l_id_sesion := k_autenticacion.f_refrescar_sesion(anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
@@ -527,19 +493,15 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
     l_rsp := NEW y_respuesta();
   
     l_rsp.lugar := 'Validando parametros';
-    IF anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
-                                                           'access_token')) IS NULL THEN
-      k_servicio.p_respuesta_error(l_rsp, 'aut0001', 'Debe ingresar token');
-      RAISE k_servicio.ex_error_general;
-    END IF;
+    k_servicio.p_validar_parametro(l_rsp,
+                                   anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                       'access_token')) IS NOT NULL,
+                                   'Debe ingresar access_token');
   
-    IF anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
-                                                           'estado')) IS NULL THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'aut0002',
+    k_servicio.p_validar_parametro(l_rsp,
+                                   anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                       'estado')) IS NOT NULL,
                                    'Debe ingresar estado');
-      RAISE k_servicio.ex_error_general;
-    END IF;
   
     l_rsp.lugar := 'Cambiando estado de sesion';
     k_autenticacion.p_cambiar_estado_sesion(anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
@@ -550,6 +512,8 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
     k_servicio.p_respuesta_ok(l_rsp);
     RETURN l_rsp;
   EXCEPTION
+    WHEN k_servicio.ex_error_parametro THEN
+      RETURN l_rsp;
     WHEN k_servicio.ex_error_general THEN
       RETURN l_rsp;
     WHEN OTHERS THEN
@@ -566,9 +530,7 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
     l_roles   y_roles;
     l_rol     y_rol;
   
-    i_usuario VARCHAR2(4000) := anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
-                                                                                    
-                                                                                    'usuario'));
+    i_usuario VARCHAR2(4000);
   
     CURSOR cr_roles(i_id_usuario IN NUMBER) IS
       SELECT r.id_rol, r.nombre, r.activo, r.detalle
@@ -583,13 +545,13 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
     l_roles   := NEW y_roles();
   
     l_rsp.lugar := 'Validando parametros';
-    IF anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
-                                                           'usuario')) IS NULL THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'aut0001',
+    k_servicio.p_validar_parametro(l_rsp,
+                                   anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                       'usuario')) IS NOT NULL,
                                    'Debe ingresar usuario');
-      RAISE k_servicio.ex_error_parametro;
-    END IF;
+  
+    i_usuario := anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                     'usuario'));
   
     l_rsp.lugar := 'Buscando datos del usuario';
     BEGIN
@@ -664,24 +626,16 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
     l_rsp := NEW y_respuesta();
   
     l_rsp.lugar := 'Validando parametros';
-    IF anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
-                                                           'clave_aplicacion')) IS NULL THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'aut0001',
+    k_servicio.p_validar_parametro(l_rsp,
+                                   anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                       'clave_aplicacion')) IS NOT NULL,
                                    'Debe ingresar clave_aplicacion');
-      RAISE k_servicio.ex_error_general;
-    END IF;
   
     l_anydata := k_servicio.f_valor_parametro(i_parametros, 'dispositivo');
-    IF l_anydata IS NOT NULL THEN
-      l_retorno := l_anydata.getobject(l_dispositivo);
-    END IF;
-    IF l_dispositivo IS NULL THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'aut0002',
+    l_retorno := l_anydata.getobject(l_dispositivo);
+    k_servicio.p_validar_parametro(l_rsp,
+                                   l_dispositivo IS NOT NULL,
                                    'Debe ingresar dispositivo');
-      RAISE k_servicio.ex_error_general;
-    END IF;
   
     l_rsp.lugar := 'Registrando dispositivo';
     k_autenticacion.p_registrar_dispositivo(anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
@@ -697,6 +651,8 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
     k_servicio.p_respuesta_ok(l_rsp);
     RETURN l_rsp;
   EXCEPTION
+    WHEN k_servicio.ex_error_parametro THEN
+      RETURN l_rsp;
     WHEN k_servicio.ex_error_general THEN
       RETURN l_rsp;
     WHEN OTHERS THEN
@@ -718,13 +674,10 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
     l_dato := NEW y_dato();
   
     l_rsp.lugar := 'Validando parametros';
-    IF anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
-                                                           'clave_aplicacion')) IS NULL THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'aut0001',
+    k_servicio.p_validar_parametro(l_rsp,
+                                   anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                       'clave_aplicacion')) IS NOT NULL,
                                    'Debe ingresar clave_aplicacion');
-      RAISE k_servicio.ex_error_parametro;
-    END IF;
   
     l_rsp.lugar     := 'Buscando aplicación';
     l_id_aplicacion := k_autenticacion.f_id_aplicacion(anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
@@ -748,6 +701,50 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
                                    'Error al obtener tiempo de expiración');
       RAISE k_servicio.ex_error_general;
     END IF;
+  
+    k_servicio.p_respuesta_ok(l_rsp, l_dato);
+    RETURN l_rsp;
+  EXCEPTION
+    WHEN k_servicio.ex_error_parametro THEN
+      RETURN l_rsp;
+    WHEN k_servicio.ex_error_general THEN
+      RETURN l_rsp;
+    WHEN OTHERS THEN
+      k_servicio.p_respuesta_excepcion(l_rsp,
+                                       utl_call_stack.error_number(1),
+                                       utl_call_stack.error_msg(1),
+                                       dbms_utility.format_error_stack);
+      RETURN l_rsp;
+  END;
+
+  FUNCTION editar_usuario(i_parametros IN y_parametros) RETURN y_respuesta IS
+    l_rsp  y_respuesta;
+    l_dato y_dato;
+  BEGIN
+    -- Inicializa respuesta
+    l_rsp  := NEW y_respuesta();
+    l_dato := NEW y_dato();
+  
+    l_rsp.lugar := 'Validando parámetros';
+    /* TODO: text="Implementar validación de parámetros" */
+    k_servicio.p_validar_parametro(l_rsp,
+                                   anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                       'usuario_antiguo')) IS NOT NULL,
+                                   'Debe ingresar usuario_antiguo');
+  
+    l_rsp.lugar := 'Editando usuario';
+    k_autenticacion.p_editar_usuario(anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                         'usuario_antiguo')),
+                                     anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                         'usuario_nuevo')),
+                                     anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                         'nombre')),
+                                     anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                         'apellido')),
+                                     anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                         'direccion_correo')),
+                                     anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros,
+                                                                                         'numero_telefono')));
   
     k_servicio.p_respuesta_ok(l_rsp, l_dato);
     RETURN l_rsp;

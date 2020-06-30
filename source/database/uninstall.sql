@@ -71,6 +71,7 @@ prompt
 drop type y_club force;
 
 drop type y_mensaje force;
+drop type y_correo force;
 drop type y_pais force;
 drop type y_pagina_parametros force;
 drop type y_pagina force;
