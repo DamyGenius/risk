@@ -31,7 +31,7 @@ using Risk.API.Models;
 
 namespace Risk.API.Services
 {
-    public class FanService : ServiceBase, IFanService
+    public class FanService : RiskServiceBase, IFanService
     {
         private const int ID_LISTAR_CLUBES = 40;
 
@@ -45,7 +45,7 @@ namespace Risk.API.Services
             prms.Add("id_club", idClub);
             prms.Add("id_division", idDivision);
 
-            string rsp = base.ApiProcesarServicio(ID_LISTAR_CLUBES, prms.ToString(Formatting.None));
+            string rsp = base.ProcesarServicio(ID_LISTAR_CLUBES, prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YPagina<YClub>>>(rsp);
 
             Pagina<Club> datos = null;
