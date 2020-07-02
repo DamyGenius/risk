@@ -22,7 +22,6 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Risk.API.Entities;
@@ -35,7 +34,7 @@ namespace Risk.API.Services
     {
         private const int ID_LISTAR_CLUBES = 40;
 
-        public FanService(RiskDbContext dbContext, IConfiguration configuration) : base(dbContext, configuration)
+        public FanService(IDbConnectionFactory dbConnectionFactory) : base(dbConnectionFactory)
         {
         }
 
