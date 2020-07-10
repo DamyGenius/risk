@@ -47,7 +47,8 @@ BEGIN
     END;
   
     -- Valida registro relacionado
-    EXECUTE IMMEDIATE 'DECLARE
+    IF l_nombre_referencia IS NOT NULL THEN
+      EXECUTE IMMEDIATE 'DECLARE
   l_existe VARCHAR2(1) := ''N'';
 BEGIN
   BEGIN
@@ -65,10 +66,11 @@ BEGIN
   END;
   :2 := l_existe;
 END;'
-      USING IN :new.referencia, OUT l_existe_registro;
-  
-    IF l_existe_registro = 'N' THEN
-      raise_application_error(-20000, 'Registro relacionado inexistente');
+        USING IN :new.referencia, OUT l_existe_registro;
+    
+      IF l_existe_registro = 'N' THEN
+        raise_application_error(-20000, 'Registro relacionado inexistente');
+      END IF;
     END IF;
   
     IF :new.contenido IS NULL OR dbms_lob.getlength(:new.contenido) = 0 THEN
@@ -97,13 +99,10 @@ END;'
     
       -- Calcula propiedades del archivo
       IF :old.contenido IS NULL OR
-         to_char(rawtohex(dbms_crypto.hash(:new.contenido,
-                                           dbms_crypto.hash_sh1))) <>
-         to_char(rawtohex(dbms_crypto.hash(:old.contenido,
-                                           dbms_crypto.hash_sh1))) THEN
-        :new.checksum := to_char(rawtohex(dbms_crypto.hash(:new.contenido,
-                                                           dbms_crypto.hash_sh1)));
-        :new.tamano   := dbms_lob.getlength(:new.contenido);
+         dbms_lob.compare(:old.contenido, :new.contenido) <> 0 THEN
+        k_archivo.p_calcular_propiedades(:new.contenido,
+                                         :new.checksum,
+                                         :new.tamano);
       END IF;
     
       -- Valida tamaño del archivo

@@ -2,10 +2,10 @@
 <HTML>
  <HEAD>
  <LINK REL="STYLESHEET" TYPE="text/css" HREF="plsqldoc.css">
- <TITLE>Package k_archivo</TITLE>
+ <TITLE>Package k_reporte</TITLE>
  <META name="object" content="PACKAGE">
- <META name="name" content="k_archivo">
- <META name="description" content="Agrupa operaciones relacionadas con archivos">
+ <META name="name" content="k_reporte">
+ <META name="description" content="Agrupa operaciones relacionadas con los reportes del sistema">
 </HEAD>
 <BODY>
 <TABLE WIDTH="100%"><TR>
@@ -13,8 +13,8 @@
 <TD><P ALIGN="RIGHT"><STRONG><SMALL><A HREF="index.html">index</A></SMALL></STRONG></TD>
 </TR></TABLE>
 <TABLE CLASS="MAIN_TABLE"><TR><TD CLASS="DESC_TEXT">
-<P CLASS="MAIN_TITLE">Package k_archivo</P>
-Agrupa operaciones relacionadas con archivos<br>
+<P CLASS="MAIN_TITLE">Package k_reporte</P>
+Agrupa operaciones relacionadas con los reportes del sistema<br>
 
 <BR>
 <A NAME="Author"></A>
@@ -24,7 +24,7 @@ Author
 <TABLE CLASS="MAIN_TABLE">
 <TR><TD VALIGN="TOP" CLASS="LIST_ITEM" WIDTH=1%>
 </TD><TD CLASS="DESC_TEXT" WIDTH=95%>
-jtsoya539 27/3/2020 16:22:16
+jtsoya539 27/3/2020 16:42:26
 </TD></TR>
 </TABLE>
 <BR>
@@ -36,69 +36,83 @@ Program units
 </TD></TR></TABLE>
 <TABLE CLASS="SUB_TABLE">
 <TR><TD VALIGN="TOP" CLASS="TYPE_ITEM">
-<A HREF="#F_TIPO_MIME">f_tipo_mime</A>&nbsp;&nbsp;
+<A HREF="#F_ARCHIVO_OK">f_archivo_ok</A>&nbsp;&nbsp;
 </TD><TD CLASS="DESC_TEXT" WIDTH=95%>
 
 </TD></TR>
 <TR><TD VALIGN="TOP" CLASS="TYPE_ITEM">
-<A HREF="#F_RECUPERAR_ARCHIVO">f_recuperar_archivo</A>&nbsp;&nbsp;
+<A HREF="#F_ARCHIVO_ERROR">f_archivo_error</A>&nbsp;&nbsp;
+</TD><TD CLASS="DESC_TEXT" WIDTH=95%>
+
+</TD></TR>
+</TABLE>
+<BR>
+<A NAME="Constants"></A>
+<TABLE CLASS="SUB_TABLE"><TR><TD CLASS="SUB_TITLE">
+Constants
+</TD></TR></TABLE>
+<TABLE CLASS="SUB_TABLE">
+<TR><TD VALIGN="TOP" CLASS="TYPE_ITEM">
+<A HREF="#C_FORMATO_PDF">c_formato_pdf</A>&nbsp;&nbsp;
 </TD><TD CLASS="DESC_TEXT" WIDTH=95%>
 
 </TD></TR>
 <TR><TD VALIGN="TOP" CLASS="TYPE_ITEM">
-<A HREF="#P_GUARDAR_ARCHIVO">p_guardar_archivo</A>&nbsp;&nbsp;
+<A HREF="#C_FORMATO_DOCX">c_formato_docx</A>&nbsp;&nbsp;
 </TD><TD CLASS="DESC_TEXT" WIDTH=95%>
 
 </TD></TR>
 <TR><TD VALIGN="TOP" CLASS="TYPE_ITEM">
-<A HREF="#P_CALCULAR_PROPIEDADES">p_calcular_propiedades</A>&nbsp;&nbsp;
+<A HREF="#C_FORMATO_XLSX">c_formato_xlsx</A>&nbsp;&nbsp;
 </TD><TD CLASS="DESC_TEXT" WIDTH=95%>
 
 </TD></TR>
 </TABLE>
 <BR>
 <HR>
-<A NAME="F_TIPO_MIME"></A>
+<A NAME="C_FORMATO_PDF"></A>
 <P CLASS="TYPE_TITLE">
-f_tipo_mime
+c_formato_pdf
 </P>
 <PRE CLASS="DECL_TEXT">
-FUNCTION f_tipo_mime(i_dominio   IN VARCHAR2,
-                     i_extension IN VARCHAR2) RETURN VARCHAR2
+c_formato_pdf  CONSTANT VARCHAR2(10) := 'PDF';
+</PRE>
+<HR>
+<A NAME="C_FORMATO_DOCX"></A>
+<P CLASS="TYPE_TITLE">
+c_formato_docx
+</P>
+<PRE CLASS="DECL_TEXT">
+c_formato_docx CONSTANT VARCHAR2(10) := 'DOCX';
+</PRE>
+<HR>
+<A NAME="C_FORMATO_XLSX"></A>
+<P CLASS="TYPE_TITLE">
+c_formato_xlsx
+</P>
+<PRE CLASS="DECL_TEXT">
+c_formato_xlsx CONSTANT VARCHAR2(10) := 'XLSX';
+</PRE>
+<HR>
+<A NAME="F_ARCHIVO_OK"></A>
+<P CLASS="TYPE_TITLE">
+f_archivo_ok
+</P>
+<PRE CLASS="DECL_TEXT">
+FUNCTION f_archivo_ok(i_contenido IN BLOB,
+                      i_formato   IN VARCHAR2 DEFAULT NULL)
+  RETURN y_archivo
 
 </PRE>
 <HR>
-<A NAME="F_RECUPERAR_ARCHIVO"></A>
+<A NAME="F_ARCHIVO_ERROR"></A>
 <P CLASS="TYPE_TITLE">
-f_recuperar_archivo
+f_archivo_error
 </P>
 <PRE CLASS="DECL_TEXT">
-FUNCTION f_recuperar_archivo(i_tabla      IN VARCHAR2,
-                             i_campo      IN VARCHAR2,
-                             i_referencia IN VARCHAR2) RETURN y_archivo
-
-</PRE>
-<HR>
-<A NAME="P_GUARDAR_ARCHIVO"></A>
-<P CLASS="TYPE_TITLE">
-p_guardar_archivo
-</P>
-<PRE CLASS="DECL_TEXT">
-PROCEDURE p_guardar_archivo(i_tabla      IN VARCHAR2,
-                            i_campo      IN VARCHAR2,
-                            i_referencia IN VARCHAR2,
-                            i_archivo    IN y_archivo)
-
-</PRE>
-<HR>
-<A NAME="P_CALCULAR_PROPIEDADES"></A>
-<P CLASS="TYPE_TITLE">
-p_calcular_propiedades
-</P>
-<PRE CLASS="DECL_TEXT">
-PROCEDURE p_calcular_propiedades(i_contenido IN BLOB,
-                                 o_checksum  OUT VARCHAR2,
-                                 o_tamano    OUT NUMBER)
+FUNCTION f_archivo_error(i_respuesta IN y_respuesta,
+                         i_formato   IN VARCHAR2 DEFAULT NULL)
+  RETURN y_archivo
 
 </PRE>
 <P>&nbsp;</P>
