@@ -108,6 +108,8 @@ namespace Risk.API
             services.AddScoped<IGenService, GenService>();
             services.AddScoped<IMsjService, MsjService>();
 
+            services.AddScoped<IFanService, FanService>();
+
             var serviceProvider = services.BuildServiceProvider();
             IAutService autService = serviceProvider.GetService<IAutService>();
             IGenService genService = serviceProvider.GetService<IGenService>();
