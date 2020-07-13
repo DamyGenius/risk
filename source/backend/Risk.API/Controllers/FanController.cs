@@ -92,7 +92,7 @@ namespace Risk.API.Controllers
         {
             var respuesta = _genService.RecuperarArchivo("T_CLUBES", "ESCUDO", idClub);
 
-            if (!respuesta.Codigo.Equals(RiskDbConstants.CODIGO_OK))
+            if (!respuesta.Codigo.Equals(RiskConstants.CODIGO_OK))
             {
                 return ProcesarRespuesta(respuesta);
             }
@@ -114,7 +114,7 @@ namespace Risk.API.Controllers
         {
             var respuesta = _genService.RecuperarArchivo("T_GRUPOS", "LOGO", idGrupo.ToString());
 
-            if (!respuesta.Codigo.Equals(RiskDbConstants.CODIGO_OK))
+            if (!respuesta.Codigo.Equals(RiskConstants.CODIGO_OK))
             {
                 return ProcesarRespuesta(respuesta);
             }
