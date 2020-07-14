@@ -5,7 +5,8 @@ create table T_PREDICCIONES
   goles_club_local     NUMBER(3),
   goles_club_visitante NUMBER(3),
   estado               VARCHAR2(1) default 'P' not null,
-  puntos               NUMBER(3)
+  puntos               NUMBER(3),
+  id_sincronizacion    NUMBER(3)
 )
 ;
 comment on table T_PREDICCIONES
