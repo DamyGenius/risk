@@ -96,6 +96,7 @@ prompt -----------------------------------
 prompt
 drop table t_grupo_usuarios cascade constraints;
 drop table t_grupos cascade constraints;
+drop table t_partidos cascade constraints;
 drop table t_torneo_jornadas cascade constraints;
 drop table t_planteles cascade constraints;
 drop table t_torneos cascade constraints;
@@ -134,6 +135,7 @@ prompt Borrando secuencias...
 prompt -----------------------------------
 prompt
 drop sequence s_id_grupo;
+drop sequence s_id_partido;
 
 drop sequence s_id_ciudad;
 drop sequence s_id_pais;

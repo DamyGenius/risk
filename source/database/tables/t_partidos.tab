@@ -1,0 +1,33 @@
+create table T_PARTIDOS
+(
+  id_partido            NUMBER(10) not null,
+  id_torneo             VARCHAR2(12),
+  id_club_local         VARCHAR2(5),
+  id_club_visitante     VARCHAR2(5),
+  fecha                 DATE,
+  hora                  VARCHAR2(5),
+  id_jornada            NUMBER(3),
+  id_estadio            NUMBER(6),
+  goles_club_local      NUMBER(3),
+  goles_club_visitante  NUMBER(3),
+  estado                VARCHAR2(1) default 'R' not null
+)
+;
+comment on table T_PARTIDOS
+  is 'Partidos.';
+comment on column T_PARTIDOS.estado
+  is 'R - Registrado, M - Programado, J - En juego, F - Finalizado, P - Postergado, S - Suspendido';
+alter table T_PARTIDOS
+  add constraint PK_PARTIDOS primary key (ID_PARTIDO);
+alter table T_PARTIDOS
+  add constraint FK_PARTIDOS_ESTADIOS foreign key (ID_ESTADIO)
+  references T_ESTADIOS (ID_ESTADIO);
+alter table T_PARTIDOS
+  add constraint FK_PARTIDOS_PLANTEL_LOCAL foreign key (ID_TORNEO, ID_CLUB_LOCAL)
+  references T_PLANTELES (ID_TORNEO, ID_CLUB);
+alter table T_PARTIDOS
+  add constraint FK_PARTIDOS_PLANTEL_VISITANTE foreign key (ID_TORNEO, ID_CLUB_VISITANTE)
+  references T_PLANTELES (ID_TORNEO, ID_CLUB);
+alter table T_PARTIDOS
+  add constraint FK_PARTIDOS_TORNEO_JORNADAS foreign key (ID_TORNEO, ID_JORNADA)
+  references T_TORNEO_JORNADAS (ID_TORNEO, ID_JORNADA);
