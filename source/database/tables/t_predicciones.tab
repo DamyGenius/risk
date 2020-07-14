@@ -1,0 +1,22 @@
+create table T_PREDICCIONES
+(
+  id_partido           NUMBER(10) not null,
+  id_usuario           NUMBER(10) not null,
+  goles_club_local     NUMBER(3),
+  goles_club_visitante NUMBER(3),
+  estado               VARCHAR2(1) default 'P' not null,
+  puntos               NUMBER(3)
+)
+;
+comment on table T_PREDICCIONES
+  is 'Predicciones.';
+comment on column T_PREDICCIONES.estado
+  is 'P - Pendiente, C - Confirmado, L - Liquidado';
+alter table T_PREDICCIONES
+  add constraint PK_PREDICCIONES primary key (ID_PARTIDO, ID_USUARIO);
+alter table T_PREDICCIONES
+  add constraint FK_PREDICCIONES_PARTIDOS foreign key (ID_PARTIDO)
+  references T_PARTIDOS (ID_PARTIDO);
+alter table T_PREDICCIONES
+  add constraint FK_PREDICCIONES_USUARIOS foreign key (ID_USUARIO)
+  references T_USUARIOS (ID_USUARIO);

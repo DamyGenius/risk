@@ -108,6 +108,7 @@ prompt
 @@tables/t_planteles.tab
 @@tables/t_torneo_jornadas.tab
 @@tables/t_partidos.tab
+@@tables/t_predicciones.tab
 @@tables/t_grupos.tab
 @@tables/t_grupo_usuarios.tab
 

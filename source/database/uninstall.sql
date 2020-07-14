@@ -96,6 +96,7 @@ prompt -----------------------------------
 prompt
 drop table t_grupo_usuarios cascade constraints;
 drop table t_grupos cascade constraints;
+drop table t_predicciones cascade constraints;
 drop table t_partidos cascade constraints;
 drop table t_torneo_jornadas cascade constraints;
 drop table t_planteles cascade constraints;
