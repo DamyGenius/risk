@@ -135,6 +135,8 @@ prompt
 @@types/y_mensaje.typ
 
 @@types/y_club.typ
+@@types/y_partido.typ
+@@types/y_partido_prediccion.typ
 
 prompt
 prompt Creando paquetes...
