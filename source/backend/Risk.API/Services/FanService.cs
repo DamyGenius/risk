@@ -34,6 +34,8 @@ namespace Risk.API.Services
     public class FanService : RiskServiceBase, IFanService
     {
         private const int ID_LISTAR_CLUBES = 40;
+        private const int ID_REALIZAR_PREDICCION = 43;
+        private const int ID_LISTAR_PARTIDOS = 44;
 
         public FanService(IConfiguration configuration, IDbConnectionFactory dbConnectionFactory) : base(configuration, dbConnectionFactory)
         {
@@ -55,6 +57,25 @@ namespace Risk.API.Services
             }
 
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<Club>, YPagina<YClub>>(entityRsp, datos);
+        }
+
+        public Respuesta<Pagina<Partido>> ListarPartidos(int? partido = null, string torneo = null, string estado = null)
+        {
+            JObject prms = new JObject();
+            prms.Add("partido", partido);
+            prms.Add("torneo", torneo);
+            prms.Add("estado", estado);
+
+            string rsp = base.ProcesarServicio(ID_LISTAR_PARTIDOS, prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YPagina<YPartido>>>(rsp);
+
+            Pagina<Partido> datos = null;
+            if (entityRsp.Datos != null)
+            {
+                datos = EntitiesMapper.GetPaginaFromEntity<Partido, YPartido>(entityRsp.Datos, EntitiesMapper.GetPartidoListFromEntity(entityRsp.Datos.Elementos));
+            }
+
+            return EntitiesMapper.GetRespuestaFromEntity<Pagina<Partido>, YPagina<YPartido>>(entityRsp, datos);
         }
     }
 }

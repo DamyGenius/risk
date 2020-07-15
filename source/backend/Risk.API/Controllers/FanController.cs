@@ -81,6 +81,21 @@ namespace Risk.API.Controllers
         }
 
         [AllowAnonymous]
+        [HttpGet("ListarPartidos")]
+        [SwaggerOperation(OperationId = "ListarPartidos", Summary = "ListarPartidos", Description = "Obtiene una lista de partidos")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Partido>>))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Operación con error", typeof(Respuesta<Dato>))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error inesperado", typeof(Respuesta<Dato>))]
+        [SwaggerResponse(StatusCodes.Status501NotImplemented, "Servicio no implementado o inactivo", typeof(Respuesta<Dato>))]
+        public IActionResult ListarPartidos([FromQuery, SwaggerParameter(Description = "Identificador del torneo", Required = true)] string idTorneo,
+                                            [FromQuery, SwaggerParameter(Description = "Estado del partido", Required = false)] string estado)
+        {
+            var respuesta = _fanService.ListarPartidos(null, idTorneo, estado);
+            return ProcesarRespuesta(respuesta);
+        }
+
+        [AllowAnonymous]
         [HttpGet("RecuperarEscudoClub")]
         [SwaggerOperation(OperationId = "RecuperarEscudoClub", Summary = "RecuperarEscudoClub", Description = "Permite recuperar el escudo de un club")]
         [Produces(MediaTypeNames.Application.Json, new[] { "application/octet-stream" })]

@@ -295,5 +295,42 @@ namespace Risk.API.Helpers
             }
             return modelList;
         }
+
+        public static Partido GetPartidoFromEntity(YPartido entity)
+        {
+            Partido model;
+            if (entity == null)
+            {
+                model = null;
+            }
+            else
+            {
+                model = new Partido
+                {
+                    IdPartido = entity.IdPartido,
+                    IdTorneo = entity.IdTorneo,
+                    IdClubLocal = entity.IdClubLocal,
+                    IdClubVisitante = entity.IdClubVisitante,
+                    Fecha = entity.Fecha,
+                    Hora = entity.Hora,
+                    IdJornada = entity.IdJornada,
+                    IdEstadio = entity.IdEstadio,
+                    GolesLocal = entity.GolesLocal,
+                    GolesVisitante = entity.GolesVisitante,
+                    Estado = entity.Estado,
+                };
+            }
+            return model;
+        }
+
+        public static List<Partido> GetPartidoListFromEntity(List<YPartido> entityList)
+        {
+            List<Partido> modelList = new List<Partido>();
+            foreach (var item in entityList)
+            {
+                modelList.Add(GetPartidoFromEntity(item));
+            }
+            return modelList;
+        }
     }
 }
