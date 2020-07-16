@@ -57,9 +57,6 @@ namespace Risk.API.Controllers
         [SwaggerOperation(OperationId = "ListarClubes", Summary = "ListarClubes", Description = "Obtiene una lista de clubes")]
         [Produces(MediaTypeNames.Application.Json)]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Club>>))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "Operación con error", typeof(Respuesta<Dato>))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error inesperado", typeof(Respuesta<Dato>))]
-        [SwaggerResponse(StatusCodes.Status501NotImplemented, "Servicio no implementado o inactivo", typeof(Respuesta<Dato>))]
         public IActionResult ListarClubes([FromQuery, SwaggerParameter(Description = "Identificador de la división", Required = false)] string idDivision)
         {
             var respuesta = _fanService.ListarClubes(null, idDivision);
@@ -71,9 +68,6 @@ namespace Risk.API.Controllers
         [SwaggerOperation(OperationId = "ListarClub", Summary = "ListarClub", Description = "Obtiene los datos de un club")]
         [Produces(MediaTypeNames.Application.Json)]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Club>>))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "Operación con error", typeof(Respuesta<Dato>))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error inesperado", typeof(Respuesta<Dato>))]
-        [SwaggerResponse(StatusCodes.Status501NotImplemented, "Servicio no implementado o inactivo", typeof(Respuesta<Dato>))]
         public IActionResult ListarClub([FromRoute, SwaggerParameter(Description = "Identificador del club", Required = true)] string idClub)
         {
             var respuesta = _fanService.ListarClubes(idClub, null);
@@ -85,9 +79,6 @@ namespace Risk.API.Controllers
         [SwaggerOperation(OperationId = "ListarPartidos", Summary = "ListarPartidos", Description = "Obtiene una lista de partidos")]
         [Produces(MediaTypeNames.Application.Json)]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Partido>>))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "Operación con error", typeof(Respuesta<Dato>))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error inesperado", typeof(Respuesta<Dato>))]
-        [SwaggerResponse(StatusCodes.Status501NotImplemented, "Servicio no implementado o inactivo", typeof(Respuesta<Dato>))]
         public IActionResult ListarPartidos([FromQuery, SwaggerParameter(Description = "Identificador del torneo", Required = true)] string idTorneo,
                                             [FromQuery, SwaggerParameter(Description = "Estado del partido", Required = false)] string estado)
         {
@@ -111,9 +102,6 @@ namespace Risk.API.Controllers
         [SwaggerOperation(OperationId = "RecuperarEscudoClub", Summary = "RecuperarEscudoClub", Description = "Permite recuperar el escudo de un club")]
         [Produces(MediaTypeNames.Application.Json, new[] { "application/octet-stream" })]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(FileContentResult))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "Operación con error", typeof(Respuesta<Dato>))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error inesperado", typeof(Respuesta<Dato>))]
-        [SwaggerResponse(StatusCodes.Status501NotImplemented, "Servicio no implementado o inactivo", typeof(Respuesta<Dato>))]
         public IActionResult RecuperarEscudoClub([FromQuery, SwaggerParameter(Description = "Identificador del club", Required = true)] string idClub)
         {
             var respuesta = _genService.RecuperarArchivo("T_CLUBES", "ESCUDO", idClub);
@@ -133,9 +121,6 @@ namespace Risk.API.Controllers
         [SwaggerOperation(OperationId = "RecuperarLogoGrupo", Summary = "RecuperarLogoGrupo", Description = "Permite recuperar el logo de un grupo")]
         [Produces(MediaTypeNames.Application.Json, new[] { "application/octet-stream" })]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(FileContentResult))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "Operación con error", typeof(Respuesta<Dato>))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error inesperado", typeof(Respuesta<Dato>))]
-        [SwaggerResponse(StatusCodes.Status501NotImplemented, "Servicio no implementado o inactivo", typeof(Respuesta<Dato>))]
         public IActionResult RecuperarLogoGrupo([FromQuery, SwaggerParameter(Description = "Identificador del grupo", Required = true)] int idGrupo)
         {
             var respuesta = _genService.RecuperarArchivo("T_GRUPOS", "LOGO", idGrupo.ToString());
@@ -156,9 +141,6 @@ namespace Risk.API.Controllers
         [Consumes("multipart/form-data")]
         [Produces(MediaTypeNames.Application.Json)]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "Operación con error", typeof(Respuesta<Dato>))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error inesperado", typeof(Respuesta<Dato>))]
-        [SwaggerResponse(StatusCodes.Status501NotImplemented, "Servicio no implementado o inactivo", typeof(Respuesta<Dato>))]
         public IActionResult GuardarLogoGrupo([FromQuery, SwaggerParameter(Description = "Identificador del grupo", Required = true)] int idGrupo, [FromForm] GuardarArchivoRequestBody requestBody)
         {
             string contenido = string.Empty;
