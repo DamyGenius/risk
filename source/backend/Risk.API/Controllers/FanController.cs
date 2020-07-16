@@ -95,6 +95,17 @@ namespace Risk.API.Controllers
             return ProcesarRespuesta(respuesta);
         }
 
+        [HttpPost("RealizarPrediccion")]
+        [SwaggerOperation(OperationId = "RealizarPrediccion", Summary = "RealizarPrediccion", Description = "Permite realizar una predicción")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
+        public IActionResult RealizarPrediccion([FromBody] RealizarPrediccionRequestBody requestBody)
+        {
+            var respuesta = _fanService.RealizarPrediccion(requestBody.Partido, requestBody.Usuario, requestBody.GolesClubLocal, requestBody.GolesClubVisitante, requestBody.IdSincronizacion);
+            return ProcesarRespuesta(respuesta);
+        }
+
         [AllowAnonymous]
         [HttpGet("RecuperarEscudoClub")]
         [SwaggerOperation(OperationId = "RecuperarEscudoClub", Summary = "RecuperarEscudoClub", Description = "Permite recuperar el escudo de un club")]

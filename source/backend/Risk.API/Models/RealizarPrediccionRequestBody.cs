@@ -22,14 +22,14 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-using Risk.API.Models;
-
-namespace Risk.API.Services
+namespace Risk.API.Models
 {
-    public interface IFanService
+    public class RealizarPrediccionRequestBody
     {
-        Respuesta<Pagina<Club>> ListarClubes(string idClub = null, string idDivision = null);
-        Respuesta<Pagina<Partido>> ListarPartidos(int? partido = null, string torneo = null, string estado = null);
-        Respuesta<Dato> RealizarPrediccion(int partido, string usuario, int golesClubLocal, int golesClubVisitante, int idSincronizacion);
+        public int Partido { get; set; }
+        public string Usuario { get; set; }
+        public int GolesClubLocal { get; set; }
+        public int GolesClubVisitante { get; set; }
+        public int IdSincronizacion { get; set; }
     }
 }

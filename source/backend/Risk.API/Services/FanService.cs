@@ -77,5 +77,20 @@ namespace Risk.API.Services
 
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<Partido>, YPagina<YPartido>>(entityRsp, datos);
         }
+
+        public Respuesta<Dato> RealizarPrediccion(int partido, string usuario, int golesClubLocal, int golesClubVisitante, int idSincronizacion)
+        {
+            JObject prms = new JObject();
+            prms.Add("partido", partido);
+            prms.Add("usuario", usuario);
+            prms.Add("goles_club_local", golesClubLocal);
+            prms.Add("goles_club_visitante", golesClubVisitante);
+            prms.Add("id_sincronizacion", idSincronizacion);
+
+            string rsp = base.ProcesarServicio(ID_REALIZAR_PREDICCION, prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
+
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
+        }
     }
 }
