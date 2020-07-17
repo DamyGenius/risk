@@ -162,6 +162,18 @@ namespace Risk.API.Controllers
             return claimsPrincipal.Identity.Name;
         }
 
+        private void RegistrarDispositivoAzure(string tokenDispositivo)
+        {
+            var respDatosDispositivo = _autService.DatosDispositivo(tokenDispositivo);
+            if (!respDatosDispositivo.Codigo.Equals(RiskConstants.CODIGO_OK))
+            {
+                return;
+            }
+
+            Dispositivo dispositivo = respDatosDispositivo.Datos;
+            // Registration in Azure Notification Hub
+        }
+
         [AllowAnonymous]
         [HttpPost("RegistrarUsuario")]
         [SwaggerOperation(OperationId = "RegistrarUsuario", Summary = "RegistrarUsuario", Description = "Permite registrar un usuario")]
@@ -193,6 +205,12 @@ namespace Risk.API.Controllers
             var refreshToken = GenerarRefreshToken();
 
             var respIniciarSesion = _autService.IniciarSesion(Request.Headers[RiskConstants.RISK_APP_KEY], requestBody.Usuario, accessToken, refreshToken, requestBody.TokenDispositivo);
+
+            if (respIniciarSesion.Codigo.Equals(RiskConstants.CODIGO_OK))
+            {
+                RegistrarDispositivoAzure(requestBody.TokenDispositivo);
+            }
+
             return ProcesarRespuesta(respIniciarSesion);
         }
 
@@ -272,7 +290,7 @@ namespace Risk.API.Controllers
         [SwaggerOperation(OperationId = "RegistrarDispositivo", Summary = "RegistrarDispositivo", Description = "Permite registrar un dispositivo")]
         [Consumes(MediaTypeNames.Application.Json)]
         [Produces(MediaTypeNames.Application.Json)]
-        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dispositivo>))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
         public IActionResult RegistrarDispositivo([FromBody] RegistrarDispositivoRequestBody requestBody)
         {
             if (requestBody.Dispositivo.TokenDispositivo == null || requestBody.Dispositivo.TokenDispositivo.Equals(string.Empty))
@@ -281,6 +299,12 @@ namespace Risk.API.Controllers
             }
 
             var respuesta = _autService.RegistrarDispositivo(Request.Headers[RiskConstants.RISK_APP_KEY], requestBody.Dispositivo);
+
+            if (respuesta.Codigo.Equals(RiskConstants.CODIGO_OK))
+            {
+                RegistrarDispositivoAzure(respuesta.Datos.Contenido);
+            }
+
             return ProcesarRespuesta(respuesta);
         }
 

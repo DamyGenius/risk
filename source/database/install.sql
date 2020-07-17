@@ -67,6 +67,7 @@ prompt
 @@sequences/s_id_correo.seq
 @@sequences/s_id_correo_adjunto.seq
 @@sequences/s_id_mensaje.seq
+@@sequences/s_id_notificacion.seq
 
 @@sequences/s_id_partido.seq
 @@sequences/s_id_grupo.seq
@@ -93,11 +94,13 @@ prompt
 @@tables/t_servicio_parametros.tab
 @@tables/t_servicio_logs.tab
 @@tables/t_dispositivos.tab
+@@tables/t_dispositivo_suscripciones.tab
 @@tables/t_sesiones.tab
 @@tables/t_usuario_claves.tab
 @@tables/t_correos.tab
 @@tables/t_correo_adjuntos.tab
 @@tables/t_mensajes.tab
+@@tables/t_notificaciones.tab
 @@tables/t_archivo_definiciones.tab
 @@tables/t_archivos.tab
 
@@ -146,6 +149,7 @@ prompt
 @@packages/k_html.pck
 @@packages/k_util.pck
 @@packages/k_auditoria.pck
+@@packages/k_dispositivo.pck
 @@packages/k_autenticacion.pck
 @@packages/k_error.pck
 @@packages/k_servicio.pck
@@ -175,6 +179,7 @@ prompt
 @@triggers/gs_correos.trg
 @@triggers/gs_correo_adjuntos.trg
 @@triggers/gs_mensajes.trg
+@@triggers/gs_notificaciones.trg
 @@triggers/gb_usuarios.trg
 @@triggers/gb_sesiones.trg
 @@triggers/gb_personas.trg
