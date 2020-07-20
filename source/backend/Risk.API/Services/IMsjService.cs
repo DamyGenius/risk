@@ -32,5 +32,7 @@ namespace Risk.API.Services
         Respuesta<Dato> CambiarEstadoMensaje(int idMensaje, string estado, string respuestaEnvio);
         Respuesta<Pagina<Correo>> ListarCorreosPendientes(int? pagina = null, int? porPagina = null, string noPaginar = null);
         Respuesta<Dato> CambiarEstadoCorreo(int idCorreo, string estado, string respuestaEnvio);
+        Respuesta<Pagina<Notificacion>> ListarNotificacionesPendientes(int? pagina = null, int? porPagina = null, string noPaginar = null);
+        Respuesta<Dato> CambiarEstadoNotificacion(int idNotificacion, string estado, string respuestaEnvio);
     }
 }

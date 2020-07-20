@@ -22,22 +22,19 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-using System.Collections.Generic;
+using Newtonsoft.Json;
 
-namespace Risk.API.Models
+namespace Risk.API.Entities
 {
-    public class Dispositivo
+    public class YNotificacion
     {
-        public int IdDispositivo { get; set; }
-        public string TokenDispositivo { get; set; }
-        public string NombreSistemaOperativo { get; set; }
-        public string VersionSistemaOperativo { get; set; }
-        public string Tipo { get; set; }
-        public string NombreNavegador { get; set; }
-        public string VersionNavegador { get; set; }
-        public string TokenNotificacion { get; set; }
-        public string TemplateNotificacion { get; set; }
-        public string PlataformaNotificacion { get; set; }
-        public List<Dato> Suscripciones { get; set; }
+        [JsonProperty("id_notificacion")]
+        public int IdNotificacion { get; set; }
+        [JsonProperty("suscripcion")]
+        public string Suscripcion { get; set; }
+        [JsonProperty("titulo")]
+        public string Titulo { get; set; }
+        [JsonProperty("contenido")]
+        public string Contenido { get; set; }
     }
 }

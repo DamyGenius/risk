@@ -22,22 +22,12 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-using System.Collections.Generic;
+using Microsoft.Azure.NotificationHubs;
 
-namespace Risk.API.Models
+namespace Risk.API.Helpers
 {
-    public class Dispositivo
+    public interface INotificationHubClientConnection
     {
-        public int IdDispositivo { get; set; }
-        public string TokenDispositivo { get; set; }
-        public string NombreSistemaOperativo { get; set; }
-        public string VersionSistemaOperativo { get; set; }
-        public string Tipo { get; set; }
-        public string NombreNavegador { get; set; }
-        public string VersionNavegador { get; set; }
-        public string TokenNotificacion { get; set; }
-        public string TemplateNotificacion { get; set; }
-        public string PlataformaNotificacion { get; set; }
-        public List<Dato> Suscripciones { get; set; }
+        NotificationHubClient Hub { get; set; }
     }
 }

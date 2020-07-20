@@ -33,6 +33,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.NotificationHubs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Risk.API.Helpers;
@@ -50,11 +51,13 @@ namespace Risk.API.Controllers
     {
         private readonly IAutService _autService;
         private readonly IGenService _genService;
+        private readonly INotificationHubClientConnection _notificationHubClientConnection;
 
-        public AutController(IAutService autService, IGenService genService, IConfiguration configuration) : base(configuration)
+        public AutController(IAutService autService, IGenService genService, INotificationHubClientConnection notificationHubClientConnection, IConfiguration configuration) : base(configuration)
         {
             _autService = autService;
             _genService = genService;
+            _notificationHubClientConnection = notificationHubClientConnection;
         }
 
         private string GenerarAccessToken(string usuario, string claveAplicacion)
@@ -162,7 +165,7 @@ namespace Risk.API.Controllers
             return claimsPrincipal.Identity.Name;
         }
 
-        private void RegistrarDispositivoAzure(string tokenDispositivo)
+        private void RegistrarDispositivoNotificationHub(string tokenDispositivo)
         {
             var respDatosDispositivo = _autService.DatosDispositivo(tokenDispositivo);
             if (!respDatosDispositivo.Codigo.Equals(RiskConstants.CODIGO_OK))
@@ -171,7 +174,63 @@ namespace Risk.API.Controllers
             }
 
             Dispositivo dispositivo = respDatosDispositivo.Datos;
-            // Registration in Azure Notification Hub
+
+            if (dispositivo.TokenNotificacion == null || dispositivo.TokenNotificacion.Equals(string.Empty))
+            {
+                return;
+            }
+
+            NotificationPlatform platform;
+            switch (dispositivo.PlataformaNotificacion)
+            {
+                case "wns":
+                    platform = NotificationPlatform.Wns;
+                    break;
+                case "apns":
+                    platform = NotificationPlatform.Apns;
+                    break;
+                case "mpns":
+                    platform = NotificationPlatform.Mpns;
+                    break;
+                case "fcm":
+                    platform = NotificationPlatform.Fcm;
+                    break;
+                case "adm":
+                    platform = NotificationPlatform.Adm;
+                    break;
+                case "baidu":
+                    platform = NotificationPlatform.Baidu;
+                    break;
+                default:
+                    platform = NotificationPlatform.Fcm;
+                    break;
+            }
+
+            List<string> tags = new List<string>();
+            if (dispositivo.Suscripciones != null)
+            {
+                foreach (var item in dispositivo.Suscripciones)
+                {
+                    tags.Add(item.Contenido);
+                }
+            }
+
+            var templates = new Dictionary<string, InstallationTemplate>()
+            {
+                {"default_template", new InstallationTemplate { Body = dispositivo.TemplateNotificacion }}
+            };
+
+            Installation installation = new Installation
+            {
+                InstallationId = dispositivo.TokenDispositivo,
+                Platform = platform,
+                PushChannel = dispositivo.TokenNotificacion,
+                PushChannelExpired = false,
+                Tags = tags,
+                Templates = templates
+            };
+
+            _notificationHubClientConnection.Hub.CreateOrUpdateInstallation(installation);
         }
 
         [AllowAnonymous]
@@ -208,7 +267,7 @@ namespace Risk.API.Controllers
 
             if (respIniciarSesion.Codigo.Equals(RiskConstants.CODIGO_OK))
             {
-                RegistrarDispositivoAzure(requestBody.TokenDispositivo);
+                RegistrarDispositivoNotificationHub(requestBody.TokenDispositivo);
             }
 
             return ProcesarRespuesta(respIniciarSesion);
@@ -302,7 +361,7 @@ namespace Risk.API.Controllers
 
             if (respuesta.Codigo.Equals(RiskConstants.CODIGO_OK))
             {
-                RegistrarDispositivoAzure(respuesta.Datos.Contenido);
+                RegistrarDispositivoNotificationHub(respuesta.Datos.Contenido);
             }
 
             return ProcesarRespuesta(respuesta);

@@ -166,6 +166,8 @@ namespace Risk.API.Helpers
                     NombreNavegador = entity.NombreNavegador,
                     VersionNavegador = entity.VersionNavegador,
                     TokenNotificacion = entity.TokenNotificacion,
+                    TemplateNotificacion = entity.TemplateNotificacion,
+                    PlataformaNotificacion = entity.PlataformaNotificacion,
                     Suscripciones = GetDatoListFromEntity(entity.Suscripciones)
                 };
             }
@@ -292,6 +294,39 @@ namespace Risk.API.Helpers
                 foreach (var item in entityList)
                 {
                     modelList.Add(GetCorreoFromEntity(item));
+                }
+            }
+            return modelList;
+        }
+
+        public static Notificacion GetNotificacionFromEntity(YNotificacion entity)
+        {
+            Notificacion model;
+            if (entity == null)
+            {
+                model = null;
+            }
+            else
+            {
+                model = new Notificacion
+                {
+                    IdNotificacion = entity.IdNotificacion,
+                    Suscripcion = entity.Suscripcion,
+                    Titulo = entity.Titulo,
+                    Contenido = entity.Contenido
+                };
+            }
+            return model;
+        }
+
+        public static List<Notificacion> GetNotificacionListFromEntity(List<YNotificacion> entityList)
+        {
+            List<Notificacion> modelList = new List<Notificacion>();
+            if (entityList != null)
+            {
+                foreach (var item in entityList)
+                {
+                    modelList.Add(GetNotificacionFromEntity(item));
                 }
             }
             return modelList;
