@@ -3,6 +3,21 @@ set feedback off
 set define off
 
 insert into t_torneo_jornadas (ID_TORNEO, ID_JORNADA, TITULO, FECHA_TOPE, HORA_TOPE, ACTUAL, ESTADO, SITUACION)
+values ('PRI-DEMO', 1, null, null, null, 'N', 'A', 'P');
+
+insert into t_torneo_jornadas (ID_TORNEO, ID_JORNADA, TITULO, FECHA_TOPE, HORA_TOPE, ACTUAL, ESTADO, SITUACION)
+values ('PRI-DEMO', 2, null, null, null, 'N', 'A', 'P');
+
+insert into t_torneo_jornadas (ID_TORNEO, ID_JORNADA, TITULO, FECHA_TOPE, HORA_TOPE, ACTUAL, ESTADO, SITUACION)
+values ('PRI-DEMO', 3, null, null, null, 'N', 'A', 'P');
+
+insert into t_torneo_jornadas (ID_TORNEO, ID_JORNADA, TITULO, FECHA_TOPE, HORA_TOPE, ACTUAL, ESTADO, SITUACION)
+values ('PRI-DEMO', 4, null, null, null, 'N', 'A', 'P');
+
+insert into t_torneo_jornadas (ID_TORNEO, ID_JORNADA, TITULO, FECHA_TOPE, HORA_TOPE, ACTUAL, ESTADO, SITUACION)
+values ('PRI-DEMO', 5, null, null, null, 'N', 'A', 'P');
+
+insert into t_torneo_jornadas (ID_TORNEO, ID_JORNADA, TITULO, FECHA_TOPE, HORA_TOPE, ACTUAL, ESTADO, SITUACION)
 values ('PRI-APE18', 1, null, null, null, 'N', 'C', 'F');
 
 insert into t_torneo_jornadas (ID_TORNEO, ID_JORNADA, TITULO, FECHA_TOPE, HORA_TOPE, ACTUAL, ESTADO, SITUACION)
