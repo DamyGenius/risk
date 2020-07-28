@@ -17,8 +17,8 @@ comment on table T_ESTADIOS
 alter table T_ESTADIOS
   add constraint PK_ESTADIOS primary key (ID_ESTADIO);
 alter table T_ESTADIOS
-  add constraint FK_ESTADIOS_CIUDADES foreign key (ID_PAIS, ID_CIUDAD)
-  references T_CIUDADES (ID_PAIS, ID_CIUDAD);
+  add constraint FK_ESTADIOS_CIUDADES foreign key (ID_CIUDAD)
+  references T_CIUDADES (ID_CIUDAD);
 alter table T_ESTADIOS
   add constraint FK_ESTADIOS_CLUBES foreign key (ID_CLUB)
   references T_CLUBES (ID_CLUB);

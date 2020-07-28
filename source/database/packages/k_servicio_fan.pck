@@ -34,7 +34,8 @@ CREATE OR REPLACE PACKAGE k_servicio_fan IS
 
   FUNCTION listar_partidos(i_parametros IN y_parametros) RETURN y_respuesta;
 
-  FUNCTION realizar_prediccion(i_parametros IN y_parametros) RETURN y_respuesta;
+  FUNCTION realizar_prediccion(i_parametros IN y_parametros)
+    RETURN y_respuesta;
 
   FUNCTION registrar_grupo(i_parametros IN y_parametros) RETURN y_respuesta;
 
@@ -150,9 +151,12 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
     l_objetos := NEW y_objetos();
   
     -- Recibe parámetros
-    l_id_partido := k_servicio.f_valor_parametro_number(i_parametros, 'partido');
-    l_id_torneo  := k_servicio.f_valor_parametro_string(i_parametros, 'torneo');
-    l_estado     := k_servicio.f_valor_parametro_string(i_parametros, 'estado');
+    l_id_partido := k_servicio.f_valor_parametro_number(i_parametros,
+                                                        'partido');
+    l_id_torneo  := k_servicio.f_valor_parametro_string(i_parametros,
+                                                        'torneo');
+    l_estado     := k_servicio.f_valor_parametro_string(i_parametros,
+                                                        'estado');
   
     FOR ele IN cr_elementos(l_id_partido, l_id_torneo, l_estado) LOOP
       l_objeto                   := NEW y_partido();
@@ -194,10 +198,11 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
       RETURN l_rsp;
   END;
 
-  FUNCTION realizar_prediccion(i_parametros IN y_parametros) RETURN y_respuesta IS
+  FUNCTION realizar_prediccion(i_parametros IN y_parametros)
+    RETURN y_respuesta IS
     l_rsp  y_respuesta;
     l_dato y_dato;
-
+  
     l_partido t_partidos.id_partido%TYPE;
     l_usuario t_usuarios.alias%TYPE;
   BEGIN
@@ -206,8 +211,10 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
     l_dato := NEW y_dato();
   
     l_rsp.lugar := 'Obteniendo parámetros';
-    l_partido := k_servicio.f_valor_parametro_number(i_parametros, 'partido');
-    l_usuario := k_servicio.f_valor_parametro_string(i_parametros, 'usuario');
+    l_partido   := k_servicio.f_valor_parametro_number(i_parametros,
+                                                       'partido');
+    l_usuario   := k_servicio.f_valor_parametro_string(i_parametros,
+                                                       'usuario');
   
     l_rsp.lugar := 'Validando parámetros';
     k_servicio.p_validar_parametro(l_rsp,
@@ -236,46 +243,49 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
                   (SELECT x.id_usuario
                      FROM t_usuarios x
                     WHERE x.alias = l_usuario) id_usuario,
-                  k_servicio.f_valor_parametro_number(i_parametros, 'goles_club_local') goles_club_local,
-                  k_servicio.f_valor_parametro_number(i_parametros, 'goles_club_visitante') goles_club_visitante,
-                  k_servicio.f_valor_parametro_number(i_parametros, 'id_sincronizacion') id_sincronizacion
+                  k_servicio.f_valor_parametro_number(i_parametros,
+                                                      'goles_club_local') goles_club_local,
+                  k_servicio.f_valor_parametro_number(i_parametros,
+                                                      'goles_club_visitante') goles_club_visitante,
+                  k_servicio.f_valor_parametro_number(i_parametros,
+                                                      'id_sincronizacion') id_sincronizacion
              FROM dual n
            /*SELECT n.id_partido,
-                  (SELECT x.id_usuario
-                     FROM t_usuarios x
-                    WHERE x.alias = n.usuario) id_usuario,
-                  n.goles_club_local,
-                  n.goles_club_visitante,
-                  n.id_sincronizacion
-             FROM json_table(i_parametros, '$' 
-                      columns (
-                           id_partido NUMBER(10) path '$.partido',
-                           usuario VARCHAR2(300) path '$.usuario',
-                           goles_club_local NUMBER(3) path '$.goles_club_local',
-                           goles_club_visitante NUMBER(3) path '$.goles_club_visitante',
-                           id_sincronizacion NUMBER(3) path '$.id_sincronizacion' ) ) n*/
-          ) s
-       ON (d.id_partido = s.id_partido
-      AND d.id_usuario = s.id_usuario)
-     WHEN MATCHED THEN
-       UPDATE SET d.goles_club_local = s.goles_club_local,
-                  d.goles_club_visitante = s.goles_club_visitante,
-                  d.id_sincronizacion = s.id_sincronizacion
-        WHERE nvl(s.id_sincronizacion, 0) > nvl(d.id_sincronizacion, 0)
-     WHEN NOT MATCHED THEN
-       INSERT
-         (d.id_partido,
-          d.id_usuario,
-          d.goles_club_local,
-          d.goles_club_visitante,
-          d.id_sincronizacion)
-       VALUES
-         (s.id_partido,
-          s.id_usuario,
-          s.goles_club_local,
-          s.goles_club_visitante,
-          s.id_sincronizacion);    
-    
+                (SELECT x.id_usuario
+                   FROM t_usuarios x
+                  WHERE x.alias = n.usuario) id_usuario,
+                n.goles_club_local,
+                n.goles_club_visitante,
+                n.id_sincronizacion
+           FROM json_table(i_parametros, '$' 
+                    columns (
+                         id_partido NUMBER(10) path '$.partido',
+                         usuario VARCHAR2(300) path '$.usuario',
+                         goles_club_local NUMBER(3) path '$.goles_club_local',
+                         goles_club_visitante NUMBER(3) path '$.goles_club_visitante',
+                         id_sincronizacion NUMBER(3) path '$.id_sincronizacion' ) ) n*/
+           ) s
+    ON (d.id_partido = s.id_partido AND d.id_usuario = s.id_usuario)
+    WHEN MATCHED THEN
+      UPDATE
+         SET d.goles_club_local     = s.goles_club_local,
+             d.goles_club_visitante = s.goles_club_visitante,
+             d.id_sincronizacion    = s.id_sincronizacion
+       WHERE nvl(s.id_sincronizacion, 0) > nvl(d.id_sincronizacion, 0)
+    WHEN NOT MATCHED THEN
+      INSERT
+        (d.id_partido,
+         d.id_usuario,
+         d.goles_club_local,
+         d.goles_club_visitante,
+         d.id_sincronizacion)
+      VALUES
+        (s.id_partido,
+         s.id_usuario,
+         s.goles_club_local,
+         s.goles_club_visitante,
+         s.id_sincronizacion);
+  
     k_servicio.p_respuesta_ok(l_rsp, l_dato);
     RETURN l_rsp;
   EXCEPTION
@@ -297,11 +307,12 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
     -- Inicializa respuesta
     l_rsp := NEW y_respuesta();
   
-    l_rsp.lugar := 'Validando parametros';
-    IF anydata.accessvarchar2(k_servicio.f_valor_parametro(i_parametros, '')) IS NULL THEN
-      k_servicio.p_respuesta_error(l_rsp, 'fan0001', 'Debe ingresar ');
-      RAISE k_servicio.ex_error_parametro;
-    END IF;
+    l_rsp.lugar := 'Validando parámetros';
+    k_servicio.p_validar_parametro(l_rsp,
+                                   k_servicio.f_valor_parametro_string(i_parametros,
+                                                                       'tipo') IN
+                                   ('GLO', 'PRI', 'PUB'),
+                                   'Tipo de grupo incorrecto');
   
     l_rsp.lugar := 'Registrando grupo';
     INSERT INTO t_grupos
@@ -317,15 +328,16 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
        todos_invitan)
     VALUES
       ('PRI-APE20',
-       'Cerristas',
-       'GLO',
+       k_servicio.f_valor_parametro_string(i_parametros, 'descripcion'),
+       k_servicio.f_valor_parametro_string(i_parametros, 'tipo'),
        NULL,
-       SYSDATE, -- ok
-       1,
-       'A', -- ok
-       'A', -- ok
-       'CER',
-       'N');
+       SYSDATE,
+       k_servicio.f_valor_parametro_number(i_parametros,
+                                           'id_jornada_inicio'),
+       'A',
+       'A',
+       k_servicio.f_valor_parametro_string(i_parametros, 'id_club'),
+       k_servicio.f_valor_parametro_string(i_parametros, 'todos_invitan'));
   
     k_servicio.p_respuesta_ok(l_rsp);
     RETURN l_rsp;
