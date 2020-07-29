@@ -417,5 +417,46 @@ namespace Risk.API.Helpers
             }
             return modelList;
         }
+
+        public static Prediccion GetPrediccionFromEntity(YPrediccion entity)
+        {
+            Prediccion model;
+            if (entity == null)
+            {
+                model = null;
+            }
+            else
+            {
+                model = new Prediccion
+                {
+                    IdPartido = entity.IdPartido,
+                    IdTorneo = entity.IdTorneo,
+                    IdClubLocal = entity.IdClubLocal,
+                    IdClubVisitante = entity.IdClubVisitante,
+                    Fecha = entity.Fecha,
+                    Hora = entity.Hora,
+                    IdJornada = entity.IdJornada,
+                    IdEstadio = entity.IdEstadio,
+                    GolesLocal = entity.GolesLocal,
+                    GolesVisitante = entity.GolesVisitante,
+                    Estado = entity.Estado,
+                    PrediccionGolesLocal = entity.PredicGolesLocal,
+                    PrediccionGolesVisitante = entity.PredicGolesVisitante,
+                    Puntos = entity.Puntos,
+                    Sincronizacion = entity.Sincronizacion,
+                };
+            }
+            return model;
+        }
+
+        public static List<Prediccion> GetPrediccionListFromEntity(List<YPrediccion> entityList)
+        {
+            List<Prediccion> modelList = new List<Prediccion>();
+            foreach (var item in entityList)
+            {
+                modelList.Add(GetPrediccionFromEntity(item));
+            }
+            return modelList;
+        }
     }
 }
