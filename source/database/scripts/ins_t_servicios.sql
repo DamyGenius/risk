@@ -91,4 +91,7 @@ values (43, 'REALIZAR_PREDICCION', 'T', 'S', 'FAN', null, null, null, null);
 insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
 values (44, 'LISTAR_PARTIDOS', 'T', 'S', 'FAN', null, null, null, null);
 
+insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
+values (45, 'LISTAR_PREDICCIONES_PARTIDOS', 'T', 'S', 'FAN', null, null, null, null);
+
 prompt Done.

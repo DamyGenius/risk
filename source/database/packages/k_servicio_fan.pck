@@ -34,6 +34,8 @@ CREATE OR REPLACE PACKAGE k_servicio_fan IS
 
   FUNCTION listar_partidos(i_parametros IN y_parametros) RETURN y_respuesta;
 
+  FUNCTION listar_predicciones_partidos(i_parametros IN y_parametros) RETURN y_respuesta;
+
   FUNCTION realizar_prediccion(i_parametros IN y_parametros)
     RETURN y_respuesta;
 
@@ -198,6 +200,109 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
       RETURN l_rsp;
   END;
 
+  FUNCTION listar_predicciones_partidos(i_parametros IN y_parametros)
+    RETURN y_respuesta IS
+    l_rsp     y_respuesta;
+    l_pagina  y_pagina;
+    l_objetos y_objetos;
+    l_objeto  y_partido_prediccion;
+  
+    l_id_partido t_partidos.id_partido%TYPE;
+    l_id_torneo  t_partidos.id_torneo%TYPE;
+    l_estado     t_partidos.estado%TYPE;
+    l_usuario    t_usuarios.alias%TYPE;
+  
+    CURSOR cr_elementos(i_id_partido IN VARCHAR2,
+                        i_id_torneo  IN VARCHAR2,
+                        i_estado     IN VARCHAR2,
+                        i_usuario    IN VARCHAR2) IS
+      SELECT c.id_partido,
+             c.id_torneo,
+             c.id_club_local,
+             c.id_club_visitante,
+             c.fecha,
+             c.hora,
+             c.id_jornada,
+             c.id_estadio,
+             c.goles_club_local,
+             c.goles_club_visitante,
+             c.estado,
+             p.goles_club_local predic_goles_local,
+             p.goles_club_visitante predic_goles_visitante,
+             p.puntos,
+             p.id_sincronizacion
+        FROM t_partidos c, t_predicciones p
+       WHERE c.id_partido = nvl(i_id_partido, c.id_partido)
+         AND c.id_torneo = nvl(i_id_torneo, c.id_torneo)
+         AND c.estado = nvl(i_estado, c.estado)
+         AND c.id_partido = p.id_partido(+)
+         AND p.id_usuario(+) = i_usuario;
+  BEGIN
+    -- Inicializa respuesta
+    l_rsp     := NEW y_respuesta();
+    l_pagina  := NEW y_pagina();
+    l_objetos := NEW y_objetos();
+  
+    -- Recibe parámetros
+    l_id_partido := k_servicio.f_valor_parametro_number(i_parametros,
+                                                        'partido');
+    l_id_torneo  := k_servicio.f_valor_parametro_string(i_parametros,
+                                                        'torneo');
+    l_estado     := k_servicio.f_valor_parametro_string(i_parametros,
+                                                        'estado');
+    l_usuario    := k_servicio.f_valor_parametro_string(i_parametros,
+                                                        'usuario');
+  
+    l_rsp.lugar := 'Validando parámetros';
+    k_servicio.p_validar_parametro(l_rsp,
+                                   l_usuario IS NOT NULL,
+                                   'Debe ingresar usuario');
+
+    FOR ele IN cr_elementos(l_id_partido, l_id_torneo, l_estado, k_autenticacion.f_id_usuario(l_usuario)) LOOP
+      l_objeto                   := NEW y_partido_prediccion();
+      l_objeto.id_partido        := ele.id_partido;
+      l_objeto.id_torneo         := ele.id_torneo;
+      l_objeto.id_club_local     := ele.id_club_local;
+      l_objeto.id_club_visitante := ele.id_club_visitante;
+      l_objeto.fecha             := ele.fecha;
+      l_objeto.hora              := ele.hora;
+      l_objeto.id_jornada        := ele.id_jornada;
+      l_objeto.id_estadio        := ele.id_estadio;
+      l_objeto.goles_local       := ele.goles_club_local;
+      l_objeto.goles_visitante   := ele.goles_club_visitante;
+      l_objeto.estado            := ele.estado;
+
+      l_objeto.predic_goles_local     := ele.predic_goles_local;
+      l_objeto.predic_goles_visitante := ele.predic_goles_visitante;
+      l_objeto.puntos                 := ele.puntos;
+      l_objeto.sincronizacion         := ele.id_sincronizacion;
+    
+      l_objetos.extend;
+      l_objetos(l_objetos.count) := l_objeto;
+    END LOOP;
+    l_pagina.numero_actual      := 0;
+    l_pagina.numero_siguiente   := 0;
+    l_pagina.numero_ultima      := 0;
+    l_pagina.numero_primera     := 0;
+    l_pagina.numero_anterior    := 0;
+    l_pagina.cantidad_elementos := l_objetos.count;
+    l_pagina.elementos          := l_objetos;
+  
+    k_servicio.p_respuesta_ok(l_rsp, l_pagina);
+    RETURN l_rsp;
+  EXCEPTION
+    WHEN k_servicio.ex_error_parametro THEN
+      RETURN l_rsp;
+    WHEN k_servicio.ex_error_general THEN
+      RETURN l_rsp;
+    WHEN OTHERS THEN
+      k_servicio.p_respuesta_excepcion(l_rsp,
+                                       utl_call_stack.error_number(1),
+                                       utl_call_stack.error_msg(1),
+                                       dbms_utility.format_error_stack);
+      RETURN l_rsp;
+  END;
+
   FUNCTION realizar_prediccion(i_parametros IN y_parametros)
     RETURN y_respuesta IS
     l_rsp  y_respuesta;
@@ -240,9 +345,7 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
     l_rsp.lugar := 'Realizando prediccion';
     MERGE INTO t_predicciones d
     USING (SELECT l_partido id_partido,
-                  (SELECT x.id_usuario
-                     FROM t_usuarios x
-                    WHERE x.alias = l_usuario) id_usuario,
+                  k_autenticacion.f_id_usuario(l_usuario) id_usuario,
                   k_servicio.f_valor_parametro_number(i_parametros,
                                                       'goles_club_local') goles_club_local,
                   k_servicio.f_valor_parametro_number(i_parametros,
@@ -271,7 +374,7 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
          SET d.goles_club_local     = s.goles_club_local,
              d.goles_club_visitante = s.goles_club_visitante,
              d.id_sincronizacion    = s.id_sincronizacion
-       WHERE nvl(s.id_sincronizacion, 0) > nvl(d.id_sincronizacion, 0)
+       --WHERE nvl(s.id_sincronizacion, 0) > nvl(d.id_sincronizacion, 0) --comentado temporalmente
     WHEN NOT MATCHED THEN
       INSERT
         (d.id_partido,

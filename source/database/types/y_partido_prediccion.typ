@@ -32,6 +32,7 @@ SOFTWARE.
 
   predic_goles_local     NUMBER(3),
   predic_goles_visitante NUMBER(3),
+  puntos                 NUMBER(3),
   sincronizacion         NUMBER(3),
 /**
 Constructor del objeto sin parámetros.
@@ -70,6 +71,7 @@ CREATE OR REPLACE TYPE BODY y_partido_prediccion IS
 
     self.predic_goles_local     := NULL;
     self.predic_goles_visitante := NULL;
+    self.puntos                 := NULL;
     self.sincronizacion         := NULL;
     RETURN;
   END;
@@ -95,6 +97,7 @@ CREATE OR REPLACE TYPE BODY y_partido_prediccion IS
   
     l_objeto.predic_goles_local     := l_json_object.get_string('predic_goles_local');
     l_objeto.predic_goles_visitante := l_json_object.get_string('predic_goles_visitante');
+    l_objeto.puntos                 := l_json_object.get_string('puntos');
     l_objeto.sincronizacion         := l_json_object.get_string('sincronizacion');
 
     RETURN l_objeto;
@@ -118,6 +121,7 @@ CREATE OR REPLACE TYPE BODY y_partido_prediccion IS
 
     l_json_object.put('predic_goles_local', self.predic_goles_local);
     l_json_object.put('predic_goles_visitante', self.predic_goles_visitante);
+    l_json_object.put('puntos', self.puntos);
     l_json_object.put('sincronizacion', self.sincronizacion);
     RETURN l_json_object.to_clob;
   END;
