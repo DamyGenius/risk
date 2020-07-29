@@ -302,7 +302,9 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
   END;
 
   FUNCTION registrar_grupo(i_parametros IN y_parametros) RETURN y_respuesta IS
-    l_rsp y_respuesta;
+    l_rsp                      y_respuesta;
+    l_id_usuario_administrador t_usuarios.id_usuario%TYPE;
+    l_id_grupo                 t_grupos.id_grupo%TYPE;
   BEGIN
     -- Inicializa respuesta
     l_rsp := NEW y_respuesta();
@@ -313,6 +315,10 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
                                                                        'tipo') IN
                                    ('GLO', 'PRI', 'PUB'),
                                    'Tipo de grupo incorrecto');
+  
+    -- Busca usuario
+    l_id_usuario_administrador := k_autenticacion.f_id_usuario(k_servicio.f_valor_parametro_string(i_parametros,
+                                                                                                   'usuario'));
   
     l_rsp.lugar := 'Registrando grupo';
     INSERT INTO t_grupos
@@ -330,14 +336,35 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
       ('PRI-APE20',
        k_servicio.f_valor_parametro_string(i_parametros, 'descripcion'),
        k_servicio.f_valor_parametro_string(i_parametros, 'tipo'),
-       NULL,
+       l_id_usuario_administrador,
        SYSDATE,
        k_servicio.f_valor_parametro_number(i_parametros,
                                            'id_jornada_inicio'),
        'A',
        'A',
        k_servicio.f_valor_parametro_string(i_parametros, 'id_club'),
-       k_servicio.f_valor_parametro_string(i_parametros, 'todos_invitan'));
+       k_servicio.f_valor_parametro_string(i_parametros, 'todos_invitan'))
+    RETURNING id_grupo INTO l_id_grupo;
+  
+    IF l_id_usuario_administrador IS NOT NULL THEN
+      l_rsp.lugar := 'Registrando usuario administrador en el grupo';
+      INSERT INTO t_grupo_usuarios
+        (id_grupo,
+         id_usuario,
+         puntos,
+         ranking,
+         estado,
+         token_activacion,
+         aceptado)
+      VALUES
+        (l_id_grupo,
+         l_id_usuario_administrador,
+         NULL,
+         NULL,
+         'A',
+         NULL,
+         NULL);
+    END IF;
   
     k_servicio.p_respuesta_ok(l_rsp);
     RETURN l_rsp;
