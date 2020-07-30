@@ -28,7 +28,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Net.Mime;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -109,60 +108,6 @@ namespace Risk.API.Controllers
             var tokenHandler = new JwtSecurityTokenHandler();
             var createdToken = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(createdToken);
-        }
-
-        private string GenerarRefreshToken(int size = 32)
-        {
-            var randomNumber = new byte[size];
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(randomNumber);
-                return Convert.ToBase64String(randomNumber);
-            }
-        }
-
-        private string GenerarTokenDispositivo()
-        {
-            return DateTime.Now.Ticks.ToString() + "-" + Guid.NewGuid().ToString();
-        }
-
-        private string ObtenerUsuarioDeAccessToken(string accessToken)
-        {
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-
-            ClaimsPrincipal claimsPrincipal;
-            SecurityToken validatedToken;
-
-            var respValorParametro2 = _genService.ValorParametro("CLAVE_VALIDACION_ACCESS_TOKEN");
-            if (!respValorParametro2.Codigo.Equals(RiskConstants.CODIGO_OK))
-            {
-                return string.Empty;
-            }
-            var signingKey = Encoding.ASCII.GetBytes(respValorParametro2.Datos.Contenido);
-
-            try
-            {
-                claimsPrincipal = tokenHandler.ValidateToken(accessToken, new TokenValidationParameters
-                {
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(signingKey),
-                    ValidateLifetime = false // No se valida el tiempo de expiración del JWT
-                }, out validatedToken);
-            }
-            catch (ArgumentException)
-            {
-                return string.Empty;
-            }
-
-            var jwtSecurityToken = validatedToken as JwtSecurityToken;
-            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-            {
-                return string.Empty;
-            }
-
-            return claimsPrincipal.Identity.Name;
         }
 
         private void RegistrarDispositivoNotificationHub(string tokenDispositivo)
@@ -265,10 +210,10 @@ namespace Risk.API.Controllers
                 return ProcesarRespuesta(respValidarCredenciales);
             }
 
-            var accessToken = GenerarAccessToken(requestBody.Usuario, Request.Headers[RiskConstants.RISK_APP_KEY]);
-            var refreshToken = GenerarRefreshToken();
+            var accessToken = GenerarAccessToken(requestBody.Usuario, TokenHelper.ObtenerClaveAplicacionDeHeaders(Request.Headers));
+            var refreshToken = TokenHelper.GenerarRefreshToken();
 
-            var respIniciarSesion = _autService.IniciarSesion(Request.Headers[RiskConstants.RISK_APP_KEY], requestBody.Usuario, accessToken, refreshToken, requestBody.TokenDispositivo);
+            var respIniciarSesion = _autService.IniciarSesion(TokenHelper.ObtenerClaveAplicacionDeHeaders(Request.Headers), requestBody.Usuario, accessToken, refreshToken, requestBody.TokenDispositivo);
 
             if (respIniciarSesion.Codigo.Equals(RiskConstants.CODIGO_OK))
             {
@@ -286,12 +231,12 @@ namespace Risk.API.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Sesion>))]
         public IActionResult RefrescarSesion([FromBody] RefrescarSesionRequestBody requestBody)
         {
-            string usuario = ObtenerUsuarioDeAccessToken(requestBody.AccessToken);
+            string usuario = TokenHelper.ObtenerUsuarioDeAccessToken(requestBody.AccessToken);
 
-            var accessTokenNuevo = GenerarAccessToken(usuario, Request.Headers[RiskConstants.RISK_APP_KEY]);
-            var refreshTokenNuevo = GenerarRefreshToken();
+            var accessTokenNuevo = GenerarAccessToken(usuario, TokenHelper.ObtenerClaveAplicacionDeHeaders(Request.Headers));
+            var refreshTokenNuevo = TokenHelper.GenerarRefreshToken();
 
-            var respuesta = _autService.RefrescarSesion(Request.Headers[RiskConstants.RISK_APP_KEY], requestBody.AccessToken, requestBody.RefreshToken, accessTokenNuevo, refreshTokenNuevo);
+            var respuesta = _autService.RefrescarSesion(TokenHelper.ObtenerClaveAplicacionDeHeaders(Request.Headers), requestBody.AccessToken, requestBody.RefreshToken, accessTokenNuevo, refreshTokenNuevo);
             return ProcesarRespuesta(respuesta);
         }
 
@@ -359,10 +304,10 @@ namespace Risk.API.Controllers
         {
             if (requestBody.Dispositivo.TokenDispositivo == null || requestBody.Dispositivo.TokenDispositivo.Equals(string.Empty))
             {
-                requestBody.Dispositivo.TokenDispositivo = GenerarTokenDispositivo();
+                requestBody.Dispositivo.TokenDispositivo = TokenHelper.GenerarTokenDispositivo();
             }
 
-            var respuesta = _autService.RegistrarDispositivo(Request.Headers[RiskConstants.RISK_APP_KEY], requestBody.Dispositivo);
+            var respuesta = _autService.RegistrarDispositivo(TokenHelper.ObtenerClaveAplicacionDeHeaders(Request.Headers), requestBody.Dispositivo);
 
             if (respuesta.Codigo.Equals(RiskConstants.CODIGO_OK))
             {
