@@ -31,6 +31,6 @@ namespace Risk.API.Services
         Respuesta<Pagina<Club>> ListarClubes(string idClub = null, string idDivision = null);
         Respuesta<Pagina<Partido>> ListarPartidos(int? partido = null, string torneo = null, string estado = null);
         Respuesta<Pagina<Prediccion>> ListarPrediccionesPartidos(string usuario, int? partido = null, string torneo = null, string estado = null);
-        Respuesta<Dato> RealizarPrediccion(int partido, string usuario, int golesClubLocal, int golesClubVisitante, int idSincronizacion);
+        Respuesta<Dato> RealizarPrediccion(int partido, string usuario, int? golesClubLocal, int? golesClubVisitante, int idSincronizacion);
     }
 }

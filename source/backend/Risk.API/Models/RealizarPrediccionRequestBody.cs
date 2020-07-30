@@ -28,8 +28,8 @@ namespace Risk.API.Models
     {
         public int Partido { get; set; }
         public string Usuario { get; set; }
-        public int GolesClubLocal { get; set; }
-        public int GolesClubVisitante { get; set; }
+        public int? GolesClubLocal { get; set; }
+        public int? GolesClubVisitante { get; set; }
         public int IdSincronizacion { get; set; }
     }
 }

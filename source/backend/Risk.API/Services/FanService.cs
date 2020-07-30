@@ -99,7 +99,7 @@ namespace Risk.API.Services
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<Prediccion>, YPagina<YPrediccion>>(entityRsp, datos);
         }
 
-        public Respuesta<Dato> RealizarPrediccion(int partido, string usuario, int golesClubLocal, int golesClubVisitante, int idSincronizacion)
+        public Respuesta<Dato> RealizarPrediccion(int partido, string usuario, int? golesClubLocal, int? golesClubVisitante, int idSincronizacion)
         {
             JObject prms = new JObject();
             prms.Add("partido", partido);
