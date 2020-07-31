@@ -34,12 +34,15 @@ CREATE OR REPLACE PACKAGE k_servicio_fan IS
 
   FUNCTION listar_partidos(i_parametros IN y_parametros) RETURN y_respuesta;
 
-  FUNCTION listar_predicciones_partidos(i_parametros IN y_parametros) RETURN y_respuesta;
+  FUNCTION listar_predicciones_partidos(i_parametros IN y_parametros)
+    RETURN y_respuesta;
 
   FUNCTION realizar_prediccion(i_parametros IN y_parametros)
     RETURN y_respuesta;
 
   FUNCTION registrar_grupo(i_parametros IN y_parametros) RETURN y_respuesta;
+
+  FUNCTION editar_grupo(i_parametros IN y_parametros) RETURN y_respuesta;
 
 END;
 /
@@ -227,7 +230,7 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
              c.goles_club_local,
              c.goles_club_visitante,
              c.estado,
-             p.goles_club_local predic_goles_local,
+             p.goles_club_local     predic_goles_local,
              p.goles_club_visitante predic_goles_visitante,
              p.puntos,
              p.id_sincronizacion
@@ -257,8 +260,11 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
     k_servicio.p_validar_parametro(l_rsp,
                                    l_usuario IS NOT NULL,
                                    'Debe ingresar usuario');
-
-    FOR ele IN cr_elementos(l_id_partido, l_id_torneo, l_estado, k_autenticacion.f_id_usuario(l_usuario)) LOOP
+  
+    FOR ele IN cr_elementos(l_id_partido,
+                            l_id_torneo,
+                            l_estado,
+                            k_autenticacion.f_id_usuario(l_usuario)) LOOP
       l_objeto                   := NEW y_partido_prediccion();
       l_objeto.id_partido        := ele.id_partido;
       l_objeto.id_torneo         := ele.id_torneo;
@@ -271,7 +277,7 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
       l_objeto.goles_local       := ele.goles_club_local;
       l_objeto.goles_visitante   := ele.goles_club_visitante;
       l_objeto.estado            := ele.estado;
-
+    
       l_objeto.predic_goles_local     := ele.predic_goles_local;
       l_objeto.predic_goles_visitante := ele.predic_goles_visitante;
       l_objeto.puntos                 := ele.puntos;
@@ -374,7 +380,9 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
          SET d.goles_club_local     = s.goles_club_local,
              d.goles_club_visitante = s.goles_club_visitante,
              d.id_sincronizacion    = s.id_sincronizacion
-       --WHERE nvl(s.id_sincronizacion, 0) > nvl(d.id_sincronizacion, 0) --comentado temporalmente
+      --WHERE nvl(s.id_sincronizacion, 0) > nvl(d.id_sincronizacion, 0) --comentado temporalmente
+      
+    
     WHEN NOT MATCHED THEN
       INSERT
         (d.id_partido,
@@ -420,8 +428,7 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
                                    'Tipo de grupo incorrecto');
   
     -- Busca usuario
-    l_id_usuario_administrador := k_autenticacion.f_id_usuario(k_servicio.f_valor_parametro_string(i_parametros,
-                                                                                                   'usuario'));
+    l_id_usuario_administrador := k_autenticacion.f_id_usuario(k_sistema.f_valor_parametro(k_sistema.c_usuario));
   
     l_rsp.lugar := 'Registrando grupo';
     INSERT INTO t_grupos
@@ -468,6 +475,86 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
          NULL,
          NULL);
     END IF;
+  
+    k_servicio.p_respuesta_ok(l_rsp);
+    RETURN l_rsp;
+  EXCEPTION
+    WHEN k_servicio.ex_error_parametro THEN
+      RETURN l_rsp;
+    WHEN k_servicio.ex_error_general THEN
+      RETURN l_rsp;
+    WHEN OTHERS THEN
+      k_servicio.p_respuesta_excepcion(l_rsp,
+                                       utl_call_stack.error_number(1),
+                                       utl_call_stack.error_msg(1),
+                                       dbms_utility.format_error_stack);
+      RETURN l_rsp;
+  END;
+
+  FUNCTION editar_grupo(i_parametros IN y_parametros) RETURN y_respuesta IS
+    l_rsp                      y_respuesta;
+    l_id_usuario_administrador t_usuarios.id_usuario%TYPE;
+    l_tipo                     t_grupos.tipo%TYPE;
+  BEGIN
+    -- Inicializa respuesta
+    l_rsp := NEW y_respuesta();
+  
+    l_rsp.lugar := 'Validando parámetros';
+    k_servicio.p_validar_parametro(l_rsp,
+                                   k_servicio.f_valor_parametro_string(i_parametros,
+                                                                       'tipo') IN
+                                   ('GLO', 'PRI', 'PUB'),
+                                   'Tipo de grupo incorrecto');
+  
+    l_rsp.lugar := 'Buscando datos del grupo';
+    BEGIN
+      SELECT a.tipo, a.id_usuario_administrador
+        INTO l_tipo, l_id_usuario_administrador
+        FROM t_grupos a
+       WHERE a.id_grupo =
+             k_servicio.f_valor_parametro_number(i_parametros, 'id_grupo');
+    EXCEPTION
+      WHEN no_data_found THEN
+        k_servicio.p_respuesta_error(l_rsp, 'fan0001', 'Grupo inexistente');
+        RAISE k_servicio.ex_error_general;
+      WHEN OTHERS THEN
+        k_servicio.p_respuesta_error(l_rsp,
+                                     'fan0002',
+                                     'Error al buscar grupo');
+        RAISE k_servicio.ex_error_general;
+    END;
+  
+    -- Valida tipo
+    IF l_tipo <> 'PRI' THEN
+      k_servicio.p_respuesta_error(l_rsp,
+                                   'fan0003',
+                                   'Sólo los grupos privados se pueden editar');
+      RAISE k_servicio.ex_error_general;
+    END IF;
+  
+    -- Valida usuario administrador
+    IF k_autenticacion.f_id_usuario(k_sistema.f_valor_parametro(k_sistema.c_usuario)) <>
+       l_id_usuario_administrador THEN
+      k_servicio.p_respuesta_error(l_rsp,
+                                   'fan0004',
+                                   'Sólo el administrador puede editar los datos del grupo');
+      RAISE k_servicio.ex_error_general;
+    END IF;
+  
+    l_rsp.lugar := 'Editando grupo';
+    UPDATE t_grupos a
+       SET a.descripcion       = k_servicio.f_valor_parametro_string(i_parametros,
+                                                                     'descripcion'),
+           a.tipo              = k_servicio.f_valor_parametro_string(i_parametros,
+                                                                     'tipo'),
+           a.id_jornada_inicio = k_servicio.f_valor_parametro_number(i_parametros,
+                                                                     'id_jornada_inicio'),
+           a.id_club           = k_servicio.f_valor_parametro_string(i_parametros,
+                                                                     'id_club'),
+           a.todos_invitan     = k_servicio.f_valor_parametro_string(i_parametros,
+                                                                     'todos_invitan')
+     WHERE a.id_grupo =
+           k_servicio.f_valor_parametro_number(i_parametros, 'id_grupo');
   
     k_servicio.p_respuesta_ok(l_rsp);
     RETURN l_rsp;
