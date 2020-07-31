@@ -1,6 +1,7 @@
 prompt Importing table t_servicio_parametros...
 set feedback off
 set define off
+
 insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
 values (0, 'DIRECCION_IP', 'I', 'S', null, 'N', null, 'S', 1, null);
 
@@ -200,24 +201,6 @@ insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FO
 values (33, 'RESPUESTA_ENVIO', 'I', 'S', null, 'S', null, 'S', 4, null);
 
 insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
-values (42, 'USUARIO_ANTIGUO', 'I', 'S', null, 'S', null, 'S', 1, null);
-
-insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
-values (42, 'USUARIO_NUEVO', 'I', 'S', null, 'N', null, 'S', 2, null);
-
-insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
-values (42, 'NOMBRE', 'I', 'S', null, 'N', null, 'S', 3, null);
-
-insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
-values (42, 'APELLIDO', 'I', 'S', null, 'N', null, 'S', 4, null);
-
-insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
-values (42, 'DIRECCION_CORREO', 'I', 'S', null, 'N', null, 'S', 5, null);
-
-insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
-values (42, 'NUMERO_TELEFONO', 'I', 'S', null, 'N', null, 'S', 6, null);
-
-insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
 values (40, 'ID_CLUB', 'I', 'S', null, 'N', null, 'S', 1, null);
 
 insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
@@ -236,10 +219,25 @@ insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FO
 values (41, 'TODOS_INVITAN', 'I', 'S', null, 'S', 'N', 'S', 4, null);
 
 insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
-values (41, 'USUARIO', 'I', 'S', null, 'N', null, 'S', 5, null);
+values (41, 'ID_CLUB', 'I', 'S', null, 'N', null, 'S', 5, null);
 
 insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
-values (41, 'ID_CLUB', 'I', 'S', null, 'N', null, 'S', 6, null);
+values (42, 'USUARIO_ANTIGUO', 'I', 'S', null, 'S', null, 'S', 1, null);
+
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
+values (42, 'USUARIO_NUEVO', 'I', 'S', null, 'N', null, 'S', 2, null);
+
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
+values (42, 'NOMBRE', 'I', 'S', null, 'N', null, 'S', 3, null);
+
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
+values (42, 'APELLIDO', 'I', 'S', null, 'N', null, 'S', 4, null);
+
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
+values (42, 'DIRECCION_CORREO', 'I', 'S', null, 'N', null, 'S', 5, null);
+
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
+values (42, 'NUMERO_TELEFONO', 'I', 'S', null, 'N', null, 'S', 6, null);
 
 insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
 values (43, 'PARTIDO', 'I', 'N', null, 'S', null, 'S', 1, null);
@@ -276,5 +274,23 @@ values (45, 'ESTADO', 'I', 'S', null, 'N', null, 'S', 3, null);
 
 insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
 values (45, 'USUARIO', 'I', 'S', null, 'S', null, 'S', 4, null);
+
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
+values (46, 'ID_GRUPO', 'I', 'N', null, 'S', null, 'S', 1, null);
+
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
+values (46, 'DESCRIPCION', 'I', 'S', null, 'S', null, 'S', 2, null);
+
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
+values (46, 'TIPO', 'I', 'S', null, 'S', null, 'S', 3, null);
+
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
+values (46, 'ID_JORNADA_INICIO', 'I', 'N', null, 'S', null, 'S', 4, null);
+
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
+values (46, 'TODOS_INVITAN', 'I', 'S', null, 'S', 'N', 'S', 5, null);
+
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
+values (46, 'ID_CLUB', 'I', 'S', null, 'N', null, 'S', 6, null);
 
 prompt Done.

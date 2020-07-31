@@ -1,6 +1,7 @@
 prompt Importing table t_servicios...
 set feedback off
 set define off
+
 insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
 values (0, 'CONTEXTO', 'M', 'S', null, null, null, null, null);
 
@@ -77,12 +78,6 @@ insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VE
 values (30, 'LISTAR_MENSAJES_PENDIENTES', 'T', 'S', 'MSJ', null, null, null, null);
 
 insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
-values (40, 'LISTAR_CLUBES', 'T', 'S', 'FAN', null, null, null, null);
-
-insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
-values (41, 'REGISTRAR_GRUPO', 'T', 'S', 'FAN', null, null, null, null);
-
-insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
 values (31, 'LISTAR_CORREOS_PENDIENTES', 'T', 'S', 'MSJ', null, null, null, null);
 
 insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
@@ -90,6 +85,12 @@ values (32, 'LISTAR_NOTIFICACIONES_PENDIENTES', 'T', 'S', 'MSJ', null, null, nul
 
 insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
 values (33, 'CAMBIAR_ESTADO_MENSAJERIA', 'T', 'S', 'MSJ', null, null, null, null);
+
+insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
+values (40, 'LISTAR_CLUBES', 'T', 'S', 'FAN', null, null, null, null);
+
+insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
+values (41, 'REGISTRAR_GRUPO', 'T', 'S', 'FAN', null, null, null, null);
 
 insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
 values (42, 'EDITAR_USUARIO', 'T', 'S', 'AUT', null, null, null, null);
@@ -102,5 +103,8 @@ values (44, 'LISTAR_PARTIDOS', 'T', 'S', 'FAN', null, null, null, null);
 
 insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
 values (45, 'LISTAR_PREDICCIONES_PARTIDOS', 'T', 'S', 'FAN', null, null, null, null);
+
+insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
+values (46, 'EDITAR_GRUPO', 'T', 'S', 'FAN', null, null, null, null);
 
 prompt Done.
