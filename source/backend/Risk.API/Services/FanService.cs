@@ -22,6 +22,7 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -38,7 +39,8 @@ namespace Risk.API.Services
         private const int ID_LISTAR_PARTIDOS = 44;
         private const int ID_LISTAR_PREDICCIONES_PARTIDOS = 45;
 
-        public FanService(IConfiguration configuration, IDbConnectionFactory dbConnectionFactory) : base(configuration, dbConnectionFactory)
+        public FanService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDbConnectionFactory dbConnectionFactory)
+            : base(configuration, httpContextAccessor, dbConnectionFactory)
         {
         }
 
