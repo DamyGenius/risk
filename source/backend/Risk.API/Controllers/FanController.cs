@@ -176,5 +176,27 @@ namespace Risk.API.Controllers
             var respuesta = _genService.GuardarArchivo("T_GRUPOS", "LOGO", idGrupo.ToString(), archivo);
             return ProcesarRespuesta(respuesta);
         }
+
+        [HttpPost("RegistrarGrupo")]
+        [SwaggerOperation(OperationId = "RegistrarGrupo", Summary = "RegistrarGrupo", Description = "Permite registrar un grupo")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
+        public IActionResult RegistrarGrupo([FromBody] RegistrarGrupoRequestBody requestBody)
+        {
+            var respuesta = _fanService.RegistrarGrupo(requestBody.Descripcion, requestBody.Tipo, requestBody.IdJornadaInicio, requestBody.TodosInvitan, requestBody.IdClub);
+            return ProcesarRespuesta(respuesta);
+        }
+
+        [HttpPost("EditarGrupo")]
+        [SwaggerOperation(OperationId = "EditarGrupo", Summary = "EditarGrupo", Description = "Permite editar un grupo")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
+        public IActionResult EditarGrupo([FromBody] EditarGrupoRequestBody requestBody)
+        {
+            var respuesta = _fanService.EditarGrupo(requestBody.IdGrupo, requestBody.Descripcion, requestBody.Tipo, requestBody.IdJornadaInicio, requestBody.TodosInvitan, requestBody.IdClub);
+            return ProcesarRespuesta(respuesta);
+        }
     }
 }

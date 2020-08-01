@@ -35,9 +35,11 @@ namespace Risk.API.Services
     public class FanService : RiskServiceBase, IFanService
     {
         private const int ID_LISTAR_CLUBES = 40;
+        private const int ID_REGISTRAR_GRUPO = 41;
         private const int ID_REALIZAR_PREDICCION = 43;
         private const int ID_LISTAR_PARTIDOS = 44;
         private const int ID_LISTAR_PREDICCIONES_PARTIDOS = 45;
+        private const int ID_EDITAR_GRUPO = 46;
 
         public FanService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDbConnectionFactory dbConnectionFactory)
             : base(configuration, httpContextAccessor, dbConnectionFactory)
@@ -111,6 +113,37 @@ namespace Risk.API.Services
             prms.Add("id_sincronizacion", idSincronizacion);
 
             string rsp = base.ProcesarServicio(ID_REALIZAR_PREDICCION, prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
+
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
+        }
+
+        public Respuesta<Dato> RegistrarGrupo(string descripcion, string tipo, int idJornadaInicio, string todosInvitan, string idClub)
+        {
+            JObject prms = new JObject();
+            prms.Add("descripcion", descripcion);
+            prms.Add("tipo", tipo);
+            prms.Add("id_jornada_inicio", idJornadaInicio);
+            prms.Add("todos_invitan", todosInvitan);
+            prms.Add("id_club", idClub);
+
+            string rsp = base.ProcesarServicio(ID_REGISTRAR_GRUPO, prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
+
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
+        }
+
+        public Respuesta<Dato> EditarGrupo(int idGrupo, string descripcion, string tipo, int idJornadaInicio, string todosInvitan, string idClub)
+        {
+            JObject prms = new JObject();
+            prms.Add("id_grupo", idGrupo);
+            prms.Add("descripcion", descripcion);
+            prms.Add("tipo", tipo);
+            prms.Add("id_jornada_inicio", idJornadaInicio);
+            prms.Add("todos_invitan", todosInvitan);
+            prms.Add("id_club", idClub);
+
+            string rsp = base.ProcesarServicio(ID_EDITAR_GRUPO, prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
 
             return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));

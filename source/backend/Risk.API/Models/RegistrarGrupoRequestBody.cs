@@ -22,17 +22,14 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-using Risk.API.Models;
-
-namespace Risk.API.Services
+namespace Risk.API.Models
 {
-    public interface IFanService
+    public class RegistrarGrupoRequestBody
     {
-        Respuesta<Pagina<Club>> ListarClubes(string idClub = null, string idDivision = null);
-        Respuesta<Pagina<Partido>> ListarPartidos(int? partido = null, string torneo = null, string estado = null);
-        Respuesta<Pagina<Prediccion>> ListarPrediccionesPartidos(string usuario, int? partido = null, string torneo = null, string estado = null);
-        Respuesta<Dato> RealizarPrediccion(int partido, string usuario, int? golesClubLocal, int? golesClubVisitante, int idSincronizacion);
-        Respuesta<Dato> RegistrarGrupo(string descripcion, string tipo, int idJornadaInicio, string todosInvitan, string idClub);
-        Respuesta<Dato> EditarGrupo(int idGrupo, string descripcion, string tipo, int idJornadaInicio, string todosInvitan, string idClub);
+        public string Descripcion { get; set; }
+        public string Tipo { get; set; }
+        public int IdJornadaInicio { get; set; }
+        public string TodosInvitan { get; set; }
+        public string IdClub { get; set; }
     }
 }
