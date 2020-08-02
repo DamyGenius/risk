@@ -71,6 +71,8 @@ prompt
 prompt Borrando types...
 prompt -----------------------------------
 prompt
+drop type y_jornada force;
+drop type y_partidos force;
 drop type y_partido_prediccion force;
 drop type y_partido force;
 drop type y_club force;

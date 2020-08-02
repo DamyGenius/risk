@@ -293,4 +293,16 @@ values (46, 'TODOS_INVITAN', 'I', 'S', null, 'S', 'N', 'S', 5, null);
 insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
 values (46, 'ID_CLUB', 'I', 'S', null, 'N', null, 'S', 6, null);
 
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
+values (47, 'TORNEO', 'I', 'S', null, 'S', null, 'S', 1, null);
+
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
+values (47, 'JORNADA', 'I', 'N', null, 'N', null, 'S', 2, null);
+
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
+values (47, 'ESTADO', 'I', 'S', null, 'N', null, 'S', 3, null);
+
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
+values (47, 'USUARIO', 'I', 'S', null, 'N', null, 'S', 4, null);
+
 prompt Done.
