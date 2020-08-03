@@ -84,7 +84,7 @@ namespace Risk.API.Controllers
                 claims.Add(new Claim(ClaimTypes.Role, rol.Nombre));
             }
 
-            var respTiempoExpiracionToken = _autService.TiempoExpiracionToken(claveAplicacion, "A");
+            var respTiempoExpiracionToken = _autService.TiempoExpiracionToken(claveAplicacion, TipoToken.AccessToken);
             if (!respTiempoExpiracionToken.Codigo.Equals(RiskConstants.CODIGO_OK))
             {
                 return string.Empty;
@@ -203,7 +203,7 @@ namespace Risk.API.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Sesion>))]
         public IActionResult IniciarSesion([FromBody] IniciarSesionRequestBody requestBody)
         {
-            var respValidarCredenciales = _autService.ValidarCredenciales(requestBody.Usuario, requestBody.Clave, "A");
+            var respValidarCredenciales = _autService.ValidarCredenciales(requestBody.Usuario, requestBody.Clave, TipoClave.Acceso);
 
             if (!respValidarCredenciales.Codigo.Equals(RiskConstants.CODIGO_OK))
             {
@@ -247,7 +247,7 @@ namespace Risk.API.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
         public IActionResult FinalizarSesion([FromBody] FinalizarSesionRequestBody requestBody)
         {
-            var respuesta = _autService.CambiarEstadoSesion(requestBody.AccessToken, "F");
+            var respuesta = _autService.CambiarEstadoSesion(requestBody.AccessToken, EstadoSesion.Finalizado);
             return ProcesarRespuesta(respuesta);
         }
 
@@ -258,7 +258,7 @@ namespace Risk.API.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
         public IActionResult RegistrarClaveTransaccional([FromBody] RegistrarClaveTransaccionalRequestBody requestBody)
         {
-            var respuesta = _autService.RegistrarClave(requestBody.Usuario, requestBody.Clave, "T");
+            var respuesta = _autService.RegistrarClave(requestBody.Usuario, requestBody.Clave, TipoClave.Transaccional);
             return ProcesarRespuesta(respuesta);
         }
 
@@ -269,7 +269,7 @@ namespace Risk.API.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
         public IActionResult CambiarClaveAcceso([FromBody] CambiarClaveAccesoRequestBody requestBody)
         {
-            var respuesta = _autService.CambiarClave(requestBody.Usuario, requestBody.ClaveAntigua, requestBody.ClaveNueva, "A");
+            var respuesta = _autService.CambiarClave(requestBody.Usuario, requestBody.ClaveAntigua, requestBody.ClaveNueva, TipoClave.Acceso);
             return ProcesarRespuesta(respuesta);
         }
 
@@ -280,7 +280,7 @@ namespace Risk.API.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
         public IActionResult CambiarClaveTransaccional([FromBody] CambiarClaveTransaccionalRequestBody requestBody)
         {
-            var respuesta = _autService.CambiarClave(requestBody.Usuario, requestBody.ClaveAntigua, requestBody.ClaveNueva, "T");
+            var respuesta = _autService.CambiarClave(requestBody.Usuario, requestBody.ClaveAntigua, requestBody.ClaveNueva, TipoClave.Transaccional);
             return ProcesarRespuesta(respuesta);
         }
 
@@ -383,21 +383,21 @@ namespace Risk.API.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
         public IActionResult EliminarUsuario([FromBody] EliminarUsuarioRequestBody requestBody)
         {
-            var respValidarCredenciales = _autService.ValidarCredenciales(requestBody.Usuario, requestBody.Clave, "A");
+            var respValidarCredenciales = _autService.ValidarCredenciales(requestBody.Usuario, requestBody.Clave, TipoClave.Acceso);
 
             if (!respValidarCredenciales.Codigo.Equals(RiskConstants.CODIGO_OK))
             {
                 return ProcesarRespuesta(respValidarCredenciales);
             }
 
-            var respCambiarEstadoSesion = _autService.CambiarEstadoSesion(requestBody.AccessToken, "F");
+            var respCambiarEstadoSesion = _autService.CambiarEstadoSesion(requestBody.AccessToken, EstadoSesion.Finalizado);
 
             if (!respCambiarEstadoSesion.Codigo.Equals(RiskConstants.CODIGO_OK))
             {
                 return ProcesarRespuesta(respCambiarEstadoSesion);
             }
 
-            var respCambiarEstadoUsuario = _autService.CambiarEstadoUsuario(requestBody.Usuario, "I");
+            var respCambiarEstadoUsuario = _autService.CambiarEstadoUsuario(requestBody.Usuario, EstadoUsuario.Inactivo);
             return ProcesarRespuesta(respCambiarEstadoUsuario);
         }
 

@@ -24,11 +24,11 @@ SOFTWARE.
 
 namespace Risk.API.Models
 {
-    public class CambiarEstadoMensajeriaRequestBody
+    public enum EstadoSesion
     {
-        public TipoMensajeria TipoMensajeria { get; set; }
-        public int IdMensajeria { get; set; }
-        public EstadoMensajeria Estado { get; set; }
-        public string RespuestaEnvio { get; set; }
+        Activo,
+        Expirado,
+        Finalizado,
+        Invalido
     }
 }

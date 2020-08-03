@@ -128,6 +128,64 @@ namespace Risk.API.Helpers
             return entity;
         }
 
+        public static string GetValueFromEstadoUsuarioEnum(EstadoUsuario enumeration)
+        {
+            switch (enumeration)
+            {
+                case EstadoUsuario.Activo:
+                    return "A";
+                case EstadoUsuario.Inactivo:
+                    return "I";
+                case EstadoUsuario.Bloqueado:
+                    return "B";
+                default:
+                    return string.Empty;
+            }
+        }
+
+        public static string GetValueFromEstadoSesionEnum(EstadoSesion enumeration)
+        {
+            switch (enumeration)
+            {
+                case EstadoSesion.Activo:
+                    return "A";
+                case EstadoSesion.Expirado:
+                    return "X";
+                case EstadoSesion.Finalizado:
+                    return "F";
+                case EstadoSesion.Invalido:
+                    return "I";
+                default:
+                    return string.Empty;
+            }
+        }
+
+        public static string GetValueFromTipoClaveEnum(TipoClave enumeration)
+        {
+            switch (enumeration)
+            {
+                case TipoClave.Acceso:
+                    return "A";
+                case TipoClave.Transaccional:
+                    return "T";
+                default:
+                    return string.Empty;
+            }
+        }
+
+        public static string GetValueFromTipoTokenEnum(TipoToken enumeration)
+        {
+            switch (enumeration)
+            {
+                case TipoToken.AccessToken:
+                    return "A";
+                case TipoToken.RefreshToken:
+                    return "R";
+                default:
+                    return string.Empty;
+            }
+        }
+
         public static string GetValueFromTipoMensajeriaEnum(TipoMensajeria enumeration)
         {
             switch (enumeration)
@@ -139,7 +197,26 @@ namespace Risk.API.Helpers
                 case TipoMensajeria.Push:
                     return "P";
                 default:
-                    return "";
+                    return string.Empty;
+            }
+        }
+
+        public static string GetValueFromEstadoMensajeriaEnum(EstadoMensajeria enumeration)
+        {
+            switch (enumeration)
+            {
+                case EstadoMensajeria.Pendiente:
+                    return "P";
+                case EstadoMensajeria.EnProceso:
+                    return "N";
+                case EstadoMensajeria.Enviado:
+                    return "E";
+                case EstadoMensajeria.ProcesadoError:
+                    return "R";
+                case EstadoMensajeria.Anulado:
+                    return "A";
+                default:
+                    return string.Empty;
             }
         }
     }
