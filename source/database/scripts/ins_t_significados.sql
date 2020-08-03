@@ -3,6 +3,15 @@ set feedback off
 set define off
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
+values ('TIPO_MENSAJERIA', 'M', 'MAIL', null, 'S');
+
+insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
+values ('TIPO_MENSAJERIA', 'S', 'SMS', null, 'S');
+
+insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
+values ('TIPO_MENSAJERIA', 'P', 'PUSH', null, 'S');
+
+insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('TIPO_APLICACION', 'S', 'SERVICIO', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
@@ -87,7 +96,7 @@ insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('ESTADO_USUARIO', 'B', 'BLOQUEADO', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
-values ('TIPO_SERVICIO', 'T', 'TRANSACCIÓN', 'K_SERVICIO', 'S');
+values ('TIPO_SERVICIO', 'T', 'TRANSACCIï¿½N', 'K_SERVICIO', 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('TIPO_SERVICIO', 'P', 'PROCESO', 'K_SERVICIO', 'S');
@@ -138,37 +147,22 @@ insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('ESTADO_SESION', 'I', 'INVï¿½LIDO', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
-values ('ESTADO_MENSAJE', 'P', 'PENDIENTE DE ENVï¿½O', null, 'S');
+values ('ESTADO_MENSAJERIA', 'P', 'PENDIENTE DE ENVï¿½O', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
-values ('ESTADO_MENSAJE', 'N', 'EN PROCESO DE ENVï¿½O', null, 'S');
+values ('ESTADO_MENSAJERIA', 'N', 'EN PROCESO DE ENVï¿½O', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
-values ('ESTADO_MENSAJE', 'E', 'ENVIADO', null, 'S');
+values ('ESTADO_MENSAJERIA', 'E', 'ENVIADO', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
-values ('ESTADO_MENSAJE', 'R', 'PROCESADO CON ERROR', null, 'S');
+values ('ESTADO_MENSAJERIA', 'R', 'PROCESADO CON ERROR', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('DOMINIO_SERVICIO', 'MSJ', 'MENSAJERï¿½A', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
-values ('ESTADO_MENSAJE', 'A', 'ANULADO', null, 'S');
-
-insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
-values ('ESTADO_CORREO', 'E', 'ENVIADO', null, 'S');
-
-insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
-values ('ESTADO_CORREO', 'N', 'EN PROCESO DE ENVï¿½O', null, 'S');
-
-insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
-values ('ESTADO_CORREO', 'P', 'PENDIENTE DE ENVï¿½O', null, 'S');
-
-insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
-values ('ESTADO_CORREO', 'R', 'PROCESADO CON ERROR', null, 'S');
-
-insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
-values ('ESTADO_CORREO', 'A', 'ANULADO', null, 'S');
+values ('ESTADO_MENSAJERIA', 'A', 'ANULADO', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('TIPO_GRUPO', 'PRI', 'PRIVADO', null, 'S');
@@ -210,6 +204,6 @@ insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('EXTENSION_REPORTE', 'TXT', 'REPORTE TXT', 'text/plain', 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
-values ('TIPO_SERVICIO', 'M', 'PARÁMETROS', null, 'S');
+values ('TIPO_SERVICIO', 'M', 'PARï¿½METROS', null, 'S');
 
 prompt Done.
