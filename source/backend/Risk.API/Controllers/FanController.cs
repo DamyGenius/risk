@@ -98,6 +98,19 @@ namespace Risk.API.Controllers
             return ProcesarRespuesta(respuesta);
         }
 
+        [HttpGet("ListarJornadas")]
+        [SwaggerOperation(OperationId = "ListarJornadas", Summary = "ListarJornadas", Description = "Obtiene una lista de jornadas")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Jornada<Prediccion>>>))]
+        public IActionResult ListarJornadas([FromQuery, SwaggerParameter(Description = "Identificador del torneo", Required = true)] string idTorneo,
+                                            [FromQuery, SwaggerParameter(Description = "Identificador de la jornada", Required = false)] int? jornada,
+                                            [FromQuery, SwaggerParameter(Description = "Estado de la jornada", Required = false)] string estado,
+                                            [FromQuery, SwaggerParameter(Description = "Usuario", Required = false)] string usuario)
+        {
+            var respuesta = _fanService.ListarJornadas(idTorneo, jornada, usuario, estado);
+            return ProcesarRespuesta(respuesta);
+        }
+
         [HttpPost("RealizarPrediccion")]
         [SwaggerOperation(OperationId = "RealizarPrediccion", Summary = "RealizarPrediccion", Description = "Permite realizar una predicción")]
         [Consumes(MediaTypeNames.Application.Json)]

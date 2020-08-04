@@ -22,18 +22,22 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-using Risk.API.Models;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
-namespace Risk.API.Services
+namespace Risk.API.Entities
 {
-    public interface IFanService
+    public class YJornada<Prediccion>
     {
-        Respuesta<Pagina<Club>> ListarClubes(string idClub = null, string idDivision = null);
-        Respuesta<Pagina<Partido>> ListarPartidos(int? partido = null, string torneo = null, string estado = null);
-        Respuesta<Pagina<Prediccion>> ListarPrediccionesPartidos(string usuario, int? partido = null, string torneo = null, string estado = null);
-        Respuesta<Pagina<Jornada<Prediccion>>> ListarJornadas(string torneo, int? jornada = null, string usuario = null, string estado = null);
-        Respuesta<Dato> RealizarPrediccion(int partido, string usuario, int? golesClubLocal, int? golesClubVisitante, int idSincronizacion);
-        Respuesta<Dato> RegistrarGrupo(string descripcion, string tipo, int idJornadaInicio, string todosInvitan, string idClub);
-        Respuesta<Dato> EditarGrupo(int idGrupo, string descripcion, string tipo, int idJornadaInicio, string todosInvitan, string idClub);
+        [JsonProperty("id_torneo")]
+        public string IdTorneo { get; set; }
+        [JsonProperty("id_jornada")]
+        public int? IdJornada { get; set; }
+        [JsonProperty("titulo")]
+        public string Titulo { get; set; }
+        [JsonProperty("estado")]
+        public string Estado { get; set; }
+        [JsonProperty("partidos")]
+        public List<Prediccion> Partidos { get; set; }
     }
 }

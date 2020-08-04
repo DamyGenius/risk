@@ -40,6 +40,7 @@ namespace Risk.API.Services
         private const int ID_LISTAR_PARTIDOS = 44;
         private const int ID_LISTAR_PREDICCIONES_PARTIDOS = 45;
         private const int ID_EDITAR_GRUPO = 46;
+        private const int ID_LISTAR_JORNADAS = 47;
 
         public FanService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDbConnectionFactory dbConnectionFactory)
             : base(configuration, httpContextAccessor, dbConnectionFactory)
@@ -101,6 +102,26 @@ namespace Risk.API.Services
             }
 
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<Prediccion>, YPagina<YPrediccion>>(entityRsp, datos);
+        }
+
+        public Respuesta<Pagina<Jornada<Prediccion>>> ListarJornadas(string torneo, int? jornada = null, string usuario = null, string estado = null)
+        {
+            JObject prms = new JObject();
+            prms.Add("torneo", torneo);
+            prms.Add("jornada", jornada);
+            prms.Add("estado", estado);
+            prms.Add("usuario", usuario);
+
+            string rsp = base.ProcesarServicio(ID_LISTAR_JORNADAS, prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YPagina<YJornada<YPrediccion>>>>(rsp);
+
+            Pagina<Jornada<Prediccion>> datos = null;
+            if (entityRsp.Datos != null)
+            {
+                datos = EntitiesMapper.GetPaginaFromEntity<Jornada<Prediccion>, YJornada<YPrediccion>>(entityRsp.Datos, EntitiesMapper.GetJornadaListFromEntity(entityRsp.Datos.Elementos));
+            }
+
+            return EntitiesMapper.GetRespuestaFromEntity<Pagina<Jornada<Prediccion>>, YPagina<YJornada<YPrediccion>>>(entityRsp, datos);
         }
 
         public Respuesta<Dato> RealizarPrediccion(int partido, string usuario, int? golesClubLocal, int? golesClubVisitante, int idSincronizacion)
