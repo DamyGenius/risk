@@ -1,7 +1,7 @@
-CREATE OR REPLACE TYPE y_pais UNDER y_objeto
+CREATE OR REPLACE TYPE y_barrio UNDER y_objeto
 (
 /**
-Agrupa datos de Paises.
+Agrupa datos de Barrios.
 
 %author jtsoya539 30/3/2020 10:54:26
 */
@@ -30,49 +30,49 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-/** Identificador del pais */
-  id_pais NUMBER(3),
-/** Nombre del pais */
+/** Identificador del barrio */
+  id_barrio NUMBER(3),
+/** Nombre del barrio */
   nombre VARCHAR2(100),
-/** Codigo del pais segun estandar ISO 3166-1 alpha-2 */
-  iso_alpha_2 VARCHAR2(2),
-/** Codigo del pais segun estandar ISO 3166-1 alpha-3 */
-  iso_alpha_3 VARCHAR2(3),
-/** Codigo del pais segun estandar ISO 3166-1 numeric */
-  iso_numeric NUMBER(3),
+/** País del barrio */
+  id_pais NUMBER(3),
+/** Departamento del barrio */
+  id_departamento NUMBER(3),
+/** Ciudad del barrio */
+  id_ciudad NUMBER(3),
 
-  CONSTRUCTOR FUNCTION y_pais RETURN SELF AS RESULT,
+  CONSTRUCTOR FUNCTION y_barrio RETURN SELF AS RESULT,
 
   STATIC FUNCTION parse_json(i_json IN CLOB) RETURN y_objeto,
 
   OVERRIDING MEMBER FUNCTION to_json RETURN CLOB
 )
 /
-CREATE OR REPLACE TYPE BODY y_pais IS
+CREATE OR REPLACE TYPE BODY y_barrio IS
 
-  CONSTRUCTOR FUNCTION y_pais RETURN SELF AS RESULT AS
+  CONSTRUCTOR FUNCTION y_barrio RETURN SELF AS RESULT AS
   BEGIN
-    self.id_pais     := NULL;
-    self.nombre      := NULL;
-    self.iso_alpha_2 := NULL;
-    self.iso_alpha_3 := NULL;
-    self.iso_numeric := NULL;
+    self.id_barrio       := NULL;
+    self.nombre          := NULL;
+    self.id_pais         := NULL;
+    self.id_departamento := NULL;
+    self.id_ciudad       := NULL;
   
     RETURN;
   END;
 
   STATIC FUNCTION parse_json(i_json IN CLOB) RETURN y_objeto IS
-    l_objeto      y_pais;
+    l_objeto      y_barrio;
     l_json_object json_object_t;
   BEGIN
     l_json_object := json_object_t.parse(i_json);
   
-    l_objeto             := NEW y_pais();
-    l_objeto.id_pais     := l_json_object.get_number('id_pais');
-    l_objeto.nombre      := l_json_object.get_string('nombre');
-    l_objeto.iso_alpha_2 := l_json_object.get_string('iso_alpha_2');
-    l_objeto.iso_alpha_3 := l_json_object.get_string('iso_alpha_3');
-    l_objeto.iso_numeric := l_json_object.get_number('iso_numeric');
+    l_objeto                 := NEW y_barrio();
+    l_objeto.id_barrio       := l_json_object.get_number('id_barrio');
+    l_objeto.nombre          := l_json_object.get_string('nombre');
+    l_objeto.id_pais         := l_json_object.get_number('id_pais');
+    l_objeto.id_departamento := l_json_object.get_number('id_departamento');
+    l_objeto.id_ciudad       := l_json_object.get_number('id_ciudad');
   
     RETURN l_objeto;
   END;
@@ -81,11 +81,11 @@ CREATE OR REPLACE TYPE BODY y_pais IS
     l_json_object json_object_t;
   BEGIN
     l_json_object := NEW json_object_t();
-    l_json_object.put('id_pais', self.id_pais);
+    l_json_object.put('id_barrio', self.id_barrio);
     l_json_object.put('nombre', self.nombre);
-    l_json_object.put('iso_alpha_2', self.iso_alpha_2);
-    l_json_object.put('iso_alpha_3', self.iso_alpha_3);
-    l_json_object.put('iso_numeric', self.iso_numeric);
+    l_json_object.put('id_pais', self.id_pais);
+    l_json_object.put('id_departamento', self.id_departamento);
+    l_json_object.put('id_ciudad', self.id_ciudad);
   
     RETURN l_json_object.to_clob;
   END;
