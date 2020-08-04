@@ -313,10 +313,12 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
 
   FUNCTION listar_jornadas(i_parametros IN y_parametros)
     RETURN y_respuesta IS
-    l_rsp     y_respuesta;
-    l_pagina  y_pagina;
-    l_objetos y_objetos;
-    l_objeto  y_jornada;
+    l_rsp      y_respuesta;
+    l_pagina   y_pagina;
+    l_objetos  y_objetos;
+    l_objeto   y_jornada;
+    l_partidos y_partidos;
+    l_partido  y_partido_prediccion;
   
     l_id_torneo  t_torneo_jornadas.id_torneo%TYPE;
     l_id_jornada t_torneo_jornadas.id_jornada%TYPE;
@@ -340,8 +342,9 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
          AND j.estado = nvl(i_estado, j.estado)
        ORDER BY j.id_torneo, j.id_jornada;
 
-    CURSOR cr_partidos(i_id_partido IN VARCHAR2,
-                       i_id_torneo  IN VARCHAR2,
+    CURSOR cr_partidos(i_id_torneo  IN VARCHAR2,
+                       i_id_jornada IN NUMBER,
+                       i_id_partido IN VARCHAR2,
                        i_estado     IN VARCHAR2,
                        i_usuario    IN VARCHAR2) IS
       SELECT c.id_partido,
@@ -362,6 +365,7 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
         FROM t_partidos c, t_predicciones p
        WHERE c.id_partido = nvl(i_id_partido, c.id_partido)
          AND c.id_torneo = nvl(i_id_torneo, c.id_torneo)
+         AND c.id_jornada = nvl(i_id_jornada, c.id_jornada)
          AND c.estado = nvl(i_estado, c.estado)
          AND c.id_partido = p.id_partido(+)
          AND p.id_usuario(+) = i_usuario;
@@ -387,15 +391,44 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
                                    'Debe ingresar torneo');
   
     FOR ele IN cr_jornadas(l_id_torneo,
-                            l_id_jornada,
-                            l_estado/*,
-                            k_autenticacion.f_id_usuario(l_usuario)*/) LOOP
-      l_objeto                   := NEW y_jornada();
-      l_objeto.id_torneo         := ele.id_torneo;
-      l_objeto.id_jornada        := ele.id_jornada;
-      l_objeto.titulo            := ele.titulo;
-      l_objeto.estado            := ele.estado;
+                           l_id_jornada,
+                           l_estado/*,
+                           k_autenticacion.f_id_usuario(l_usuario)*/) LOOP
+      l_objeto            := NEW y_jornada();
+      l_partidos          := NEW y_partidos();
+      l_objeto.id_torneo  := ele.id_torneo;
+      l_objeto.id_jornada := ele.id_jornada;
+      l_objeto.titulo     := ele.titulo;
+      l_objeto.estado     := ele.estado;
 
+      FOR p IN cr_partidos(ele.id_torneo,
+                           ele.id_jornada,
+                           NULL,
+                           NULL,
+                           k_autenticacion.f_id_usuario(l_usuario)) LOOP
+        l_partido                   := NEW y_partido_prediccion();
+        l_partido.id_partido        := p.id_partido;
+        l_partido.id_torneo         := p.id_torneo;
+        l_partido.id_club_local     := p.id_club_local;
+        l_partido.id_club_visitante := p.id_club_visitante;
+        l_partido.fecha             := p.fecha;
+        l_partido.hora              := p.hora;
+        l_partido.id_jornada        := p.id_jornada;
+        l_partido.id_estadio        := p.id_estadio;
+        l_partido.goles_local       := p.goles_club_local;
+        l_partido.goles_visitante   := p.goles_club_visitante;
+        l_partido.estado            := p.estado;
+      
+        l_partido.predic_goles_local     := p.predic_goles_local;
+        l_partido.predic_goles_visitante := p.predic_goles_visitante;
+        l_partido.puntos                 := p.puntos;
+        l_partido.sincronizacion         := p.id_sincronizacion;
+      
+        l_partidos.extend;
+        l_partidos(l_partidos.count) := l_partido;
+      END LOOP;
+
+      l_objeto.partidos          := l_partidos;
       l_objetos.extend;
       l_objetos(l_objetos.count) := l_objeto;
     END LOOP;
