@@ -3,45 +3,45 @@ set feedback off
 set define off
 
 insert into t_grupos (ID_GRUPO, ID_TORNEO, DESCRIPCION, TIPO, ID_USUARIO_ADMINISTRADOR, FECHA_CREACION, ID_JORNADA_INICIO, ESTADO, SITUACION, ID_CLUB, TODOS_INVITAN)
-values (1, 'PRI-APE20', 'General', 'GLO', null, null, 1, 'A', 'A', null, 'N');
+values (null, 'PRI-APE20', 'General', 'GLO', null, null, 1, 'A', 'A', null, 'N');
 
 insert into t_grupos (ID_GRUPO, ID_TORNEO, DESCRIPCION, TIPO, ID_USUARIO_ADMINISTRADOR, FECHA_CREACION, ID_JORNADA_INICIO, ESTADO, SITUACION, ID_CLUB, TODOS_INVITAN)
-values (2, 'PRI-APE20', 'Cerristas', 'GLO', null, null, 1, 'A', 'A', 'CER', 'N');
+values (null, 'PRI-APE20', 'Cerristas', 'GLO', null, null, 1, 'A', 'A', 'CER', 'N');
 
 insert into t_grupos (ID_GRUPO, ID_TORNEO, DESCRIPCION, TIPO, ID_USUARIO_ADMINISTRADOR, FECHA_CREACION, ID_JORNADA_INICIO, ESTADO, SITUACION, ID_CLUB, TODOS_INVITAN)
-values (3, 'PRI-APE20', 'Olimpistas', 'GLO', null, null, 1, 'A', 'A', 'OLI', 'N');
+values (null, 'PRI-APE20', 'Olimpistas', 'GLO', null, null, 1, 'A', 'A', 'OLI', 'N');
 
 insert into t_grupos (ID_GRUPO, ID_TORNEO, DESCRIPCION, TIPO, ID_USUARIO_ADMINISTRADOR, FECHA_CREACION, ID_JORNADA_INICIO, ESTADO, SITUACION, ID_CLUB, TODOS_INVITAN)
-values (4, 'PRI-APE20', 'Liberteños', 'GLO', null, null, 1, 'A', 'A', 'LIB', 'N');
+values (null, 'PRI-APE20', 'Liberteños', 'GLO', null, null, 1, 'A', 'A', 'LIB', 'N');
 
 insert into t_grupos (ID_GRUPO, ID_TORNEO, DESCRIPCION, TIPO, ID_USUARIO_ADMINISTRADOR, FECHA_CREACION, ID_JORNADA_INICIO, ESTADO, SITUACION, ID_CLUB, TODOS_INVITAN)
-values (5, 'PRI-APE20', 'Solenses', 'GLO', null, null, 1, 'A', 'A', 'SOL', 'N');
+values (null, 'PRI-APE20', 'Solenses', 'GLO', null, null, 1, 'A', 'A', 'SOL', 'N');
 
 insert into t_grupos (ID_GRUPO, ID_TORNEO, DESCRIPCION, TIPO, ID_USUARIO_ADMINISTRADOR, FECHA_CREACION, ID_JORNADA_INICIO, ESTADO, SITUACION, ID_CLUB, TODOS_INVITAN)
-values (6, 'PRI-APE20', 'Luqueños', 'GLO', null, null, 1, 'A', 'A', 'LUQ', 'N');
+values (null, 'PRI-APE20', 'Luqueños', 'GLO', null, null, 1, 'A', 'A', 'LUQ', 'N');
 
 insert into t_grupos (ID_GRUPO, ID_TORNEO, DESCRIPCION, TIPO, ID_USUARIO_ADMINISTRADOR, FECHA_CREACION, ID_JORNADA_INICIO, ESTADO, SITUACION, ID_CLUB, TODOS_INVITAN)
-values (7, 'PRI-APE20', 'Santanianos', 'GLO', null, null, 1, 'A', 'A', 'SAN', 'N');
+values (null, 'PRI-APE20', 'Santanianos', 'GLO', null, null, 1, 'A', 'A', 'SAN', 'N');
 
 insert into t_grupos (ID_GRUPO, ID_TORNEO, DESCRIPCION, TIPO, ID_USUARIO_ADMINISTRADOR, FECHA_CREACION, ID_JORNADA_INICIO, ESTADO, SITUACION, ID_CLUB, TODOS_INVITAN)
-values (8, 'PRI-APE20', 'Nacionalófilos', 'GLO', null, null, 1, 'A', 'A', 'NAC', 'N');
+values (null, 'PRI-APE20', 'Nacionalófilos', 'GLO', null, null, 1, 'A', 'A', 'NAC', 'N');
 
 insert into t_grupos (ID_GRUPO, ID_TORNEO, DESCRIPCION, TIPO, ID_USUARIO_ADMINISTRADOR, FECHA_CREACION, ID_JORNADA_INICIO, ESTADO, SITUACION, ID_CLUB, TODOS_INVITAN)
-values (9, 'PRI-APE20', 'Aurinegros', 'GLO', null, null, 1, 'A', 'A', 'GUA', 'N');
+values (null, 'PRI-APE20', 'Aurinegros', 'GLO', null, null, 1, 'A', 'A', 'GUA', 'N');
 
 insert into t_grupos (ID_GRUPO, ID_TORNEO, DESCRIPCION, TIPO, ID_USUARIO_ADMINISTRADOR, FECHA_CREACION, ID_JORNADA_INICIO, ESTADO, SITUACION, ID_CLUB, TODOS_INVITAN)
-values (10, 'PRI-APE20', 'Rayaditos', 'GLO', null, null, 1, 'A', 'A', 'SSL', 'N');
+values (null, 'PRI-APE20', 'Rayaditos', 'GLO', null, null, 1, 'A', 'A', 'SSL', 'N');
 
 insert into t_grupos (ID_GRUPO, ID_TORNEO, DESCRIPCION, TIPO, ID_USUARIO_ADMINISTRADOR, FECHA_CREACION, ID_JORNADA_INICIO, ESTADO, SITUACION, ID_CLUB, TODOS_INVITAN)
-values (11, 'PRI-APE20', 'Kelitos', 'GLO', null, null, 1, 'A', 'A', 'RIV', 'N');
+values (null, 'PRI-APE20', 'Kelitos', 'GLO', null, null, 1, 'A', 'A', 'RIV', 'N');
 
 insert into t_grupos (ID_GRUPO, ID_TORNEO, DESCRIPCION, TIPO, ID_USUARIO_ADMINISTRADOR, FECHA_CREACION, ID_JORNADA_INICIO, ESTADO, SITUACION, ID_CLUB, TODOS_INVITAN)
-values (12, 'PRI-APE20', 'Águilas de Luque', 'GLO', null, null, 1, 'A', 'A', 'GEN', 'N');
+values (null, 'PRI-APE20', 'Águilas de Luque', 'GLO', null, null, 1, 'A', 'A', 'GEN', 'N');
 
 insert into t_grupos (ID_GRUPO, ID_TORNEO, DESCRIPCION, TIPO, ID_USUARIO_ADMINISTRADOR, FECHA_CREACION, ID_JORNADA_INICIO, ESTADO, SITUACION, ID_CLUB, TODOS_INVITAN)
-values (13, 'PRI-APE20', 'Itagüeños', 'GLO', null, null, 1, 'A', 'A', '12O', 'N');
+values (null, 'PRI-APE20', 'Itagüeños', 'GLO', null, null, 1, 'A', 'A', '12O', 'N');
 
 insert into t_grupos (ID_GRUPO, ID_TORNEO, DESCRIPCION, TIPO, ID_USUARIO_ADMINISTRADOR, FECHA_CREACION, ID_JORNADA_INICIO, ESTADO, SITUACION, ID_CLUB, TODOS_INVITAN)
-values (14, 'PRI-APE20', 'Guaireños', 'GLO', null, null, 1, 'A', 'A', 'GUI', 'N');
+values (null, 'PRI-APE20', 'Guaireños', 'GLO', null, null, 1, 'A', 'A', 'GUI', 'N');
 
 prompt Done.
