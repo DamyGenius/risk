@@ -394,7 +394,7 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
     FOR ele IN cr_jornadas(l_id_torneo,
                            l_id_jornada,
                            l_estado /*,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                           k_autenticacion.f_id_usuario(l_usuario)*/) LOOP
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 k_autenticacion.f_id_usuario(l_usuario)*/) LOOP
       l_objeto            := NEW y_jornada();
       l_partidos          := NEW y_partidos();
       l_objeto.id_torneo  := ele.id_torneo;
@@ -719,24 +719,57 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
   END;
 
   FUNCTION datos_grupo(i_parametros IN y_parametros) RETURN y_respuesta IS
-    l_rsp                      y_respuesta;
-    l_id_usuario_administrador t_usuarios.id_usuario%TYPE;
-    l_tipo                     t_grupos.tipo%TYPE;
+    l_rsp      y_respuesta;
+    l_grupo    y_grupo;
+    l_usuarios y_objetos;
+    l_usuario  y_grupo_usuario;
+  
+    CURSOR cr_usuarios(i_id_grupo IN NUMBER) IS
+      SELECT a.id_grupo,
+             a.id_usuario,
+             a.puntos,
+             a.ranking,
+             a.estado,
+             a.token_activacion,
+             a.aceptado
+        FROM t_grupo_usuarios a
+       WHERE a.id_grupo = i_id_grupo;
   BEGIN
     -- Inicializa respuesta
-    l_rsp := NEW y_respuesta();
+    l_rsp      := NEW y_respuesta();
+    l_grupo    := NEW y_grupo();
+    l_usuarios := NEW y_objetos();
   
-    l_rsp.lugar := 'Validando parámetros';
+    l_rsp.lugar := 'Validando parametros';
     k_servicio.p_validar_parametro(l_rsp,
-                                   k_servicio.f_valor_parametro_string(i_parametros,
-                                                                       'tipo') IN
-                                   ('GLO', 'PRI', 'PUB'),
-                                   'Tipo de grupo incorrecto');
+                                   k_servicio.f_valor_parametro_number(i_parametros,
+                                                                       'id_grupo') IS NOT NULL,
+                                   'Debe ingresar id_grupo');
   
     l_rsp.lugar := 'Buscando datos del grupo';
     BEGIN
-      SELECT a.tipo, a.id_usuario_administrador
-        INTO l_tipo, l_id_usuario_administrador
+      SELECT a.id_grupo,
+             a.id_torneo,
+             a.descripcion,
+             a.tipo,
+             a.id_usuario_administrador,
+             a.fecha_creacion,
+             a.id_jornada_inicio,
+             a.estado,
+             a.situacion,
+             a.id_club,
+             a.todos_invitan
+        INTO l_grupo.id_grupo,
+             l_grupo.id_torneo,
+             l_grupo.descripcion,
+             l_grupo.tipo,
+             l_grupo.id_usuario_administrador,
+             l_grupo.fecha_creacion,
+             l_grupo.id_jornada_inicio,
+             l_grupo.estado,
+             l_grupo.situacion,
+             l_grupo.id_club,
+             l_grupo.todos_invitan
         FROM t_grupos a
        WHERE a.id_grupo =
              k_servicio.f_valor_parametro_number(i_parametros, 'id_grupo');
@@ -747,43 +780,26 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
       WHEN OTHERS THEN
         k_servicio.p_respuesta_error(l_rsp,
                                      'fan0002',
-                                     'Error al buscar grupo');
+                                     'Error al buscar datos del grupo');
         RAISE k_servicio.ex_error_general;
     END;
   
-    -- Valida tipo
-    IF l_tipo <> 'PRI' THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'fan0003',
-                                   'Sólo los grupos privados se pueden editar');
-      RAISE k_servicio.ex_error_general;
-    END IF;
+    l_rsp.lugar := 'Buscando usuarios del grupo';
+    FOR c IN cr_usuarios(l_grupo.id_grupo) LOOP
+      l_usuario                  := NEW y_grupo_usuario();
+      l_usuario.id_usuario       := c.id_usuario;
+      l_usuario.puntos           := c.puntos;
+      l_usuario.ranking          := c.ranking;
+      l_usuario.estado           := c.estado;
+      l_usuario.token_activacion := c.token_activacion;
+      l_usuario.aceptado         := c.aceptado;
+    
+      l_usuarios.extend;
+      l_usuarios(l_usuarios.count) := l_usuario;
+    END LOOP;
+    l_grupo.usuarios := l_usuarios;
   
-    -- Valida usuario administrador
-    IF k_autenticacion.f_id_usuario(k_sistema.f_valor_parametro(k_sistema.c_usuario)) <>
-       l_id_usuario_administrador THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'fan0004',
-                                   'Sólo el administrador puede editar los datos del grupo');
-      RAISE k_servicio.ex_error_general;
-    END IF;
-  
-    l_rsp.lugar := 'Editando grupo';
-    UPDATE t_grupos a
-       SET a.descripcion       = k_servicio.f_valor_parametro_string(i_parametros,
-                                                                     'descripcion'),
-           a.tipo              = k_servicio.f_valor_parametro_string(i_parametros,
-                                                                     'tipo'),
-           a.id_jornada_inicio = k_servicio.f_valor_parametro_number(i_parametros,
-                                                                     'id_jornada_inicio'),
-           a.id_club           = k_servicio.f_valor_parametro_string(i_parametros,
-                                                                     'id_club'),
-           a.todos_invitan     = k_servicio.f_valor_parametro_string(i_parametros,
-                                                                     'todos_invitan')
-     WHERE a.id_grupo =
-           k_servicio.f_valor_parametro_number(i_parametros, 'id_grupo');
-  
-    k_servicio.p_respuesta_ok(l_rsp);
+    k_servicio.p_respuesta_ok(l_rsp, l_grupo);
     RETURN l_rsp;
   EXCEPTION
     WHEN k_servicio.ex_error_parametro THEN
