@@ -148,7 +148,7 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
              c.id_estadio,
              c.goles_club_local,
              c.goles_club_visitante,
-             c.estado
+             k_util.f_significado_codigo('ESTADO_PARTIDO',c.estado) estado
         FROM t_partidos c
        WHERE c.id_partido = nvl(i_id_partido, c.id_partido)
          AND c.id_torneo = nvl(i_id_torneo, c.id_torneo)
@@ -233,7 +233,7 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
              c.id_estadio,
              c.goles_club_local,
              c.goles_club_visitante,
-             c.estado,
+             k_util.f_significado_codigo('ESTADO_PARTIDO',c.estado) estado,
              p.goles_club_local     predic_goles_local,
              p.goles_club_visitante predic_goles_visitante,
              p.puntos,
@@ -358,7 +358,7 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
              c.id_estadio,
              c.goles_club_local,
              c.goles_club_visitante,
-             c.estado,
+             k_util.f_significado_codigo('ESTADO_PARTIDO',c.estado) estado,
              p.goles_club_local     predic_goles_local,
              p.goles_club_visitante predic_goles_visitante,
              p.puntos,

@@ -40,7 +40,7 @@ SOFTWARE.
   id_estadio        NUMBER(6),
   goles_local       NUMBER(3),
   goles_visitante   NUMBER(3),
-  estado            VARCHAR2(1),
+  estado            VARCHAR2(300),
 /**
 Constructor del objeto sin parámetros.
 
