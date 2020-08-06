@@ -151,6 +151,8 @@ prompt
 @@types/y_partido_prediccion.typ
 @@types/y_partidos.typ
 @@types/y_jornada.typ
+@@types/y_grupo_usuario.typ
+@@types/y_grupo.typ
 
 prompt
 prompt Creando paquetes...
