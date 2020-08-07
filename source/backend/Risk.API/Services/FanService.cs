@@ -41,6 +41,7 @@ namespace Risk.API.Services
         private const int ID_LISTAR_PREDICCIONES_PARTIDOS = 45;
         private const int ID_EDITAR_GRUPO = 46;
         private const int ID_LISTAR_JORNADAS = 47;
+        private const int ID_DATOS_GRUPO = 48;
 
         public FanService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDbConnectionFactory dbConnectionFactory)
             : base(configuration, httpContextAccessor, dbConnectionFactory)
@@ -168,6 +169,17 @@ namespace Risk.API.Services
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
 
             return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
+        }
+
+        public Respuesta<Grupo> DatosGrupo(int idGrupo)
+        {
+            JObject prms = new JObject();
+            prms.Add("id_grupo", idGrupo);
+
+            string rsp = base.ProcesarServicio(ID_DATOS_GRUPO, prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YGrupo>>(rsp);
+
+            return EntitiesMapper.GetRespuestaFromEntity<Grupo, YGrupo>(entityRsp, EntitiesMapper.GetGrupoFromEntity(entityRsp.Datos));
         }
     }
 }

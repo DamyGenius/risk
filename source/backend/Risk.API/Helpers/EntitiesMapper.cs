@@ -591,5 +591,81 @@ namespace Risk.API.Helpers
             }
             return modelList;
         }
+
+        public static GrupoUsuario GetGrupoUsuarioFromEntity(YGrupoUsuario entity)
+        {
+            GrupoUsuario model;
+            if (entity == null)
+            {
+                model = null;
+            }
+            else
+            {
+                model = new GrupoUsuario
+                {
+                    IdUsuario = entity.IdUsuario,
+                    Puntos = entity.Puntos,
+                    Ranking = entity.Ranking,
+                    Estado = entity.Estado,
+                    TokenActivacion = entity.TokenActivacion,
+                    Aceptado = entity.Aceptado
+                };
+            }
+            return model;
+        }
+
+        public static List<GrupoUsuario> GetGrupoUsuarioListFromEntity(List<YGrupoUsuario> entityList)
+        {
+            List<GrupoUsuario> modelList = new List<GrupoUsuario>();
+            if (entityList != null)
+            {
+                foreach (var item in entityList)
+                {
+                    modelList.Add(GetGrupoUsuarioFromEntity(item));
+                }
+            }
+            return modelList;
+        }
+
+        public static Grupo GetGrupoFromEntity(YGrupo entity)
+        {
+            Grupo model;
+            if (entity == null)
+            {
+                model = null;
+            }
+            else
+            {
+                model = new Grupo
+                {
+                    IdGrupo = entity.IdGrupo,
+                    IdTorneo = entity.IdTorneo,
+                    Descripcion = entity.Descripcion,
+                    Tipo = entity.Tipo,
+                    IdUsuarioAdministrador = entity.IdUsuarioAdministrador,
+                    FechaCreacion = entity.FechaCreacion,
+                    IdJornadaInicio = entity.IdJornadaInicio,
+                    Estado = entity.Estado,
+                    Situacion = entity.Situacion,
+                    IdClub = entity.IdClub,
+                    TodosInvitan = entity.TodosInvitan,
+                    Usuarios = GetGrupoUsuarioListFromEntity(entity.Usuarios)
+                };
+            }
+            return model;
+        }
+
+        public static List<Grupo> GetGrupoListFromEntity(List<YGrupo> entityList)
+        {
+            List<Grupo> modelList = new List<Grupo>();
+            if (entityList != null)
+            {
+                foreach (var item in entityList)
+                {
+                    modelList.Add(GetGrupoFromEntity(item));
+                }
+            }
+            return modelList;
+        }
     }
 }

@@ -211,5 +211,15 @@ namespace Risk.API.Controllers
             var respuesta = _fanService.EditarGrupo(requestBody.IdGrupo, requestBody.Descripcion, requestBody.Tipo, requestBody.IdJornadaInicio, requestBody.TodosInvitan, requestBody.IdClub);
             return ProcesarRespuesta(respuesta);
         }
+
+        [HttpGet("DatosGrupo")]
+        [SwaggerOperation(OperationId = "DatosGrupo", Summary = "DatosGrupo", Description = "Permite obtener los datos de un grupo")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Grupo>))]
+        public IActionResult DatosGrupo([FromQuery, SwaggerParameter(Description = "Identificador del grupo", Required = true)] int idGrupo)
+        {
+            var respuesta = _fanService.DatosGrupo(idGrupo);
+            return ProcesarRespuesta(respuesta);
+        }
     }
 }
