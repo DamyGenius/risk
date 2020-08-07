@@ -125,4 +125,7 @@ values (47, 'LISTAR_JORNADAS', 'T', 'S', 'FAN', null, null, null, null);
 insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
 values (48, 'DATOS_GRUPO', 'T', 'S', 'FAN', null, null, null, null);
 
+insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
+values (49, 'LISTAR_GRUPOS', 'T', 'S', 'FAN', null, null, null, null);
+
 prompt Done.

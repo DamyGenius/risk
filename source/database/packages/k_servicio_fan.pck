@@ -48,9 +48,82 @@ CREATE OR REPLACE PACKAGE k_servicio_fan IS
 
   FUNCTION datos_grupo(i_parametros IN y_parametros) RETURN y_respuesta;
 
+  FUNCTION listar_grupos(i_parametros IN y_parametros) RETURN y_respuesta;
+
 END;
 /
 CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
+
+  FUNCTION lf_datos_grupo(i_id_grupo IN NUMBER) RETURN y_grupo IS
+    l_grupo    y_grupo;
+    l_usuarios y_objetos;
+    l_usuario  y_grupo_usuario;
+  
+    CURSOR cr_usuarios(i_id_grupo IN NUMBER) IS
+      SELECT a.id_grupo,
+             a.id_usuario,
+             a.puntos,
+             a.ranking,
+             a.estado,
+             a.token_activacion,
+             a.aceptado
+        FROM t_grupo_usuarios a
+       WHERE a.id_grupo = i_id_grupo;
+  BEGIN
+    -- Inicializa respuesta
+    l_grupo    := NEW y_grupo();
+    l_usuarios := NEW y_objetos();
+  
+    -- Busca datos del grupo
+    BEGIN
+      SELECT a.id_grupo,
+             a.id_torneo,
+             a.descripcion,
+             a.tipo,
+             a.id_usuario_administrador,
+             a.fecha_creacion,
+             a.id_jornada_inicio,
+             a.estado,
+             a.situacion,
+             a.id_club,
+             a.todos_invitan
+        INTO l_grupo.id_grupo,
+             l_grupo.id_torneo,
+             l_grupo.descripcion,
+             l_grupo.tipo,
+             l_grupo.id_usuario_administrador,
+             l_grupo.fecha_creacion,
+             l_grupo.id_jornada_inicio,
+             l_grupo.estado,
+             l_grupo.situacion,
+             l_grupo.id_club,
+             l_grupo.todos_invitan
+        FROM t_grupos a
+       WHERE a.id_grupo = i_id_grupo;
+    EXCEPTION
+      WHEN no_data_found THEN
+        raise_application_error(-20000, 'Grupo inexistente');
+      WHEN OTHERS THEN
+        raise_application_error(-20000, 'Error al buscar datos del grupo');
+    END;
+  
+    -- Busca usuarios del grupo
+    FOR c IN cr_usuarios(l_grupo.id_grupo) LOOP
+      l_usuario                  := NEW y_grupo_usuario();
+      l_usuario.id_usuario       := c.id_usuario;
+      l_usuario.puntos           := c.puntos;
+      l_usuario.ranking          := c.ranking;
+      l_usuario.estado           := c.estado;
+      l_usuario.token_activacion := c.token_activacion;
+      l_usuario.aceptado         := c.aceptado;
+    
+      l_usuarios.extend;
+      l_usuarios(l_usuarios.count) := l_usuario;
+    END LOOP;
+    l_grupo.usuarios := l_usuarios;
+  
+    RETURN l_grupo;
+  END;
 
   FUNCTION listar_clubes(i_parametros IN y_parametros) RETURN y_respuesta IS
     l_rsp     y_respuesta;
@@ -148,7 +221,7 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
              c.id_estadio,
              c.goles_club_local,
              c.goles_club_visitante,
-             k_util.f_significado_codigo('ESTADO_PARTIDO',c.estado) estado
+             k_util.f_significado_codigo('ESTADO_PARTIDO', c.estado) estado
         FROM t_partidos c
        WHERE c.id_partido = nvl(i_id_partido, c.id_partido)
          AND c.id_torneo = nvl(i_id_torneo, c.id_torneo)
@@ -233,8 +306,8 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
              c.id_estadio,
              c.goles_club_local,
              c.goles_club_visitante,
-             k_util.f_significado_codigo('ESTADO_PARTIDO',c.estado) estado,
-             p.goles_club_local     predic_goles_local,
+             k_util.f_significado_codigo('ESTADO_PARTIDO', c.estado) estado,
+             p.goles_club_local predic_goles_local,
              p.goles_club_visitante predic_goles_visitante,
              p.puntos,
              p.id_sincronizacion
@@ -358,8 +431,8 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
              c.id_estadio,
              c.goles_club_local,
              c.goles_club_visitante,
-             k_util.f_significado_codigo('ESTADO_PARTIDO',c.estado) estado,
-             p.goles_club_local     predic_goles_local,
+             k_util.f_significado_codigo('ESTADO_PARTIDO', c.estado) estado,
+             p.goles_club_local predic_goles_local,
              p.goles_club_visitante predic_goles_visitante,
              p.puntos,
              p.id_sincronizacion
@@ -394,7 +467,7 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
     FOR ele IN cr_jornadas(l_id_torneo,
                            l_id_jornada,
                            l_estado /*,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 k_autenticacion.f_id_usuario(l_usuario)*/) LOOP
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          k_autenticacion.f_id_usuario(l_usuario)*/) LOOP
       l_objeto            := NEW y_jornada();
       l_partidos          := NEW y_partidos();
       l_objeto.id_torneo  := ele.id_torneo;
@@ -719,26 +792,11 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
   END;
 
   FUNCTION datos_grupo(i_parametros IN y_parametros) RETURN y_respuesta IS
-    l_rsp      y_respuesta;
-    l_grupo    y_grupo;
-    l_usuarios y_objetos;
-    l_usuario  y_grupo_usuario;
-  
-    CURSOR cr_usuarios(i_id_grupo IN NUMBER) IS
-      SELECT a.id_grupo,
-             a.id_usuario,
-             a.puntos,
-             a.ranking,
-             a.estado,
-             a.token_activacion,
-             a.aceptado
-        FROM t_grupo_usuarios a
-       WHERE a.id_grupo = i_id_grupo;
+    l_rsp   y_respuesta;
+    l_grupo y_grupo;
   BEGIN
     -- Inicializa respuesta
-    l_rsp      := NEW y_respuesta();
-    l_grupo    := NEW y_grupo();
-    l_usuarios := NEW y_objetos();
+    l_rsp := NEW y_respuesta();
   
     l_rsp.lugar := 'Validando parametros';
     k_servicio.p_validar_parametro(l_rsp,
@@ -746,60 +804,63 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
                                                                        'id_grupo') IS NOT NULL,
                                    'Debe ingresar id_grupo');
   
-    l_rsp.lugar := 'Buscando datos del grupo';
-    BEGIN
-      SELECT a.id_grupo,
-             a.id_torneo,
-             a.descripcion,
-             a.tipo,
-             a.id_usuario_administrador,
-             a.fecha_creacion,
-             a.id_jornada_inicio,
-             a.estado,
-             a.situacion,
-             a.id_club,
-             a.todos_invitan
-        INTO l_grupo.id_grupo,
-             l_grupo.id_torneo,
-             l_grupo.descripcion,
-             l_grupo.tipo,
-             l_grupo.id_usuario_administrador,
-             l_grupo.fecha_creacion,
-             l_grupo.id_jornada_inicio,
-             l_grupo.estado,
-             l_grupo.situacion,
-             l_grupo.id_club,
-             l_grupo.todos_invitan
-        FROM t_grupos a
-       WHERE a.id_grupo =
-             k_servicio.f_valor_parametro_number(i_parametros, 'id_grupo');
-    EXCEPTION
-      WHEN no_data_found THEN
-        k_servicio.p_respuesta_error(l_rsp, 'fan0001', 'Grupo inexistente');
-        RAISE k_servicio.ex_error_general;
-      WHEN OTHERS THEN
-        k_servicio.p_respuesta_error(l_rsp,
-                                     'fan0002',
-                                     'Error al buscar datos del grupo');
-        RAISE k_servicio.ex_error_general;
-    END;
-  
-    l_rsp.lugar := 'Buscando usuarios del grupo';
-    FOR c IN cr_usuarios(l_grupo.id_grupo) LOOP
-      l_usuario                  := NEW y_grupo_usuario();
-      l_usuario.id_usuario       := c.id_usuario;
-      l_usuario.puntos           := c.puntos;
-      l_usuario.ranking          := c.ranking;
-      l_usuario.estado           := c.estado;
-      l_usuario.token_activacion := c.token_activacion;
-      l_usuario.aceptado         := c.aceptado;
-    
-      l_usuarios.extend;
-      l_usuarios(l_usuarios.count) := l_usuario;
-    END LOOP;
-    l_grupo.usuarios := l_usuarios;
+    l_rsp.lugar := 'Cargando datos del grupo';
+    l_grupo     := lf_datos_grupo(k_servicio.f_valor_parametro_number(i_parametros,
+                                                                      'id_grupo'));
   
     k_servicio.p_respuesta_ok(l_rsp, l_grupo);
+    RETURN l_rsp;
+  EXCEPTION
+    WHEN k_servicio.ex_error_parametro THEN
+      RETURN l_rsp;
+    WHEN k_servicio.ex_error_general THEN
+      RETURN l_rsp;
+    WHEN OTHERS THEN
+      k_servicio.p_respuesta_excepcion(l_rsp,
+                                       utl_call_stack.error_number(1),
+                                       utl_call_stack.error_msg(1),
+                                       dbms_utility.format_error_stack);
+      RETURN l_rsp;
+  END;
+
+  FUNCTION listar_grupos(i_parametros IN y_parametros) RETURN y_respuesta IS
+    l_rsp       y_respuesta;
+    l_pagina    y_pagina;
+    l_elementos y_objetos;
+    l_elemento  y_grupo;
+  
+    l_pagina_parametros y_pagina_parametros;
+  
+    CURSOR cr_elementos(i_tipo IN VARCHAR2) IS
+      SELECT a.id_grupo FROM t_grupos a WHERE a.tipo = nvl(i_tipo, a.tipo);
+  BEGIN
+    -- Inicializa respuesta
+    l_rsp       := NEW y_respuesta();
+    l_elementos := NEW y_objetos();
+  
+    l_rsp.lugar := 'Validando parametros';
+    k_servicio.p_validar_parametro(l_rsp,
+                                   k_servicio.f_valor_parametro_object(i_parametros,
+                                                                       'pagina_parametros') IS NOT NULL,
+                                   'Debe ingresar pagina_parametros');
+    l_pagina_parametros := treat(k_servicio.f_valor_parametro_object(i_parametros,
+                                                                     'pagina_parametros') AS
+                                 y_pagina_parametros);
+  
+    FOR ele IN cr_elementos(k_servicio.f_valor_parametro_string(i_parametros,
+                                                                'tipo_grupo')) LOOP
+      l_elemento := lf_datos_grupo(ele.id_grupo);
+    
+      l_elementos.extend;
+      l_elementos(l_elementos.count) := l_elemento;
+    END LOOP;
+  
+    l_pagina := k_servicio.f_paginar_elementos(l_elementos,
+                                               l_pagina_parametros.pagina,
+                                               l_pagina_parametros.por_pagina,
+                                               l_pagina_parametros.no_paginar);
+  
+    k_servicio.p_respuesta_ok(l_rsp, l_pagina);
     RETURN l_rsp;
   EXCEPTION
     WHEN k_servicio.ex_error_parametro THEN
