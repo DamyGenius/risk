@@ -140,7 +140,7 @@ namespace Risk.API.Services
             return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
         }
 
-        public Respuesta<Dato> RegistrarGrupo(string descripcion, string tipo, int idJornadaInicio, string todosInvitan, string idClub)
+        public Respuesta<Grupo> RegistrarGrupo(string descripcion, string tipo, int idJornadaInicio, string todosInvitan, string idClub)
         {
             JObject prms = new JObject();
             prms.Add("descripcion", descripcion);
@@ -150,9 +150,9 @@ namespace Risk.API.Services
             prms.Add("id_club", idClub);
 
             string rsp = base.ProcesarServicio(ID_REGISTRAR_GRUPO, prms.ToString(Formatting.None));
-            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YGrupo>>(rsp);
 
-            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
+            return EntitiesMapper.GetRespuestaFromEntity<Grupo, YGrupo>(entityRsp, EntitiesMapper.GetGrupoFromEntity(entityRsp.Datos));
         }
 
         public Respuesta<Dato> EditarGrupo(int idGrupo, string descripcion, string tipo, int idJornadaInicio, string todosInvitan, string idClub)
