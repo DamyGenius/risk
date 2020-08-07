@@ -39,11 +39,11 @@ namespace Risk.API.Entities
         [JsonProperty("tipo")]
         public string Tipo { get; set; }
         [JsonProperty("id_usuario_administrador")]
-        public int IdUsuarioAdministrador { get; set; }
+        public int? IdUsuarioAdministrador { get; set; }
         [JsonProperty("fecha_creacion")]
         public DateTime? FechaCreacion { get; set; }
         [JsonProperty("id_jornada_inicio")]
-        public int IdJornadaInicio { get; set; }
+        public int? IdJornadaInicio { get; set; }
         [JsonProperty("estado")]
         public string Estado { get; set; }
         [JsonProperty("situacion")]

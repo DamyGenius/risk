@@ -27,8 +27,8 @@ namespace Risk.API.Models
     public class GrupoUsuario
     {
         public int IdUsuario { get; set; }
-        public int Puntos { get; set; }
-        public int Ranking { get; set; }
+        public int? Puntos { get; set; }
+        public int? Ranking { get; set; }
         public string Estado { get; set; }
         public string TokenActivacion { get; set; }
         public string Aceptado { get; set; }
