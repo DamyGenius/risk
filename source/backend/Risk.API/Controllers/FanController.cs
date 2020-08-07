@@ -221,5 +221,29 @@ namespace Risk.API.Controllers
             var respuesta = _fanService.DatosGrupo(idGrupo);
             return ProcesarRespuesta(respuesta);
         }
+
+        [HttpGet("ListarGrupos")]
+        [SwaggerOperation(OperationId = "ListarGrupos", Summary = "ListarGrupos", Description = "Obtiene una lista de grupos")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Grupo>>))]
+        public IActionResult ListarGrupos([FromQuery, SwaggerParameter(Description = "", Required = true)] string misGrupos,
+            [FromQuery, SwaggerParameter(Description = "", Required = false)] string tipoGrupo,
+            [FromQuery, SwaggerParameter(Description = "", Required = false)] string aceptado,
+            [FromQuery, SwaggerParameter(Description = "Número de la página", Required = false)] int pagina,
+            [FromQuery, SwaggerParameter(Description = "Cantidad de elementos por página", Required = false)] int porPagina,
+            [FromQuery, SwaggerParameter(Description = "No paginar? (S/N)", Required = false)] string noPaginar)
+        {
+            PaginaParametros paginaParametros = new PaginaParametros
+            {
+                Pagina = pagina,
+                PorPagina = porPagina,
+                NoPaginar = noPaginar
+            };
+            var respuesta = _fanService.ListarGrupos(misGrupos, tipoGrupo, aceptado, paginaParametros);
+
+            respuesta.Datos = ProcesarPagina(respuesta.Datos);
+
+            return ProcesarRespuesta(respuesta);
+        }
     }
 }

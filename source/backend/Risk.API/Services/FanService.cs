@@ -42,6 +42,7 @@ namespace Risk.API.Services
         private const int ID_EDITAR_GRUPO = 46;
         private const int ID_LISTAR_JORNADAS = 47;
         private const int ID_DATOS_GRUPO = 48;
+        private const int ID_LISTAR_GRUPOS = 49;
 
         public FanService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDbConnectionFactory dbConnectionFactory)
             : base(configuration, httpContextAccessor, dbConnectionFactory)
@@ -180,6 +181,30 @@ namespace Risk.API.Services
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YGrupo>>(rsp);
 
             return EntitiesMapper.GetRespuestaFromEntity<Grupo, YGrupo>(entityRsp, EntitiesMapper.GetGrupoFromEntity(entityRsp.Datos));
+        }
+
+        public Respuesta<Pagina<Grupo>> ListarGrupos(string misGrupos, string tipoGrupo = null, string aceptado = null, PaginaParametros paginaParametros = null)
+        {
+            JObject prms = new JObject();
+            prms.Add("mis_grupos", misGrupos);
+            prms.Add("tipo_grupo", tipoGrupo);
+            prms.Add("aceptado", aceptado);
+
+            if (paginaParametros != null)
+            {
+                prms.Add("pagina_parametros", JToken.FromObject(ModelsMapper.GetYPaginaParametrosFromModel(paginaParametros)));
+            }
+
+            string rsp = base.ProcesarServicio(ID_LISTAR_GRUPOS, prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YPagina<YGrupo>>>(rsp);
+
+            Pagina<Grupo> datos = null;
+            if (entityRsp.Datos != null)
+            {
+                datos = EntitiesMapper.GetPaginaFromEntity<Grupo, YGrupo>(entityRsp.Datos, EntitiesMapper.GetGrupoListFromEntity(entityRsp.Datos.Elementos));
+            }
+
+            return EntitiesMapper.GetRespuestaFromEntity<Pagina<Grupo>, YPagina<YGrupo>>(entityRsp, datos);
         }
     }
 }
