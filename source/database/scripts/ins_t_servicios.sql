@@ -48,7 +48,7 @@ insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VE
 values (14, 'REGISTRAR_DISPOSITIVO', 'T', 'S', 'AUT', null, null, null, null);
 
 insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
-values (16, 'LISTAR_PAISES', 'T', 'S', 'GEN', null, null, null, null);
+values (16, 'LISTAR_PAISES', 'T', 'S', 'GEN', null, '0.1', null, null);
 
 insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
 values (17, 'TIEMPO_EXPIRACION_TOKEN', 'T', 'S', 'AUT', null, null, null, null);
@@ -75,13 +75,13 @@ insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VE
 values (24, 'VALIDAR_OTP', 'T', 'S', 'AUT', null, null, null, null);
 
 insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
-values (25, 'LISTAR_DEPARTAMENTOS', 'T', 'S', 'GEN', null, null, null, null);
+values (25, 'LISTAR_DEPARTAMENTOS', 'T', 'S', 'GEN', null, '0.1', null, null);
 
 insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
-values (26, 'LISTAR_CIUDADES', 'T', 'S', 'GEN', null, null, null, null);
+values (26, 'LISTAR_CIUDADES', 'T', 'S', 'GEN', null, '0.1', null, null);
 
 insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
-values (27, 'LISTAR_BARRIOS', 'T', 'S', 'GEN', null, null, null, null);
+values (27, 'LISTAR_BARRIOS', 'T', 'S', 'GEN', null, '0.1', null, null);
 
 insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
 values (28, 'RECUPERAR_TEXTO', 'T', 'S', 'GEN', null, null, null, null);
@@ -99,7 +99,7 @@ insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VE
 values (33, 'CAMBIAR_ESTADO_MENSAJERIA', 'T', 'S', 'MSJ', null, null, null, null);
 
 insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
-values (40, 'LISTAR_CLUBES', 'T', 'S', 'FAN', null, null, null, null);
+values (40, 'LISTAR_CLUBES', 'T', 'S', 'FAN', null, '0.1', null, null);
 
 insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
 values (41, 'REGISTRAR_GRUPO', 'T', 'S', 'FAN', null, null, null, null);
