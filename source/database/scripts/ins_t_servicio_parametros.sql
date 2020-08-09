@@ -359,4 +359,7 @@ values (49, 'TIPO_GRUPO', 'I', 'S', null, 'N', null, 'S', 2, null);
 insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
 values (49, 'ACEPTADO', 'I', 'S', null, 'N', null, 'S', 3, null);
 
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA)
+values (50, 'SERVICIO', 'I', 'S', null, 'S', null, 'S', 1, null);
+
 prompt Done.
