@@ -24,19 +24,16 @@ insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FO
 values (1, 'TIPO_CLAVE', 'I', 'S', null, 'N', 'A', 'S', 3, null, null);
 
 insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA, LONGITUD_MAXIMA)
-values (2, 'CLAVE_APLICACION', 'I', 'S', null, 'S', null, 'S', 1, null, null);
+values (2, 'USUARIO', 'I', 'S', null, 'S', null, 'S', 1, null, null);
 
 insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA, LONGITUD_MAXIMA)
-values (2, 'USUARIO', 'I', 'S', null, 'S', null, 'S', 2, null, null);
+values (2, 'ACCESS_TOKEN', 'I', 'S', null, 'S', null, 'S', 2, null, null);
 
 insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA, LONGITUD_MAXIMA)
-values (2, 'ACCESS_TOKEN', 'I', 'S', null, 'S', null, 'S', 3, null, null);
+values (2, 'REFRESH_TOKEN', 'I', 'S', null, 'S', null, 'S', 3, null, null);
 
 insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA, LONGITUD_MAXIMA)
-values (2, 'REFRESH_TOKEN', 'I', 'S', null, 'S', null, 'S', 4, null, null);
-
-insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA, LONGITUD_MAXIMA)
-values (2, 'TOKEN_DISPOSITIVO', 'I', 'S', null, 'N', null, 'S', 5, null, null);
+values (2, 'TOKEN_DISPOSITIVO', 'I', 'S', null, 'N', null, 'S', 4, null, null);
 
 insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA, LONGITUD_MAXIMA)
 values (3, 'ACCESS_TOKEN', 'I', 'S', null, 'S', null, 'S', 1, null, null);
@@ -99,19 +96,16 @@ insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FO
 values (10, 'USUARIO', 'I', 'S', null, 'S', null, 'S', 1, null, null);
 
 insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA, LONGITUD_MAXIMA)
-values (11, 'CLAVE_APLICACION', 'I', 'S', null, 'S', null, 'S', 1, null, null);
+values (11, 'ACCESS_TOKEN_ANTIGUO', 'I', 'S', null, 'S', null, 'S', 1, null, null);
 
 insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA, LONGITUD_MAXIMA)
-values (11, 'ACCESS_TOKEN_ANTIGUO', 'I', 'S', null, 'S', null, 'S', 2, null, null);
+values (11, 'REFRESH_TOKEN_ANTIGUO', 'I', 'S', null, 'S', null, 'S', 2, null, null);
 
 insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA, LONGITUD_MAXIMA)
 values (11, 'ACCESS_TOKEN_NUEVO', 'I', 'S', null, 'S', null, 'S', 3, null, null);
 
 insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA, LONGITUD_MAXIMA)
-values (11, 'REFRESH_TOKEN_ANTIGUO', 'I', 'S', null, 'S', null, 'S', 4, null, null);
-
-insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA, LONGITUD_MAXIMA)
-values (11, 'REFRESH_TOKEN_NUEVO', 'I', 'S', null, 'S', null, 'S', 5, null, null);
+values (11, 'REFRESH_TOKEN_NUEVO', 'I', 'S', null, 'S', null, 'S', 4, null, null);
 
 insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA, LONGITUD_MAXIMA)
 values (12, 'CLAVE_APLICACION', 'I', 'S', null, 'S', null, 'S', 1, null, null);
