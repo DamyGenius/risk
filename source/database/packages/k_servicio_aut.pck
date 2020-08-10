@@ -675,11 +675,6 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
   
     l_rsp.lugar := 'Validando parametros';
     k_servicio.p_validar_parametro(l_rsp,
-                                   k_servicio.f_valor_parametro_string(i_parametros,
-                                                                       'clave_aplicacion') IS NOT NULL,
-                                   'Debe ingresar clave_aplicacion');
-  
-    k_servicio.p_validar_parametro(l_rsp,
                                    k_servicio.f_valor_parametro_object(i_parametros,
                                                                        'dispositivo') IS NOT NULL,
                                    'Debe ingresar dispositivo');
@@ -688,8 +683,7 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
                            y_dispositivo);
   
     l_rsp.lugar      := 'Registrando dispositivo';
-    l_id_dispositivo := k_dispositivo.f_registrar_dispositivo(k_servicio.f_valor_parametro_string(i_parametros,
-                                                                                                  'clave_aplicacion'),
+    l_id_dispositivo := k_dispositivo.f_registrar_dispositivo(k_sistema.f_valor_parametro_string(k_sistema.c_id_aplicacion),
                                                               l_dispositivo.token_dispositivo,
                                                               l_dispositivo.token_notificacion,
                                                               l_dispositivo.nombre_sistema_operativo,
@@ -829,9 +823,8 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
 
   FUNCTION tiempo_expiracion_token(i_parametros IN y_parametros)
     RETURN y_respuesta IS
-    l_rsp           y_respuesta;
-    l_dato          y_dato;
-    l_id_aplicacion t_aplicaciones.id_aplicacion%TYPE;
+    l_rsp  y_respuesta;
+    l_dato y_dato;
   BEGIN
     -- Inicializa respuesta
     l_rsp  := NEW y_respuesta();
@@ -840,22 +833,11 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
     l_rsp.lugar := 'Validando parametros';
     k_servicio.p_validar_parametro(l_rsp,
                                    k_servicio.f_valor_parametro_string(i_parametros,
-                                                                       'clave_aplicacion') IS NOT NULL,
-                                   'Debe ingresar clave_aplicacion');
-  
-    l_rsp.lugar     := 'Buscando aplicación';
-    l_id_aplicacion := k_autenticacion.f_id_aplicacion(k_servicio.f_valor_parametro_string(i_parametros,
-                                                                                           'clave_aplicacion'),
-                                                       'S');
-    IF l_id_aplicacion IS NULL THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'aut0002',
-                                   'Aplicacion inexistente o inactiva');
-      RAISE k_servicio.ex_error_general;
-    END IF;
+                                                                       'tipo_token') IS NOT NULL,
+                                   'Debe ingresar tipo_token');
   
     l_rsp.lugar      := 'Obteniendo tiempo de expiración';
-    l_dato.contenido := to_char(k_autenticacion.f_tiempo_expiracion_token(l_id_aplicacion,
+    l_dato.contenido := to_char(k_autenticacion.f_tiempo_expiracion_token(k_sistema.f_valor_parametro_string(k_sistema.c_id_aplicacion),
                                                                           k_servicio.f_valor_parametro_string(i_parametros,
                                                                                                               'tipo_token')));
   

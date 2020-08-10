@@ -186,10 +186,9 @@ namespace Risk.API.Services
             return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
         }
 
-        public Respuesta<Dato> RegistrarDispositivo(string claveAplicacion, Dispositivo dispositivo)
+        public Respuesta<Dato> RegistrarDispositivo(Dispositivo dispositivo)
         {
             JObject prms = new JObject();
-            prms.Add("clave_aplicacion", claveAplicacion);
 
             if (dispositivo != null)
             {
@@ -213,10 +212,9 @@ namespace Risk.API.Services
             return EntitiesMapper.GetRespuestaFromEntity<Dispositivo, YDispositivo>(entityRsp, EntitiesMapper.GetDispositivoFromEntity(entityRsp.Datos));
         }
 
-        public Respuesta<Dato> TiempoExpiracionToken(string claveAplicacion, TipoToken tipoToken)
+        public Respuesta<Dato> TiempoExpiracionToken(TipoToken tipoToken)
         {
             JObject prms = new JObject();
-            prms.Add("clave_aplicacion", claveAplicacion);
             prms.Add("tipo_token", ModelsMapper.GetValueFromTipoTokenEnum(tipoToken));
 
             string rsp = base.ProcesarServicio(ID_TIEMPO_EXPIRACION_TOKEN, prms.ToString(Formatting.None));
