@@ -35,11 +35,17 @@ SOFTWARE.
 /**  */
   id_torneo VARCHAR2(12),
 /**  */
+  titulo_torneo VARCHAR2(50),
+/**  */
   descripcion VARCHAR2(150),
 /**  */
   tipo VARCHAR2(3),
 /**  */
+  descripcion_tipo VARCHAR2(300),
+/**  */
   id_usuario_administrador NUMBER(10),
+/**  */
+  alias_usuario_administrador VARCHAR2(300),
 /**  */
   fecha_creacion DATE,
 /**  */
@@ -50,6 +56,8 @@ SOFTWARE.
   situacion VARCHAR2(1),
 /**  */
   id_club VARCHAR2(5),
+/**  */
+  nombre_oficial_club VARCHAR2(100),
 /** Todos los usuarios pueden invitar? (S/N) */
   todos_invitan VARCHAR2(1),
 /** Usuarios */
@@ -66,18 +74,22 @@ CREATE OR REPLACE TYPE BODY y_grupo IS
 
   CONSTRUCTOR FUNCTION y_grupo RETURN SELF AS RESULT AS
   BEGIN
-    self.id_grupo                 := NULL;
-    self.id_torneo                := NULL;
-    self.descripcion              := NULL;
-    self.tipo                     := NULL;
-    self.id_usuario_administrador := NULL;
-    self.fecha_creacion           := NULL;
-    self.id_jornada_inicio        := NULL;
-    self.estado                   := NULL;
-    self.situacion                := NULL;
-    self.id_club                  := NULL;
-    self.todos_invitan            := NULL;
-    self.usuarios                 := NEW y_objetos();
+    self.id_grupo                    := NULL;
+    self.id_torneo                   := NULL;
+    self.titulo_torneo               := NULL;
+    self.descripcion                 := NULL;
+    self.tipo                        := NULL;
+    self.descripcion_tipo            := NULL;
+    self.id_usuario_administrador    := NULL;
+    self.alias_usuario_administrador := NULL;
+    self.fecha_creacion              := NULL;
+    self.id_jornada_inicio           := NULL;
+    self.estado                      := NULL;
+    self.situacion                   := NULL;
+    self.id_club                     := NULL;
+    self.nombre_oficial_club         := NULL;
+    self.todos_invitan               := NULL;
+    self.usuarios                    := NEW y_objetos();
   
     RETURN;
   END;
@@ -88,19 +100,23 @@ CREATE OR REPLACE TYPE BODY y_grupo IS
   BEGIN
     l_json_object := json_object_t.parse(i_json);
   
-    l_objeto                          := NEW y_grupo();
-    l_objeto.id_grupo                 := l_json_object.get_number('id_grupo');
-    l_objeto.id_torneo                := l_json_object.get_string('id_torneo');
-    l_objeto.descripcion              := l_json_object.get_string('descripcion');
-    l_objeto.tipo                     := l_json_object.get_string('tipo');
-    l_objeto.id_usuario_administrador := l_json_object.get_number('id_usuario_administrador');
-    l_objeto.fecha_creacion           := l_json_object.get_date('fecha_creacion');
-    l_objeto.id_jornada_inicio        := l_json_object.get_number('id_jornada_inicio');
-    l_objeto.estado                   := l_json_object.get_string('estado');
-    l_objeto.situacion                := l_json_object.get_string('situacion');
-    l_objeto.id_club                  := l_json_object.get_string('id_club');
-    l_objeto.todos_invitan            := l_json_object.get_string('todos_invitan');
-    l_objeto.usuarios                 := NULL; -- TODO
+    l_objeto                             := NEW y_grupo();
+    l_objeto.id_grupo                    := l_json_object.get_number('id_grupo');
+    l_objeto.id_torneo                   := l_json_object.get_string('id_torneo');
+    l_objeto.titulo_torneo               := l_json_object.get_string('titulo_torneo');
+    l_objeto.descripcion                 := l_json_object.get_string('descripcion');
+    l_objeto.tipo                        := l_json_object.get_string('tipo');
+    l_objeto.descripcion_tipo            := l_json_object.get_string('descripcion_tipo');
+    l_objeto.id_usuario_administrador    := l_json_object.get_number('id_usuario_administrador');
+    l_objeto.alias_usuario_administrador := l_json_object.get_string('alias_usuario_administrador');
+    l_objeto.fecha_creacion              := l_json_object.get_date('fecha_creacion');
+    l_objeto.id_jornada_inicio           := l_json_object.get_number('id_jornada_inicio');
+    l_objeto.estado                      := l_json_object.get_string('estado');
+    l_objeto.situacion                   := l_json_object.get_string('situacion');
+    l_objeto.id_club                     := l_json_object.get_string('id_club');
+    l_objeto.nombre_oficial_club         := l_json_object.get_string('nombre_oficial_club');
+    l_objeto.todos_invitan               := l_json_object.get_string('todos_invitan');
+    l_objeto.usuarios                    := NULL; -- TODO
   
     RETURN l_objeto;
   END;
@@ -113,15 +129,20 @@ CREATE OR REPLACE TYPE BODY y_grupo IS
     l_json_object := NEW json_object_t();
     l_json_object.put('id_grupo', self.id_grupo);
     l_json_object.put('id_torneo', self.id_torneo);
+    l_json_object.put('titulo_torneo', self.titulo_torneo);
     l_json_object.put('descripcion', self.descripcion);
     l_json_object.put('tipo', self.tipo);
+    l_json_object.put('descripcion_tipo', self.descripcion_tipo);
     l_json_object.put('id_usuario_administrador',
                       self.id_usuario_administrador);
+    l_json_object.put('alias_usuario_administrador',
+                      self.alias_usuario_administrador);
     l_json_object.put('fecha_creacion', self.fecha_creacion);
     l_json_object.put('id_jornada_inicio', self.id_jornada_inicio);
     l_json_object.put('estado', self.estado);
     l_json_object.put('situacion', self.situacion);
     l_json_object.put('id_club', self.id_club);
+    l_json_object.put('nombre_oficial_club', self.nombre_oficial_club);
     l_json_object.put('todos_invitan', self.todos_invitan);
   
     IF self.usuarios IS NULL THEN

@@ -34,12 +34,18 @@ namespace Risk.API.Entities
         public int IdGrupo { get; set; }
         [JsonProperty("id_torneo")]
         public string IdTorneo { get; set; }
+        [JsonProperty("titulo_torneo")]
+        public string TituloTorneo { get; set; }
         [JsonProperty("descripcion")]
         public string Descripcion { get; set; }
         [JsonProperty("tipo")]
         public string Tipo { get; set; }
+        [JsonProperty("descripcion_tipo")]
+        public string DescripcionTipo { get; set; }
         [JsonProperty("id_usuario_administrador")]
         public int? IdUsuarioAdministrador { get; set; }
+        [JsonProperty("alias_usuario_administrador")]
+        public string AliasUsuarioAdministrador { get; set; }
         [JsonProperty("fecha_creacion")]
         public DateTime? FechaCreacion { get; set; }
         [JsonProperty("id_jornada_inicio")]
@@ -50,6 +56,8 @@ namespace Risk.API.Entities
         public string Situacion { get; set; }
         [JsonProperty("id_club")]
         public string IdClub { get; set; }
+        [JsonProperty("nombre_oficial_club")]
+        public string NombreOficialClub { get; set; }
         [JsonProperty("todos_invitan")]
         public string TodosInvitan { get; set; }
         [JsonProperty("usuarios")]

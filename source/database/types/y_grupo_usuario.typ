@@ -33,6 +33,8 @@ SOFTWARE.
 /**  */
   id_usuario NUMBER(10),
 /**  */
+  alias_usuario VARCHAR2(300),
+/**  */
   puntos NUMBER(15),
 /**  */
   ranking NUMBER(6),
@@ -55,6 +57,7 @@ CREATE OR REPLACE TYPE BODY y_grupo_usuario IS
   CONSTRUCTOR FUNCTION y_grupo_usuario RETURN SELF AS RESULT AS
   BEGIN
     self.id_usuario       := NULL;
+    self.alias_usuario    := NULL;
     self.puntos           := NULL;
     self.ranking          := NULL;
     self.estado           := NULL;
@@ -72,6 +75,7 @@ CREATE OR REPLACE TYPE BODY y_grupo_usuario IS
   
     l_objeto                  := NEW y_grupo_usuario();
     l_objeto.id_usuario       := l_json_object.get_number('id_usuario');
+    l_objeto.alias_usuario    := l_json_object.get_string('alias_usuario');
     l_objeto.puntos           := l_json_object.get_number('puntos');
     l_objeto.ranking          := l_json_object.get_number('ranking');
     l_objeto.estado           := l_json_object.get_string('estado');
@@ -86,6 +90,7 @@ CREATE OR REPLACE TYPE BODY y_grupo_usuario IS
   BEGIN
     l_json_object := NEW json_object_t();
     l_json_object.put('id_usuario', self.id_usuario);
+    l_json_object.put('alias_usuario', self.alias_usuario);
     l_json_object.put('puntos', self.puntos);
     l_json_object.put('ranking', self.ranking);
     l_json_object.put('estado', self.estado);

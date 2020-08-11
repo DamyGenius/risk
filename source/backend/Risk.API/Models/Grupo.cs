@@ -31,14 +31,18 @@ namespace Risk.API.Models
     {
         public int IdGrupo { get; set; }
         public string IdTorneo { get; set; }
+        public string TituloTorneo { get; set; }
         public string Descripcion { get; set; }
         public string Tipo { get; set; }
+        public string DescripcionTipo { get; set; }
         public int? IdUsuarioAdministrador { get; set; }
+        public string AliasUsuarioAdministrador { get; set; }
         public DateTime? FechaCreacion { get; set; }
         public int? IdJornadaInicio { get; set; }
         public string Estado { get; set; }
         public string Situacion { get; set; }
         public string IdClub { get; set; }
+        public string NombreOficialClub { get; set; }
         public string TodosInvitan { get; set; }
         public List<GrupoUsuario> Usuarios { get; set; }
     }

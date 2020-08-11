@@ -30,6 +30,8 @@ namespace Risk.API.Entities
     {
         [JsonProperty("id_usuario")]
         public int IdUsuario { get; set; }
+        [JsonProperty("alias_usuario")]
+        public string AliasUsuario { get; set; }
         [JsonProperty("puntos")]
         public int? Puntos { get; set; }
         [JsonProperty("ranking")]

@@ -606,6 +606,7 @@ namespace Risk.API.Helpers
                 model = new GrupoUsuario
                 {
                     IdUsuario = entity.IdUsuario,
+                    AliasUsuario = entity.AliasUsuario,
                     Puntos = entity.Puntos,
                     Ranking = entity.Ranking,
                     Estado = entity.Estado,
@@ -642,14 +643,18 @@ namespace Risk.API.Helpers
                 {
                     IdGrupo = entity.IdGrupo,
                     IdTorneo = entity.IdTorneo,
+                    TituloTorneo = entity.TituloTorneo,
                     Descripcion = entity.Descripcion,
                     Tipo = entity.Tipo,
+                    DescripcionTipo = entity.DescripcionTipo,
                     IdUsuarioAdministrador = entity.IdUsuarioAdministrador,
+                    AliasUsuarioAdministrador = entity.AliasUsuarioAdministrador,
                     FechaCreacion = entity.FechaCreacion,
                     IdJornadaInicio = entity.IdJornadaInicio,
                     Estado = entity.Estado,
                     Situacion = entity.Situacion,
                     IdClub = entity.IdClub,
+                    NombreOficialClub = entity.NombreOficialClub,
                     TodosInvitan = entity.TodosInvitan,
                     Usuarios = GetGrupoUsuarioListFromEntity(entity.Usuarios)
                 };
