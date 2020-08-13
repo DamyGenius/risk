@@ -36,21 +36,11 @@ CREATE OR REPLACE PACKAGE k_autenticacion IS
   c_access_token  CONSTANT CHAR(1) := 'A';
   c_refresh_token CONSTANT CHAR(1) := 'R';
 
-  FUNCTION f_id_aplicacion(i_clave_aplicacion IN VARCHAR2,
-                           i_activo           IN VARCHAR2 DEFAULT NULL)
-    RETURN VARCHAR2;
-
   FUNCTION f_id_sesion(i_access_token IN VARCHAR2) RETURN NUMBER;
-
-  FUNCTION f_id_usuario(i_alias IN VARCHAR2) RETURN NUMBER;
-
-  FUNCTION f_alias_usuario(i_id_usuario IN NUMBER) RETURN VARCHAR2;
 
   FUNCTION f_tiempo_expiracion_token(i_id_aplicacion IN VARCHAR2,
                                      i_tipo_token    IN VARCHAR2)
     RETURN NUMBER;
-
-  FUNCTION f_validar_alias_usuario(i_alias VARCHAR2) RETURN BOOLEAN;
 
   PROCEDURE p_validar_clave(i_usuario    IN VARCHAR2,
                             i_clave      IN VARCHAR2,
@@ -62,9 +52,6 @@ CREATE OR REPLACE PACKAGE k_autenticacion IS
                                 i_apellido         IN VARCHAR2,
                                 i_direccion_correo IN VARCHAR2,
                                 i_numero_telefono  IN VARCHAR2 DEFAULT NULL);
-
-  PROCEDURE p_cambiar_estado_usuario(i_usuario IN VARCHAR2,
-                                     i_estado  IN VARCHAR2);
 
   PROCEDURE p_registrar_clave(i_usuario    IN VARCHAR2,
                               i_clave      IN VARCHAR2,
@@ -83,13 +70,6 @@ CREATE OR REPLACE PACKAGE k_autenticacion IS
   PROCEDURE p_validar_credenciales(i_usuario    IN VARCHAR2,
                                    i_clave      IN VARCHAR2,
                                    i_tipo_clave IN CHAR DEFAULT 'A');
-
-  FUNCTION f_generar_clave_aplicacion RETURN VARCHAR2;
-
-  FUNCTION f_validar_clave_aplicacion(i_clave_aplicacion IN VARCHAR2)
-    RETURN BOOLEAN;
-
-  PROCEDURE p_validar_clave_aplicacion(i_clave_aplicacion IN VARCHAR2);
 
   FUNCTION f_iniciar_sesion(i_id_aplicacion     IN VARCHAR2,
                             i_usuario           IN VARCHAR2,
@@ -132,7 +112,6 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
   -- Excepciones
   ex_credenciales_invalidas EXCEPTION;
   ex_tokens_invalidos       EXCEPTION;
-  ex_usuario_inexistente    EXCEPTION;
   ex_sesion_inexistente     EXCEPTION;
 
   -- https://mikepargeter.wordpress.com/2012/11/26/pbkdf2-in-oracle
@@ -247,26 +226,6 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
       RETURN NULL;
   END;
 
-  FUNCTION f_id_aplicacion(i_clave_aplicacion IN VARCHAR2,
-                           i_activo           IN VARCHAR2 DEFAULT NULL)
-    RETURN VARCHAR2 IS
-    l_id_aplicacion t_aplicaciones.id_aplicacion%TYPE;
-  BEGIN
-    BEGIN
-      SELECT id_aplicacion
-        INTO l_id_aplicacion
-        FROM t_aplicaciones
-       WHERE clave = i_clave_aplicacion
-         AND activo = nvl(i_activo, activo);
-    EXCEPTION
-      WHEN no_data_found THEN
-        l_id_aplicacion := NULL;
-      WHEN OTHERS THEN
-        l_id_aplicacion := NULL;
-    END;
-    RETURN l_id_aplicacion;
-  END;
-
   FUNCTION f_id_sesion(i_access_token IN VARCHAR2) RETURN NUMBER IS
     l_id_sesion t_sesiones.id_sesion%TYPE;
   BEGIN
@@ -282,40 +241,6 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
         l_id_sesion := NULL;
     END;
     RETURN l_id_sesion;
-  END;
-
-  FUNCTION f_id_usuario(i_alias IN VARCHAR2) RETURN NUMBER IS
-    l_id_usuario t_usuarios.id_usuario%TYPE;
-  BEGIN
-    BEGIN
-      SELECT id_usuario
-        INTO l_id_usuario
-        FROM t_usuarios
-       WHERE alias = i_alias;
-    EXCEPTION
-      WHEN no_data_found THEN
-        l_id_usuario := NULL;
-      WHEN OTHERS THEN
-        l_id_usuario := NULL;
-    END;
-    RETURN l_id_usuario;
-  END;
-
-  FUNCTION f_alias_usuario(i_id_usuario IN NUMBER) RETURN VARCHAR2 IS
-    l_alias t_usuarios.alias%TYPE;
-  BEGIN
-    BEGIN
-      SELECT u.alias
-        INTO l_alias
-        FROM t_usuarios u
-       WHERE u.id_usuario = i_id_usuario;
-    EXCEPTION
-      WHEN no_data_found THEN
-        l_alias := NULL;
-      WHEN OTHERS THEN
-        l_alias := NULL;
-    END;
-    RETURN l_alias;
   END;
 
   FUNCTION f_tiempo_expiracion_token(i_id_aplicacion IN VARCHAR2,
@@ -356,13 +281,6 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     END IF;
   
     RETURN l_tiempo_expiracion_token;
-  END;
-
-  FUNCTION f_validar_alias_usuario(i_alias VARCHAR2) RETURN BOOLEAN IS
-  BEGIN
-    RETURN nvl(regexp_like(i_alias,
-                           k_util.f_valor_parametro('REGEXP_VALIDAR_ALIAS_USUARIO')),
-               TRUE);
   END;
 
   PROCEDURE p_validar_clave(i_usuario    IN VARCHAR2,
@@ -511,27 +429,6 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
       raise_application_error(-20000, 'Usuario ya existe');
   END;
 
-  PROCEDURE p_cambiar_estado_usuario(i_usuario IN VARCHAR2,
-                                     i_estado  IN VARCHAR2) IS
-    l_id_usuario t_usuarios.id_usuario%TYPE;
-  BEGIN
-    -- Busca usuario
-    l_id_usuario := f_id_usuario(i_usuario);
-  
-    IF l_id_usuario IS NULL THEN
-      RAISE ex_usuario_inexistente;
-    END IF;
-  
-    -- Actualiza usuario
-    UPDATE t_usuarios
-       SET estado = i_estado
-     WHERE id_usuario = l_id_usuario
-       AND estado <> i_estado;
-  EXCEPTION
-    WHEN ex_usuario_inexistente THEN
-      raise_application_error(-20000, 'Usuario inexistente');
-  END;
-
   PROCEDURE p_registrar_clave(i_usuario    IN VARCHAR2,
                               i_clave      IN VARCHAR2,
                               i_tipo_clave IN CHAR DEFAULT 'A') IS
@@ -543,10 +440,10 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     p_validar_clave(i_usuario, i_clave, i_tipo_clave);
   
     -- Busca usuario
-    l_id_usuario := f_id_usuario(i_usuario);
+    l_id_usuario := k_usuario.f_id_usuario(i_usuario);
   
     IF l_id_usuario IS NULL THEN
-      RAISE ex_usuario_inexistente;
+      RAISE k_usuario.ex_usuario_inexistente;
     END IF;
   
     -- Genera salt
@@ -576,7 +473,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
        0,
        NULL);
   EXCEPTION
-    WHEN ex_usuario_inexistente THEN
+    WHEN k_usuario.ex_usuario_inexistente THEN
       raise_application_error(-20000, 'Usuario inexistente');
     WHEN dup_val_on_index THEN
       raise_application_error(-20000,
@@ -595,10 +492,10 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     p_validar_clave(i_usuario, i_clave_nueva, i_tipo_clave);
   
     -- Busca usuario
-    l_id_usuario := f_id_usuario(i_usuario);
+    l_id_usuario := k_usuario.f_id_usuario(i_usuario);
   
     IF l_id_usuario IS NULL THEN
-      RAISE ex_usuario_inexistente;
+      RAISE k_usuario.ex_usuario_inexistente;
     END IF;
   
     IF NOT f_validar_credenciales(i_usuario, i_clave_antigua, i_tipo_clave) THEN
@@ -626,7 +523,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
       RAISE ex_credenciales_invalidas;
     END IF;*/
   EXCEPTION
-    WHEN ex_usuario_inexistente THEN
+    WHEN k_usuario.ex_usuario_inexistente THEN
       raise_application_error(-20000, 'Credenciales invalidas');
     WHEN ex_credenciales_invalidas THEN
       raise_application_error(-20000, 'Credenciales invalidas');
@@ -645,10 +542,10 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     l_iteraciones t_usuario_claves.iteraciones%TYPE;
   BEGIN
     -- Busca usuario
-    l_id_usuario := f_id_usuario(i_usuario);
+    l_id_usuario := k_usuario.f_id_usuario(i_usuario);
   
     IF l_id_usuario IS NULL THEN
-      RAISE ex_usuario_inexistente;
+      RAISE k_usuario.ex_usuario_inexistente;
     END IF;
   
     BEGIN
@@ -673,7 +570,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     lp_registrar_autenticacion(l_id_usuario, i_tipo_clave);
     RETURN TRUE;
   EXCEPTION
-    WHEN ex_usuario_inexistente THEN
+    WHEN k_usuario.ex_usuario_inexistente THEN
       RETURN FALSE;
     WHEN ex_credenciales_invalidas THEN
       lp_registrar_intento_fallido(l_id_usuario, i_tipo_clave);
@@ -689,31 +586,6 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
   BEGIN
     IF NOT f_validar_credenciales(i_usuario, i_clave, i_tipo_clave) THEN
       raise_application_error(-20000, 'Credenciales invalidas');
-    END IF;
-  END;
-
-  FUNCTION f_generar_clave_aplicacion RETURN VARCHAR2 IS
-  BEGIN
-    RETURN utl_raw.cast_to_varchar2(utl_encode.base64_encode(dbms_crypto.randombytes(number_bytes => 32)));
-  END;
-
-  FUNCTION f_validar_clave_aplicacion(i_clave_aplicacion IN VARCHAR2)
-    RETURN BOOLEAN IS
-  BEGIN
-    IF f_id_aplicacion(i_clave_aplicacion, 'S') IS NULL THEN
-      RETURN FALSE;
-    ELSE
-      RETURN TRUE;
-    END IF;
-  EXCEPTION
-    WHEN OTHERS THEN
-      RETURN FALSE;
-  END;
-
-  PROCEDURE p_validar_clave_aplicacion(i_clave_aplicacion IN VARCHAR2) IS
-  BEGIN
-    IF NOT f_validar_clave_aplicacion(i_clave_aplicacion) THEN
-      raise_application_error(-20000, 'Aplicacion inexistente o inactiva');
     END IF;
   END;
 
@@ -737,10 +609,10 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     END IF;
   
     -- Busca usuario
-    l_id_usuario := f_id_usuario(i_usuario);
+    l_id_usuario := k_usuario.f_id_usuario(i_usuario);
   
     IF l_id_usuario IS NULL THEN
-      RAISE ex_usuario_inexistente;
+      RAISE k_usuario.ex_usuario_inexistente;
     END IF;
   
     -- Busca dispositivo
@@ -817,7 +689,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
   
     RETURN l_id_sesion;
   EXCEPTION
-    WHEN ex_usuario_inexistente THEN
+    WHEN k_usuario.ex_usuario_inexistente THEN
       raise_application_error(-20000, 'Usuario inexistente');
   END;
 
