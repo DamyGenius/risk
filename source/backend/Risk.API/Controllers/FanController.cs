@@ -127,9 +127,10 @@ namespace Risk.API.Controllers
         [SwaggerOperation(OperationId = "RecuperarEscudoClub", Summary = "RecuperarEscudoClub", Description = "Permite recuperar el escudo de un club")]
         [Produces(MediaTypeNames.Application.Json, new[] { "application/octet-stream" })]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(FileContentResult))]
-        public IActionResult RecuperarEscudoClub([FromQuery, SwaggerParameter(Description = "Identificador del club", Required = true)] string idClub)
+        public IActionResult RecuperarEscudoClub([FromQuery, SwaggerParameter(Description = "Identificador del club", Required = true)] string idClub,
+            [FromQuery, SwaggerParameter(Description = "Version", Required = false)] int? version)
         {
-            var respuesta = _genService.RecuperarArchivo("T_CLUBES", "ESCUDO", idClub);
+            var respuesta = _genService.RecuperarArchivo("T_CLUBES", "ESCUDO", idClub, version);
 
             if (!respuesta.Codigo.Equals(RiskConstants.CODIGO_OK))
             {
@@ -146,9 +147,10 @@ namespace Risk.API.Controllers
         [SwaggerOperation(OperationId = "RecuperarLogoGrupo", Summary = "RecuperarLogoGrupo", Description = "Permite recuperar el logo de un grupo")]
         [Produces(MediaTypeNames.Application.Json, new[] { "application/octet-stream" })]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(FileContentResult))]
-        public IActionResult RecuperarLogoGrupo([FromQuery, SwaggerParameter(Description = "Identificador del grupo", Required = true)] int idGrupo)
+        public IActionResult RecuperarLogoGrupo([FromQuery, SwaggerParameter(Description = "Identificador del grupo", Required = true)] int idGrupo,
+            [FromQuery, SwaggerParameter(Description = "Version", Required = false)] int? version)
         {
-            var respuesta = _genService.RecuperarArchivo("T_GRUPOS", "LOGO", idGrupo.ToString());
+            var respuesta = _genService.RecuperarArchivo("T_GRUPOS", "LOGO", idGrupo.ToString(), version);
 
             if (!respuesta.Codigo.Equals(RiskConstants.CODIGO_OK))
             {
