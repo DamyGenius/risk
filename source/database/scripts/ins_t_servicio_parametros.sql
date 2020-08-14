@@ -359,4 +359,7 @@ values (49, 'PAGINA_PARAMETROS', 'I', 'O', 'Y_PAGINA_PARAMETROS', 'N', null, 'S'
 insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA, LONGITUD_MAXIMA)
 values (50, 'SERVICIO', 'I', 'S', null, 'S', null, 'S', 1, null, null);
 
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA, LONGITUD_MAXIMA)
+values (51, 'ID_GRUPO', 'I', 'N', null, 'S', null, 'S', 1, null, null);
+
 prompt Done.
