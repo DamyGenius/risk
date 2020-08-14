@@ -39,6 +39,7 @@ SOFTWARE.
   twitter        VARCHAR2(100),
   facebook       VARCHAR2(100),
   id_division    VARCHAR2(3),
+  version_escudo NUMBER(10),
 
 /**
 Constructor del objeto sin parámetros.
@@ -72,6 +73,7 @@ CREATE OR REPLACE TYPE BODY y_club IS
     self.twitter        := NULL;
     self.facebook       := NULL;
     self.id_division    := NULL;
+    self.version_escudo := NULL;
     RETURN;
   END;
 
@@ -91,6 +93,7 @@ CREATE OR REPLACE TYPE BODY y_club IS
     l_objeto.twitter        := l_json_object.get_string('twitter');
     l_objeto.facebook       := l_json_object.get_string('facebook');
     l_objeto.id_division    := l_json_object.get_string('id_division');
+    l_objeto.version_escudo := l_json_object.get_string('version_escudo');
   
     RETURN l_objeto;
   END;
@@ -108,6 +111,7 @@ CREATE OR REPLACE TYPE BODY y_club IS
     l_json_object.put('twitter', self.twitter);
     l_json_object.put('facebook', self.facebook);
     l_json_object.put('id_division', self.id_division);
+    l_json_object.put('version_escudo', self.version_escudo);
     RETURN l_json_object.to_clob;
   END;
 

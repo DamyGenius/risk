@@ -182,6 +182,7 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
       l_objeto.twitter        := ele.twitter;
       l_objeto.facebook       := ele.facebook;
       l_objeto.id_division    := ele.id_division;
+      l_objeto.version_escudo := k_archivo.f_version_archivo('T_CLUBES', 'ESCUDO', ele.id_club);
     
       l_objetos.extend;
       l_objetos(l_objetos.count) := l_objeto;
