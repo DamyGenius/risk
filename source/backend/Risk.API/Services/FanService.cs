@@ -43,6 +43,7 @@ namespace Risk.API.Services
         private const int ID_LISTAR_JORNADAS = 47;
         private const int ID_DATOS_GRUPO = 48;
         private const int ID_LISTAR_GRUPOS = 49;
+        private const int ID_ABANDONAR_GRUPO = 51;
 
         public FanService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDbConnectionFactory dbConnectionFactory)
             : base(configuration, httpContextAccessor, dbConnectionFactory)
@@ -205,6 +206,17 @@ namespace Risk.API.Services
             }
 
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<Grupo>, YPagina<YGrupo>>(entityRsp, datos);
+        }
+
+        public Respuesta<Dato> AbandonarGrupo(int idGrupo)
+        {
+            JObject prms = new JObject();
+            prms.Add("id_grupo", idGrupo);
+
+            string rsp = base.ProcesarServicio(ID_ABANDONAR_GRUPO, prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
+
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
         }
     }
 }
