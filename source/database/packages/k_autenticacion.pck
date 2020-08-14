@@ -33,13 +33,6 @@ CREATE OR REPLACE PACKAGE k_autenticacion IS
   c_clave_acceso        CONSTANT CHAR(1) := 'A';
   c_clave_transaccional CONSTANT CHAR(1) := 'T';
 
-  c_access_token  CONSTANT CHAR(1) := 'A';
-  c_refresh_token CONSTANT CHAR(1) := 'R';
-
-  FUNCTION f_tiempo_expiracion_token(i_id_aplicacion IN VARCHAR2,
-                                     i_tipo_token    IN VARCHAR2)
-    RETURN NUMBER;
-
   PROCEDURE p_validar_clave(i_usuario    IN VARCHAR2,
                             i_clave      IN VARCHAR2,
                             i_tipo_clave IN CHAR DEFAULT 'A');
@@ -185,75 +178,6 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
   EXCEPTION
     WHEN OTHERS THEN
       ROLLBACK;
-  END;
-
-  FUNCTION lf_fecha_expiracion_access_token(i_access_token IN VARCHAR2)
-    RETURN DATE IS
-    l_exp          NUMBER;
-    l_payload_json json_object_t;
-  BEGIN
-    l_payload_json := json_object_t.parse(utl_raw.cast_to_varchar2(utl_encode.base64_decode(utl_raw.cast_to_raw(k_util.f_valor_posicion(i_access_token,
-                                                                                                                                        2,
-                                                                                                                                        '.')))));
-    l_exp          := l_payload_json.get_number('exp');
-    RETURN to_date('19700101', 'YYYYMMDD') +((l_exp +
-                                             ((to_number(substr(tz_offset(sessiontimezone),
-                                                                 1,
-                                                                 3)) + 0) * 3600)) /
-                                             86400);
-  EXCEPTION
-    WHEN OTHERS THEN
-      RETURN NULL;
-  END;
-
-  FUNCTION lf_fecha_expiracion_refresh_token(i_id_aplicacion IN VARCHAR2)
-    RETURN DATE IS
-  BEGIN
-    RETURN SYSDATE +(f_tiempo_expiracion_token(i_id_aplicacion,
-                                               c_refresh_token) / 24);
-  EXCEPTION
-    WHEN OTHERS THEN
-      RETURN NULL;
-  END;
-
-  FUNCTION f_tiempo_expiracion_token(i_id_aplicacion IN VARCHAR2,
-                                     i_tipo_token    IN VARCHAR2)
-    RETURN NUMBER IS
-    l_tiempo_expiracion_token t_aplicaciones.tiempo_expiracion_access_token%TYPE;
-  BEGIN
-    -- Busca el tiempo de expiración configurado para la aplicación
-    BEGIN
-      SELECT CASE i_tipo_token
-               WHEN c_refresh_token THEN -- Refresh Token
-                tiempo_expiracion_refresh_token
-               WHEN c_access_token THEN -- Access Token
-                tiempo_expiracion_access_token
-               ELSE
-                NULL
-             END
-        INTO l_tiempo_expiracion_token
-        FROM t_aplicaciones
-       WHERE id_aplicacion = i_id_aplicacion;
-    EXCEPTION
-      WHEN no_data_found THEN
-        l_tiempo_expiracion_token := NULL;
-      WHEN OTHERS THEN
-        l_tiempo_expiracion_token := NULL;
-    END;
-  
-    -- Si no encuentra, busca el tiempo de expiración configurado a nivel general
-    IF l_tiempo_expiracion_token IS NULL THEN
-      l_tiempo_expiracion_token := CASE i_tipo_token
-                                     WHEN c_refresh_token THEN -- Refresh Token
-                                      to_number(k_util.f_valor_parametro('TIEMPO_EXPIRACION_REFRESH_TOKEN'))
-                                     WHEN c_access_token THEN -- Access Token
-                                      to_number(k_util.f_valor_parametro('TIEMPO_EXPIRACION_ACCESS_TOKEN'))
-                                     ELSE
-                                      NULL
-                                   END;
-    END IF;
-  
-    RETURN l_tiempo_expiracion_token;
   END;
 
   PROCEDURE p_validar_clave(i_usuario    IN VARCHAR2,
@@ -497,12 +421,12 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     END IF;*/
   EXCEPTION
     WHEN k_usuario.ex_usuario_inexistente THEN
-      raise_application_error(-20000, 'Credenciales invalidas');
+      raise_application_error(-20000, 'Credenciales inválidas');
     WHEN ex_credenciales_invalidas THEN
-      raise_application_error(-20000, 'Credenciales invalidas');
+      raise_application_error(-20000, 'Credenciales inválidas');
     WHEN OTHERS THEN
       lp_registrar_intento_fallido(l_id_usuario, i_tipo_clave);
-      raise_application_error(-20000, 'Credenciales invalidas');
+      raise_application_error(-20000, 'Credenciales inválidas');
   END;
 
   FUNCTION f_validar_credenciales(i_usuario    IN VARCHAR2,
@@ -558,7 +482,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
                                    i_tipo_clave IN CHAR DEFAULT 'A') IS
   BEGIN
     IF NOT f_validar_credenciales(i_usuario, i_clave, i_tipo_clave) THEN
-      raise_application_error(-20000, 'Credenciales invalidas');
+      raise_application_error(-20000, 'Credenciales inválidas');
     END IF;
   END;
 
@@ -578,7 +502,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
   BEGIN
     -- Valida aplicacion
     IF i_id_aplicacion IS NULL THEN
-      raise_application_error(-20000, 'Aplicacion inexistente o inactiva');
+      raise_application_error(-20000, 'Aplicación inexistente o inactiva');
     END IF;
   
     -- Busca usuario
@@ -621,8 +545,8 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     END IF;
   
     -- Obtiene la fecha de expiracion del Access Token y Refresh Token
-    l_fecha_expiracion_access_token  := lf_fecha_expiracion_access_token(i_access_token);
-    l_fecha_expiracion_refresh_token := lf_fecha_expiracion_refresh_token(i_id_aplicacion);
+    l_fecha_expiracion_access_token  := k_sesion.f_fecha_expiracion_access_token(i_access_token);
+    l_fecha_expiracion_refresh_token := k_sesion.f_fecha_expiracion_refresh_token(i_id_aplicacion);
   
     -- Inserta sesion
     INSERT INTO t_sesiones
@@ -678,7 +602,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
   BEGIN
     -- Valida aplicacion
     IF i_id_aplicacion IS NULL THEN
-      raise_application_error(-20000, 'Aplicacion inexistente o inactiva');
+      raise_application_error(-20000, 'Aplicación inexistente o inactiva');
     END IF;
   
     -- Busca sesion
@@ -689,8 +613,8 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     END IF;
   
     -- Obtiene la fecha de expiracion del Access Token y Refresh Token
-    l_fecha_expiracion_access_token  := lf_fecha_expiracion_access_token(i_access_token_nuevo);
-    l_fecha_expiracion_refresh_token := lf_fecha_expiracion_refresh_token(i_id_aplicacion);
+    l_fecha_expiracion_access_token  := k_sesion.f_fecha_expiracion_access_token(i_access_token_nuevo);
+    l_fecha_expiracion_refresh_token := k_sesion.f_fecha_expiracion_refresh_token(i_id_aplicacion);
   
     -- Actualiza sesion
     UPDATE t_sesiones
@@ -712,7 +636,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     RETURN l_id_sesion;
   EXCEPTION
     WHEN ex_tokens_invalidos THEN
-      raise_application_error(-20000, 'Tokens invalidos');
+      raise_application_error(-20000, 'Tokens inválidos');
   END;
 
   PROCEDURE p_editar_usuario(i_usuario_antiguo  IN VARCHAR2,
