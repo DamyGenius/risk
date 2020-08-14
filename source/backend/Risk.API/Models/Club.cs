@@ -37,5 +37,6 @@ namespace Risk.API.Models
         public string Twitter { get; set; }
         public string Facebook { get; set; }
         public string IdDivision { get; set; }
+        public int? VersionEscudo { get; set; }
     }
 }

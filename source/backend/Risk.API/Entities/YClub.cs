@@ -47,5 +47,7 @@ namespace Risk.API.Entities
         public string Facebook { get; set; }
         [JsonProperty("id_division")]
         public string IdDivision { get; set; }
+        [JsonProperty("version_escudo")]
+        public int? VersionEscudo { get; set; }
     }
 }

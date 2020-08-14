@@ -503,6 +503,7 @@ namespace Risk.API.Helpers
                     Twitter = entity.Twitter,
                     Facebook = entity.Facebook,
                     IdDivision = entity.IdDivision,
+                    VersionEscudo = entity.VersionEscudo
                 };
             }
             return model;
