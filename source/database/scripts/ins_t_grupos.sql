@@ -44,4 +44,13 @@ values (null, 'PRI-APE20', 'Itagüeños', 'GLO', null, null, 1, 'A', 'A', '12O', '
 insert into t_grupos (ID_GRUPO, ID_TORNEO, DESCRIPCION, TIPO, ID_USUARIO_ADMINISTRADOR, FECHA_CREACION, ID_JORNADA_INICIO, ESTADO, SITUACION, ID_CLUB, TODOS_INVITAN)
 values (null, 'PRI-APE20', 'Guaireños', 'GLO', null, null, 1, 'A', 'A', 'GUI', 'N');
 
+insert into t_grupos (ID_GRUPO, ID_TORNEO, DESCRIPCION, TIPO, ID_USUARIO_ADMINISTRADOR, FECHA_CREACION, ID_JORNADA_INICIO, ESTADO, SITUACION, ID_CLUB, TODOS_INVITAN)
+values (null, 'PRI-DEMO', 'Grupo General 1', 'GLO', null, null, 1, 'A', 'A', null, 'N');
+
+insert into t_grupos (ID_GRUPO, ID_TORNEO, DESCRIPCION, TIPO, ID_USUARIO_ADMINISTRADOR, FECHA_CREACION, ID_JORNADA_INICIO, ESTADO, SITUACION, ID_CLUB, TODOS_INVITAN)
+values (null, 'PRI-DEMO', 'Grupo Privado 1', 'PRI', 1, null, 1, 'A', 'A', null, 'N');
+
+insert into t_grupos (ID_GRUPO, ID_TORNEO, DESCRIPCION, TIPO, ID_USUARIO_ADMINISTRADOR, FECHA_CREACION, ID_JORNADA_INICIO, ESTADO, SITUACION, ID_CLUB, TODOS_INVITAN)
+values (null, 'PRI-DEMO', 'Grupo Privado 2', 'PRI', 2, null, 1, 'A', 'A', null, 'N');
+
 prompt Done.
