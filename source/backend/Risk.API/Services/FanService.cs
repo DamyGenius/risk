@@ -184,12 +184,13 @@ namespace Risk.API.Services
             return EntitiesMapper.GetRespuestaFromEntity<Grupo, YGrupo>(entityRsp, EntitiesMapper.GetGrupoFromEntity(entityRsp.Datos));
         }
 
-        public Respuesta<Pagina<Grupo>> ListarGrupos(string misGrupos, string tipoGrupo = null, string aceptado = null, PaginaParametros paginaParametros = null)
+        public Respuesta<Pagina<Grupo>> ListarGrupos(string misGrupos, string tipoGrupo = null, string aceptado = null, string incluirUsuarios = null, PaginaParametros paginaParametros = null)
         {
             JObject prms = new JObject();
             prms.Add("mis_grupos", misGrupos);
             prms.Add("tipo_grupo", tipoGrupo);
             prms.Add("aceptado", aceptado);
+            prms.Add("incluir_usuarios", incluirUsuarios);
 
             if (paginaParametros != null)
             {

@@ -231,6 +231,7 @@ namespace Risk.API.Controllers
         public IActionResult ListarGrupos([FromQuery, SwaggerParameter(Description = "", Required = true)] string misGrupos,
             [FromQuery, SwaggerParameter(Description = "", Required = false)] string tipoGrupo,
             [FromQuery, SwaggerParameter(Description = "", Required = false)] string aceptado,
+            [FromQuery, SwaggerParameter(Description = "", Required = false)] string incluirUsuarios,
             [FromQuery, SwaggerParameter(Description = "Número de la página", Required = false)] int pagina,
             [FromQuery, SwaggerParameter(Description = "Cantidad de elementos por página", Required = false)] int porPagina,
             [FromQuery, SwaggerParameter(Description = "No paginar? (S/N)", Required = false)] string noPaginar)
@@ -241,7 +242,7 @@ namespace Risk.API.Controllers
                 PorPagina = porPagina,
                 NoPaginar = noPaginar
             };
-            var respuesta = _fanService.ListarGrupos(misGrupos, tipoGrupo, aceptado, paginaParametros);
+            var respuesta = _fanService.ListarGrupos(misGrupos, tipoGrupo, aceptado, incluirUsuarios, paginaParametros);
 
             respuesta.Datos = ProcesarPagina(respuesta.Datos);
 
