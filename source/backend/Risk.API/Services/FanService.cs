@@ -45,6 +45,7 @@ namespace Risk.API.Services
         private const int ID_LISTAR_GRUPOS = 49;
         private const int ID_ABANDONAR_GRUPO = 51;
         private const int ID_INVITAR_USUARIO = 52;
+        private const int ID_RESPONDER_INVITACION = 53;
 
         public FanService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDbConnectionFactory dbConnectionFactory)
             : base(configuration, httpContextAccessor, dbConnectionFactory)
@@ -228,6 +229,18 @@ namespace Risk.API.Services
             prms.Add("usuario", usuario);
 
             string rsp = base.ProcesarServicio(ID_INVITAR_USUARIO, prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
+
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
+        }
+
+        public Respuesta<Dato> ResponderInvitacion(int idGrupo, RespuestaInvitacion respuestaInvitacion)
+        {
+            JObject prms = new JObject();
+            prms.Add("id_grupo", idGrupo);
+            prms.Add("respuesta", respuestaInvitacion.ToString());
+
+            string rsp = base.ProcesarServicio(ID_RESPONDER_INVITACION, prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
 
             return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));

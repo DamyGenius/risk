@@ -271,5 +271,17 @@ namespace Risk.API.Controllers
             var respuesta = _fanService.InvitarUsuario(idGrupo, usuario);
             return ProcesarRespuesta(respuesta);
         }
+
+        [HttpPost("ResponderInvitacion")]
+        [SwaggerOperation(OperationId = "ResponderInvitacion", Summary = "ResponderInvitacion", Description = "Permite responder a invitación de un grupo")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
+        public IActionResult ResponderInvitacion([FromQuery, SwaggerParameter(Description = "Identificador del grupo", Required = true)] int idGrupo,
+            [FromQuery, SwaggerParameter(Description = "Respuesta a Invitación (ACEPTAR/RECHAZAR)", Required = true)] RespuestaInvitacion respuestaInvitacion)
+        {
+            var respuesta = _fanService.ResponderInvitacion(idGrupo, respuestaInvitacion);
+            return ProcesarRespuesta(respuesta);
+        }
     }
 }

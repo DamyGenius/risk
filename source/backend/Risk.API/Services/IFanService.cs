@@ -39,5 +39,6 @@ namespace Risk.API.Services
         Respuesta<Pagina<Grupo>> ListarGrupos(string misGrupos, string tipoGrupo = null, string aceptado = null, string incluirUsuarios = null, PaginaParametros paginaParametros = null);
         Respuesta<Dato> AbandonarGrupo(int idGrupo);
         Respuesta<Dato> InvitarUsuario(int idGrupo, string usuario);
+        Respuesta<Dato> ResponderInvitacion(int idGrupo, RespuestaInvitacion respuestaInvitacion);
     }
 }
