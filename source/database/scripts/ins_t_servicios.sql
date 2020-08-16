@@ -140,4 +140,7 @@ values (51, 'ABANDONAR_GRUPO', 'T', 'S', 'FAN', null, null, null, null);
 insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
 values (52, 'INVITAR_USUARIO', 'T', 'S', 'FAN', null, null, null, null);
 
+insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
+values (53, 'RESPONDER_INVITACION', 'T', 'S', 'FAN', null, null, null, null);
+
 prompt Done.

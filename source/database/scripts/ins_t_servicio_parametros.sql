@@ -371,4 +371,10 @@ values (52, 'ID_GRUPO', 'I', 'N', null, 'S', null, 'S', 1, null, null);
 insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA, LONGITUD_MAXIMA)
 values (52, 'USUARIO', 'I', 'S', null, 'S', null, 'S', 2, null, null);
 
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA, LONGITUD_MAXIMA)
+values (53, 'ID_GRUPO', 'I', 'N', null, 'S', null, 'S', 1, null, null);
+
+insert into t_servicio_parametros (ID_SERVICIO, NOMBRE, DIRECCION, TIPO_DATO, FORMATO, OBLIGATORIO, VALOR_DEFECTO, ACTIVO, ORDEN, ETIQUETA, LONGITUD_MAXIMA)
+values (53, 'RESPUESTA', 'I', 'S', null, 'S', null, 'S', 2, null, 8);
+
 prompt Done.

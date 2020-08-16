@@ -54,6 +54,8 @@ CREATE OR REPLACE PACKAGE k_servicio_fan IS
 
   FUNCTION invitar_usuario(i_parametros IN y_parametros) RETURN y_respuesta;
 
+  FUNCTION responder_invitacion(i_parametros IN y_parametros) RETURN y_respuesta;
+
 END;
 /
 CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
@@ -940,15 +942,24 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
   FUNCTION abandonar_grupo(i_parametros IN y_parametros) RETURN y_respuesta IS
     l_rsp  y_respuesta;
     l_dato y_dato;
+  
+    l_usuario  t_usuarios.alias%TYPE;
+    l_id_grupo t_grupos.id_grupo%TYPE;
   BEGIN
     -- Inicializa respuesta
     l_rsp  := NEW y_respuesta();
     l_dato := NEW y_dato();
   
+    l_rsp.lugar := 'Obteniendo variables del sistema';
+    l_usuario   := k_sistema.f_valor_parametro_string(k_sistema.c_usuario);
+
+    l_rsp.lugar := 'Obteniendo parámetros';
+    l_id_grupo  := k_servicio.f_valor_parametro_number(i_parametros,
+                                                       'id_grupo');
+
     l_rsp.lugar := 'Validando parametros';
     k_servicio.p_validar_parametro(l_rsp,
-                                   k_servicio.f_valor_parametro_number(i_parametros,
-                                                                       'id_grupo') IS NOT NULL,
+                                   l_id_grupo IS NOT NULL,
                                    'Debe ingresar id_grupo');
   
     -- TODO: Otras validaciones internas. Ej: tipo de grupo
@@ -956,10 +967,8 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
   
     l_rsp.lugar := 'Eliminando usuario del grupo';
     DELETE t_grupo_usuarios a
-     WHERE a.id_grupo =
-           k_servicio.f_valor_parametro_number(i_parametros, 'id_grupo')
-       AND a.id_usuario =
-           k_usuario.f_id_usuario(k_sistema.f_valor_parametro_string(k_sistema.c_usuario));
+     WHERE a.id_grupo = l_id_grupo
+       AND a.id_usuario = k_usuario.f_id_usuario(l_usuario);
   
     k_servicio.p_respuesta_ok(l_rsp, l_dato);
     RETURN l_rsp;
@@ -1055,6 +1064,71 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
                                    'fan0006',
                                    'Error al enviar invitación');
       RAISE k_servicio.ex_error_general;
+    END IF;
+  
+    k_servicio.p_respuesta_ok(l_rsp, l_dato);
+    RETURN l_rsp;
+  EXCEPTION
+    WHEN k_servicio.ex_error_parametro THEN
+      RETURN l_rsp;
+    WHEN k_servicio.ex_error_general THEN
+      RETURN l_rsp;
+    WHEN OTHERS THEN
+      k_servicio.p_respuesta_excepcion(l_rsp,
+                                       utl_call_stack.error_number(1),
+                                       utl_call_stack.error_msg(1),
+                                       dbms_utility.format_error_stack);
+      RETURN l_rsp;
+  END;
+
+  FUNCTION responder_invitacion(i_parametros IN y_parametros) RETURN y_respuesta IS
+    c_aceptar  CONSTANT VARCHAR2(8) := 'ACEPTAR';
+    c_rechazar CONSTANT VARCHAR2(8) := 'RECHAZAR';
+
+    l_rsp  y_respuesta;
+    l_dato y_dato;
+  
+    l_usuario   t_usuarios.alias%TYPE;
+    l_id_grupo  t_grupos.id_grupo%TYPE;
+    l_respuesta VARCHAR2(8);
+  BEGIN
+    -- Inicializa respuesta
+    l_rsp  := NEW y_respuesta();
+    l_dato := NEW y_dato();
+  
+    l_rsp.lugar := 'Obteniendo variables del sistema';
+    l_usuario   := k_sistema.f_valor_parametro_string(k_sistema.c_usuario);
+
+    l_rsp.lugar := 'Obteniendo parámetros';
+    l_id_grupo  := k_servicio.f_valor_parametro_number(i_parametros,
+                                                       'id_grupo');
+    l_respuesta := k_servicio.f_valor_parametro_string(i_parametros,
+                                                       'respuesta');
+
+    l_rsp.lugar := 'Validando parametros';
+    k_servicio.p_validar_parametro(l_rsp,
+                                   l_id_grupo IS NOT NULL,
+                                   'Debe ingresar id_grupo');
+    k_servicio.p_validar_parametro(l_rsp,
+                                   l_respuesta IS NOT NULL,
+                                   'Debe ingresar respuesta');
+    k_servicio.p_validar_parametro(l_rsp,
+                                   l_respuesta IN (c_aceptar, c_rechazar),
+                                   'Valores posibles de respuesta: ' ||
+                                   '[' || c_aceptar || '], [' || c_rechazar || ']');
+    --TODO: Agregar otras validaciones si es necesario
+  
+    l_rsp.lugar := 'Respondiendo invitación del grupo';
+    IF l_respuesta = c_aceptar THEN
+      UPDATE t_grupo_usuarios a
+         SET a.estado = 'A',
+             a.aceptado = 'S'
+       WHERE a.id_grupo = l_id_grupo
+         AND a.id_usuario = k_usuario.f_id_usuario(l_usuario);
+    ELSIF l_respuesta = c_rechazar THEN
+      DELETE t_grupo_usuarios a
+       WHERE a.id_grupo = l_id_grupo
+         AND a.id_usuario = k_usuario.f_id_usuario(l_usuario);
     END IF;
   
     k_servicio.p_respuesta_ok(l_rsp, l_dato);
