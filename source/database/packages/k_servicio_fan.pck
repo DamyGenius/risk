@@ -144,6 +144,9 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
       l_usuario                  := NEW y_grupo_usuario();
       l_usuario.id_usuario       := c.id_usuario;
       l_usuario.alias_usuario    := k_usuario.f_alias(c.id_usuario);
+      l_usuario.version_avatar   := k_archivo.f_version_archivo('T_USUARIOS',
+                                                                'AVATAR',
+                                                                k_usuario.f_alias(c.id_usuario));
       l_usuario.puntos           := c.puntos;
       l_usuario.ranking          := c.ranking;
       l_usuario.estado           := c.estado;

@@ -30,17 +30,19 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-/**  */
+/** Identificador del usuario */
   id_usuario NUMBER(10),
-/**  */
+/** Alias del usuario (identificador para autenticacion) */
   alias_usuario VARCHAR2(300),
-/**  */
+/** Version del avatar del usuario */
+  version_avatar NUMBER(10),
+/** Puntos en el grupo */
   puntos NUMBER(15),
-/**  */
+/** Ranking en el grupo */
   ranking NUMBER(6),
-/**  */
+/** Estado */
   estado VARCHAR2(1),
-/**  */
+/** Token de activación */
   token_activacion VARCHAR2(50),
 /** Invitación aceptada? (S/N) */
   aceptado VARCHAR2(1),
@@ -58,6 +60,7 @@ CREATE OR REPLACE TYPE BODY y_grupo_usuario IS
   BEGIN
     self.id_usuario       := NULL;
     self.alias_usuario    := NULL;
+    self.version_avatar   := NULL;
     self.puntos           := NULL;
     self.ranking          := NULL;
     self.estado           := NULL;
@@ -76,6 +79,7 @@ CREATE OR REPLACE TYPE BODY y_grupo_usuario IS
     l_objeto                  := NEW y_grupo_usuario();
     l_objeto.id_usuario       := l_json_object.get_number('id_usuario');
     l_objeto.alias_usuario    := l_json_object.get_string('alias_usuario');
+    l_objeto.version_avatar  := l_json_object.get_string('version_avatar');
     l_objeto.puntos           := l_json_object.get_number('puntos');
     l_objeto.ranking          := l_json_object.get_number('ranking');
     l_objeto.estado           := l_json_object.get_string('estado');
@@ -91,6 +95,7 @@ CREATE OR REPLACE TYPE BODY y_grupo_usuario IS
     l_json_object := NEW json_object_t();
     l_json_object.put('id_usuario', self.id_usuario);
     l_json_object.put('alias_usuario', self.alias_usuario);
+    l_json_object.put('version_avatar', self.version_avatar);
     l_json_object.put('puntos', self.puntos);
     l_json_object.put('ranking', self.ranking);
     l_json_object.put('estado', self.estado);
