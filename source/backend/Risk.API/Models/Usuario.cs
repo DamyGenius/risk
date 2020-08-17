@@ -37,6 +37,8 @@ namespace Risk.API.Models
         public string DireccionCorreo { get; set; }
         public string NumeroTelefono { get; set; }
         public int? VersionAvatar { get; set; }
+        public int? Puntos { get; set; }
+        public int? Ranking { get; set; }
         public List<Rol> Roles { get; set; }
     }
 }

@@ -195,6 +195,8 @@ namespace Risk.API.Helpers
                     DireccionCorreo = entity.DireccionCorreo,
                     NumeroTelefono = entity.NumeroTelefono,
                     VersionAvatar = entity.VersionAvatar,
+                    Puntos = entity.Puntos,
+                    Ranking = entity.Ranking,
                     Roles = GetRolListFromEntity(entity.Roles)
                 };
             }
@@ -641,6 +643,7 @@ namespace Risk.API.Helpers
                 {
                     IdUsuario = entity.IdUsuario,
                     AliasUsuario = entity.AliasUsuario,
+                    VersionAvatar = entity.VersionAvatar,
                     Puntos = entity.Puntos,
                     Ranking = entity.Ranking,
                     Estado = entity.Estado,
