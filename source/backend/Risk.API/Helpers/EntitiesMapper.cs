@@ -693,6 +693,7 @@ namespace Risk.API.Helpers
                     IdClub = entity.IdClub,
                     NombreOficialClub = entity.NombreOficialClub,
                     TodosInvitan = entity.TodosInvitan,
+                    VersionLogo = entity.VersionLogo,
                     Usuarios = GetGrupoUsuarioListFromEntity(entity.Usuarios)
                 };
             }

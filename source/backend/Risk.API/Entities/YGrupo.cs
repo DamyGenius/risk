@@ -60,6 +60,8 @@ namespace Risk.API.Entities
         public string NombreOficialClub { get; set; }
         [JsonProperty("todos_invitan")]
         public string TodosInvitan { get; set; }
+        [JsonProperty("version_logo")]
+        public int? VersionLogo { get; set; }
         [JsonProperty("usuarios")]
         public List<YGrupoUsuario> Usuarios { get; set; }
     }

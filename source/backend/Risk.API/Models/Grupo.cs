@@ -44,6 +44,7 @@ namespace Risk.API.Models
         public string IdClub { get; set; }
         public string NombreOficialClub { get; set; }
         public string TodosInvitan { get; set; }
+        public int? VersionLogo { get; set; }
         public List<GrupoUsuario> Usuarios { get; set; }
     }
 }
