@@ -112,7 +112,8 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
              a.situacion,
              a.id_club,
              c.nombre_oficial,
-             a.todos_invitan
+             a.todos_invitan,
+             k_archivo.f_version_archivo('T_GRUPOS', 'LOGO', a.id_grupo)
         INTO l_grupo.id_grupo,
              l_grupo.id_torneo,
              l_grupo.titulo_torneo,
@@ -127,7 +128,8 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
              l_grupo.situacion,
              l_grupo.id_club,
              l_grupo.nombre_oficial_club,
-             l_grupo.todos_invitan
+             l_grupo.todos_invitan,
+             l_grupo.version_logo
         FROM t_grupos a, t_torneos t, t_clubes c
        WHERE t.id_torneo = a.id_torneo
          AND c.id_club(+) = a.id_club

@@ -60,6 +60,8 @@ SOFTWARE.
   nombre_oficial_club VARCHAR2(100),
 /** Todos los usuarios pueden invitar? (S/N) */
   todos_invitan VARCHAR2(1),
+/** Version del logo del grupo */
+  version_logo NUMBER(10),
 /** Usuarios */
   usuarios y_objetos,
 
@@ -89,6 +91,7 @@ CREATE OR REPLACE TYPE BODY y_grupo IS
     self.id_club                     := NULL;
     self.nombre_oficial_club         := NULL;
     self.todos_invitan               := NULL;
+    self.version_logo                := NULL;
     self.usuarios                    := NEW y_objetos();
   
     RETURN;
@@ -116,6 +119,7 @@ CREATE OR REPLACE TYPE BODY y_grupo IS
     l_objeto.id_club                     := l_json_object.get_string('id_club');
     l_objeto.nombre_oficial_club         := l_json_object.get_string('nombre_oficial_club');
     l_objeto.todos_invitan               := l_json_object.get_string('todos_invitan');
+    l_objeto.version_logo                := l_json_object.get_string('version_logo');
     l_objeto.usuarios                    := NULL; -- TODO
   
     RETURN l_objeto;
@@ -144,6 +148,7 @@ CREATE OR REPLACE TYPE BODY y_grupo IS
     l_json_object.put('id_club', self.id_club);
     l_json_object.put('nombre_oficial_club', self.nombre_oficial_club);
     l_json_object.put('todos_invitan', self.todos_invitan);
+    l_json_object.put('version_logo', self.version_logo);
   
     IF self.usuarios IS NULL THEN
       l_json_object.put_null('usuarios');
