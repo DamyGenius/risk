@@ -311,7 +311,11 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     INSERT INTO t_usuarios
       (alias, id_persona, estado, direccion_correo, numero_telefono)
     VALUES
-      (i_usuario, l_id_persona, 'A', i_direccion_correo, i_numero_telefono)
+      (i_usuario,
+       l_id_persona,
+       'P', -- PENDIENTE DE ACTIVACIÓN
+       i_direccion_correo,
+       i_numero_telefono)
     RETURNING id_usuario INTO l_id_usuario;
   
     INSERT INTO t_rol_usuarios
@@ -494,6 +498,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     RETURN NUMBER IS
     l_id_sesion                      t_sesiones.id_sesion%TYPE;
     l_id_usuario                     t_usuarios.id_usuario%TYPE;
+    l_estado_usuario                 t_usuarios.estado%TYPE;
     l_tipo_aplicacion                t_aplicaciones.tipo%TYPE;
     l_id_dispositivo                 t_dispositivos.id_dispositivo%TYPE;
     l_cantidad                       NUMBER(3);
@@ -510,6 +515,15 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
   
     IF l_id_usuario IS NULL THEN
       RAISE k_usuario.ex_usuario_inexistente;
+    END IF;
+  
+    -- Valida estado de usuario
+    l_estado_usuario := k_usuario.f_estado(l_id_usuario);
+    IF l_estado_usuario <> 'A' THEN
+      raise_application_error(-20000,
+                              'Usuario ' ||
+                              k_util.f_formatear_titulo(k_util.f_significado_codigo('ESTADO_USUARIO',
+                                                                                    l_estado_usuario)));
     END IF;
   
     -- Busca dispositivo
