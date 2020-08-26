@@ -32,7 +32,7 @@ namespace Risk.API.Services
         Respuesta<Sesion> IniciarSesion(string usuario, string accessToken, string refreshToken, string tokenDispositivo);
         Respuesta<Sesion> RefrescarSesion(string accessTokenAntiguo, string refreshTokenAntiguo, string accessTokenNuevo, string refreshTokenNuevo);
         Respuesta<Dato> CambiarEstadoSesion(string accessToken, EstadoSesion estado);
-        Respuesta<Dato> RegistrarUsuario(string usuario, string clave, string nombre, string apellido, string direccionCorreo, string numeroTelefono);
+        Respuesta<Dato> RegistrarUsuario(string usuario, string clave, string nombre, string apellido, string direccionCorreo, string numeroTelefono, string idClub);
         Respuesta<Dato> RegistrarClave(string usuario, string clave, TipoClave tipoClave);
         Respuesta<Dato> CambiarClave(string usuario, string claveAntigua, string claveNueva, TipoClave tipoClave);
         Respuesta<Dato> ValidarSesion(string accessToken);
@@ -41,7 +41,7 @@ namespace Risk.API.Services
         Respuesta<Dato> RegistrarDispositivo(Dispositivo dispositivo);
         Respuesta<Dispositivo> DatosDispositivo(string tokenDispositivo);
         Respuesta<Dato> TiempoExpiracionToken(TipoToken tipoToken);
-        Respuesta<Dato> EditarUsuario(string usuarioAntiguo, string usuarioNuevo, string nombre, string apellido, string direccionCorreo, string numeroTelefono);
+        Respuesta<Dato> EditarUsuario(string usuarioAntiguo, string usuarioNuevo, string nombre, string apellido, string direccionCorreo, string numeroTelefono, string idClub);
         Respuesta<Dato> CambiarEstadoUsuario(string usuario, EstadoUsuario estado);
         Respuesta<Dato> GenerarOtp(TipoMensajeria tipoMensajeria, string destino);
         Respuesta<Dato> ValidarOtp(string secret, int otp);

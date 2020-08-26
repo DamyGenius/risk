@@ -192,7 +192,7 @@ namespace Risk.API.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
         public IActionResult RegistrarUsuario([FromBody] RegistrarUsuarioRequestBody requestBody)
         {
-            var respuesta = _autService.RegistrarUsuario(requestBody.Usuario, requestBody.Clave, requestBody.Nombre, requestBody.Apellido, requestBody.DireccionCorreo, requestBody.NumeroTelefono);
+            var respuesta = _autService.RegistrarUsuario(requestBody.Usuario, requestBody.Clave, requestBody.Nombre, requestBody.Apellido, requestBody.DireccionCorreo, requestBody.NumeroTelefono, requestBody.IdClub);
             return ProcesarRespuesta(respuesta);
         }
 
@@ -384,7 +384,7 @@ namespace Risk.API.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
         public IActionResult EditarUsuario([FromQuery, SwaggerParameter(Description = "Usuario", Required = true)] string usuario, [FromBody] EditarUsuarioRequestBody requestBody)
         {
-            var respuesta = _autService.EditarUsuario(usuario, requestBody.UsuarioNuevo, requestBody.Nombre, requestBody.Apellido, requestBody.DireccionCorreo, requestBody.NumeroTelefono);
+            var respuesta = _autService.EditarUsuario(usuario, requestBody.UsuarioNuevo, requestBody.Nombre, requestBody.Apellido, requestBody.DireccionCorreo, requestBody.NumeroTelefono, requestBody.IdClub);
             return ProcesarRespuesta(respuesta);
         }
 

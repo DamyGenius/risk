@@ -31,5 +31,6 @@ namespace Risk.API.Models
         public string Apellido { get; set; }
         public string DireccionCorreo { get; set; }
         public string NumeroTelefono { get; set; }
+        public string IdClub { get; set; }
     }
 }

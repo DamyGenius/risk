@@ -124,7 +124,7 @@ namespace Risk.API.Services
             return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
         }
 
-        public Respuesta<Dato> RegistrarUsuario(string usuario, string clave, string nombre, string apellido, string direccionCorreo, string numeroTelefono)
+        public Respuesta<Dato> RegistrarUsuario(string usuario, string clave, string nombre, string apellido, string direccionCorreo, string numeroTelefono, string idClub)
         {
             JObject prms = new JObject();
             prms.Add("usuario", usuario);
@@ -133,6 +133,7 @@ namespace Risk.API.Services
             prms.Add("apellido", apellido);
             prms.Add("direccion_correo", direccionCorreo);
             prms.Add("numero_telefono", numeroTelefono);
+            prms.Add("id_club", idClub);
 
             string rsp = base.ProcesarServicio(ID_REGISTRAR_USUARIO, prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
@@ -223,7 +224,7 @@ namespace Risk.API.Services
             return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
         }
 
-        public Respuesta<Dato> EditarUsuario(string usuarioAntiguo, string usuarioNuevo, string nombre, string apellido, string direccionCorreo, string numeroTelefono)
+        public Respuesta<Dato> EditarUsuario(string usuarioAntiguo, string usuarioNuevo, string nombre, string apellido, string direccionCorreo, string numeroTelefono, string idClub)
         {
             JObject prms = new JObject();
             prms.Add("usuario_antiguo", usuarioAntiguo);
@@ -232,6 +233,7 @@ namespace Risk.API.Services
             prms.Add("apellido", apellido);
             prms.Add("direccion_correo", direccionCorreo);
             prms.Add("numero_telefono", numeroTelefono);
+            prms.Add("id_club", idClub);
 
             string rsp = base.ProcesarServicio(ID_EDITAR_USUARIO, prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
