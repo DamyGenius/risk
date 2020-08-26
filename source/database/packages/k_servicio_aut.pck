@@ -118,7 +118,9 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
                                         k_servicio.f_valor_parametro_string(i_parametros,
                                                                             'direccion_correo'),
                                         k_servicio.f_valor_parametro_string(i_parametros,
-                                                                            'numero_telefono'));
+                                                                            'numero_telefono'),
+                                        k_servicio.f_valor_parametro_string(i_parametros,
+                                                                            'id_club'));
   
     l_rsp.lugar := 'Enviando mensajería';
     IF k_mensajeria.f_enviar_correo('Confirmación de correo',
@@ -735,7 +737,9 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
                                      k_servicio.f_valor_parametro_string(i_parametros,
                                                                          'direccion_correo'),
                                      k_servicio.f_valor_parametro_string(i_parametros,
-                                                                         'numero_telefono'));
+                                                                         'numero_telefono'),
+                                     k_servicio.f_valor_parametro_string(i_parametros,
+                                                                         'id_club'));
   
     k_servicio.p_respuesta_ok(l_rsp, l_dato);
     RETURN l_rsp;
