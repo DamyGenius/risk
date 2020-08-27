@@ -1,7 +1,6 @@
 prompt Importing table t_parametros...
 set feedback off
 set define off
-
 insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR)
 values ('BASE_DATOS_PRODUCCION', 'Nombre de la Base de Datos del entorno de Producción', 'RISK');
 
@@ -33,7 +32,7 @@ insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR)
 values ('TIEMPO_EXPIRACION_REFRESH_TOKEN', 'Tiempo de expiración del Refresh Token en horas', '5');
 
 insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR)
-values ('URL_SERVICIOS_PRODUCCION', 'URL base de los Servicios Web del entorno de Producción', 'http://localhost:5000');
+values ('URL_SERVICIOS_PRODUCCION', 'URL base de los Servicios Web del entorno de Producción', 'https://localhost:5001');
 
 insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR)
 values ('PAGINACION_CANTIDAD_DEFECTO_POR_PAGINA', 'Cantidad por defecto de elementos por página en paginación de listas', '30');
@@ -42,10 +41,10 @@ insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR)
 values ('PAGINACION_CANTIDAD_MAXIMA_POR_PAGINA', 'Cantidad máxima permitida de elementos por página en paginación de listas', '100');
 
 insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR)
-values ('DIRECCION_CORREO_PRUEBAS', 'Dirección de correo electrónico para pruebas', null);
+values ('DIRECCION_CORREO_PRUEBAS', 'Dirección de correo electrónico para pruebas', 'demouser@risk.com');
 
 insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR)
-values ('NUMERO_TELEFONO_PRUEBAS', 'Número de teléfono para pruebas', null);
+values ('NUMERO_TELEFONO_PRUEBAS', 'Número de teléfono para pruebas', '+595991000000');
 
 insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR)
 values ('DIRECCION_CORREO_REMITENTE', 'Dirección de correo del remitente para mensajería', null);
@@ -57,10 +56,10 @@ insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR)
 values ('REPORTE_FORMATO_SALIDA_DEFECTO', 'Formato de salida por defecto para reportes', 'PDF');
 
 insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR)
-values ('SUSCRIPCION_PRUEBAS', 'Tag o expresión destino para pruebas de notificaciones push', null);
+values ('SUSCRIPCION_PRUEBAS', 'Tag o expresión destino para pruebas de notificaciones push', 'test');
 
 insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR)
-values ('REGEXP_VALIDAR_ALIAS_USUARIO', 'Expresión Regular para validación de alias de usuario', null);
+values ('REGEXP_VALIDAR_ALIAS_USUARIO', 'Expresión Regular para validación de alias de usuario', '^[A-Za-z0-9_]{1,50}$');
 
 insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR)
 values ('TIEMPO_TOLERANCIA_VALIDAR_OTP', 'Tiempo de tolerancia para validación de OTP en segundos', '120');

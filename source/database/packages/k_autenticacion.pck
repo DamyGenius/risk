@@ -37,7 +37,7 @@ CREATE OR REPLACE PACKAGE k_autenticacion IS
                             i_clave      IN VARCHAR2,
                             i_tipo_clave IN CHAR DEFAULT 'A');
 
-  PROCEDURE p_registrar_usuario(i_usuario          IN VARCHAR2,
+  PROCEDURE p_registrar_usuario(i_alias            IN VARCHAR2,
                                 i_clave            IN VARCHAR2,
                                 i_nombre           IN VARCHAR2,
                                 i_apellido         IN VARCHAR2,
@@ -45,11 +45,19 @@ CREATE OR REPLACE PACKAGE k_autenticacion IS
                                 i_numero_telefono  IN VARCHAR2 DEFAULT NULL,
                                 i_id_club          IN VARCHAR2 DEFAULT NULL);
 
-  PROCEDURE p_registrar_clave(i_usuario    IN VARCHAR2,
+  PROCEDURE p_editar_usuario(i_alias_antiguo    IN VARCHAR2,
+                             i_alias_nuevo      IN VARCHAR2,
+                             i_nombre           IN VARCHAR2,
+                             i_apellido         IN VARCHAR2,
+                             i_direccion_correo IN VARCHAR2,
+                             i_numero_telefono  IN VARCHAR2 DEFAULT NULL,
+                             i_id_club          IN VARCHAR2 DEFAULT NULL);
+
+  PROCEDURE p_registrar_clave(i_alias      IN VARCHAR2,
                               i_clave      IN VARCHAR2,
                               i_tipo_clave IN CHAR DEFAULT 'A');
 
-  PROCEDURE p_cambiar_clave(i_usuario       IN VARCHAR2,
+  PROCEDURE p_cambiar_clave(i_alias         IN VARCHAR2,
                             i_clave_antigua IN VARCHAR2,
                             i_clave_nueva   IN VARCHAR2,
                             i_tipo_clave    IN CHAR DEFAULT 'A');
@@ -76,14 +84,6 @@ CREATE OR REPLACE PACKAGE k_autenticacion IS
                               i_access_token_nuevo    IN VARCHAR2,
                               i_refresh_token_nuevo   IN VARCHAR2)
     RETURN NUMBER;
-
-  PROCEDURE p_editar_usuario(i_usuario_antiguo  IN VARCHAR2,
-                             i_usuario_nuevo    IN VARCHAR2,
-                             i_nombre           IN VARCHAR2,
-                             i_apellido         IN VARCHAR2,
-                             i_direccion_correo IN VARCHAR2,
-                             i_numero_telefono  IN VARCHAR2 DEFAULT NULL,
-                             i_id_club          IN VARCHAR2 DEFAULT NULL);
 
 END;
 /
@@ -227,7 +227,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
       END LOOP;
       IF l_can_repeticiones > 2 THEN
         raise_application_error(-20000,
-                                'La clave no puede contener más de 2 caracteres iguales');
+                                'La clave no puede contener mï¿½s de 2 caracteres iguales');
       END IF;
     END LOOP;
   
@@ -252,17 +252,17 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     -- Valida la cantidad de letras mayusculas
     IF l_can_letras_may = 0 THEN
       raise_application_error(-20000,
-                              'La clave debe contener al menos 1 letra mayúscula');
+                              'La clave debe contener al menos 1 letra mayï¿½scula');
     END IF;
     -- Valida la cantidad de letras minusculas
     IF l_can_letras_min = 0 THEN
       raise_application_error(-20000,
-                              'La clave debe contener al menos 1 letra minúscula');
+                              'La clave debe contener al menos 1 letra minï¿½scula');
     END IF;
     -- Valida la cantidad de numeros
     IF l_can_numeros = 0 THEN
       raise_application_error(-20000,
-                              'La clave debe contener al menos 1 número');
+                              'La clave debe contener al menos 1 nï¿½mero');
     END IF;
     -- Valida la cantidad de caracteres especiales
     IF l_can_otros = 0 THEN
@@ -276,7 +276,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     END IF;
   END;
 
-  PROCEDURE p_registrar_usuario(i_usuario          IN VARCHAR2,
+  PROCEDURE p_registrar_usuario(i_alias            IN VARCHAR2,
                                 i_clave            IN VARCHAR2,
                                 i_nombre           IN VARCHAR2,
                                 i_apellido         IN VARCHAR2,
@@ -287,7 +287,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     l_id_usuario t_usuarios.id_usuario%TYPE;
   BEGIN
     -- Valida clave
-    p_validar_clave(i_usuario, i_clave, c_clave_acceso);
+    p_validar_clave(i_alias, i_clave, c_clave_acceso);
   
     -- Inserta persona
     INSERT INTO t_personas
@@ -314,9 +314,9 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     INSERT INTO t_usuarios
       (alias, id_persona, estado, direccion_correo, numero_telefono)
     VALUES
-      (i_usuario,
+      (i_alias,
        l_id_persona,
-       'P', -- PENDIENTE DE ACTIVACIÓN
+       'P', -- PENDIENTE DE ACTIVACIï¿½N
        i_direccion_correo,
        i_numero_telefono)
     RETURNING id_usuario INTO l_id_usuario;
@@ -326,16 +326,52 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
       SELECT id_rol, l_id_usuario
         FROM t_roles
        WHERE nombre = k_util.f_valor_parametro('NOMBRE_ROL_DEFECTO');
-  
-    -- TODO: registrar el club del usuario
 
-    p_registrar_clave(i_usuario, i_clave, c_clave_acceso);
+    -- TODO: registrar el club del usuario
+  
+    p_registrar_clave(i_alias, i_clave, c_clave_acceso);
   EXCEPTION
     WHEN dup_val_on_index THEN
       raise_application_error(-20000, 'Usuario ya existe');
   END;
 
-  PROCEDURE p_registrar_clave(i_usuario    IN VARCHAR2,
+  PROCEDURE p_editar_usuario(i_alias_antiguo    IN VARCHAR2,
+                             i_alias_nuevo      IN VARCHAR2,
+                             i_nombre           IN VARCHAR2,
+                             i_apellido         IN VARCHAR2,
+                             i_direccion_correo IN VARCHAR2,
+                             i_numero_telefono  IN VARCHAR2 DEFAULT NULL,
+                             i_id_club          IN VARCHAR2 DEFAULT NULL) IS
+    l_id_persona t_personas.id_persona%TYPE;
+  BEGIN
+    -- Actualiza usuario
+    UPDATE t_usuarios
+       SET alias            = nvl(i_alias_nuevo, alias),
+           direccion_correo = nvl(i_direccion_correo, direccion_correo),
+           numero_telefono  = nvl(i_numero_telefono, numero_telefono)
+     WHERE alias = i_alias_antiguo
+    RETURNING id_persona INTO l_id_persona;
+  
+    IF SQL%NOTFOUND THEN
+      raise_application_error(-20000, 'Usuario inexistente');
+    END IF;
+  
+    -- Actualiza persona
+    UPDATE t_personas
+       SET nombre          = nvl(i_nombre, nombre),
+           apellido        = nvl(i_apellido, apellido),
+           nombre_completo = nvl(i_nombre || ' ' || i_apellido,
+                                 nombre_completo)
+     WHERE id_persona = l_id_persona;
+  
+    IF SQL%NOTFOUND THEN
+      raise_application_error(-20000, 'Persona inexistente');
+    END IF;
+
+    -- TODO: registrar el club del usuario
+  END;
+
+  PROCEDURE p_registrar_clave(i_alias      IN VARCHAR2,
                               i_clave      IN VARCHAR2,
                               i_tipo_clave IN CHAR DEFAULT 'A') IS
     l_id_usuario t_usuarios.id_usuario%TYPE;
@@ -343,10 +379,10 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     l_salt       t_usuario_claves.salt%TYPE;
   BEGIN
     -- Valida clave
-    p_validar_clave(i_usuario, i_clave, i_tipo_clave);
+    p_validar_clave(i_alias, i_clave, i_tipo_clave);
   
     -- Busca usuario
-    l_id_usuario := k_usuario.f_id_usuario(i_usuario);
+    l_id_usuario := k_usuario.f_id_usuario(i_alias);
   
     IF l_id_usuario IS NULL THEN
       RAISE k_usuario.ex_usuario_inexistente;
@@ -386,7 +422,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
                               'Usuario ya tiene una clave registrada');
   END;
 
-  PROCEDURE p_cambiar_clave(i_usuario       IN VARCHAR2,
+  PROCEDURE p_cambiar_clave(i_alias         IN VARCHAR2,
                             i_clave_antigua IN VARCHAR2,
                             i_clave_nueva   IN VARCHAR2,
                             i_tipo_clave    IN CHAR DEFAULT 'A') IS
@@ -395,16 +431,16 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     l_salt       t_usuario_claves.salt%TYPE;
   BEGIN
     -- Valida clave
-    p_validar_clave(i_usuario, i_clave_nueva, i_tipo_clave);
+    p_validar_clave(i_alias, i_clave_nueva, i_tipo_clave);
   
     -- Busca usuario
-    l_id_usuario := k_usuario.f_id_usuario(i_usuario);
+    l_id_usuario := k_usuario.f_id_usuario(i_alias);
   
     IF l_id_usuario IS NULL THEN
       RAISE k_usuario.ex_usuario_inexistente;
     END IF;
   
-    IF NOT f_validar_credenciales(i_usuario, i_clave_antigua, i_tipo_clave) THEN
+    IF NOT f_validar_credenciales(i_alias, i_clave_antigua, i_tipo_clave) THEN
       RAISE ex_credenciales_invalidas;
     END IF;
   
@@ -430,12 +466,12 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     END IF;*/
   EXCEPTION
     WHEN k_usuario.ex_usuario_inexistente THEN
-      raise_application_error(-20000, 'Credenciales inválidas');
+      raise_application_error(-20000, 'Credenciales invï¿½lidas');
     WHEN ex_credenciales_invalidas THEN
-      raise_application_error(-20000, 'Credenciales inválidas');
+      raise_application_error(-20000, 'Credenciales invï¿½lidas');
     WHEN OTHERS THEN
       lp_registrar_intento_fallido(l_id_usuario, i_tipo_clave);
-      raise_application_error(-20000, 'Credenciales inválidas');
+      raise_application_error(-20000, 'Credenciales invï¿½lidas');
   END;
 
   FUNCTION f_validar_credenciales(i_usuario    IN VARCHAR2,
@@ -448,7 +484,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     l_iteraciones t_usuario_claves.iteraciones%TYPE;
   BEGIN
     -- Busca usuario
-    l_id_usuario := k_usuario.f_id_usuario(i_usuario);
+    l_id_usuario := k_usuario.f_buscar_id(i_usuario);
   
     IF l_id_usuario IS NULL THEN
       RAISE k_usuario.ex_usuario_inexistente;
@@ -491,7 +527,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
                                    i_tipo_clave IN CHAR DEFAULT 'A') IS
   BEGIN
     IF NOT f_validar_credenciales(i_usuario, i_clave, i_tipo_clave) THEN
-      raise_application_error(-20000, 'Credenciales inválidas');
+      raise_application_error(-20000, 'Credenciales invï¿½lidas');
     END IF;
   END;
 
@@ -512,11 +548,11 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
   BEGIN
     -- Valida aplicacion
     IF i_id_aplicacion IS NULL THEN
-      raise_application_error(-20000, 'Aplicación inexistente o inactiva');
+      raise_application_error(-20000, 'Aplicaciï¿½n inexistente o inactiva');
     END IF;
   
     -- Busca usuario
-    l_id_usuario := k_usuario.f_id_usuario(i_usuario);
+    l_id_usuario := k_usuario.f_buscar_id(i_usuario);
   
     IF l_id_usuario IS NULL THEN
       RAISE k_usuario.ex_usuario_inexistente;
@@ -561,7 +597,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
       IF l_cantidad >=
          to_number(k_util.f_valor_parametro('CANTIDAD_MAXIMA_SESIONES_USUARIO')) THEN
         raise_application_error(-20000,
-                                'Usuario ha alcanzado la cantidad máxima de sesiones activas');
+                                'Usuario ha alcanzado la cantidad mï¿½xima de sesiones activas');
       END IF;
     
     END IF;
@@ -600,7 +636,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     RETURNING id_sesion INTO l_id_sesion;
   
     IF l_id_dispositivo IS NOT NULL THEN
-      -- Inserta o actualiza una suscripción por el usuario en el dispositivo
+      -- Inserta o actualiza una suscripciï¿½n por el usuario en el dispositivo
       k_dispositivo.p_suscribir_notificacion(l_id_dispositivo,
                                              k_dispositivo.c_suscripcion_usuario || '_' ||
                                              to_char(l_id_usuario));
@@ -624,7 +660,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
   BEGIN
     -- Valida aplicacion
     IF i_id_aplicacion IS NULL THEN
-      raise_application_error(-20000, 'Aplicación inexistente o inactiva');
+      raise_application_error(-20000, 'Aplicaciï¿½n inexistente o inactiva');
     END IF;
   
     -- Busca sesion
@@ -658,44 +694,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     RETURN l_id_sesion;
   EXCEPTION
     WHEN ex_tokens_invalidos THEN
-      raise_application_error(-20000, 'Tokens inválidos');
-  END;
-
-  PROCEDURE p_editar_usuario(i_usuario_antiguo  IN VARCHAR2,
-                             i_usuario_nuevo    IN VARCHAR2,
-                             i_nombre           IN VARCHAR2,
-                             i_apellido         IN VARCHAR2,
-                             i_direccion_correo IN VARCHAR2,
-                             i_numero_telefono  IN VARCHAR2 DEFAULT NULL,
-                             i_id_club          IN VARCHAR2 DEFAULT NULL) IS
-    l_id_persona t_personas.id_persona%TYPE;
-  BEGIN
-    -- Actualiza usuario
-    UPDATE t_usuarios
-       SET alias            = nvl(i_usuario_nuevo, alias),
-           direccion_correo = nvl(i_direccion_correo, direccion_correo),
-           numero_telefono  = nvl(i_numero_telefono, numero_telefono)
-     WHERE alias = i_usuario_antiguo
-    RETURNING id_persona INTO l_id_persona;
-  
-    IF SQL%NOTFOUND THEN
-      raise_application_error(-20000, 'Usuario inexistente');
-    END IF;
-  
-    -- Actualiza persona
-    UPDATE t_personas
-       SET nombre          = nvl(i_nombre, nombre),
-           apellido        = nvl(i_apellido, apellido),
-           nombre_completo = nvl(i_nombre || ' ' || i_apellido,
-                                 nombre_completo)
-     WHERE id_persona = l_id_persona;
-  
-    IF SQL%NOTFOUND THEN
-      raise_application_error(-20000, 'Persona inexistente');
-    END IF;
-
-    -- TODO: registrar el club del usuario
-
+      raise_application_error(-20000, 'Tokens invï¿½lidos');
   END;
 
 END;

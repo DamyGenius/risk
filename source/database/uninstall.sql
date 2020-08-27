@@ -59,6 +59,7 @@ drop package k_servicio_aut;
 drop package k_servicio;
 drop package k_mensajeria;
 drop package k_archivo;
+drop package k_dato;
 drop package k_error;
 drop package k_autenticacion;
 drop package k_sesion;
@@ -122,6 +123,8 @@ drop table t_divisiones cascade constraints;
 
 drop table t_archivos cascade constraints;
 drop table t_archivo_definiciones cascade constraints;
+drop table t_datos cascade constraints;
+drop table t_dato_definiciones cascade constraints;
 drop table t_notificaciones cascade constraints;
 drop table t_mensajes cascade constraints;
 drop table t_correo_adjuntos cascade constraints;
