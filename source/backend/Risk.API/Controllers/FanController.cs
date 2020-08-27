@@ -105,9 +105,10 @@ namespace Risk.API.Controllers
         public IActionResult ListarJornadas([FromQuery, SwaggerParameter(Description = "Identificador del torneo", Required = true)] string idTorneo,
                                             [FromQuery, SwaggerParameter(Description = "Identificador de la jornada", Required = false)] int? jornada,
                                             [FromQuery, SwaggerParameter(Description = "Estado de la jornada", Required = false)] string estado,
-                                            [FromQuery, SwaggerParameter(Description = "Usuario", Required = false)] string usuario)
+                                            [FromQuery, SwaggerParameter(Description = "Usuario", Required = false)] string usuario,
+                                            [FromQuery, SwaggerParameter(Description = "Incluir partidos (S/N)", Required = false)] string incluirPartidos)
         {
-            var respuesta = _fanService.ListarJornadas(idTorneo, jornada, usuario, estado);
+            var respuesta = _fanService.ListarJornadas(idTorneo, jornada, usuario, estado, incluirPartidos);
             return ProcesarRespuesta(respuesta);
         }
 

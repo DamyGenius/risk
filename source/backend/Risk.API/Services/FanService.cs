@@ -109,13 +109,14 @@ namespace Risk.API.Services
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<Prediccion>, YPagina<YPrediccion>>(entityRsp, datos);
         }
 
-        public Respuesta<Pagina<Jornada<Prediccion>>> ListarJornadas(string torneo, int? jornada = null, string usuario = null, string estado = null)
+        public Respuesta<Pagina<Jornada<Prediccion>>> ListarJornadas(string torneo, int? jornada = null, string usuario = null, string estado = null, string incluirPartidos = null)
         {
             JObject prms = new JObject();
             prms.Add("torneo", torneo);
             prms.Add("jornada", jornada);
             prms.Add("estado", estado);
             prms.Add("usuario", usuario);
+            prms.Add("incluir_partidos", incluirPartidos);
 
             string rsp = base.ProcesarServicio(ID_LISTAR_JORNADAS, prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YPagina<YJornada<YPrediccion>>>>(rsp);
