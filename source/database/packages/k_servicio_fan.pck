@@ -433,10 +433,11 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
     l_partidos y_partidos;
     l_partido  y_partido_prediccion;
   
-    l_id_torneo  t_torneo_jornadas.id_torneo%TYPE;
-    l_id_jornada t_torneo_jornadas.id_jornada%TYPE;
-    l_estado     t_partidos.estado%TYPE;
-    l_usuario    t_usuarios.alias%TYPE;
+    l_id_torneo        t_torneo_jornadas.id_torneo%TYPE;
+    l_id_jornada       t_torneo_jornadas.id_jornada%TYPE;
+    l_estado           t_partidos.estado%TYPE;
+    l_usuario          t_usuarios.alias%TYPE;
+    l_incluir_partidos VARCHAR2(1);
   
     CURSOR cr_jornadas(i_id_torneo  IN VARCHAR2,
                        i_id_jornada IN NUMBER,
@@ -489,14 +490,16 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
     l_objetos := NEW y_objetos();
   
     -- Recibe parámetros
-    l_id_torneo  := k_servicio.f_valor_parametro_string(i_parametros,
-                                                        'torneo');
-    l_id_jornada := k_servicio.f_valor_parametro_number(i_parametros,
-                                                        'jornada');
-    l_estado     := k_servicio.f_valor_parametro_string(i_parametros,
-                                                        'estado');
-    l_usuario    := k_servicio.f_valor_parametro_string(i_parametros,
-                                                        'usuario');
+    l_id_torneo        := k_servicio.f_valor_parametro_string(i_parametros,
+                                                              'torneo');
+    l_id_jornada       := k_servicio.f_valor_parametro_number(i_parametros,
+                                                              'jornada');
+    l_estado           := k_servicio.f_valor_parametro_string(i_parametros,
+                                                              'estado');
+    l_usuario          := k_servicio.f_valor_parametro_string(i_parametros,
+                                                              'usuario');
+    l_incluir_partidos := k_servicio.f_valor_parametro_string(i_parametros,
+                                                              'incluir_partidos');
   
     l_rsp.lugar := 'Validando parámetros';
     k_servicio.p_validar_parametro(l_rsp,
@@ -514,32 +517,34 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
       l_objeto.titulo     := ele.titulo;
       l_objeto.estado     := ele.estado;
     
-      FOR p IN cr_partidos(ele.id_torneo,
-                           ele.id_jornada,
-                           NULL,
-                           NULL,
-                           k_usuario.f_id_usuario(l_usuario)) LOOP
-        l_partido                   := NEW y_partido_prediccion();
-        l_partido.id_partido        := p.id_partido;
-        l_partido.id_torneo         := p.id_torneo;
-        l_partido.id_club_local     := p.id_club_local;
-        l_partido.id_club_visitante := p.id_club_visitante;
-        l_partido.fecha             := p.fecha;
-        l_partido.hora              := p.hora;
-        l_partido.id_jornada        := p.id_jornada;
-        l_partido.id_estadio        := p.id_estadio;
-        l_partido.goles_local       := p.goles_club_local;
-        l_partido.goles_visitante   := p.goles_club_visitante;
-        l_partido.estado            := p.estado;
-      
-        l_partido.predic_goles_local     := p.predic_goles_local;
-        l_partido.predic_goles_visitante := p.predic_goles_visitante;
-        l_partido.puntos                 := p.puntos;
-        l_partido.sincronizacion         := p.id_sincronizacion;
-      
-        l_partidos.extend;
-        l_partidos(l_partidos.count) := l_partido;
-      END LOOP;
+      IF nvl(l_incluir_partidos, 'S') = 'S' THEN
+        FOR p IN cr_partidos(ele.id_torneo,
+                             ele.id_jornada,
+                             NULL,
+                             NULL,
+                             k_usuario.f_id_usuario(l_usuario)) LOOP
+          l_partido                   := NEW y_partido_prediccion();
+          l_partido.id_partido        := p.id_partido;
+          l_partido.id_torneo         := p.id_torneo;
+          l_partido.id_club_local     := p.id_club_local;
+          l_partido.id_club_visitante := p.id_club_visitante;
+          l_partido.fecha             := p.fecha;
+          l_partido.hora              := p.hora;
+          l_partido.id_jornada        := p.id_jornada;
+          l_partido.id_estadio        := p.id_estadio;
+          l_partido.goles_local       := p.goles_club_local;
+          l_partido.goles_visitante   := p.goles_club_visitante;
+          l_partido.estado            := p.estado;
+        
+          l_partido.predic_goles_local     := p.predic_goles_local;
+          l_partido.predic_goles_visitante := p.predic_goles_visitante;
+          l_partido.puntos                 := p.puntos;
+          l_partido.sincronizacion         := p.id_sincronizacion;
+        
+          l_partidos.extend;
+          l_partidos(l_partidos.count) := l_partido;
+        END LOOP;
+      END IF;
     
       l_objeto.partidos := l_partidos;
       l_objetos.extend;
