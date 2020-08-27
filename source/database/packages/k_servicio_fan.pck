@@ -880,6 +880,10 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
       SELECT a.id_grupo
         FROM t_grupos a
        WHERE a.tipo = nvl(i_tipo, a.tipo)
+         AND a.tipo IN (SELECT a.codigo
+                          FROM t_significados a
+                         WHERE a.dominio = 'TIPO_GRUPO'
+                           AND a.activo = 'S') --Tipo de grupo Activo
          AND ((i_mis_grupos = 'S' AND EXISTS
               (SELECT 1
                   FROM t_grupo_usuarios u

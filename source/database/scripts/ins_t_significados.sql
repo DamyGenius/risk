@@ -170,7 +170,7 @@ insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('TIPO_GRUPO', 'GLO', 'GLOBAL', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
-values ('TIPO_GRUPO', 'PUB', 'P�BLICO', null, 'S');
+values ('TIPO_GRUPO', 'PUB', 'P�BLICO', null, 'N');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('TIPO_DATO_PARAMETRO', 'O', 'OBJECT', null, 'S');
