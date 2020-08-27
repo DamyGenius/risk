@@ -199,9 +199,9 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
     FOR ele IN cr_elementos(l_id_club, l_id_division) LOOP
       l_objeto                := NEW y_club();
       l_objeto.id_club        := ele.id_club;
-      l_objeto.nombre_oficial := ele.nombre_oficial;
-      l_objeto.nombre_corto   := ele.nombre_corto;
-      l_objeto.otros_nombres  := ele.otros_nombres;
+      l_objeto.nombre_oficial := k_util.f_formatear_titulo(ele.nombre_oficial);
+      l_objeto.nombre_corto   := k_util.f_formatear_titulo(ele.nombre_corto);
+      l_objeto.otros_nombres  := k_util.f_formatear_titulo(ele.otros_nombres);
       l_objeto.fundacion      := ele.fundacion;
       l_objeto.pagina_web     := ele.pagina_web;
       l_objeto.twitter        := ele.twitter;
