@@ -1,4 +1,4 @@
-CREATE OR REPLACE PACKAGE k_autenticacion IS
+﻿CREATE OR REPLACE PACKAGE k_autenticacion IS
 
   /**
   Agrupa operaciones relacionadas con la autenticacion de usuarios
@@ -285,6 +285,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
                                 i_id_club          IN VARCHAR2 DEFAULT NULL) IS
     l_id_persona t_personas.id_persona%TYPE;
     l_id_usuario t_usuarios.id_usuario%TYPE;
+    l_alias      t_usuarios.alias%TYPE;
   BEGIN
     -- Valida clave
     p_validar_clave(i_alias, i_clave, c_clave_acceso);
@@ -319,7 +320,8 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
        'P', -- PENDIENTE DE ACTIVACI�N
        i_direccion_correo,
        i_numero_telefono)
-    RETURNING id_usuario INTO l_id_usuario;
+    RETURNING id_usuario, alias
+         INTO l_id_usuario, l_alias;
   
     INSERT INTO t_rol_usuarios
       (id_rol, id_usuario)
@@ -327,7 +329,10 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
         FROM t_roles
        WHERE nombre = k_util.f_valor_parametro('NOMBRE_ROL_DEFECTO');
 
-    -- TODO: registrar el club del usuario
+    -- Registra club del usuario
+    IF i_id_club IS NOT NULL THEN
+      k_dato.p_guardar_dato_string('T_USUARIOS', 'ID_CLUB', l_alias, i_id_club);
+    END IF;
   
     p_registrar_clave(i_alias, i_clave, c_clave_acceso);
   EXCEPTION
@@ -343,6 +348,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
                              i_numero_telefono  IN VARCHAR2 DEFAULT NULL,
                              i_id_club          IN VARCHAR2 DEFAULT NULL) IS
     l_id_persona t_personas.id_persona%TYPE;
+    l_alias      t_usuarios.alias%TYPE;
   BEGIN
     -- Actualiza usuario
     UPDATE t_usuarios
@@ -350,7 +356,8 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
            direccion_correo = nvl(i_direccion_correo, direccion_correo),
            numero_telefono  = nvl(i_numero_telefono, numero_telefono)
      WHERE alias = i_alias_antiguo
-    RETURNING id_persona INTO l_id_persona;
+    RETURNING id_persona, alias
+         INTO l_id_persona, l_alias;
   
     IF SQL%NOTFOUND THEN
       raise_application_error(-20000, 'Usuario inexistente');
@@ -368,7 +375,10 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
       raise_application_error(-20000, 'Persona inexistente');
     END IF;
 
-    -- TODO: registrar el club del usuario
+    -- Registra club del usuario
+    IF i_id_club IS NOT NULL THEN
+      k_dato.p_guardar_dato_string('T_USUARIOS', 'ID_CLUB', l_alias, i_id_club);
+    END IF;
   END;
 
   PROCEDURE p_registrar_clave(i_alias      IN VARCHAR2,
