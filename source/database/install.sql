@@ -244,6 +244,7 @@ prompt
 @@scripts/ins_t_partidos.sql
 @@scripts/ins_t_predicciones.sql
 @@scripts/ins_t_grupos.sql
+@@scripts/ins_t_dato_definiciones.sql
 commit;
 /
 
