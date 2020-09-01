@@ -102,7 +102,7 @@ insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VE
 values (33, 'CAMBIAR_ESTADO_MENSAJERIA', 'T', 'S', 'MSJ', null, null, null, null);
 
 insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
-values (40, 'LISTAR_CLUBES', 'T', 'S', 'FAN', null, '0.1', null, null);
+values (40, 'LISTAR_CLUBES', 'T', 'S', 'FAN', null, '2.2', null, null);
 
 insert into t_servicios (ID_SERVICIO, NOMBRE, TIPO, ACTIVO, DOMINIO, DETALLE, VERSION_ACTUAL, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
 values (41, 'REGISTRAR_GRUPO', 'T', 'S', 'FAN', null, null, null, null);
