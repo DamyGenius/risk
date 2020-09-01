@@ -10,13 +10,17 @@ create table T_PARTIDOS
   id_estadio            NUMBER(6),
   goles_club_local      NUMBER(3),
   goles_club_visitante  NUMBER(3),
-  estado                VARCHAR2(1) default 'R' not null
+  estado                VARCHAR2(1) default 'R' not null,
+  id_importacion        NUMBER(15),
+  situacion_importacion VARCHAR2(1) default 'N' not null
 )
 ;
 comment on table T_PARTIDOS
   is 'Partidos.';
 comment on column T_PARTIDOS.estado
   is 'R - Registrado, M - Programado, J - En juego, F - Finalizado, P - Postergado, S - Suspendido';
+comment on column T_PARTIDOS.situacion_importacion
+  is 'N - Sin datos, T - Datos temporales, V - En verificación, D - Datos definitivos, A - Puntajes actualizados';
 alter table T_PARTIDOS
   add constraint PK_PARTIDOS primary key (ID_PARTIDO);
 alter table T_PARTIDOS

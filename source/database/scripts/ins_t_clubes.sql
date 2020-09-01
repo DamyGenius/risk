@@ -48,10 +48,10 @@ insert into t_clubes (ID_CLUB, ID_PERSONA, NOMBRE_OFICIAL, OTROS_NOMBRES, FUNDAC
 values ('3DF', null, 'CLUB ATLÉTICO 3 DE FEBRERO', 'EL GIGANTE DEL INTERIOR, EL ROJO PARANAENSE, EL TIGRE DEL ESTE', to_date('20-11-1970', 'dd-mm-yyyy'), null, '@CA3F', null, 'PRI', 'ATLÉTICO 3 DE FEBRERO', null);
 
 insert into t_clubes (ID_CLUB, ID_PERSONA, NOMBRE_OFICIAL, OTROS_NOMBRES, FUNDACION, PAGINA_WEB, TWITTER, FACEBOOK, ID_DIVISION, NOMBRE_CORTO, ID_IMPORTACION)
-values ('12O', null, 'CLUB 12 DE OCTUBRE DE ITAUGUÁ', 'EL 12, LOS TEJEDORES, HIJOS DE COLÓN', to_date('14-08-1914', 'dd-mm-yyyy'), null, '@12deOctubreI', null, 'PRI', '12 DE OCTUBRE', null);
+values ('12O', null, 'CLUB 12 DE OCTUBRE DE ITAUGUÁ', 'EL 12, LOS TEJEDORES, HIJOS DE COLÓN', to_date('14-08-1914', 'dd-mm-yyyy'), null, '@12deOctubreI', null, 'PRI', '12 DE OCTUBRE', 210);
 
 insert into t_clubes (ID_CLUB, ID_PERSONA, NOMBRE_OFICIAL, OTROS_NOMBRES, FUNDACION, PAGINA_WEB, TWITTER, FACEBOOK, ID_DIVISION, NOMBRE_CORTO, ID_IMPORTACION)
-values ('GUI', null, 'GUAIREÑA FÚTBOL CLUB', 'GUA''I', to_date('28-03-2016', 'dd-mm-yyyy'), null, '@GuairenaClub', null, 'PRI', 'GUAIREÑA', null);
+values ('GUI', null, 'GUAIREÑA FÚTBOL CLUB', 'GUA''I', to_date('28-03-2016', 'dd-mm-yyyy'), null, '@GuairenaClub', null, 'PRI', 'GUAIREÑA', 6746);
 
 insert into t_clubes (ID_CLUB, ID_PERSONA, NOMBRE_OFICIAL, OTROS_NOMBRES, FUNDACION, PAGINA_WEB, TWITTER, FACEBOOK, ID_DIVISION, NOMBRE_CORTO, ID_IMPORTACION)
 values ('RIV', null, 'RIVER PLATE', 'EL KELITO', null, null, null, null, 'PRI', 'RIVER PLATE', 3220);
