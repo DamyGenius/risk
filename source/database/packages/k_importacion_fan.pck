@@ -32,7 +32,7 @@ CREATE OR REPLACE PACKAGE k_importacion_fan IS
 
   g_salida CLOB := ''; -- Salida del output
 
-  PROCEDURE p_importar_partidos(p_partidos IN CLOB);
+  PROCEDURE p_importar_partidos(i_partidos IN CLOB);
 
 END;
 /
@@ -66,7 +66,7 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
       RETURN NULL;
   END;
 
-  PROCEDURE p_importar_partidos(p_partidos IN CLOB) IS
+  PROCEDURE p_importar_partidos(i_partidos IN CLOB) IS
     v_partidos JSON_ARRAY_T;
     v_partido  JSON_OBJECT_T;
 
@@ -82,7 +82,7 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
     l_golesvisitante    t_partidos.goles_club_visitante%TYPE;
     l_estado            t_partidos.estado%TYPE;
   BEGIN
-    v_partidos := JSON_ARRAY_T(p_partidos);
+    v_partidos := JSON_ARRAY_T(i_partidos);
 
     FOR i IN 0 .. v_partidos.get_size - 1 LOOP
       v_partido := TREAT(v_partidos.get(i) AS JSON_OBJECT_T);

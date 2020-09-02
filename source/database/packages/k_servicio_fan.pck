@@ -57,6 +57,8 @@ CREATE OR REPLACE PACKAGE k_servicio_fan IS
   FUNCTION responder_invitacion(i_parametros IN y_parametros)
     RETURN y_respuesta;
 
+  FUNCTION registrar_fixture(i_parametros IN y_parametros) RETURN y_respuesta;
+
 END;
 /
 CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
@@ -1161,6 +1163,39 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
     END IF;
   
     k_servicio.p_respuesta_ok(l_rsp, l_dato);
+    RETURN l_rsp;
+  EXCEPTION
+    WHEN k_servicio.ex_error_parametro THEN
+      RETURN l_rsp;
+    WHEN k_servicio.ex_error_general THEN
+      RETURN l_rsp;
+    WHEN OTHERS THEN
+      k_servicio.p_respuesta_excepcion(l_rsp,
+                                       utl_call_stack.error_number(1),
+                                       utl_call_stack.error_msg(1),
+                                       dbms_utility.format_error_stack);
+      RETURN l_rsp;
+  END;
+
+  FUNCTION registrar_fixture(i_parametros IN y_parametros) RETURN y_respuesta IS
+    l_rsp y_respuesta;
+    l_partidos CLOB;
+  BEGIN
+    -- Inicializa respuesta
+    l_rsp := NEW y_respuesta();
+  
+    l_rsp.lugar := 'Obteniendo parametros';
+    l_partidos  := k_servicio.f_valor_parametro_string(i_parametros, 'partidos');
+  
+    l_rsp.lugar := 'Validando parametros';
+    k_servicio.p_validar_parametro(l_rsp,
+                                   l_partidos IS NOT NULL,
+                                   'Debe ingresar partidos');
+  
+    l_rsp.lugar := 'Registrando partidos';
+    k_importacion_fan.p_importar_partidos(l_partidos);
+  
+    k_servicio.p_respuesta_ok(l_rsp);
     RETURN l_rsp;
   EXCEPTION
     WHEN k_servicio.ex_error_parametro THEN
