@@ -1,4 +1,4 @@
-create or replace package k_datos_fan is
+CREATE OR REPLACE PACKAGE k_datos_fan IS
 
   /**
   Agrupa operaciones relacionadas con el consumo de webservices de Datos de Fantasy.
@@ -31,302 +31,305 @@ create or replace package k_datos_fan is
   */
 
   -- Url base de webservices de Datos de Fantasy
-  c_url_base constant varchar2(300) := 'https://www.rama.com.py/proyecto-ne-wsdatos';
+  c_url_base CONSTANT VARCHAR2(300) := 'https://www.rama.com.py/proyecto-ne-wsdatos';
 
   -- Posibles respuestas en variable de salida o_ok
-  c_success    constant varchar2(1) := 'S'; --éxito
-  c_auth_error constant varchar2(1) := 'X'; --no autorizado
-  c_error      constant varchar2(1) := 'N'; --error
+  c_success    CONSTANT VARCHAR2(1) := 'S'; --éxito
+  c_auth_error CONSTANT VARCHAR2(1) := 'X'; --no autorizado
+  c_error      CONSTANT VARCHAR2(1) := 'N'; --error
 
   --Procedimiento para obtener datos de las posiciones
-  procedure p_posiciones
-        (o_ok       out varchar2,
-         o_response out CLOB);
+  PROCEDURE p_posiciones(o_ok       OUT VARCHAR2,
+                         o_response OUT CLOB);
 
   --Procedimiento para obtener datos del fixture
-  procedure p_fixture
-        (o_ok       out varchar2,
-         o_response out CLOB);
+  PROCEDURE p_fixture(o_ok       OUT VARCHAR2,
+                      o_response OUT CLOB);
 
   --Procedimiento para obtener datos de los planteles
-  procedure p_planteles
-        (o_ok       out varchar2,
-         o_response out CLOB);
+  PROCEDURE p_planteles(o_ok       OUT VARCHAR2,
+                        o_response OUT CLOB);
 
   --Procedimiento para obtener datos de un partido
-  procedure p_partido
-        (i_partido  in varchar2,
-         o_ok       out varchar2,
-         o_response out CLOB);
+  PROCEDURE p_partido(i_partido  IN VARCHAR2,
+                      o_ok       OUT VARCHAR2,
+                      o_response OUT CLOB);
 
-end k_datos_fan;
+END k_datos_fan;
 /
-create or replace package body k_datos_fan is
+CREATE OR REPLACE PACKAGE BODY k_datos_fan IS
 
   --Función interna para comunicación con WS
-  function lf_read_http_body(resp in out utl_http.resp)
-    return clob AS
+  FUNCTION lf_read_http_body(resp IN OUT utl_http.resp) RETURN CLOB AS
     --
-    ret   clob;
-    v_msg varchar2(2048);
-  begin
-    begin
-      loop
+    ret   CLOB;
+    v_msg VARCHAR2(2048);
+  BEGIN
+    BEGIN
+      LOOP
         utl_http.read_text(resp, v_msg, 512);
         ret := ret || v_msg;
-      end loop;
-    exception
-      when utl_http.end_of_body then
-        null;
-    end;
-    return ret;
-  end lf_read_http_body;
+      END LOOP;
+    EXCEPTION
+      WHEN utl_http.end_of_body THEN
+        NULL;
+    END;
+    RETURN ret;
+  END lf_read_http_body;
 
   --Procedimiento para obtener datos de las posiciones
-  procedure p_posiciones
-        (o_ok       out varchar2,
-         o_response out CLOB)
-  as
+  PROCEDURE p_posiciones(o_ok       OUT VARCHAR2,
+                         o_response OUT CLOB) AS
     --
-    c_url     constant varchar2(300) := c_url_base || '/rest/posiciones';
-    v_url     varchar2(300);
+    c_url CONSTANT VARCHAR2(300) := c_url_base || '/rest/posiciones';
+    v_url VARCHAR2(300);
     --
-    ret       clob;
-    postData  clob;
-    req       utl_http.req;
-    resp      utl_http.resp;
+    ret      CLOB;
+    postdata CLOB;
+    req      utl_http.req;
+    resp     utl_http.resp;
     --
-    v_response clob;
-  begin
+    v_response CLOB;
+  BEGIN
     -- URL WS
-    utl_http.set_response_error_check(enable => FALSE);
+    utl_http.set_response_error_check(ENABLE => FALSE);
     utl_http.set_body_charset('UTF-8');
-
-    v_url   := c_url;
-
+  
+    v_url := c_url;
+  
     -- Enviamos Parametros
-    postData := '';
+    postdata := '';
     --DBMS_OUTPUT.PUT_LINE( postData);
-
-    req := utl_http.begin_request(url    => v_url,
-                                  method => 'GET');
-
-    utl_http.set_header(req, 'Content-Type', 'application/x-www-form-urlencoded');
+  
+    req := utl_http.begin_request(url => v_url, method => 'GET');
+  
+    utl_http.set_header(req,
+                        'Content-Type',
+                        'application/x-www-form-urlencoded');
     --utl_http.set_header(req, 'Content-Length', length(postData));
     --utl_http.write_text(req, postData);
     resp := utl_http.get_response(r => req);
-
-    if resp.status_code < 300 then -- Respuesta exitosa
+  
+    IF resp.status_code < 300 THEN
+      -- Respuesta exitosa
       o_ok := c_success;
-    elsif resp.status_code = 401 then -- No autorizado
+    ELSIF resp.status_code = 401 THEN
+      -- No autorizado
       o_ok := c_auth_error;
-    else -- Otro error
+    ELSE
+      -- Otro error
       o_ok := c_error;
-    end if;
-
+    END IF;
+  
     -- Respuesta del WS
     ret := lf_read_http_body(resp);
     utl_http.end_response(r => resp);
-
+  
     -- Parse de la respuesta
-    v_response := replace(ret, chr(10), ' ');
-
+    v_response := REPLACE(ret, chr(10), ' ');
+  
     --Result
     --DBMS_OUTPUT.PUT_LINE( v_response);
     o_response := v_response;
-
-  exception
-    when others then
-      o_ok := c_error;
-      o_response := DBMS_UTILITY.format_error_stack;
-
-  end p_posiciones;
+  
+  EXCEPTION
+    WHEN OTHERS THEN
+      o_ok       := c_error;
+      o_response := dbms_utility.format_error_stack;
+    
+  END p_posiciones;
 
   --Procedimiento para obtener datos del fixture
-  procedure p_fixture
-        (o_ok       out varchar2,
-         o_response out CLOB)
-  as
+  PROCEDURE p_fixture(o_ok       OUT VARCHAR2,
+                      o_response OUT CLOB) AS
     --
-    c_url     constant varchar2(300) := c_url_base || '/rest/fixture';
-    v_url     varchar2(300);
+    c_url CONSTANT VARCHAR2(300) := c_url_base || '/rest/fixture';
+    v_url VARCHAR2(300);
     --
-    ret       clob;        
-    postData  clob;
-    req       utl_http.req;
-    resp      utl_http.resp;
+    ret      CLOB;
+    postdata CLOB;
+    req      utl_http.req;
+    resp     utl_http.resp;
     --
-    v_response clob;
-  begin
+    v_response CLOB;
+  BEGIN
     -- URL WS
-    utl_http.set_response_error_check(enable => FALSE);
+    utl_http.set_response_error_check(ENABLE => FALSE);
     utl_http.set_body_charset('UTF-8');
-
-    v_url   := c_url;
-
+  
+    v_url := c_url;
+  
     -- Enviamos Parametros
-    postData := '';
+    postdata := '';
     --DBMS_OUTPUT.PUT_LINE( postData);
-
-    req := utl_http.begin_request(url    => v_url,
-                                  method => 'GET');
-
-    utl_http.set_header(req, 'Content-Type', 'application/x-www-form-urlencoded');
+  
+    req := utl_http.begin_request(url => v_url, method => 'GET');
+  
+    utl_http.set_header(req,
+                        'Content-Type',
+                        'application/x-www-form-urlencoded');
     --utl_http.set_header(req, 'Content-Length', length(postData));
     --utl_http.write_text(req, postData);
     resp := utl_http.get_response(r => req);
-
-    if resp.status_code < 300 then -- Respuesta exitosa
+  
+    IF resp.status_code < 300 THEN
+      -- Respuesta exitosa
       o_ok := c_success;
-    elsif resp.status_code = 401 then -- No autorizado
+    ELSIF resp.status_code = 401 THEN
+      -- No autorizado
       o_ok := c_auth_error;
-    else -- Otro error
+    ELSE
+      -- Otro error
       o_ok := c_error;
-    end if;
-
+    END IF;
+  
     -- Respuesta del WS
     ret := lf_read_http_body(resp);
     utl_http.end_response(r => resp);
-
+  
     -- Parse de la respuesta
-    v_response := replace(ret, chr(10), ' ');
-
+    v_response := REPLACE(ret, chr(10), ' ');
+  
     --Result
     --DBMS_OUTPUT.PUT_LINE( v_response);
     o_response := v_response;
-
-  exception
-    when others then
-      o_ok := c_error;
-      o_response := DBMS_UTILITY.format_error_stack;
-
-  end p_fixture;
+  
+  EXCEPTION
+    WHEN OTHERS THEN
+      o_ok       := c_error;
+      o_response := dbms_utility.format_error_stack;
+    
+  END p_fixture;
 
   --Procedimiento para obtener datos de los planteles
-  procedure p_planteles
-        (o_ok       out varchar2,
-         o_response out CLOB)
-  as
+  PROCEDURE p_planteles(o_ok       OUT VARCHAR2,
+                        o_response OUT CLOB) AS
     --
-    c_url     constant varchar2(300) := c_url_base || '/rest/planteles';
-    v_url     varchar2(300);
+    c_url CONSTANT VARCHAR2(300) := c_url_base || '/rest/planteles';
+    v_url VARCHAR2(300);
     --
-    ret       clob;
-    postData  clob;
-    req       utl_http.req;
-    resp      utl_http.resp;
+    ret      CLOB;
+    postdata CLOB;
+    req      utl_http.req;
+    resp     utl_http.resp;
     --
-    v_response clob;
-  begin
+    v_response CLOB;
+  BEGIN
     -- URL WS
-    utl_http.set_response_error_check(enable => FALSE);
+    utl_http.set_response_error_check(ENABLE => FALSE);
     utl_http.set_body_charset('UTF-8');
-
-    v_url   := c_url;
-
+  
+    v_url := c_url;
+  
     -- Enviamos Parametros
-    postData := '';
+    postdata := '';
     --DBMS_OUTPUT.PUT_LINE( postData);
-
-    req := utl_http.begin_request(url    => v_url,
-                                  method => 'GET');
-
-    utl_http.set_header(req, 'Content-Type', 'application/x-www-form-urlencoded');
+  
+    req := utl_http.begin_request(url => v_url, method => 'GET');
+  
+    utl_http.set_header(req,
+                        'Content-Type',
+                        'application/x-www-form-urlencoded');
     --utl_http.set_header(req, 'Content-Length', length(postData));
     --utl_http.write_text(req, postData);
     resp := utl_http.get_response(r => req);
-
-    if resp.status_code < 300 then -- Respuesta exitosa
+  
+    IF resp.status_code < 300 THEN
+      -- Respuesta exitosa
       o_ok := c_success;
-    elsif resp.status_code = 401 then -- No autorizado
+    ELSIF resp.status_code = 401 THEN
+      -- No autorizado
       o_ok := c_auth_error;
-    else -- Otro error
+    ELSE
+      -- Otro error
       o_ok := c_error;
-    end if;
-
+    END IF;
+  
     -- Respuesta del WS
     ret := lf_read_http_body(resp);
     utl_http.end_response(r => resp);
-
+  
     -- Parse de la respuesta
-    v_response := replace(ret, chr(10), ' ');
-
+    v_response := REPLACE(ret, chr(10), ' ');
+  
     --Result
     --DBMS_OUTPUT.PUT_LINE( v_response);
     o_response := v_response;
-
-  exception
-    when others then
-      o_ok := c_error;
-      o_response := DBMS_UTILITY.format_error_stack;
-
-  end p_planteles;
+  
+  EXCEPTION
+    WHEN OTHERS THEN
+      o_ok       := c_error;
+      o_response := dbms_utility.format_error_stack;
+    
+  END p_planteles;
 
   --Procedimiento para obtener datos de un partido
-  procedure p_partido
-        (i_partido  in varchar2,
-         o_ok       out varchar2,
-         o_response out CLOB)
-  as
+  PROCEDURE p_partido(i_partido  IN VARCHAR2,
+                      o_ok       OUT VARCHAR2,
+                      o_response OUT CLOB) AS
     --
-    c_url     constant varchar2(300) := c_url_base || '/rest/partido';
-    v_url     varchar2(300);
+    c_url CONSTANT VARCHAR2(300) := c_url_base || '/rest/partido';
+    v_url VARCHAR2(300);
     --
-    ret       clob;
-    postData  clob;
-    req       utl_http.req;
-    resp      utl_http.resp;
+    ret      CLOB;
+    postdata CLOB;
+    req      utl_http.req;
+    resp     utl_http.resp;
     --
-    v_response clob;
-  begin
+    v_response CLOB;
+  BEGIN
     -- URL WS
-    utl_http.set_response_error_check(enable => FALSE);
+    utl_http.set_response_error_check(ENABLE => FALSE);
     utl_http.set_body_charset('UTF-8');
-
-    v_url   := c_url;
-
+  
+    v_url := c_url;
+  
     -- Enviamos Parametros
-    postData := '';
-    postData := postData || 'idPartido=' || i_partido ;
+    postdata := '';
+    postdata := postdata || 'idPartido=' || i_partido;
     --DBMS_OUTPUT.PUT_LINE( postData);
-
-    req := utl_http.begin_request(url    => v_url,
-                                  method => 'POST');
-
-    utl_http.set_header(req, 'Content-Type', 'application/x-www-form-urlencoded');
-    utl_http.set_header(req, 'Content-Length', length(postData));
-    utl_http.write_text(req, postData);
+  
+    req := utl_http.begin_request(url => v_url, method => 'POST');
+  
+    utl_http.set_header(req,
+                        'Content-Type',
+                        'application/x-www-form-urlencoded');
+    utl_http.set_header(req, 'Content-Length', length(postdata));
+    utl_http.write_text(req, postdata);
     resp := utl_http.get_response(r => req);
-
-    if resp.status_code < 300 then -- Respuesta exitosa
+  
+    IF resp.status_code < 300 THEN
+      -- Respuesta exitosa
       o_ok := c_success;
-    elsif resp.status_code = 401 then -- No autorizado
+    ELSIF resp.status_code = 401 THEN
+      -- No autorizado
       o_ok := c_auth_error;
-    else -- Otro error
+    ELSE
+      -- Otro error
       o_ok := c_error;
-    end if;
-
+    END IF;
+  
     -- Respuesta del WS
     ret := lf_read_http_body(resp);
     utl_http.end_response(r => resp);
-
+  
     -- Parse de la respuesta
-    v_response := replace(ret, chr(10), ' ');
-
+    v_response := REPLACE(ret, chr(10), ' ');
+  
     --Result
     --DBMS_OUTPUT.PUT_LINE( v_response);
     o_response := v_response;
+  
+  EXCEPTION
+    WHEN OTHERS THEN
+      o_ok       := c_error;
+      o_response := dbms_utility.format_error_stack;
+    
+  END p_partido;
 
-  exception
-    when others then
-      o_ok := c_error;
-      o_response := DBMS_UTILITY.format_error_stack;
-
-  end p_partido;
-
-begin
+BEGIN
   -- Initialization
   -- Set Oracle Wallet location (no arguments needed)
-  UTL_HTTP.SET_WALLET('');
-end k_datos_fan;
+  utl_http.set_wallet('');
+END k_datos_fan;
 /

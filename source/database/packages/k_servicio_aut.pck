@@ -163,26 +163,60 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
   FUNCTION cambiar_estado_usuario(i_parametros IN y_parametros)
     RETURN y_respuesta IS
     l_rsp y_respuesta;
+    l_usuario VARCHAR2(200);
+    l_estado t_usuarios.estado%TYPE;
   BEGIN
     -- Inicializa respuesta
     l_rsp := NEW y_respuesta();
   
+    l_rsp.lugar := 'Obteniendo parametros';
+    l_usuario   := k_servicio.f_valor_parametro_string(i_parametros,
+                                                       'usuario');
+    l_estado    := k_servicio.f_valor_parametro_string(i_parametros,
+                                                       'estado');
+
     l_rsp.lugar := 'Validando parametros';
     k_servicio.p_validar_parametro(l_rsp,
-                                   k_servicio.f_valor_parametro_string(i_parametros,
-                                                                       'usuario') IS NOT NULL,
+                                   l_usuario IS NOT NULL,
                                    'Debe ingresar usuario');
   
     k_servicio.p_validar_parametro(l_rsp,
-                                   k_servicio.f_valor_parametro_string(i_parametros,
-                                                                       'estado') IS NOT NULL,
+                                   l_estado IS NOT NULL,
                                    'Debe ingresar estado');
   
     l_rsp.lugar := 'Cambiando estado de usuario';
-    k_usuario.p_cambiar_estado(k_usuario.f_buscar_id(k_servicio.f_valor_parametro_string(i_parametros,
-                                                                                         'usuario')),
-                               k_servicio.f_valor_parametro_string(i_parametros,
-                                                                   'estado'));
+    k_usuario.p_cambiar_estado(k_usuario.f_buscar_id(l_usuario), l_estado);
+  
+    l_rsp.lugar := 'Registrando usuario en el grupo general';
+    BEGIN
+      INSERT INTO t_grupo_usuarios
+        (id_grupo,
+         id_usuario,
+         puntos,
+         ranking,
+         estado,
+         token_activacion,
+         aceptado)
+      VALUES
+        (1, --TODO: Dinamizar
+         k_usuario.f_buscar_id(l_usuario),
+         NULL,
+         NULL,
+         'A',
+         NULL,
+         'S');
+    EXCEPTION
+      WHEN dup_val_on_index THEN
+        k_servicio.p_respuesta_error(l_rsp,
+                                     'aut0006',
+                                     'Usuario ya pertenece al grupo o tiene una invitación pendiente');
+        RAISE k_servicio.ex_error_general;
+      WHEN OTHERS THEN
+        k_servicio.p_respuesta_error(l_rsp,
+                                     'aut0007',
+                                     'Error al crear invitación');
+        RAISE k_servicio.ex_error_general;
+    END;
   
     k_servicio.p_respuesta_ok(l_rsp);
     RETURN l_rsp;
