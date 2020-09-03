@@ -34,18 +34,18 @@ CREATE OR REPLACE PACKAGE k_puntajes_fan IS
   -- %param
   -- %return Puntaje realizado por un usuario en un partido. Nulo si no está definido
   FUNCTION f_calcular_puntaje(i_id_usuario IN t_predicciones.id_usuario%TYPE,
-                             i_id_partido IN t_predicciones.id_partido%TYPE)
+                              i_id_partido IN t_predicciones.id_partido%TYPE)
     RETURN NUMBER;
 
   -- Actualiza los puntajes de los usuarios que predijeron en un partido finalizado.
   -- %param
   PROCEDURE p_actualizar_puntajes(i_id_partido IN t_partidos.id_partido%TYPE,
-                                 i_id_usuario IN t_predicciones.id_usuario%TYPE := NULL);
+                                  i_id_usuario IN t_predicciones.id_usuario%TYPE := NULL);
 
   -- Actualiza los puntajes de todos los usuarios que predijeron en una jornada.
   -- %param
   PROCEDURE p_actualizar_puntajes(i_id_torneo  IN t_torneo_jornadas.id_torneo%TYPE,
-                                 i_id_jornada IN t_torneo_jornadas.id_jornada%TYPE);
+                                  i_id_jornada IN t_torneo_jornadas.id_jornada%TYPE);
 
   -- Retorna la sumatoria de puntos de predicciones de un usuario en un torneo.
   -- %param
@@ -54,6 +54,9 @@ CREATE OR REPLACE PACKAGE k_puntajes_fan IS
                              i_id_usuario IN t_predicciones.id_usuario%TYPE,
                              i_id_jornada IN t_partidos.id_jornada%TYPE DEFAULT NULL)
     RETURN NUMBER;
+
+  -- Actualiza el ranking de todos los grupos.
+  PROCEDURE p_actualizar_ranking;
 
 END;
 /
@@ -157,7 +160,7 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
 
   -- Calcula el puntaje realizado por un usuario en un partido.
   FUNCTION f_calcular_puntaje(i_id_usuario IN t_predicciones.id_usuario%TYPE,
-                             i_id_partido IN t_predicciones.id_partido%TYPE)
+                              i_id_partido IN t_predicciones.id_partido%TYPE)
     RETURN NUMBER IS
   
     l_puntaje_total   NUMBER(3) := NULL;
@@ -203,7 +206,7 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
 
   -- Actualiza los puntajes de los usuarios que predijeron en un partido finalizado.
   PROCEDURE p_actualizar_puntajes(i_id_partido IN t_partidos.id_partido%TYPE,
-                                 i_id_usuario IN t_predicciones.id_usuario%TYPE := NULL) IS
+                                  i_id_usuario IN t_predicciones.id_usuario%TYPE := NULL) IS
   
     l_puntaje t_grupo_usuarios.puntos%TYPE;
     --
@@ -213,7 +216,7 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
        WHERE j.id_partido = i_id_partido
          AND j.id_partido = p.id_partido
          AND p.estado = 'F' --Finalizado
-         --AND j.estado = 'C' --Confirmado --TODO: Descomentar una vez que tenga el estado C
+            --AND j.estado = 'C' --Confirmado --TODO: Descomentar una vez que tenga el estado C
          AND (j.id_usuario = i_id_usuario OR i_id_usuario IS NULL);
   
   BEGIN
@@ -221,8 +224,7 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
     FOR c IN c_predicciones LOOP
       l_puntaje := f_calcular_puntaje(c.id_usuario, c.id_partido);
       UPDATE t_predicciones j
-         SET j.puntos = l_puntaje,
-             j.estado = 'L' --Liquidado
+         SET j.puntos = l_puntaje, j.estado = 'L' --Liquidado
        WHERE j.rowid = c.fila;
     END LOOP;
   
@@ -230,7 +232,7 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
 
   -- Actualiza los puntajes de todos los usuarios que predijeron en una jornada.
   PROCEDURE p_actualizar_puntajes(i_id_torneo  IN t_torneo_jornadas.id_torneo%TYPE,
-                                 i_id_jornada IN t_torneo_jornadas.id_jornada%TYPE) IS
+                                  i_id_jornada IN t_torneo_jornadas.id_jornada%TYPE) IS
     CURSOR c_partidos IS
       SELECT p.*
         FROM t_partidos p
@@ -272,6 +274,17 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
   
     RETURN l_puntaje;
   
+  END;
+
+  -- Actualiza el ranking de todos los grupos.
+  PROCEDURE p_actualizar_ranking IS
+  BEGIN
+    MERGE INTO t_grupo_usuarios d
+    USING (SELECT n.my_rank, n.puntaje, n.id_grupo, n.id_usuario, n.alias
+             FROM v_ranking_usuarios n) s
+    ON (d.id_grupo = s.id_grupo AND d.id_usuario = s.id_usuario)
+    WHEN MATCHED THEN
+      UPDATE SET d.puntos = s.puntaje, d.ranking = s.my_rank;
   END;
 
 BEGIN

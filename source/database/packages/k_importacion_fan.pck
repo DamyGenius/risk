@@ -34,6 +34,8 @@ CREATE OR REPLACE PACKAGE k_importacion_fan IS
 
   PROCEDURE p_importar_partidos(i_partidos IN CLOB);
 
+  PROCEDURE p_importar_partidos;
+
 END;
 /
 CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
@@ -133,7 +135,8 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
         -- Actualizar puntajes de usuarios que predijeron en el partido finalizado.
         IF l_estado = 'F' AND rw_partido.estado != l_estado THEN
           k_puntajes_fan.p_actualizar_puntajes(rw_partido.id_partido);
-          --TODO: Recalcular ranking de grupos
+          -- Recalcular ranking de grupos
+          k_puntajes_fan.p_actualizar_ranking;
         END IF;
       ELSE
         INSERT INTO t_partidos
@@ -163,6 +166,23 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
       END IF;
     
     END LOOP;
+  END;
+
+  PROCEDURE p_importar_partidos IS
+    l_ok    VARCHAR2(1);
+    l_datos CLOB;
+  BEGIN
+    -- obtenemos los datos a través del WS
+    k_datos_fan.p_fixture(o_ok => l_ok, o_response => l_datos);
+  
+    -- actualizamos la cabecera de los partidos
+    IF l_ok = 'S' THEN
+      p_importar_partidos(i_partidos => l_datos);
+    ELSE
+      raise_application_error(-20501,
+                              'Error en k_datos_fan.p_fixture: ' || l_datos);
+    END IF;
+    COMMIT;
   END;
 
 BEGIN

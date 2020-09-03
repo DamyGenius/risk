@@ -173,8 +173,8 @@ CREATE OR REPLACE PACKAGE BODY k_usuario IS
              u.direccion_correo,
              u.numero_telefono,
              k_archivo.f_version_archivo('T_USUARIOS', 'AVATAR', u.alias),
-             0 puntos, --TODO: obtener de tabla
-             1 ranking --TODO: obtener de tabla
+             g.puntos,
+             g.ranking
         INTO l_usuario.id_usuario,
              l_usuario.alias,
              l_usuario.nombre,
@@ -186,8 +186,10 @@ CREATE OR REPLACE PACKAGE BODY k_usuario IS
              l_usuario.version_avatar,
              l_usuario.puntos,
              l_usuario.ranking
-        FROM t_usuarios u, t_personas p
+        FROM t_usuarios u, t_personas p, t_grupo_usuarios g
        WHERE p.id_persona(+) = u.id_persona
+         AND g.id_usuario(+) = u.id_usuario
+         AND g.id_grupo(+) = 1 --TODO: Dinamizar codigo de grupo general
          AND u.id_usuario = i_id_usuario;
     EXCEPTION
       WHEN no_data_found THEN
