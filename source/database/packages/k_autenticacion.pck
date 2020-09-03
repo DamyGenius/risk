@@ -85,6 +85,8 @@
                               i_refresh_token_nuevo   IN VARCHAR2)
     RETURN NUMBER;
 
+  FUNCTION f_generar_url_activacion(i_alias IN VARCHAR2) RETURN VARCHAR2;
+
 END;
 /
 CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
@@ -705,6 +707,20 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
   EXCEPTION
     WHEN ex_tokens_invalidos THEN
       raise_application_error(-20000, 'Tokens inv�lidos');
+  END;
+
+  FUNCTION f_generar_url_activacion(i_alias IN VARCHAR2) RETURN VARCHAR2 IS
+    l_json_object json_object_t;
+    l_key         VARCHAR2(1000);
+  BEGIN
+    l_json_object := NEW json_object_t();
+    l_json_object.put('usuario', i_alias);
+    l_json_object.put('hash', k_util.f_hash(i_alias, dbms_crypto.hash_sh1));
+  
+    l_key := utl_url.escape(k_util.base64encode(k_util.clob_to_blob(l_json_object.to_clob)),
+                            TRUE);
+  
+    RETURN k_util.f_valor_parametro('URL_SERVICIOS_PRODUCCION') || '/Aut/ActivarUsuario?key=' || l_key;
   END;
 
 END;
