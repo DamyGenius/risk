@@ -131,13 +131,6 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
                estado               = l_estado,
                id_importacion       = l_id
          WHERE p.id_partido = rw_partido.id_partido;
-      
-        -- Actualizar puntajes de usuarios que predijeron en el partido finalizado.
-        IF l_estado = 'F' AND rw_partido.estado != l_estado THEN
-          k_puntajes_fan.p_actualizar_puntajes(rw_partido.id_partido);
-          -- Recalcular ranking de grupos
-          k_puntajes_fan.p_actualizar_ranking;
-        END IF;
       ELSE
         INSERT INTO t_partidos
           (id_torneo, --TODO: obtener
@@ -162,7 +155,48 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
            l_goleslocal,
            l_golesvisitante,
            l_estado,
-           l_id);
+           l_id)
+        RETURNING id_partido INTO rw_partido.id_partido;
+      END IF;
+    
+      -- Actualizar job de cierre de predicciones del partido programado
+      -- Si es una inserción o modificación
+      IF l_estado = 'M' THEN
+        --TODO: agregar condición de cambio de fecha/hora del partido
+        DECLARE
+          v_what      VARCHAR2(1000);
+          v_next_date DATE := l_fecha_partido - (60 / 86400); --hora del partido menos 1 min
+          --v_next_date DATE := current_timestamp + (300 / 86400); --dentro de 300 segs.
+          --
+          job_doesnt_exist EXCEPTION;
+          PRAGMA EXCEPTION_INIT(job_doesnt_exist, -27476);
+        BEGIN
+          dbms_scheduler.set_attribute(NAME      => 'CIERRE_PREDICCIONES_' ||
+                                                    to_char(rw_partido.id_partido),
+                                       attribute => 'start_date',
+                                       VALUE     => v_next_date);
+        EXCEPTION
+          WHEN job_doesnt_exist THEN
+            -- Crear el job si no existe
+            v_what := 'BEGIN' ||
+                      '  k_puntajes_fan.p_cerrar_predicciones(''' ||
+                      rw_partido.id_partido || '''); ' || 'END;';
+            dbms_scheduler.create_job(job_name   => 'CIERRE_PREDICCIONES_' ||
+                                                    to_char(rw_partido.id_partido),
+                                      job_type   => 'PLSQL_BLOCK',
+                                      job_action => v_what,
+                                      start_date => v_next_date,
+                                      --repeat_interval   =>  'FREQ = DAILY; INTERVAL = 1',
+                                      enabled => TRUE);
+        END;
+      END IF;
+    
+      -- Actualizar puntajes de usuarios que predijeron en el partido finalizado.
+      -- Solamente si es una modificación
+      IF l_estado = 'F' AND rw_partido.estado != l_estado THEN
+        k_puntajes_fan.p_actualizar_puntajes(rw_partido.id_partido);
+        -- Recalcular ranking de grupos
+        k_puntajes_fan.p_actualizar_ranking;
       END IF;
     
     END LOOP;

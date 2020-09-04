@@ -58,6 +58,9 @@ CREATE OR REPLACE PACKAGE k_puntajes_fan IS
   -- Actualiza el ranking de todos los grupos.
   PROCEDURE p_actualizar_ranking;
 
+  -- Cierra todas las predicciones de un partido.
+  PROCEDURE p_cerrar_predicciones(i_id_partido IN t_partidos.id_partido%TYPE);
+
 END;
 /
 CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
@@ -285,6 +288,28 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
     ON (d.id_grupo = s.id_grupo AND d.id_usuario = s.id_usuario)
     WHEN MATCHED THEN
       UPDATE SET d.puntos = s.puntaje, d.ranking = s.my_rank;
+  END;
+
+  -- Cierra todas las predicciones de un partido.
+  PROCEDURE p_cerrar_predicciones(i_id_partido IN t_partidos.id_partido%TYPE) IS
+  BEGIN
+    IF i_id_partido IS NULL THEN
+      raise_application_error(-20000, 'Parámetro i_id_partido inválido');
+    END IF;
+  
+    -- Cambia estado de partido a En Juego  
+    UPDATE t_partidos p
+       SET p.estado = 'J' --En Juego
+     WHERE p.id_partido = i_id_partido
+       AND p.estado = 'M'; --Programado es el estado previo a En Juego
+  
+    -- Cambia estado de predicciones a Confirmado
+    IF SQL%FOUND THEN
+      UPDATE t_predicciones p
+         SET p.estado = 'C' --Confirmado
+       WHERE p.id_partido = i_id_partido
+         AND p.estado = 'P'; --Pendiente es el estado previo a Confirmado
+    END IF;
   END;
 
 BEGIN
