@@ -63,6 +63,7 @@ prompt
 @@sequences/s_id_rol.seq
 @@sequences/s_id_servicio.seq
 @@sequences/s_id_servicio_log.seq
+@@sequences/s_id_trabajo.seq
 @@sequences/s_id_sesion.seq
 @@sequences/s_id_usuario.seq
 @@sequences/s_id_dispositivo.seq
@@ -97,6 +98,8 @@ prompt
 @@tables/t_servicios.tab
 @@tables/t_servicio_parametros.tab
 @@tables/t_servicio_logs.tab
+@@tables/t_trabajos.tab
+@@tables/t_trabajo_parametros.tab
 @@tables/t_dispositivos.tab
 @@tables/t_dispositivo_suscripciones.tab
 @@tables/t_dispositivo_ubicaciones.tab
@@ -178,6 +181,7 @@ prompt
 @@packages/k_servicio_aut.pck
 @@packages/k_servicio_gen.pck
 @@packages/k_servicio_msj.pck
+@@packages/k_planificador.pck
 @@packages/k_reporte.pck
 @@packages/k_reporte_gen.pck
 
@@ -195,6 +199,7 @@ prompt
 @@triggers/gs_roles.trg
 @@triggers/gs_servicios.trg
 @@triggers/gs_servicio_logs.trg
+@@triggers/gs_trabajos.trg
 @@triggers/gs_sesiones.trg
 @@triggers/gs_usuarios.trg
 @@triggers/gs_dispositivos.trg
