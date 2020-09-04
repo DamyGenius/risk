@@ -231,6 +231,8 @@ prompt
 @@scripts/ins_t_parametros.sql
 @@scripts/ins_t_servicios.sql
 @@scripts/ins_t_servicio_parametros.sql
+@@scripts/ins_t_trabajos.sql
+@@scripts/ins_t_trabajo_parametros.sql
 @@scripts/ins_t_roles.sql
 @@scripts/ins_t_paises.sql
 @@scripts/ins_t_departamentos.sql

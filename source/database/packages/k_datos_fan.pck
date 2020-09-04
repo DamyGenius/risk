@@ -152,6 +152,8 @@ CREATE OR REPLACE PACKAGE BODY k_datos_fan IS
     resp     utl_http.resp;
     --
     v_response CLOB;
+    -- ejemplo de una respuesta exitosa:
+    -- [{"id":-1,"numeroFecha":3,"local":{"id":115},"visitante":{"id":2119},"dia":"4-9-2020","hora":"13:17","golesLocal":2,"golesVisitante":1,"estado":"F"}];
   BEGIN
     -- URL WS
     utl_http.set_response_error_check(ENABLE => FALSE);

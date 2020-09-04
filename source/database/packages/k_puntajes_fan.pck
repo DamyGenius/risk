@@ -61,6 +61,9 @@ CREATE OR REPLACE PACKAGE k_puntajes_fan IS
   -- Cierra todas las predicciones de un partido.
   PROCEDURE p_cerrar_predicciones(i_id_partido IN t_partidos.id_partido%TYPE);
 
+  -- Finaliza el trabajo de un partido en juego, si el partido ya está finalizado.
+  PROCEDURE p_cerrar_partido_en_juego(i_id_partido IN t_partidos.id_partido%TYPE);
+
 END;
 /
 CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
@@ -292,6 +295,7 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
 
   -- Cierra todas las predicciones de un partido.
   PROCEDURE p_cerrar_predicciones(i_id_partido IN t_partidos.id_partido%TYPE) IS
+    l_fecha_inicio TIMESTAMP WITH TIME ZONE := current_timestamp + (900 / 86400); --dentro de 900 segs.
   BEGIN
     IF i_id_partido IS NULL THEN
       raise_application_error(-20000, 'Parámetro i_id_partido inválido');
@@ -309,6 +313,42 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
          SET p.estado = 'C' --Confirmado
        WHERE p.id_partido = i_id_partido
          AND p.estado = 'P'; --Pendiente es el estado previo a Confirmado
+    END IF;
+  
+    -- Crea el trabajo del partido en juego
+    k_planificador.p_crear_o_editar_trabajo(i_id_trabajo   => 2, --partido en juego
+                                            i_parametros   => '{"id_partido":"' ||
+                                                              i_id_partido || '"}',
+                                            i_fecha_inicio => l_fecha_inicio);
+  
+  END;
+
+  -- Finaliza el trabajo de un partido en juego, si el partido ya está finalizado.
+  PROCEDURE p_cerrar_partido_en_juego(i_id_partido IN t_partidos.id_partido%TYPE) IS
+    l_estado t_partidos.estado%TYPE;
+  BEGIN
+    -- Obtener estado del partido
+    BEGIN
+      SELECT p.estado
+        INTO l_estado
+        FROM t_partidos p
+       WHERE p.id_partido = i_id_partido;
+    EXCEPTION
+      WHEN no_data_found THEN
+        raise_application_error(-20001, 'Partido no registrado.');
+      WHEN OTHERS THEN
+        raise_application_error(-20002,
+                                'Error al obtener estado del partido: ' ||
+                                SQLERRM);
+    END;
+  
+    IF l_estado = 'F' THEN
+      -- estado finalizado
+      -- Crea el trabajo del partido en juego
+      k_planificador.p_editar_trabajo(i_id_trabajo => 2, --partido en juego
+                                      i_parametros => '{"id_partido":"' ||
+                                                      i_id_partido || '"}',
+                                      i_fecha_fin  => current_timestamp);
     END IF;
   END;
 
