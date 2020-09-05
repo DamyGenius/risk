@@ -110,7 +110,7 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
       l_golesvisitante := l_partido.get_number('golesVisitante');
       l_estado         := l_partido.get_string('estado');
     
-      IF l_estado NOT IN ('F', 'S') THEN
+      IF l_estado NOT IN ('F', 'S', 'J') THEN
         -- FINALIZADO O SUSPENDIDO
         l_goleslocal     := NULL;
         l_golesvisitante := NULL;
@@ -122,7 +122,7 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
            SET id_torneo            = 'PRI-APE20', --k_sistema.f_torneo, --TODO: obtener
                id_club_local        = l_id_club_local,
                id_club_visitante    = l_id_club_visitante,
-               fecha                = trunc(l_fecha_partido),
+               fecha                = l_fecha_partido,
                hora                 = to_char(l_fecha_partido, 'HH24:MI'),
                id_jornada           = l_numerofecha,
                id_estadio           = NULL,
@@ -148,7 +148,7 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
           ('PRI-APE20', --k_sistema.f_torneo, --TODO: obtener
            l_id_club_local,
            l_id_club_visitante,
-           trunc(l_fecha_partido),
+           l_fecha_partido,
            to_char(l_fecha_partido, 'HH24:MI'),
            l_numerofecha,
            NULL,

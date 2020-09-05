@@ -29,10 +29,10 @@ insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR)
 values ('REGEXP_VALIDAR_NUMERO_TELEFONO', 'Expresión Regular para validación de números de teléfono', '^\+5959[6-9][1-9][0-9]{6}$');
 
 insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR)
-values ('TIEMPO_EXPIRACION_ACCESS_TOKEN', 'Tiempo de expiración del Access Token en segundos', '300');
+values ('TIEMPO_EXPIRACION_ACCESS_TOKEN', 'Tiempo de expiración del Access Token en segundos', '900');
 
 insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR)
-values ('TIEMPO_EXPIRACION_REFRESH_TOKEN', 'Tiempo de expiración del Refresh Token en horas', '5');
+values ('TIEMPO_EXPIRACION_REFRESH_TOKEN', 'Tiempo de expiración del Refresh Token en horas', '720');
 
 insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR)
 values ('URL_SERVICIOS_PRODUCCION', 'URL base de los Servicios Web del entorno de Producción', 'https://localhost:5001');
