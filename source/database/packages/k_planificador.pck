@@ -51,6 +51,7 @@ CREATE OR REPLACE PACKAGE k_planificador IS
   c_actualizacion_partidos CONSTANT NUMBER(15) := 54;
   c_cierre_predicciones    CONSTANT NUMBER(15) := 55;
   c_partido_en_juego       CONSTANT NUMBER(15) := 56;
+  c_fin_partido            CONSTANT NUMBER(15) := 57;
 
   FUNCTION f_procesar_parametros(i_id_trabajo IN NUMBER,
                                  i_parametros IN CLOB) RETURN y_parametros;
