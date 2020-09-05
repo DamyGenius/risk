@@ -185,6 +185,9 @@ prompt
 @@packages/k_reporte_gen.pck
 
 @@packages/k_servicio_fan.pck
+@@packages/k_datos_fan.pck
+@@packages/k_puntajes_fan.pck
+@@packages/k_importacion_fan.pck
 
 prompt
 prompt Creando triggers...

@@ -316,7 +316,7 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
     END IF;
   
     -- Crea el trabajo del partido en juego
-    k_planificador.p_crear_o_editar_trabajo(i_id_trabajo   => 2, --partido en juego
+    k_planificador.p_crear_o_editar_trabajo(i_id_trabajo   => k_planificador.c_partido_en_juego,
                                             i_parametros   => '{"id_partido":"' ||
                                                               i_id_partido || '"}',
                                             i_fecha_inicio => l_fecha_inicio);
@@ -345,7 +345,7 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
     IF l_estado = 'F' THEN
       -- estado finalizado
       -- Crea el trabajo del partido en juego
-      k_planificador.p_editar_trabajo(i_id_trabajo => 2, --partido en juego
+      k_planificador.p_editar_trabajo(i_id_trabajo => k_planificador.c_partido_en_juego,
                                       i_parametros => '{"id_partido":"' ||
                                                       i_id_partido || '"}',
                                       i_fecha_fin  => current_timestamp);
