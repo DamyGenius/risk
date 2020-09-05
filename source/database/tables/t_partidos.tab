@@ -11,6 +11,7 @@ create table T_PARTIDOS
   goles_club_local      NUMBER(3),
   goles_club_visitante  NUMBER(3),
   estado                VARCHAR2(1) default 'R' not null,
+  estado_predicciones   VARCHAR2(1) default 'P' not null,
   id_importacion        NUMBER(15),
   situacion_importacion VARCHAR2(1) default 'N' not null
 )
@@ -19,6 +20,8 @@ comment on table T_PARTIDOS
   is 'Partidos.';
 comment on column T_PARTIDOS.estado
   is 'R - Registrado, M - Programado, J - En juego, F - Finalizado, P - Postergado, S - Suspendido';
+comment on column T_PARTIDOS.estado_predicciones
+  is 'P - Pendiente, C - Confirmado, L - Liquidado';
 comment on column T_PARTIDOS.situacion_importacion
   is 'N - Sin datos, T - Datos temporales, V - En verificación, D - Datos definitivos, A - Puntajes actualizados';
 alter table T_PARTIDOS

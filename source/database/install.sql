@@ -258,6 +258,13 @@ commit;
 /
 
 prompt
+prompt Creando jobs...
+prompt -----------------------------------
+prompt
+
+@@jobs/create_actualizacion_partidos.sql
+
+prompt
 prompt ===================================
 prompt Instalacion finalizada
 prompt ===================================

@@ -58,10 +58,16 @@ CREATE OR REPLACE PACKAGE k_puntajes_fan IS
   -- Actualiza el ranking de todos los grupos.
   PROCEDURE p_actualizar_ranking;
 
+  -- Planifica el trabajo de los partidos programados del torneo.
+  PROCEDURE p_planificar_partidos(i_id_torneo IN t_torneo_jornadas.id_torneo%TYPE DEFAULT NULL);
+
   -- Cierra todas las predicciones de un partido.
   PROCEDURE p_cerrar_predicciones(i_id_partido IN t_partidos.id_partido%TYPE);
 
-  -- Finaliza el trabajo de un partido en juego, si el partido ya está finalizado.
+  -- Inicia el trabajo de un partido en juego.
+  PROCEDURE p_abrir_partido_en_juego(i_id_partido IN t_partidos.id_partido%TYPE);
+
+  -- Finaliza el trabajo de un partido en juego, si el partido está finalizado.
   PROCEDURE p_cerrar_partido_en_juego(i_id_partido IN t_partidos.id_partido%TYPE);
 
 END;
@@ -293,34 +299,85 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
       UPDATE SET d.puntos = s.puntaje, d.ranking = s.my_rank;
   END;
 
+  -- Planifica el trabajo de los partidos programados del torneo.
+  PROCEDURE p_planificar_partidos(i_id_torneo IN t_torneo_jornadas.id_torneo%TYPE DEFAULT NULL) IS
+    l_id_torneo t_torneo_jornadas.id_torneo%TYPE := nvl(i_id_torneo,
+                                                        'PRI-APE-20');
+    --TODO: dinamizar torneo por defecto
+    --
+    CURSOR c_partidos IS
+      SELECT p.id_partido, p.fecha - (60 / 86400) fecha_inicio --fecha/hora del partido menos 1 min
+        FROM t_partidos p
+       WHERE p.id_torneo = l_id_torneo
+         AND p.estado = 'M' --Programado
+      ;
+  BEGIN
+  
+    FOR par IN c_partidos LOOP
+      -- Crea el trabajo del cierre de predicciones
+      -- TODO: Verificar si ya está creado con la misma fecha
+      k_planificador.p_crear_o_editar_trabajo(i_id_trabajo   => k_planificador.c_cierre_predicciones,
+                                              i_parametros   => '{"id_partido":"' ||
+                                                                par.id_partido || '"}',
+                                              i_fecha_inicio => par.fecha_inicio);
+    END LOOP;
+  
+  END;
+
   -- Cierra todas las predicciones de un partido.
   PROCEDURE p_cerrar_predicciones(i_id_partido IN t_partidos.id_partido%TYPE) IS
-    l_fecha_inicio TIMESTAMP WITH TIME ZONE := current_timestamp + (900 / 86400); --dentro de 900 segs.
   BEGIN
     IF i_id_partido IS NULL THEN
       raise_application_error(-20000, 'Parámetro i_id_partido inválido');
     END IF;
   
-    -- Cambia estado de partido a En Juego  
+    -- Cambia estado de predicciones del partido a Confirmado
     UPDATE t_partidos p
-       SET p.estado = 'J' --En Juego
+       SET p.estado_predicciones = 'C' --Confirmado
      WHERE p.id_partido = i_id_partido
-       AND p.estado = 'M'; --Programado es el estado previo a En Juego
+       AND p.estado_predicciones = 'P'; --Pendiente
   
     -- Cambia estado de predicciones a Confirmado
     IF SQL%FOUND THEN
       UPDATE t_predicciones p
          SET p.estado = 'C' --Confirmado
        WHERE p.id_partido = i_id_partido
-         AND p.estado = 'P'; --Pendiente es el estado previo a Confirmado
+         AND p.estado = 'P'; --Pendiente
     END IF;
   
-    -- Crea el trabajo del partido en juego
-    k_planificador.p_crear_o_editar_trabajo(i_id_trabajo   => k_planificador.c_partido_en_juego,
-                                            i_parametros   => '{"id_partido":"' ||
-                                                              i_id_partido || '"}',
-                                            i_fecha_inicio => l_fecha_inicio);
+  END;
+
+  -- Inicia el trabajo de un partido en juego.
+  PROCEDURE p_abrir_partido_en_juego(i_id_partido IN t_partidos.id_partido%TYPE) IS
+    l_estado t_partidos.estado%TYPE;
+    l_estado_predicciones t_partidos.estado_predicciones%TYPE;
+    --
+    --TODO: llevar a la tabla de t_trabajos
+    l_fecha_inicio TIMESTAMP WITH TIME ZONE := current_timestamp + (900 / 86400); --dentro de 900 segs.
+  BEGIN
+    -- Obtener estado del partido y estado de predicciones del partido
+    BEGIN
+      SELECT p.estado, p.estado_predicciones
+        INTO l_estado, l_estado_predicciones
+        FROM t_partidos p
+       WHERE p.id_partido = i_id_partido;
+    EXCEPTION
+      WHEN no_data_found THEN
+        raise_application_error(-20001, 'Partido no registrado.');
+      WHEN OTHERS THEN
+        raise_application_error(-20002,
+                                'Error al obtener estado del partido: ' ||
+                                SQLERRM);
+    END;
   
+    IF l_estado IN ('M', 'J') AND l_estado_predicciones = 'C' THEN
+      -- Crea el trabajo del partido en juego
+      -- para partido programado o en juego y predicciones cerradas
+      k_planificador.p_crear_o_editar_trabajo(i_id_trabajo   => k_planificador.c_partido_en_juego,
+                                              i_parametros   => '{"id_partido":"' ||
+                                                                i_id_partido || '"}',
+                                              i_fecha_inicio => l_fecha_inicio);
+    END IF;
   END;
 
   -- Finaliza el trabajo de un partido en juego, si el partido ya está finalizado.
@@ -344,7 +401,7 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
   
     IF l_estado = 'F' THEN
       -- estado finalizado
-      -- Crea el trabajo del partido en juego
+      -- Finaliza el trabajo del partido en juego
       k_planificador.p_editar_trabajo(i_id_trabajo => k_planificador.c_partido_en_juego,
                                       i_parametros => '{"id_partido":"' ||
                                                       i_id_partido || '"}',
