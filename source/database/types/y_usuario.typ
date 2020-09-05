@@ -53,10 +53,10 @@ SOFTWARE.
 /** Ranking general */
   ranking NUMBER(6),
 /** Roles del usuario */
-  roles y_roles,
+  roles y_objetos,
 
 /**
-Constructor del objeto sin parámetros.
+Constructor del objeto sin parï¿½metros.
 
 %author jtsoya539 30/3/2020 10:08:08
 %return Objeto del tipo y_usuario.
@@ -89,7 +89,7 @@ CREATE OR REPLACE TYPE BODY y_usuario IS
     self.version_avatar   := NULL;
     self.puntos           := NULL;
     self.ranking          := NULL;
-    self.roles            := NEW y_roles();
+    self.roles            := NEW y_objetos();
     RETURN;
   END;
 
@@ -97,7 +97,7 @@ CREATE OR REPLACE TYPE BODY y_usuario IS
     l_usuario     y_usuario;
     l_json_object json_object_t;
     l_rol         y_rol;
-    l_roles       y_roles;
+    l_roles       y_objetos;
     l_json_array  json_array_t;
   BEGIN
     l_json_object := json_object_t.parse(i_json);
@@ -118,9 +118,9 @@ CREATE OR REPLACE TYPE BODY y_usuario IS
     l_json_array := l_json_object.get_array('roles');
   
     IF l_json_array IS NULL THEN
-      l_usuario.roles := NEW y_roles();
+      l_usuario.roles := NEW y_objetos();
     ELSE
-      l_roles := NEW y_roles();
+      l_roles := NEW y_objetos();
       FOR i IN 0 .. l_json_array.get_size - 1 LOOP
         l_rol := NEW y_rol();
         l_rol := treat(y_rol.parse_json(l_json_array.get(i).to_clob) AS

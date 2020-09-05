@@ -137,7 +137,6 @@ prompt
 @@types/y_parametros.typ
 @@types/y_respuesta.typ
 @@types/y_rol.typ
-@@types/y_roles.typ
 @@types/y_usuario.typ
 @@types/y_sesion.typ
 @@types/y_dispositivo.typ
