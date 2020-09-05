@@ -581,6 +581,8 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
   
     l_partido t_partidos.id_partido%TYPE;
     l_usuario t_usuarios.alias%TYPE;
+
+    l_estado t_partidos.estado_predicciones%TYPE;
   BEGIN
     -- Inicializa respuesta
     l_rsp  := NEW y_respuesta();
@@ -611,7 +613,15 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
                                    k_servicio.f_valor_parametro_number(i_parametros,
                                                                        'id_sincronizacion') IS NOT NULL,
                                    'Debe ingresar id_sincronizacion');
-    /* TODO: text="Validar que el estado del partido y que el usuario exista" */
+    -- Validar estado de predicciones del partido
+    BEGIN
+      SELECT min(p.estado_predicciones)
+        INTO l_estado
+        FROM t_partidos p
+       WHERE p.id_partido = l_partido;
+    END;
+    k_servicio.p_validar_parametro(l_rsp, l_estado = 'P', 'Partido no disponible');
+    /* TODO: text="Validar que el usuario exista" */
   
     l_rsp.lugar := 'Realizando prediccion';
     MERGE INTO t_predicciones d

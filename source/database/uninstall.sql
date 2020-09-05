@@ -49,6 +49,9 @@ prompt
 prompt Borrando paquetes...
 prompt -----------------------------------
 prompt
+drop package k_puntajes_fan;
+drop package k_importacion_fan;
+drop package k_datos_fan;
 drop package k_servicio_fan;
 
 drop package k_reporte_gen;

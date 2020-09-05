@@ -159,14 +159,6 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
         RETURNING id_partido INTO rw_partido.id_partido;
       END IF;
     
-      -- Actualizar puntajes de usuarios que predijeron en el partido finalizado.
-      -- Solamente si es una modificación
-      IF l_estado = 'F' AND rw_partido.estado != l_estado THEN
-        k_puntajes_fan.p_actualizar_puntajes(rw_partido.id_partido);
-        -- Recalcular ranking de grupos
-        k_puntajes_fan.p_actualizar_ranking;
-      END IF;
-    
     END LOOP;
   END;
 
