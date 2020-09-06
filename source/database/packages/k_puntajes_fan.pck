@@ -59,7 +59,8 @@ CREATE OR REPLACE PACKAGE k_puntajes_fan IS
   PROCEDURE p_actualizar_ranking;
 
   -- Planifica el trabajo de los partidos programados del torneo.
-  PROCEDURE p_planificar_partidos(i_id_torneo IN t_torneo_jornadas.id_torneo%TYPE DEFAULT NULL);
+  PROCEDURE p_planificar_partidos(i_id_torneo  IN t_torneo_jornadas.id_torneo%TYPE DEFAULT NULL,
+                                  i_id_partido IN t_partidos.id_partido%TYPE DEFAULT NULL);
 
   -- Cierra todas las predicciones de un partido.
   PROCEDURE p_cerrar_predicciones(i_id_partido IN t_partidos.id_partido%TYPE);
@@ -303,7 +304,8 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
   END;
 
   -- Planifica el trabajo de los partidos programados del torneo.
-  PROCEDURE p_planificar_partidos(i_id_torneo IN t_torneo_jornadas.id_torneo%TYPE DEFAULT NULL) IS
+  PROCEDURE p_planificar_partidos(i_id_torneo  IN t_torneo_jornadas.id_torneo%TYPE DEFAULT NULL,
+                                  i_id_partido IN t_partidos.id_partido%TYPE DEFAULT NULL) IS
     l_id_torneo t_torneo_jornadas.id_torneo%TYPE := nvl(i_id_torneo,
                                                         'PRI-APE20');
     --TODO: dinamizar torneo por defecto
@@ -312,6 +314,7 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
       SELECT p.id_partido, p.fecha fecha_inicio
         FROM t_partidos p
        WHERE p.id_torneo = l_id_torneo
+         AND (p.id_partido = i_id_partido OR i_id_partido IS NULL)
          AND p.estado = 'M' --Programado
       ;
   BEGIN
