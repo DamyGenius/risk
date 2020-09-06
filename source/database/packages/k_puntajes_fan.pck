@@ -354,13 +354,25 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
   PROCEDURE p_abrir_partido_en_juego(i_id_partido IN t_partidos.id_partido%TYPE) IS
     l_estado              t_partidos.estado%TYPE;
     l_estado_predicciones t_partidos.estado_predicciones%TYPE;
+    l_club_local          t_clubes.nombre_corto%TYPE;
+    l_club_visitante      t_clubes.nombre_corto%TYPE;
+    --
+    l_result PLS_INTEGER;
   BEGIN
-    -- Obtener estado del partido y estado de predicciones del partido
+    -- Obtener datos del partido
     BEGIN
-      SELECT p.estado, p.estado_predicciones
-        INTO l_estado, l_estado_predicciones
-        FROM t_partidos p
-       WHERE p.id_partido = i_id_partido;
+      SELECT p.estado,
+             p.estado_predicciones,
+             k_util.f_formatear_titulo(l.nombre_corto) club_local,
+             k_util.f_formatear_titulo(v.nombre_corto) club_visitante
+        INTO l_estado,
+             l_estado_predicciones,
+             l_club_local,
+             l_club_visitante
+        FROM t_partidos p, t_clubes l, t_clubes v
+       WHERE p.id_partido = i_id_partido
+         AND p.id_club_local = l.id_club
+         AND p.id_club_visitante = v.id_club;
     EXCEPTION
       WHEN no_data_found THEN
         raise_application_error(-20001, 'Partido no registrado.');
@@ -372,10 +384,19 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
   
     IF l_estado IN ('M', 'J') AND l_estado_predicciones = 'C' THEN
       -- Crea el trabajo del partido en juego
-      -- para partido programado o en juego y predicciones cerradas
+      -- para partido programado o en juego con predicciones cerradas
       k_planificador.p_crear_o_editar_trabajo(i_id_trabajo => k_planificador.c_partido_en_juego,
                                               i_parametros => '{"id_partido":"' ||
                                                               i_id_partido || '"}');
+      -- Notifica del partido en juego a todos los dispositivos suscriptos
+      l_result := k_mensajeria.f_enviar_notificacion(i_titulo      => '¡Partido en juego!',
+                                                     i_contenido   => 'El partido ' ||
+                                                                      l_club_local ||
+                                                                      ' vs. ' ||
+                                                                      l_club_visitante ||
+                                                                      ' está comenzando.',
+                                                     i_suscripcion => 'default');
+    
     END IF;
   END;
 
@@ -408,14 +429,30 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
 
   -- Finaliza el trabajo de un partido en juego, si el partido ya está finalizado.
   PROCEDURE p_cerrar_partido_en_juego(i_id_partido IN t_partidos.id_partido%TYPE) IS
-    l_estado t_partidos.estado%TYPE;
+    l_estado          t_partidos.estado%TYPE;
+    l_club_local      t_clubes.nombre_corto%TYPE;
+    l_club_visitante  t_clubes.nombre_corto%TYPE;
+    l_goles_local     t_partidos.goles_club_local%TYPE;
+    l_goles_visitante t_partidos.goles_club_visitante%TYPE;
+    --
+    l_result PLS_INTEGER;
   BEGIN
-    -- Obtener estado del partido
+    -- Obtener datos del partido
     BEGIN
-      SELECT p.estado
-        INTO l_estado
-        FROM t_partidos p
-       WHERE p.id_partido = i_id_partido;
+      SELECT p.estado,
+             k_util.f_formatear_titulo(l.nombre_corto) club_local,
+             k_util.f_formatear_titulo(v.nombre_corto) club_visitante,
+             p.goles_club_local,
+             p.goles_club_visitante
+        INTO l_estado,
+             l_club_local,
+             l_club_visitante,
+             l_goles_local,
+             l_goles_visitante
+        FROM t_partidos p, t_clubes l, t_clubes v
+       WHERE p.id_partido = i_id_partido
+         AND p.id_club_local = l.id_club
+         AND p.id_club_visitante = v.id_club;
     EXCEPTION
       WHEN no_data_found THEN
         raise_application_error(-20001, 'Partido no registrado.');
@@ -426,12 +463,21 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
     END;
   
     IF l_estado = 'F' THEN
-      -- estado finalizado
       -- Finaliza el trabajo del partido en juego
-      k_planificador.p_editar_trabajo(i_id_trabajo => k_planificador.c_partido_en_juego,
-                                      i_parametros => '{"id_partido":"' ||
-                                                      i_id_partido || '"}',
-                                      i_fecha_fin  => current_timestamp);
+      -- para partido finalizado
+      k_planificador.p_eliminar_trabajo(i_id_trabajo => k_planificador.c_partido_en_juego,
+                                        i_parametros => '{"id_partido":"' ||
+                                                        i_id_partido || '"}');
+      -- Notifica del partido finalizado a todos los dispositivos suscriptos
+      l_result := k_mensajeria.f_enviar_notificacion(i_titulo      => '¡Partido finalizado!',
+                                                     i_contenido   => 'El partido ' ||
+                                                                      l_club_local ||
+                                                                      ' vs. ' ||
+                                                                      l_club_visitante ||
+                                                                      ' terminó ' ||
+                                                                      l_goles_local || '-' ||
+                                                                      l_goles_visitante || '.',
+                                                     i_suscripcion => 'default');
     END IF;
   END;
 
