@@ -1,6 +1,7 @@
 prompt Importing table t_operaciones...
 set feedback off
 set define off
+
 insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL)
 values (0, 'P', 'CONTEXTO', null, 'S', null, null);
 
@@ -101,9 +102,45 @@ insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE,
 values (33, 'S', 'CAMBIAR_ESTADO_MENSAJERIA', 'MSJ', 'S', null, null);
 
 insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL)
+values (40, 'S', 'LISTAR_CLUBES', 'FAN', 'S', null, '2.2');
+
+insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL)
+values (41, 'S', 'REGISTRAR_GRUPO', 'FAN', 'S', null, null);
+
+insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL)
 values (42, 'S', 'EDITAR_USUARIO', 'AUT', 'S', null, null);
 
 insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL)
+values (43, 'S', 'REALIZAR_PREDICCION', 'FAN', 'S', null, null);
+
+insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL)
+values (44, 'S', 'LISTAR_PARTIDOS', 'FAN', 'S', null, null);
+
+insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL)
+values (45, 'S', 'LISTAR_PREDICCIONES_PARTIDOS', 'FAN', 'S', null, null);
+
+insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL)
+values (46, 'S', 'EDITAR_GRUPO', 'FAN', 'S', null, null);
+
+insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL)
+values (47, 'S', 'LISTAR_JORNADAS', 'FAN', 'S', null, null);
+
+insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL)
+values (48, 'S', 'DATOS_GRUPO', 'FAN', 'S', null, null);
+
+insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL)
+values (49, 'S', 'LISTAR_GRUPOS', 'FAN', 'S', null, null);
+
+insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL)
 values (50, 'S', 'VERSION_SERVICIO', 'GEN', 'S', null, null);
+
+insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL)
+values (51, 'S', 'ABANDONAR_GRUPO', 'FAN', 'S', null, null);
+
+insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL)
+values (52, 'S', 'INVITAR_USUARIO', 'FAN', 'S', null, null);
+
+insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL)
+values (53, 'S', 'RESPONDER_INVITACION', 'FAN', 'S', null, null);
 
 prompt Done.
