@@ -143,4 +143,16 @@ values (52, 'S', 'INVITAR_USUARIO', 'FAN', 'S', null, null);
 insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL)
 values (53, 'S', 'RESPONDER_INVITACION', 'FAN', 'S', null, null);
 
+insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL)
+values (54, 'T', 'ACTUALIZACION_PARTIDOS', 'FAN', 'S', 'Trabajo de actualización y planificación de partidos', null);
+
+insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL)
+values (55, 'T', 'CIERRE_PREDICCIONES_{ID_PARTIDO}', 'FAN', 'S', 'Trabajo de cierre de predicciones de partido programado', null);
+
+insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL)
+values (56, 'T', 'PARTIDO_EN_JUEGO_{ID_PARTIDO}', 'FAN', 'S', 'Trabajo de actualización de partido en juego', null);
+
+insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL)
+values (57, 'T', 'FIN_PARTIDO_{ID_PARTIDO}', 'FAN', 'S', 'Trabajo de cierre de partido en juego', null);
+
 prompt Done.
