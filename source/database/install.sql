@@ -61,6 +61,7 @@ prompt
 @@sequences/s_id_barrio.seq
 @@sequences/s_id_persona.seq
 @@sequences/s_id_rol.seq
+@@sequences/s_id_operacion.seq
 @@sequences/s_id_servicio.seq
 @@sequences/s_id_servicio_log.seq
 @@sequences/s_id_trabajo.seq
@@ -95,6 +96,8 @@ prompt
 @@tables/t_permisos.tab
 @@tables/t_rol_permisos.tab
 @@tables/t_rol_usuarios.tab
+@@tables/t_operaciones.tab
+@@tables/t_operacion_parametros.tab
 @@tables/t_servicios.tab
 @@tables/t_servicio_parametros.tab
 @@tables/t_servicio_logs.tab
@@ -176,6 +179,7 @@ prompt
 @@packages/k_dato.pck
 @@packages/k_archivo.pck
 @@packages/k_mensajeria.pck
+@@packages/k_operacion.pck
 @@packages/k_servicio.pck
 @@packages/k_servicio_aut.pck
 @@packages/k_servicio_gen.pck
@@ -199,6 +203,7 @@ prompt
 @@triggers/gs_barrios.trg
 @@triggers/gs_personas.trg
 @@triggers/gs_roles.trg
+@@triggers/gs_operaciones.trg
 @@triggers/gs_servicios.trg
 @@triggers/gs_servicio_logs.trg
 @@triggers/gs_trabajos.trg
@@ -231,6 +236,8 @@ prompt
 @@scripts/ins_t_significados.sql
 @@scripts/ins_t_errores.sql
 @@scripts/ins_t_parametros.sql
+@@scripts/ins_t_operaciones.sql
+@@scripts/ins_t_operacion_parametros.sql
 @@scripts/ins_t_servicios.sql
 @@scripts/ins_t_servicio_parametros.sql
 @@scripts/ins_t_trabajos.sql
