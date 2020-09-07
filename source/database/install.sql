@@ -129,6 +129,11 @@ prompt
 @@tables/t_grupo_usuarios.tab
 
 prompt
+prompt Creando vistas...
+prompt -----------------------------------
+prompt
+
+prompt
 prompt Creando types...
 prompt -----------------------------------
 prompt
