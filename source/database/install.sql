@@ -133,6 +133,8 @@ prompt Creando vistas...
 prompt -----------------------------------
 prompt
 
+@@views/v_ranking_usuarios.sql
+
 prompt
 prompt Creando types...
 prompt -----------------------------------

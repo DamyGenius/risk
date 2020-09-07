@@ -114,6 +114,7 @@ prompt
 prompt Borrando vistas...
 prompt -----------------------------------
 prompt
+drop view v_ranking_usuarios;
 
 prompt
 prompt Borrando tablas...
