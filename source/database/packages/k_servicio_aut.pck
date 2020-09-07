@@ -1,4 +1,4 @@
-CREATE OR REPLACE PACKAGE k_servicio_aut IS
+﻿CREATE OR REPLACE PACKAGE k_servicio_aut IS
 
   /**
   Agrupa operaciones relacionadas con los Servicios Web del dominio AUT
@@ -139,19 +139,19 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
 
   FUNCTION cambiar_estado_usuario(i_parametros IN y_parametros)
     RETURN y_respuesta IS
-    l_rsp y_respuesta;
+    l_rsp     y_respuesta;
     l_usuario VARCHAR2(200);
-    l_estado t_usuarios.estado%TYPE;
+    l_estado  t_usuarios.estado%TYPE;
   BEGIN
     -- Inicializa respuesta
     l_rsp := NEW y_respuesta();
   
     l_rsp.lugar := 'Obteniendo parametros';
-    l_usuario   := k_servicio.f_valor_parametro_string(i_parametros,
-                                                       'usuario');
-    l_estado    := k_servicio.f_valor_parametro_string(i_parametros,
-                                                       'estado');
-
+    l_usuario   := k_operacion.f_valor_parametro_string(i_parametros,
+                                                        'usuario');
+    l_estado    := k_operacion.f_valor_parametro_string(i_parametros,
+                                                        'estado');
+  
     l_rsp.lugar := 'Validando parametros';
     k_servicio.p_validar_parametro(l_rsp,
                                    l_usuario IS NOT NULL,
