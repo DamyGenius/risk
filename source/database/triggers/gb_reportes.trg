@@ -1,10 +1,12 @@
-CREATE OR REPLACE TRIGGER gs_trabajos
-  BEFORE INSERT ON t_trabajos
+CREATE OR REPLACE TRIGGER gb_reportes
+  BEFORE INSERT OR UPDATE OR DELETE ON t_reportes
   FOR EACH ROW
+DECLARE
+  l_tipo_operacion t_operaciones.tipo%TYPE;
 BEGIN
   /*
   --------------------------------- MIT License ---------------------------------
-  Copyright (c) 2020 dmezac
+  Copyright (c) 2019 jtsoya539
   
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +28,26 @@ BEGIN
   -------------------------------------------------------------------------------
   */
 
-  IF :new.id_trabajo IS NULL THEN
-    :new.id_trabajo := s_id_trabajo.nextval;
+  IF inserting OR updating THEN
+  
+    -- Valida operación
+    BEGIN
+      SELECT o.tipo
+        INTO l_tipo_operacion
+        FROM t_operaciones o
+       WHERE o.id_operacion = :new.id_reporte;
+    EXCEPTION
+      WHEN no_data_found THEN
+        raise_application_error(-20000, 'Operación inexistente');
+    END;
+  
+    -- Valida tipo de operación
+    IF l_tipo_operacion <> 'R' THEN
+      raise_application_error(-20000, 'Operación no es de tipo Reporte');
+    END IF;
+  
   END IF;
+
 END;
 /
+

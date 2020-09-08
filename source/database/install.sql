@@ -62,9 +62,7 @@ prompt
 @@sequences/s_id_persona.seq
 @@sequences/s_id_rol.seq
 @@sequences/s_id_operacion.seq
-@@sequences/s_id_servicio.seq
-@@sequences/s_id_servicio_log.seq
-@@sequences/s_id_trabajo.seq
+@@sequences/s_id_operacion_log.seq
 @@sequences/s_id_sesion.seq
 @@sequences/s_id_usuario.seq
 @@sequences/s_id_dispositivo.seq
@@ -98,11 +96,10 @@ prompt
 @@tables/t_rol_usuarios.tab
 @@tables/t_operaciones.tab
 @@tables/t_operacion_parametros.tab
+@@tables/t_operacion_logs.tab
+@@tables/t_reportes.tab
 @@tables/t_servicios.tab
-@@tables/t_servicio_parametros.tab
-@@tables/t_servicio_logs.tab
 @@tables/t_trabajos.tab
-@@tables/t_trabajo_parametros.tab
 @@tables/t_dispositivos.tab
 @@tables/t_dispositivo_suscripciones.tab
 @@tables/t_dispositivo_ubicaciones.tab
@@ -211,9 +208,7 @@ prompt
 @@triggers/gs_personas.trg
 @@triggers/gs_roles.trg
 @@triggers/gs_operaciones.trg
-@@triggers/gs_servicios.trg
-@@triggers/gs_servicio_logs.trg
-@@triggers/gs_trabajos.trg
+@@triggers/gs_operacion_logs.trg
 @@triggers/gs_sesiones.trg
 @@triggers/gs_usuarios.trg
 @@triggers/gs_dispositivos.trg
@@ -221,6 +216,9 @@ prompt
 @@triggers/gs_correo_adjuntos.trg
 @@triggers/gs_mensajes.trg
 @@triggers/gs_notificaciones.trg
+@@triggers/gb_reportes.trg
+@@triggers/gb_servicios.trg
+@@triggers/gb_trabajos.trg
 @@triggers/gb_usuarios.trg
 @@triggers/gb_sesiones.trg
 @@triggers/gb_personas.trg
@@ -245,10 +243,9 @@ prompt
 @@scripts/ins_t_parametros.sql
 @@scripts/ins_t_operaciones.sql
 @@scripts/ins_t_operacion_parametros.sql
+@@scripts/ins_t_reportes.sql
 @@scripts/ins_t_servicios.sql
-@@scripts/ins_t_servicio_parametros.sql
 @@scripts/ins_t_trabajos.sql
-@@scripts/ins_t_trabajo_parametros.sql
 @@scripts/ins_t_roles.sql
 @@scripts/ins_t_paises.sql
 @@scripts/ins_t_departamentos.sql

@@ -1,6 +1,8 @@
-CREATE OR REPLACE TRIGGER gs_servicios
-  BEFORE INSERT ON t_servicios
+CREATE OR REPLACE TRIGGER gb_servicios
+  BEFORE INSERT OR UPDATE OR DELETE ON t_servicios
   FOR EACH ROW
+DECLARE
+  l_tipo_operacion t_operaciones.tipo%TYPE;
 BEGIN
   /*
   --------------------------------- MIT License ---------------------------------
@@ -26,8 +28,26 @@ BEGIN
   -------------------------------------------------------------------------------
   */
 
-  IF :new.id_servicio IS NULL THEN
-    :new.id_servicio := s_id_servicio.nextval;
+  IF inserting OR updating THEN
+  
+    -- Valida operación
+    BEGIN
+      SELECT o.tipo
+        INTO l_tipo_operacion
+        FROM t_operaciones o
+       WHERE o.id_operacion = :new.id_servicio;
+    EXCEPTION
+      WHEN no_data_found THEN
+        raise_application_error(-20000, 'Operación inexistente');
+    END;
+  
+    -- Valida tipo de operación
+    IF l_tipo_operacion <> 'S' THEN
+      raise_application_error(-20000, 'Operación no es de tipo Servicio');
+    END IF;
+  
   END IF;
+
 END;
 /
+
