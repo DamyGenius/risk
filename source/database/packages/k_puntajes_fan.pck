@@ -322,10 +322,10 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
     FOR par IN c_partidos LOOP
       -- Crea el trabajo del cierre de predicciones
       -- TODO: Verificar si ya está creado con la misma fecha
-      k_planificador.p_crear_o_editar_trabajo(i_id_trabajo   => k_planificador.c_cierre_predicciones,
-                                              i_parametros   => '{"id_partido":"' ||
-                                                                par.id_partido || '"}',
-                                              i_fecha_inicio => par.fecha_inicio);
+      k_trabajo.p_crear_o_editar_trabajo(i_id_trabajo   => k_trabajo.c_cierre_predicciones,
+                                         i_parametros   => '{"id_partido":"' ||
+                                                           par.id_partido || '"}',
+                                         i_fecha_inicio => par.fecha_inicio);
     END LOOP;
   
   END;
@@ -388,9 +388,9 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
     IF l_estado IN ('M', 'J') AND l_estado_predicciones = 'C' THEN
       -- Crea el trabajo del partido en juego
       -- para partido programado o en juego con predicciones cerradas
-      k_planificador.p_crear_o_editar_trabajo(i_id_trabajo => k_planificador.c_partido_en_juego,
-                                              i_parametros => '{"id_partido":"' ||
-                                                              i_id_partido || '"}');
+      k_trabajo.p_crear_o_editar_trabajo(i_id_trabajo => k_trabajo.c_partido_en_juego,
+                                         i_parametros => '{"id_partido":"' ||
+                                                         i_id_partido || '"}');
       -- Notifica del partido en juego a todos los dispositivos suscriptos
       l_result := k_mensajeria.f_enviar_notificacion(i_titulo      => '¡Partido en juego!',
                                                      i_contenido   => 'El partido ' ||
@@ -424,9 +424,9 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
   
     IF l_estado = 'F' THEN
       -- Inicia el trabajo de cierre del partido finalizado
-      k_planificador.p_crear_o_editar_trabajo(i_id_trabajo => k_planificador.c_fin_partido,
-                                              i_parametros => '{"id_partido":"' ||
-                                                              i_id_partido || '"}');
+      k_trabajo.p_crear_o_editar_trabajo(i_id_trabajo => k_trabajo.c_fin_partido,
+                                         i_parametros => '{"id_partido":"' ||
+                                                         i_id_partido || '"}');
     END IF;
   END;
 
@@ -468,9 +468,9 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
     IF l_estado = 'F' THEN
       -- Finaliza el trabajo del partido en juego
       -- para partido finalizado
-      k_planificador.p_eliminar_trabajo(i_id_trabajo => k_planificador.c_partido_en_juego,
-                                        i_parametros => '{"id_partido":"' ||
-                                                        i_id_partido || '"}');
+      k_trabajo.p_eliminar_trabajo(i_id_trabajo => k_trabajo.c_partido_en_juego,
+                                   i_parametros => '{"id_partido":"' ||
+                                                   i_id_partido || '"}');
       -- Notifica del partido finalizado a todos los dispositivos suscriptos
       l_result := k_mensajeria.f_enviar_notificacion(i_titulo      => '¡Partido finalizado!',
                                                      i_contenido   => 'El partido ' ||
