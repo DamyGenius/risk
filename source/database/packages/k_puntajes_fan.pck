@@ -318,6 +318,7 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
          AND p.estado = 'M' --Programado
       ;
   BEGIN
+    EXECUTE IMMEDIATE 'ALTER SESSION SET TIME_ZONE = ''-4:0''';
   
     FOR par IN c_partidos LOOP
       -- Crea el trabajo del cierre de predicciones
@@ -325,7 +326,8 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
       k_trabajo.p_crear_o_editar_trabajo(i_id_trabajo   => k_trabajo.c_cierre_predicciones,
                                          i_parametros   => '{"id_partido":"' ||
                                                            par.id_partido || '"}',
-                                         i_fecha_inicio => par.fecha_inicio);
+                                         i_fecha_inicio => CAST(par.fecha_inicio AS
+                                                                TIMESTAMP));
     END LOOP;
   
   END;
