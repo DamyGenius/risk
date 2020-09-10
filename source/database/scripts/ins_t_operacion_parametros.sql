@@ -315,10 +315,10 @@ insert into t_operacion_parametros (ID_OPERACION, NOMBRE, ORDEN, ACTIVO, TIPO_DA
 values (45, 'USUARIO', 3, 'S', 'S', null, null, 'S', null, null, null);
 
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
-values (45, 'ESTADO_PARTIDO', 4, 'S', 'S', null, null, 'N', null, null, null);
+values (45, 'ESTADOS_PARTIDOS', 4, 'S', 'S', null, null, 'N', null, null, null);
 
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
-values (45, 'ESTADO_PREDICCION', 5, 'S', 'S', null, null, 'N', null, null, null);
+values (45, 'ESTADOS_PREDICCIONES', 5, 'S', 'S', null, null, 'N', null, null, null);
 
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
 values (45, 'PAGINA_PARAMETROS', 6, 'S', 'O', 'Y_PAGINA_PARAMETROS', null, 'N', null, null, null);
