@@ -289,6 +289,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     l_id_usuario          t_usuarios.id_usuario%TYPE;
     l_alias               t_usuarios.alias%TYPE;
     l_confirmacion_activa VARCHAR2(1);
+    l_body                CLOB;
   BEGIN
     -- Valida clave
     p_validar_clave(i_alias, i_clave, c_clave_acceso);
@@ -346,14 +347,21 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
   
     IF l_confirmacion_activa = 'S' THEN
       -- Env�a correo de verificaci�n
+      l_body := k_mensajeria.f_correo_html('Para activar tu cuenta, por favor verifica tu direcci�n de correo.' ||
+                                           utl_tcp.crlf ||
+                                           'Tu cuenta no ser� creada hasta que tu direcci�n de correo sea confirmada.' ||
+                                           utl_tcp.crlf ||
+                                           'Confirma tu direcci�n de correo con el bot�n o con la siguiente URL:' ||
+                                           utl_tcp.crlf ||
+                                           f_generar_url_activacion(i_alias),
+                                           'Confirmaci�n de correo',
+                                           'Confirmaci�n de correo',
+                                           NULL,
+                                           'Confirmar',
+                                           f_generar_url_activacion(i_alias));
+    
       IF k_mensajeria.f_enviar_correo('Confirmaci�n de correo',
-                                      'Para activar tu cuenta, por favor verifica tu direcci�n de correo.' ||
-                                      utl_tcp.crlf ||
-                                      'Tu cuenta no ser� creada hasta que tu direcci�n de correo sea confirmada.' ||
-                                      utl_tcp.crlf ||
-                                      'Confirma tu direcci�n de correo con la siguiente URL:' ||
-                                      utl_tcp.crlf ||
-                                      f_generar_url_activacion(i_alias),
+                                      l_body,
                                       NULL,
                                       i_direccion_correo) <>
          k_mensajeria.c_ok THEN
