@@ -91,10 +91,21 @@ namespace Risk.API.Controllers
         [Produces(MediaTypeNames.Application.Json)]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Prediccion>>))]
         public IActionResult ListarPrediccionesPartidos([FromQuery, SwaggerParameter(Description = "Identificador del torneo", Required = true)] string idTorneo,
-                                            [FromQuery, SwaggerParameter(Description = "Estado del partido", Required = false)] string estado,
-                                            [FromQuery, SwaggerParameter(Description = "Usuario", Required = true)] string usuario)
+            [FromQuery, SwaggerParameter(Description = "Estados de partidos (separados por coma)", Required = false)] string estadosPartidos,
+            [FromQuery, SwaggerParameter(Description = "Estados de predicciones (separados por coma)", Required = false)] string estadosPredicciones,
+            [FromQuery, SwaggerParameter(Description = "Usuario", Required = true)] string usuario,
+            [FromQuery, SwaggerParameter(Description = "Número de la página", Required = false)] int pagina,
+            [FromQuery, SwaggerParameter(Description = "Cantidad de elementos por página", Required = false)] int porPagina,
+            [FromQuery, SwaggerParameter(Description = "No paginar? (S/N)", Required = false)] string noPaginar,
+            [FromQuery, SwaggerParameter(Description = "Orden (ASC/DESC)", Required = false)] OrdenLista orden)
         {
-            var respuesta = _fanService.ListarPrediccionesPartidos(usuario, null, idTorneo, estado);
+            PaginaParametros paginaParametros = new PaginaParametros
+            {
+                Pagina = pagina,
+                PorPagina = porPagina,
+                NoPaginar = noPaginar
+            };
+            var respuesta = _fanService.ListarPrediccionesPartidos(usuario, null, idTorneo, estadosPartidos, estadosPredicciones, paginaParametros, orden);
             return ProcesarRespuesta(respuesta);
         }
 
