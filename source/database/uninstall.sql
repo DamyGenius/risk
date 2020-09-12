@@ -88,6 +88,7 @@ drop type y_partido_prediccion force;
 drop type y_partido force;
 drop type y_club force;
 
+drop type y_cadenas_caracteres force;
 drop type y_notificacion force;
 drop type y_mensaje force;
 drop type y_correo force;
