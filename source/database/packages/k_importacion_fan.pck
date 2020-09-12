@@ -71,16 +71,17 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
     l_partidos json_array_t;
     l_partido  json_object_t;
   
-    l_id                t_partidos.id_importacion%TYPE;
-    l_numerofecha       t_partidos.id_jornada%TYPE;
-    l_id_club_local     t_partidos.id_club_local%TYPE;
-    l_id_club_visitante t_partidos.id_club_visitante%TYPE;
-    l_dia               VARCHAR2(30);
-    l_hora              VARCHAR2(30);
-    l_fecha_partido     DATE;
-    l_goleslocal        t_partidos.goles_club_local%TYPE;
-    l_golesvisitante    t_partidos.goles_club_visitante%TYPE;
-    l_estado            t_partidos.estado%TYPE;
+    l_id                  t_partidos.id_importacion%TYPE;
+    l_numerofecha         t_partidos.id_jornada%TYPE;
+    l_id_club_local       t_partidos.id_club_local%TYPE;
+    l_id_club_visitante   t_partidos.id_club_visitante%TYPE;
+    l_dia                 VARCHAR2(30);
+    l_hora                VARCHAR2(30);
+    l_fecha_partido       DATE;
+    l_goleslocal          t_partidos.goles_club_local%TYPE;
+    l_golesvisitante      t_partidos.goles_club_visitante%TYPE;
+    l_estado              t_partidos.estado%TYPE;
+    l_estado_predicciones t_partidos.estado_predicciones%TYPE;
     --
     rw_partido t_partidos%ROWTYPE;
   BEGIN
@@ -106,9 +107,15 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
         l_fecha_partido := NULL;
       END IF;
     
-      l_goleslocal     := l_partido.get_number('golesLocal');
-      l_golesvisitante := l_partido.get_number('golesVisitante');
-      l_estado         := l_partido.get_string('estado');
+      l_goleslocal          := l_partido.get_number('golesLocal');
+      l_golesvisitante      := l_partido.get_number('golesVisitante');
+      l_estado              := l_partido.get_string('estado');
+      l_estado_predicciones := CASE l_estado
+                                 WHEN 'F' THEN
+                                  'L' --Liquidado
+                                 ELSE
+                                  'P' --Pendiente
+                               END;
     
       IF l_estado NOT IN ('F', 'S', 'J') THEN
         -- FINALIZADO O SUSPENDIDO
@@ -143,6 +150,7 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
            goles_club_local,
            goles_club_visitante,
            estado,
+           estado_predicciones,
            id_importacion)
         VALUES
           ('PRI-APE20', --k_sistema.f_torneo, --TODO: obtener
@@ -155,6 +163,7 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
            l_goleslocal,
            l_golesvisitante,
            l_estado,
+           l_estado_predicciones,
            l_id)
         RETURNING id_partido INTO rw_partido.id_partido;
       END IF;
