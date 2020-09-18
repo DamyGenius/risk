@@ -113,6 +113,7 @@ prompt
 @@tables/t_datos.tab
 @@tables/t_archivo_definiciones.tab
 @@tables/t_archivos.tab
+@@tables/t_migraciones.tab
 
 @@tables/t_divisiones.tab
 @@tables/t_clubes.tab
