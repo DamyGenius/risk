@@ -30,7 +30,7 @@ CREATE OR REPLACE PACKAGE k_trabajo IS
   -------------------------------------------------------------------------------
   */
 
-  -- C�digos de respuesta
+  -- Códigos de respuesta
   c_ok                      CONSTANT VARCHAR2(10) := '0';
   c_trabajo_no_implementado CONSTANT VARCHAR2(10) := 'tra0001';
   c_error_parametro         CONSTANT VARCHAR2(10) := 'tra0002';
@@ -47,7 +47,7 @@ CREATE OR REPLACE PACKAGE k_trabajo IS
   PRAGMA EXCEPTION_INIT(ex_trabajo_no_existe, -27476);
   PRAGMA EXCEPTION_INIT(ex_trabajo_ya_existe, -27477);
 
-  -- C�digos de trabajos del sistema
+  -- Códigos de trabajos del sistema
   c_actualizacion_partidos CONSTANT NUMBER(15) := 54;
   c_cierre_predicciones    CONSTANT NUMBER(15) := 55;
   c_partido_en_juego       CONSTANT NUMBER(15) := 56;
@@ -64,7 +64,7 @@ CREATE OR REPLACE PACKAGE k_trabajo IS
                             i_fecha_fin            IN TIMESTAMP WITH TIME ZONE DEFAULT NULL);
 
   -- Edita un trabajo en el sistema
-  -- Edici�n de la acci�n del trabajo no implementada
+  -- Edición de la acción del trabajo no implementada
   -- %param
   PROCEDURE p_editar_trabajo(i_id_trabajo           IN NUMBER,
                              i_parametros           IN CLOB DEFAULT NULL,
@@ -73,7 +73,7 @@ CREATE OR REPLACE PACKAGE k_trabajo IS
                              i_fecha_fin            IN TIMESTAMP WITH TIME ZONE DEFAULT NULL);
 
   -- Crea o edita un trabajo en el sistema
-  -- Edici�n de la acci�n del trabajo no implementada
+  -- Edición de la acción del trabajo no implementada
   -- %param
   PROCEDURE p_crear_o_editar_trabajo(i_id_trabajo           IN NUMBER,
                                      i_parametros           IN CLOB DEFAULT NULL,
@@ -135,7 +135,7 @@ CREATE OR REPLACE PACKAGE BODY k_trabajo IS
         RAISE ex_trabajo_no_implementado;
     END;
   
-    -- Obtener par�metros del trabajo
+    -- Obtener parámetros del trabajo
     BEGIN
       l_prms := k_operacion.f_procesar_parametros(i_id_trabajo,
                                                   i_parametros);
@@ -144,7 +144,7 @@ CREATE OR REPLACE PACKAGE BODY k_trabajo IS
         RAISE ex_error_parametro;
     END;
   
-    -- Procesar par�metros del trabajo
+    -- Procesar parámetros del trabajo
     DECLARE
       i PLS_INTEGER;
     BEGIN
@@ -222,7 +222,7 @@ CREATE OR REPLACE PACKAGE BODY k_trabajo IS
     END;
   
     IF i_parametros IS NOT NULL THEN
-      -- Obtener par�metros del trabajo
+      -- Obtener parámetros del trabajo
       BEGIN
         l_prms := k_operacion.f_procesar_parametros(i_id_trabajo,
                                                     i_parametros);
@@ -231,7 +231,7 @@ CREATE OR REPLACE PACKAGE BODY k_trabajo IS
           RAISE ex_error_parametro;
       END;
     
-      -- Procesar par�metros del trabajo
+      -- Procesar parámetros del trabajo
       DECLARE
         i PLS_INTEGER;
       BEGIN
@@ -260,7 +260,7 @@ CREATE OR REPLACE PACKAGE BODY k_trabajo IS
                                    VALUE     => l_fecha_inicio);
     END IF;
   
-    -- Editar int�rvalo de repetici�n del trabajo
+    -- Editar intérvalo de repetición del trabajo
     IF i_intervalo_repeticion IS NOT NULL THEN
       dbms_scheduler.set_attribute(NAME      => l_nombre_trabajo,
                                    attribute => 'repeat_interval',
@@ -322,7 +322,7 @@ CREATE OR REPLACE PACKAGE BODY k_trabajo IS
     END;
   
     IF i_parametros IS NOT NULL THEN
-      -- Obtener par�metros del trabajo
+      -- Obtener parámetros del trabajo
       BEGIN
         l_prms := k_operacion.f_procesar_parametros(i_id_trabajo,
                                                     i_parametros);
@@ -331,7 +331,7 @@ CREATE OR REPLACE PACKAGE BODY k_trabajo IS
           RAISE ex_error_parametro;
       END;
     
-      -- Procesar par�metros del trabajo
+      -- Procesar parámetros del trabajo
       DECLARE
         i PLS_INTEGER;
       BEGIN

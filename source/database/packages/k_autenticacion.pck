@@ -229,7 +229,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
       END LOOP;
       IF l_can_repeticiones > 2 THEN
         raise_application_error(-20000,
-                                'La clave no puede contener m�s de 2 caracteres iguales');
+                                'La clave no puede contener más de 2 caracteres iguales');
       END IF;
     END LOOP;
   
@@ -254,17 +254,17 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     -- Valida la cantidad de letras mayusculas
     IF l_can_letras_may = 0 THEN
       raise_application_error(-20000,
-                              'La clave debe contener al menos 1 letra may�scula');
+                              'La clave debe contener al menos 1 letra mayúscula');
     END IF;
     -- Valida la cantidad de letras minusculas
     IF l_can_letras_min = 0 THEN
       raise_application_error(-20000,
-                              'La clave debe contener al menos 1 letra min�scula');
+                              'La clave debe contener al menos 1 letra minúscula');
     END IF;
     -- Valida la cantidad de numeros
     IF l_can_numeros = 0 THEN
       raise_application_error(-20000,
-                              'La clave debe contener al menos 1 n�mero');
+                              'La clave debe contener al menos 1 número');
     END IF;
     -- Valida la cantidad de caracteres especiales
     IF l_can_otros = 0 THEN
@@ -324,7 +324,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     VALUES
       (i_alias,
        l_id_persona,
-       CASE l_confirmacion_activa WHEN 'S' THEN 'P' -- PENDIENTE DE ACTIVACI�N
+       CASE l_confirmacion_activa WHEN 'S' THEN 'P' -- PENDIENTE DE ACTIVACIÓN
        ELSE 'A' -- ACTIVO
        END,
        i_direccion_correo,
@@ -346,21 +346,21 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     p_registrar_clave(i_alias, i_clave, c_clave_acceso);
   
     IF l_confirmacion_activa = 'S' THEN
-      -- Env�a correo de verificaci�n
-      l_body := k_mensajeria.f_correo_html('Para activar tu cuenta, por favor verifica tu direcci�n de correo.' ||
+      -- Envía correo de verificación
+      l_body := k_mensajeria.f_correo_html('Para activar tu cuenta, por favor verifica tu dirección de correo.' ||
                                            utl_tcp.crlf ||
-                                           'Tu cuenta no ser� creada hasta que tu direcci�n de correo sea confirmada.' ||
+                                           'Tu cuenta no será creada hasta que tu dirección de correo sea confirmada.' ||
                                            utl_tcp.crlf ||
-                                           'Confirma tu direcci�n de correo con el bot�n o con la siguiente URL:' ||
+                                           'Confirma tu dirección de correo con el botón o con la siguiente URL:' ||
                                            utl_tcp.crlf ||
                                            f_generar_url_activacion(i_alias),
-                                           'Confirmaci�n de correo',
-                                           'Confirmaci�n de correo',
+                                           'Confirmación de correo',
+                                           'Confirmación de correo',
                                            NULL,
                                            'Confirmar',
                                            f_generar_url_activacion(i_alias));
     
-      IF k_mensajeria.f_enviar_correo('Confirmaci�n de correo',
+      IF k_mensajeria.f_enviar_correo('Confirmación de correo',
                                       l_body,
                                       NULL,
                                       i_direccion_correo,
@@ -370,7 +370,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
                                       k_mensajeria.c_prioridad_importante) <>
          k_mensajeria.c_ok THEN
         raise_application_error(-20000,
-                                'Error al enviar correo de verificaci�n');
+                                'Error al enviar correo de verificación');
       END IF;
     END IF;
   EXCEPTION
@@ -514,12 +514,12 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     END IF;*/
   EXCEPTION
     WHEN k_usuario.ex_usuario_inexistente THEN
-      raise_application_error(-20000, 'Credenciales inv�lidas');
+      raise_application_error(-20000, 'Credenciales inválidas');
     WHEN ex_credenciales_invalidas THEN
-      raise_application_error(-20000, 'Credenciales inv�lidas');
+      raise_application_error(-20000, 'Credenciales inválidas');
     WHEN OTHERS THEN
       lp_registrar_intento_fallido(l_id_usuario, i_tipo_clave);
-      raise_application_error(-20000, 'Credenciales inv�lidas');
+      raise_application_error(-20000, 'Credenciales inválidas');
   END;
 
   FUNCTION f_validar_credenciales(i_usuario    IN VARCHAR2,
@@ -575,7 +575,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
                                    i_tipo_clave IN CHAR DEFAULT 'A') IS
   BEGIN
     IF NOT f_validar_credenciales(i_usuario, i_clave, i_tipo_clave) THEN
-      raise_application_error(-20000, 'Credenciales inv�lidas');
+      raise_application_error(-20000, 'Credenciales inválidas');
     END IF;
   END;
 
@@ -596,7 +596,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
   BEGIN
     -- Valida aplicacion
     IF i_id_aplicacion IS NULL THEN
-      raise_application_error(-20000, 'Aplicaci�n inexistente o inactiva');
+      raise_application_error(-20000, 'Aplicación inexistente o inactiva');
     END IF;
   
     -- Busca usuario
@@ -645,7 +645,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
       IF l_cantidad >=
          to_number(k_util.f_valor_parametro('CANTIDAD_MAXIMA_SESIONES_USUARIO')) THEN
         raise_application_error(-20000,
-                                'Usuario ha alcanzado la cantidad m�xima de sesiones activas');
+                                'Usuario ha alcanzado la cantidad máxima de sesiones activas');
       END IF;
     
     END IF;
@@ -684,7 +684,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     RETURNING id_sesion INTO l_id_sesion;
   
     IF l_id_dispositivo IS NOT NULL THEN
-      -- Inserta o actualiza una suscripci�n por el usuario en el dispositivo
+      -- Inserta o actualiza una suscripción por el usuario en el dispositivo
       k_dispositivo.p_suscribir_notificacion(l_id_dispositivo,
                                              k_dispositivo.c_suscripcion_usuario || '_' ||
                                              to_char(l_id_usuario));
@@ -708,7 +708,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
   BEGIN
     -- Valida aplicacion
     IF i_id_aplicacion IS NULL THEN
-      raise_application_error(-20000, 'Aplicaci�n inexistente o inactiva');
+      raise_application_error(-20000, 'Aplicación inexistente o inactiva');
     END IF;
   
     -- Busca sesion
@@ -742,7 +742,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     RETURN l_id_sesion;
   EXCEPTION
     WHEN ex_tokens_invalidos THEN
-      raise_application_error(-20000, 'Tokens inv�lidos');
+      raise_application_error(-20000, 'Tokens inválidos');
   END;
 
   FUNCTION f_generar_url_activacion(i_alias IN VARCHAR2) RETURN VARCHAR2 IS

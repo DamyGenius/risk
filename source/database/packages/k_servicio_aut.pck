@@ -186,12 +186,12 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
       WHEN dup_val_on_index THEN
         k_servicio.p_respuesta_error(l_rsp,
                                      'aut0006',
-                                     'Usuario ya pertenece al grupo o tiene una invitaci�n pendiente');
+                                     'Usuario ya pertenece al grupo o tiene una invitación pendiente');
         RAISE k_servicio.ex_error_general;
       WHEN OTHERS THEN
         k_servicio.p_respuesta_error(l_rsp,
                                      'aut0007',
-                                     'Error al crear invitaci�n');
+                                     'Error al crear invitación');
         RAISE k_servicio.ex_error_general;
     END;
   
@@ -302,7 +302,7 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
                                                                                     'tipo_clave')) THEN
       k_servicio.p_respuesta_error(l_rsp,
                                    'aut0003',
-                                   'Credenciales inv�lidas');
+                                   'Credenciales inválidas');
       RAISE k_servicio.ex_error_general;
     END IF;
   
@@ -654,7 +654,7 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
     -- Inicializa respuesta
     l_rsp := NEW y_respuesta();
   
-    l_rsp.lugar := 'Validando par�metros';
+    l_rsp.lugar := 'Validando parámetros';
     k_servicio.p_validar_parametro(l_rsp,
                                    k_operacion.f_valor_parametro_string(i_parametros,
                                                                         'token_dispositivo') IS NOT NULL,
@@ -694,7 +694,7 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
                                                                         'tipo_token') IS NOT NULL,
                                    'Debe ingresar tipo_token');
   
-    l_rsp.lugar      := 'Obteniendo tiempo de expiraci�n';
+    l_rsp.lugar      := 'Obteniendo tiempo de expiración';
     l_dato.contenido := to_char(k_sesion.f_tiempo_expiracion_token(k_sistema.f_valor_parametro_string(k_sistema.c_id_aplicacion),
                                                                    k_operacion.f_valor_parametro_string(i_parametros,
                                                                                                         'tipo_token')));
@@ -702,7 +702,7 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
     IF l_dato.contenido IS NULL THEN
       k_servicio.p_respuesta_error(l_rsp,
                                    'aut0003',
-                                   'Error al obtener tiempo de expiraci�n');
+                                   'Error al obtener tiempo de expiración');
       RAISE k_servicio.ex_error_general;
     END IF;
   
@@ -729,8 +729,8 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
     l_rsp  := NEW y_respuesta();
     l_dato := NEW y_dato();
   
-    l_rsp.lugar := 'Validando par�metros';
-    /* TODO: text="Implementar validaci�n de par�metros" */
+    l_rsp.lugar := 'Validando parámetros';
+    /* TODO: text="Implementar validación de parámetros" */
     k_servicio.p_validar_parametro(l_rsp,
                                    k_operacion.f_valor_parametro_string(i_parametros,
                                                                         'usuario_antiguo') IS NOT NULL,
@@ -788,7 +788,7 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
                                    k_operacion.f_valor_parametro_string(i_parametros,
                                                                         'tipo_mensajeria') IN
                                    ('M', 'S', 'P'),
-                                   'Valor no v�lido para tipo_mensajeria');
+                                   'Valor no válido para tipo_mensajeria');
   
     k_servicio.p_validar_parametro(l_rsp,
                                    k_operacion.f_valor_parametro_string(i_parametros,
@@ -801,18 +801,18 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
     l_rsp.lugar := 'Generando OTP';
     l_otp       := oos_util_totp.generate_otp(l_secret);
   
-    l_rsp.lugar := 'Enviando mensajer�a';
+    l_rsp.lugar := 'Enviando mensajería';
     CASE
      k_operacion.f_valor_parametro_string(i_parametros, 'tipo_mensajeria')
     
       WHEN 'M' THEN
         -- Mail
-        l_body := k_mensajeria.f_correo_html('Tu clave de validaci�n es ' ||
+        l_body := k_mensajeria.f_correo_html('Tu clave de validación es ' ||
                                              l_otp,
-                                             'Clave de validaci�n',
-                                             'Clave de validaci�n');
+                                             'Clave de validación',
+                                             'Clave de validación');
       
-        IF k_mensajeria.f_enviar_correo('Clave de validaci�n',
+        IF k_mensajeria.f_enviar_correo('Clave de validación',
                                         l_body,
                                         NULL,
                                         k_operacion.f_valor_parametro_string(i_parametros,
@@ -830,7 +830,7 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
       
       WHEN 'S' THEN
         -- SMS
-        IF k_mensajeria.f_enviar_mensaje('Tu clave de validaci�n es ' ||
+        IF k_mensajeria.f_enviar_mensaje('Tu clave de validación es ' ||
                                          l_otp,
                                          NULL,
                                          k_operacion.f_valor_parametro_string(i_parametros,
@@ -890,12 +890,12 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
                                     k_operacion.f_valor_parametro_number(i_parametros,
                                                                          'otp'),
                                     to_number(k_util.f_valor_parametro('TIEMPO_TOLERANCIA_VALIDAR_OTP'))) <> 1 THEN
-        k_servicio.p_respuesta_error(l_rsp, 'aut0001', 'OTP inv�lido');
+        k_servicio.p_respuesta_error(l_rsp, 'aut0001', 'OTP inválido');
         RAISE k_servicio.ex_error_general;
       END IF;
     EXCEPTION
       WHEN OTHERS THEN
-        k_servicio.p_respuesta_error(l_rsp, 'aut0002', 'OTP inv�lido');
+        k_servicio.p_respuesta_error(l_rsp, 'aut0002', 'OTP inválido');
         RAISE k_servicio.ex_error_general;
     END;
   
