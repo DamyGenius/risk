@@ -56,7 +56,7 @@ SOFTWARE.
   roles y_objetos,
 
 /**
-Constructor del objeto sin par�metros.
+Constructor del objeto sin parámetros.
 
 %author jtsoya539 30/3/2020 10:08:08
 %return Objeto del tipo y_usuario.
