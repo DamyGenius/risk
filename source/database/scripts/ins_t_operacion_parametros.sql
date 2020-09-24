@@ -378,6 +378,15 @@ insert into t_operacion_parametros (ID_OPERACION, NOMBRE, ORDEN, ACTIVO, TIPO_DA
 values (49, 'PAGINA_PARAMETROS', 10, 'S', 'O', 'Y_PAGINA_PARAMETROS', null, 'N', null, null, null);
 
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
+values (430, 'TOKEN_DISPOSITIVO', 1, 'S', 'S', null, null, 'S', null, null, null);
+
+insert into t_operacion_parametros (ID_OPERACION, NOMBRE, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
+values (430, 'LATITUD', 2, 'S', 'N', null, null, 'S', null, null, null);
+
+insert into t_operacion_parametros (ID_OPERACION, NOMBRE, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
+values (430, 'LONGITUD', 3, 'S', 'N', null, null, 'S', null, null, null);
+
+insert into t_operacion_parametros (ID_OPERACION, NOMBRE, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
 values (50, 'SERVICIO', 1, 'S', 'S', null, null, 'S', null, null, null);
 
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
