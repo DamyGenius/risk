@@ -394,12 +394,11 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
                                          i_parametros => '{"id_partido":"' ||
                                                          i_id_partido || '"}');
       -- Notifica del partido en juego a todos los dispositivos suscriptos
-      l_result := k_mensajeria.f_enviar_notificacion(i_titulo      => '¡Partido en juego!',
-                                                     i_contenido   => 'El partido ' ||
-                                                                      l_club_local ||
+      l_result := k_mensajeria.f_enviar_notificacion(i_titulo      => l_club_local ||
                                                                       ' vs. ' ||
-                                                                      l_club_visitante ||
-                                                                      ' está comenzando.',
+                                                                      l_club_visitante,
+                                                     i_contenido   => 'El partido ' ||
+                                                                      'está comenzando.',
                                                      i_suscripcion => 'default');
     
     END IF;
@@ -474,12 +473,11 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
                                    i_parametros => '{"id_partido":"' ||
                                                    i_id_partido || '"}');
       -- Notifica del partido finalizado a todos los dispositivos suscriptos
-      l_result := k_mensajeria.f_enviar_notificacion(i_titulo      => '¡Partido finalizado!',
-                                                     i_contenido   => 'El partido ' ||
-                                                                      l_club_local ||
+      l_result := k_mensajeria.f_enviar_notificacion(i_titulo      => l_club_local ||
                                                                       ' vs. ' ||
-                                                                      l_club_visitante ||
-                                                                      ' terminó ' ||
+                                                                      l_club_visitante,
+                                                     i_contenido   => 'El partido ' ||
+                                                                      'finalizó ' ||
                                                                       l_goles_local || '-' ||
                                                                       l_goles_visitante || '.',
                                                      i_suscripcion => 'default');
