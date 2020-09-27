@@ -32,13 +32,34 @@ CREATE OR REPLACE PACKAGE k_importacion_fan IS
 
   g_salida CLOB := ''; -- Salida del output
 
+  -- Función que retorna el estado de la importación de partidos
+  -- E-En Ejecución/D-Detenido
+  FUNCTION f_estado_importacion_partidos RETURN VARCHAR2;
+
+  -- Procedimiento de importación de partidos
   PROCEDURE p_importar_partidos(i_partidos IN CLOB);
 
+  -- Procedimiento de importación de partidos
   PROCEDURE p_importar_partidos;
 
 END;
 /
 CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
+
+  -- Procedimiento interno para actualizar parámetros de forma autónoma
+  PROCEDURE lp_actualizar_valor_parametro(i_id_parametro IN VARCHAR2,
+                                          i_valor        IN VARCHAR2) IS
+    PRAGMA AUTONOMOUS_TRANSACTION;
+  BEGIN
+    k_util.p_actualizar_valor_parametro(i_id_parametro, i_valor);
+    COMMIT;
+  END;
+
+  -- Procedimiento interno para actualizar estado de importación de partidos
+  PROCEDURE lp_actualizar_importacion_partido(i_valor IN VARCHAR2) IS
+  BEGIN
+    lp_actualizar_valor_parametro('ESTADO_IMPORTACION_PARTIDOS', i_valor);
+  END;
 
   FUNCTION lf_buscar_partido(i_id_importacion IN NUMBER)
     RETURN t_partidos%ROWTYPE IS
@@ -65,6 +86,11 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
   EXCEPTION
     WHEN OTHERS THEN
       RETURN NULL;
+  END;
+
+  FUNCTION f_estado_importacion_partidos RETURN VARCHAR2 IS
+  BEGIN
+    RETURN k_util.f_valor_parametro('ESTADO_IMPORTACION_PARTIDOS');
   END;
 
   PROCEDURE p_importar_partidos(i_partidos IN CLOB) IS
@@ -175,6 +201,13 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
     l_ok    VARCHAR2(1);
     l_datos CLOB;
   BEGIN
+    -- verificamos si ya existe una importación en ejecución
+    IF f_estado_importacion_partidos = 'E' THEN
+      RETURN;
+    ELSE
+      lp_actualizar_importacion_partido('E');
+    END IF;
+  
     -- obtenemos los datos a través del WS
     k_datos_fan.p_fixture(o_ok => l_ok, o_response => l_datos);
   
@@ -186,6 +219,13 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
                               'Error en k_datos_fan.p_fixture: ' || l_datos);
     END IF;
     COMMIT;
+    lp_actualizar_importacion_partido('D');
+  
+  EXCEPTION
+    WHEN OTHERS THEN
+      ROLLBACK;
+      lp_actualizar_importacion_partido('D');
+      raise_application_error(-20502, SQLERRM);
   END;
 
 BEGIN

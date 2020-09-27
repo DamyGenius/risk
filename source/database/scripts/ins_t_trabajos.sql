@@ -17,6 +17,10 @@ END;', null, -60, null, null, 'Trabajo de cierre de predicciones de partido prog
 insert into t_trabajos (ID_TRABAJO, TIPO, ACCION, FECHA_INICIO, TIEMPO_INICIO, INTERVALO_REPETICION, FECHA_FIN, COMENTARIOS, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
 values (56, 'PLSQL_BLOCK', 'BEGIN
   k_importacion_fan.p_importar_partidos;
+  LOOP
+    EXIT WHEN nvl(k_importacion_fan.f_estado_importacion_partidos, ''D'') <> ''E'';
+    sys.dbms_session.sleep(1);
+  END LOOP;
   k_puntajes_fan.p_iniciar_cierre_partido_en_juego(&ID_PARTIDO);
 END;', null, 900, 'FREQ=MINUTELY; INTERVAL=15;', null, 'Trabajo de actualización de partido en juego', null, null);
 

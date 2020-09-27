@@ -67,4 +67,7 @@ values ('REGEXP_VALIDAR_ALIAS_USUARIO', 'Expresión Regular para validación de al
 insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR)
 values ('TIEMPO_TOLERANCIA_VALIDAR_OTP', 'Tiempo de tolerancia para validación de OTP en segundos', '120');
 
+insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR)
+values ('ESTADO_IMPORTACION_PARTIDOS', 'Indica el estado de la importación de Partidos de Fantasy (E-En Ejecución/D-Detenido)', 'D');
+
 prompt Done.
