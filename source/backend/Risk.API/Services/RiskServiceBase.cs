@@ -43,6 +43,7 @@ namespace Risk.API.Services
         protected readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IDbConnectionFactory _dbConnectionFactory;
         private const string SQL_PROCESAR_SERVICIO = "K_SERVICIO.F_PROCESAR_SERVICIO";
+        private const string SQL_PROCESAR_REPORTE = "K_REPORTE.F_PROCESAR_REPORTE";
         private const string RESPUESTA_ERROR_BASE_DATOS = "{\"codigo\":\"api9999\",\"mensaje\":\"Servicio no disponible\",\"mensaje_bd\":null,\"lugar\":null,\"datos\":null}";
 
         public RiskServiceBase(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDbConnectionFactory dbConnectionFactory)
@@ -76,10 +77,10 @@ namespace Risk.API.Services
             return ctx.ToString(Formatting.None);
         }
 
-        public string ProcesarServicio(int idServicio, string parametros, [CallerFilePath] string callerFilePath = "", [CallerMemberName] string callerMemberName = "")
+        public string ProcesarOperacion(string tipo, string nombre, string dominio, string parametros, [CallerFilePath] string callerFilePath = "", [CallerMemberName] string callerMemberName = "")
         {
             string respuesta = string.Empty;
-            if (idServicio > 0)
+            if (tipo != null && nombre != null && dominio != null)
             {
                 using (OracleConnection con = (OracleConnection)_dbConnectionFactory.CreateConnection())
                 {
@@ -99,7 +100,18 @@ namespace Risk.API.Services
                         using (OracleCommand cmd = con.CreateCommand())
                         {
                             cmd.CommandType = CommandType.StoredProcedure;
-                            cmd.CommandText = SQL_PROCESAR_SERVICIO;
+                            switch (tipo)
+                            {
+                                case "S":
+                                    cmd.CommandText = SQL_PROCESAR_SERVICIO;
+                                    break;
+                                case "R":
+                                    cmd.CommandText = SQL_PROCESAR_REPORTE;
+                                    break;
+                                default:
+                                    cmd.CommandText = string.Empty;
+                                    break;
+                            }
                             cmd.BindByName = true;
 
                             OracleClob result = new OracleClob(con);
@@ -112,7 +124,8 @@ namespace Risk.API.Services
                             iContexto.Write(contexto.ToCharArray(), 0, contexto.Length);
 
                             cmd.Parameters.Add("result", OracleDbType.Clob, result, ParameterDirection.ReturnValue);
-                            cmd.Parameters.Add("i_id_servicio", OracleDbType.Int32, idServicio, ParameterDirection.Input);
+                            cmd.Parameters.Add("i_nombre", OracleDbType.Varchar2, nombre, ParameterDirection.Input);
+                            cmd.Parameters.Add("i_dominio", OracleDbType.Varchar2, dominio, ParameterDirection.Input);
                             cmd.Parameters.Add("i_parametros", OracleDbType.Clob, iParametros, ParameterDirection.Input);
                             cmd.Parameters.Add("i_contexto", OracleDbType.Clob, iContexto, ParameterDirection.Input);
 
