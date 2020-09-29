@@ -1,4 +1,4 @@
-ï»¿CREATE OR REPLACE PACKAGE k_servicio_aut IS
+CREATE OR REPLACE PACKAGE k_servicio_aut IS
 
   /**
   Agrupa operaciones relacionadas con los Servicios Web del dominio AUT
@@ -689,13 +689,13 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_aut IS
     -- Inicializa respuesta
     l_rsp := NEW y_respuesta();
   
-    l_rsp.lugar := 'Validando parámetros';
+    l_rsp.lugar := 'Validando parÃ¡metros';
     k_servicio.p_validar_parametro(l_rsp,
                                    k_operacion.f_valor_parametro_string(i_parametros,
                                                                         'token_dispositivo') IS NOT NULL,
                                    'Debe ingresar token_dispositivo');
   
-    l_rsp.lugar := 'Registrando ubicación del dispositivo';
+    l_rsp.lugar := 'Registrando ubicaciÃ³n del dispositivo';
     k_dispositivo.p_registrar_ubicacion(k_dispositivo.f_id_dispositivo(k_operacion.f_valor_parametro_string(i_parametros,
                                                                                                             'token_dispositivo')),
                                         k_operacion.f_valor_parametro_number(i_parametros,

@@ -127,13 +127,6 @@ prompt
 @@tables/t_grupo_usuarios.tab
 
 prompt
-prompt Creando vistas...
-prompt -----------------------------------
-prompt
-
-@@views/v_ranking_usuarios.sql
-
-prompt
 prompt Creando types...
 prompt -----------------------------------
 prompt
@@ -198,6 +191,13 @@ prompt
 @@packages/k_datos_fan.pck
 @@packages/k_importacion_fan.pck
 @@packages/k_puntajes_fan.pck
+
+prompt
+prompt Creando vistas...
+prompt -----------------------------------
+prompt
+
+@@views/v_ranking_usuarios.sql
 
 prompt
 prompt Creando triggers...

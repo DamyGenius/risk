@@ -46,6 +46,12 @@ prompt ===================================
 prompt
 
 prompt
+prompt Borrando vistas...
+prompt -----------------------------------
+prompt
+drop view v_ranking_usuarios;
+
+prompt
 prompt Borrando paquetes...
 prompt -----------------------------------
 prompt
@@ -110,12 +116,6 @@ drop type y_archivo force;
 drop type y_dato force;
 drop type y_objetos force;
 drop type y_objeto force;
-
-prompt
-prompt Borrando vistas...
-prompt -----------------------------------
-prompt
-drop view v_ranking_usuarios;
 
 prompt
 prompt Borrando tablas...
