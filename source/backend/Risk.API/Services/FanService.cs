@@ -34,18 +34,19 @@ namespace Risk.API.Services
 {
     public class FanService : RiskServiceBase, IFanService
     {
-        private const int ID_LISTAR_CLUBES = 40;
-        private const int ID_REGISTRAR_GRUPO = 41;
-        private const int ID_REALIZAR_PREDICCION = 43;
-        private const int ID_LISTAR_PARTIDOS = 44;
-        private const int ID_LISTAR_PREDICCIONES_PARTIDOS = 45;
-        private const int ID_EDITAR_GRUPO = 46;
-        private const int ID_LISTAR_JORNADAS = 47;
-        private const int ID_DATOS_GRUPO = 48;
-        private const int ID_LISTAR_GRUPOS = 49;
-        private const int ID_ABANDONAR_GRUPO = 51;
-        private const int ID_INVITAR_USUARIO = 52;
-        private const int ID_RESPONDER_INVITACION = 53;
+        private const string DOMINIO_OPERACION = "FAN";
+        private const string NOMBRE_LISTAR_CLUBES = "LISTAR_CLUBES";
+        private const string NOMBRE_REGISTRAR_GRUPO = "REGISTRAR_GRUPO";
+        private const string NOMBRE_REALIZAR_PREDICCION = "REALIZAR_PREDICCION";
+        private const string NOMBRE_LISTAR_PARTIDOS = "LISTAR_PARTIDOS";
+        private const string NOMBRE_LISTAR_PREDICCIONES_PARTIDOS = "LISTAR_PREDICCIONES_PARTIDOS";
+        private const string NOMBRE_EDITAR_GRUPO = "EDITAR_GRUPO";
+        private const string NOMBRE_LISTAR_JORNADAS = "LISTAR_JORNADAS";
+        private const string NOMBRE_DATOS_GRUPO = "DATOS_GRUPO";
+        private const string NOMBRE_LISTAR_GRUPOS = "LISTAR_GRUPOS";
+        private const string NOMBRE_ABANDONAR_GRUPO = "ABANDONAR_GRUPO";
+        private const string NOMBRE_INVITAR_USUARIO = "INVITAR_USUARIO";
+        private const string NOMBRE_RESPONDER_INVITACION = "RESPONDER_INVITACION";
 
         public FanService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDbConnectionFactory dbConnectionFactory)
             : base(configuration, httpContextAccessor, dbConnectionFactory)
@@ -58,7 +59,10 @@ namespace Risk.API.Services
             prms.Add("id_club", idClub);
             prms.Add("id_division", idDivision);
 
-            string rsp = base.ProcesarServicio(ID_LISTAR_CLUBES, prms.ToString(Formatting.None));
+            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+                NOMBRE_LISTAR_CLUBES,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YPagina<YClub>>>(rsp);
 
             Pagina<Club> datos = null;
@@ -77,7 +81,10 @@ namespace Risk.API.Services
             prms.Add("torneo", torneo);
             prms.Add("estado", estado);
 
-            string rsp = base.ProcesarServicio(ID_LISTAR_PARTIDOS, prms.ToString(Formatting.None));
+            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+                NOMBRE_LISTAR_PARTIDOS,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YPagina<YPartido>>>(rsp);
 
             Pagina<Partido> datos = null;
@@ -103,7 +110,10 @@ namespace Risk.API.Services
             }
             prms.Add("orden", orden.ToString());
 
-            string rsp = base.ProcesarServicio(ID_LISTAR_PREDICCIONES_PARTIDOS, prms.ToString(Formatting.None));
+            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+                NOMBRE_LISTAR_PREDICCIONES_PARTIDOS,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YPagina<YPrediccion>>>(rsp);
 
             Pagina<Prediccion> datos = null;
@@ -124,7 +134,10 @@ namespace Risk.API.Services
             prms.Add("usuario", usuario);
             prms.Add("incluir_partidos", incluirPartidos);
 
-            string rsp = base.ProcesarServicio(ID_LISTAR_JORNADAS, prms.ToString(Formatting.None));
+            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+                NOMBRE_LISTAR_JORNADAS,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YPagina<YJornada<YPrediccion>>>>(rsp);
 
             Pagina<Jornada<Prediccion>> datos = null;
@@ -145,7 +158,10 @@ namespace Risk.API.Services
             prms.Add("goles_club_visitante", golesClubVisitante);
             prms.Add("id_sincronizacion", idSincronizacion);
 
-            string rsp = base.ProcesarServicio(ID_REALIZAR_PREDICCION, prms.ToString(Formatting.None));
+            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+                NOMBRE_REALIZAR_PREDICCION,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
 
             return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
@@ -160,7 +176,10 @@ namespace Risk.API.Services
             prms.Add("todos_invitan", todosInvitan);
             prms.Add("id_club", idClub);
 
-            string rsp = base.ProcesarServicio(ID_REGISTRAR_GRUPO, prms.ToString(Formatting.None));
+            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+                NOMBRE_REGISTRAR_GRUPO,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YGrupo>>(rsp);
 
             return EntitiesMapper.GetRespuestaFromEntity<Grupo, YGrupo>(entityRsp, EntitiesMapper.GetGrupoFromEntity(entityRsp.Datos));
@@ -176,7 +195,10 @@ namespace Risk.API.Services
             prms.Add("todos_invitan", todosInvitan);
             prms.Add("id_club", idClub);
 
-            string rsp = base.ProcesarServicio(ID_EDITAR_GRUPO, prms.ToString(Formatting.None));
+            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+                NOMBRE_EDITAR_GRUPO,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
 
             return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
@@ -187,7 +209,10 @@ namespace Risk.API.Services
             JObject prms = new JObject();
             prms.Add("id_grupo", idGrupo);
 
-            string rsp = base.ProcesarServicio(ID_DATOS_GRUPO, prms.ToString(Formatting.None));
+            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+                NOMBRE_DATOS_GRUPO,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YGrupo>>(rsp);
 
             return EntitiesMapper.GetRespuestaFromEntity<Grupo, YGrupo>(entityRsp, EntitiesMapper.GetGrupoFromEntity(entityRsp.Datos));
@@ -206,7 +231,10 @@ namespace Risk.API.Services
                 prms.Add("pagina_parametros", JToken.FromObject(ModelsMapper.GetYPaginaParametrosFromModel(paginaParametros)));
             }
 
-            string rsp = base.ProcesarServicio(ID_LISTAR_GRUPOS, prms.ToString(Formatting.None));
+            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+                NOMBRE_LISTAR_GRUPOS,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YPagina<YGrupo>>>(rsp);
 
             Pagina<Grupo> datos = null;
@@ -223,7 +251,10 @@ namespace Risk.API.Services
             JObject prms = new JObject();
             prms.Add("id_grupo", idGrupo);
 
-            string rsp = base.ProcesarServicio(ID_ABANDONAR_GRUPO, prms.ToString(Formatting.None));
+            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+                NOMBRE_ABANDONAR_GRUPO,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
 
             return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
@@ -235,7 +266,10 @@ namespace Risk.API.Services
             prms.Add("id_grupo", idGrupo);
             prms.Add("usuario", usuario);
 
-            string rsp = base.ProcesarServicio(ID_INVITAR_USUARIO, prms.ToString(Formatting.None));
+            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+                NOMBRE_INVITAR_USUARIO,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
 
             return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
@@ -247,7 +281,10 @@ namespace Risk.API.Services
             prms.Add("id_grupo", idGrupo);
             prms.Add("respuesta", respuestaInvitacion.ToString());
 
-            string rsp = base.ProcesarServicio(ID_RESPONDER_INVITACION, prms.ToString(Formatting.None));
+            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+                NOMBRE_RESPONDER_INVITACION,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
 
             return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
