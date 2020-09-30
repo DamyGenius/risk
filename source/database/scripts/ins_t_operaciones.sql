@@ -48,6 +48,9 @@ insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE,
 values (14, 'S', 'REGISTRAR_DISPOSITIVO', 'AUT', 'S', null, '0.1.0', 'N');
 
 insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL, LOG_ACTIVO)
+values (15, 'S', 'REGISTRAR_UBICACION', 'AUT', 'S', null, '0.1.0', 'N');
+
+insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL, LOG_ACTIVO)
 values (16, 'S', 'LISTAR_PAISES', 'GEN', 'S', null, '0.1.0', 'N');
 
 insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL, LOG_ACTIVO)
@@ -144,18 +147,15 @@ insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE,
 values (53, 'S', 'RESPONDER_INVITACION', 'FAN', 'S', null, '0.1.0', 'N');
 
 insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL, LOG_ACTIVO)
-values (54, 'T', 'ACTUALIZACION_PARTIDOS', 'FAN', 'S', 'Trabajo de actualización y planificación de partidos', null, 'N');
+values (54, 'T', 'ACTUALIZACION_PARTIDOS', 'FAN', 'S', 'Trabajo de actualizaciÃ³n y planificaciÃ³n de partidos', null, 'N');
 
 insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL, LOG_ACTIVO)
 values (55, 'T', 'CIERRE_PREDICCIONES_{ID_PARTIDO}', 'FAN', 'S', 'Trabajo de cierre de predicciones de partido programado', null, 'N');
 
 insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL, LOG_ACTIVO)
-values (56, 'T', 'PARTIDO_EN_JUEGO_{ID_PARTIDO}', 'FAN', 'S', 'Trabajo de actualización de partido en juego', null, 'N');
+values (56, 'T', 'PARTIDO_EN_JUEGO_{ID_PARTIDO}', 'FAN', 'S', 'Trabajo de actualizaciÃ³n de partido en juego', null, 'N');
 
 insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL, LOG_ACTIVO)
 values (57, 'T', 'FIN_PARTIDO_{ID_PARTIDO}', 'FAN', 'S', 'Trabajo de cierre de partido en juego', null, 'N');
-
-insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL, LOG_ACTIVO)
-values (430, 'S', 'REGISTRAR_UBICACION', 'AUT', 'S', null, '0.1.0', 'N');
 
 prompt Done.
