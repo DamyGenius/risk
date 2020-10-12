@@ -24,6 +24,7 @@ SOFTWARE.
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Risk.API.Entities;
@@ -48,8 +49,8 @@ namespace Risk.API.Services
         private const string NOMBRE_INVITAR_USUARIO = "INVITAR_USUARIO";
         private const string NOMBRE_RESPONDER_INVITACION = "RESPONDER_INVITACION";
 
-        public FanService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDbConnectionFactory dbConnectionFactory)
-            : base(configuration, httpContextAccessor, dbConnectionFactory)
+        public FanService(ILogger<FanService> logger, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDbConnectionFactory dbConnectionFactory)
+            : base(logger, configuration, httpContextAccessor, dbConnectionFactory)
         {
         }
 
