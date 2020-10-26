@@ -3,11 +3,19 @@
 Bienvenido/a a la documentación del Proyecto RISK.
 
 ## Contenido
+* [Arquitectura](#arquitectura)
 * [Requerimientos](#requerimientos)
 * [Instalación](#instalación)
 * [Guía de estilo para Desarrollo](database/styleguide.md)
 * [API PL/SQL](database/plsqldoc/index.html)
 * [API Clientes de Risk.API](backend/README.md)
+
+## Arquitectura
+### General
+![Arquitectura General](architecture/Risk.png)
+
+### Mensajería
+![Arquitectura Mensajería](architecture/Msj.png)
 
 ## Requerimientos
 ### Base de Datos
@@ -21,8 +29,8 @@ Los servicios de mensajería del proyecto Risk.Msj tienen requerimientos especia
 Servicio|Requerimiento
 --------|-------------
 Mail|Cuenta de Gmail configurada con autenticación [OAuth](https://github.com/jstedfast/MailKit/blob/master/GMailOAuth2.md) o acceso de [apps menos seguras](https://www.google.com/settings/security/lesssecureapps).
-Push|Cuenta de Twilio configurada con el servicio [SMS](https://www.twilio.com/sms).
-SMS|Cuenta de Azure configurada con el servicio [Notification Hubs](https://azure.microsoft.com/es-es/services/notification-hubs/).
+Push|Cuenta de Azure configurada con el servicio [Notification Hubs](https://azure.microsoft.com/es-es/services/notification-hubs/).
+SMS|Cuenta de Twilio configurada con el servicio [SMS](https://www.twilio.com/sms).
 
 ## Instalación
 ### Base de Datos
