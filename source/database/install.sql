@@ -179,6 +179,7 @@ prompt
 @@packages/k_archivo.pck
 @@packages/k_mensajeria.pck
 @@packages/k_autenticacion.pck
+@@packages/k_autorizacion.pck
 @@packages/k_operacion.pck
 @@packages/k_servicio.pck
 @@packages/k_reporte.pck
@@ -250,6 +251,8 @@ prompt
 @@scripts/ins_t_servicios.sql
 @@scripts/ins_t_trabajos.sql
 @@scripts/ins_t_roles.sql
+@@scripts/ins_t_permisos.sql
+@@scripts/ins_t_rol_permisos.sql
 @@scripts/ins_t_paises.sql
 @@scripts/ins_t_departamentos.sql
 @@scripts/ins_t_archivo_definiciones.sql
