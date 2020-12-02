@@ -135,6 +135,7 @@ prompt
 @@types/y_dato.typ
 @@types/y_datos.typ
 @@types/y_archivo.typ
+@@types/y_archivos.typ
 @@types/y_parametro.typ
 @@types/y_parametros.typ
 @@types/y_respuesta.typ
