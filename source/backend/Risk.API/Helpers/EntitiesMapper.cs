@@ -53,6 +53,19 @@ namespace Risk.API.Helpers
             return model;
         }
 
+        public static List<Archivo> GetArchivoListFromEntity(List<YArchivo> entityList)
+        {
+            List<Archivo> modelList = new List<Archivo>();
+            if (entityList != null)
+            {
+                foreach (var item in entityList)
+                {
+                    modelList.Add(GetArchivoFromEntity(item));
+                }
+            }
+            return modelList;
+        }
+
         public static Dato GetDatoFromEntity(YDato entity)
         {
             Dato model;
@@ -163,7 +176,7 @@ namespace Risk.API.Helpers
                     TokenDispositivo = entity.TokenDispositivo,
                     NombreSistemaOperativo = entity.NombreSistemaOperativo,
                     VersionSistemaOperativo = entity.VersionSistemaOperativo,
-                    Tipo = entity.Tipo,
+                    Tipo = GetTipoDispositivoEnumFromValue(entity.Tipo),
                     NombreNavegador = entity.NombreNavegador,
                     VersionNavegador = entity.VersionNavegador,
                     TokenNotificacion = entity.TokenNotificacion,
@@ -419,7 +432,8 @@ namespace Risk.API.Helpers
                     MensajeFrom = entity.MensajeFrom,
                     MensajeReplyTo = entity.MensajeReplyTo,
                     MensajeCc = entity.MensajeCc,
-                    MensajeBcc = entity.MensajeBcc
+                    MensajeBcc = entity.MensajeBcc,
+                    Adjuntos = GetArchivoListFromEntity(entity.Adjuntos)
                 };
             }
             return model;
@@ -711,6 +725,25 @@ namespace Risk.API.Helpers
                 }
             }
             return modelList;
+        }
+
+        public static TipoDispositivo GetTipoDispositivoEnumFromValue(string value)
+        {
+            switch (value)
+            {
+                case "M":
+                    return TipoDispositivo.Mobile;
+                case "T":
+                    return TipoDispositivo.Tablet;
+                case "D":
+                    return TipoDispositivo.Desktop;
+                case "V":
+                    return TipoDispositivo.Tv;
+                case "W":
+                    return TipoDispositivo.Watch;
+                default:
+                    return TipoDispositivo.Mobile;
+            }
         }
     }
 }

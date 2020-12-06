@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MimeKit;
 using Risk.API.Client.Model;
+using Risk.Msj.Helpers;
 
 namespace Risk.Msj
 {
@@ -124,8 +126,11 @@ namespace Risk.Msj
 
                                 message.Subject = item.MensajeSubject;
 
+                                var multipart = new Multipart("mixed");
+
+                                // Body
                                 string subtype;
-                                if (item.MensajeBody.Contains("<html>"))
+                                if (item.MensajeBody.Contains("<html>") && item.MensajeBody.Contains("</html>"))
                                 {
                                     subtype = "html";
                                 }
@@ -133,11 +138,39 @@ namespace Risk.Msj
                                 {
                                     subtype = "plain";
                                 }
-                                message.Body = new TextPart(subtype)
+                                var body = new TextPart(subtype)
                                 {
                                     Text = item.MensajeBody
                                 };
+                                multipart.Add(body);
 
+                                // Attachments
+                                if (item.Adjuntos.Any())
+                                {
+                                    foreach (var adjunto in item.Adjuntos)
+                                    {
+                                        string contentType = adjunto.TipoMime;
+                                        if (contentType == null)
+                                        {
+                                            contentType = "application/octet-stream";
+                                        }
+
+                                        byte[] contenido = GZipHelper.Decompress(Convert.FromBase64String(adjunto.Contenido));
+                                        var ms = new MemoryStream();
+                                        ms.Write(contenido, 0, contenido.Length);
+
+                                        var attachment = new MimePart(contentType)
+                                        {
+                                            Content = new MimeContent(ms, ContentEncoding.Default),
+                                            ContentDisposition = new ContentDisposition(ContentDisposition.Attachment),
+                                            ContentTransferEncoding = ContentEncoding.Base64,
+                                            FileName = string.Concat(adjunto.Nombre, ".", adjunto.Extension)
+                                        };
+                                        multipart.Add(attachment);
+                                    }
+                                }
+
+                                message.Body = multipart;
                                 smtpClient.Send(message);
 
                                 // Cambia estado de la mensajería a E-ENVIADO

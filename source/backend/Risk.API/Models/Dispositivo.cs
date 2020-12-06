@@ -32,7 +32,7 @@ namespace Risk.API.Models
         public string TokenDispositivo { get; set; }
         public string NombreSistemaOperativo { get; set; }
         public string VersionSistemaOperativo { get; set; }
-        public string Tipo { get; set; }
+        public TipoDispositivo Tipo { get; set; }
         public string NombreNavegador { get; set; }
         public string VersionNavegador { get; set; }
         public string TokenNotificacion { get; set; }
