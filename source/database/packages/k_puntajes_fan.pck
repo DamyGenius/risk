@@ -316,7 +316,8 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
          AND p.estado = 'M' --Programado
       ;
   BEGIN
-    EXECUTE IMMEDIATE 'ALTER SESSION SET TIME_ZONE = ''-4:0''';
+    EXECUTE IMMEDIATE 'ALTER SESSION SET TIME_ZONE = ''' ||
+                      k_util.f_valor_parametro('ZONA_HORARIA_PRODUCCION') || '''';
   
     k_sistema.p_inicializar_parametros;
     l_id_torneo := nvl(i_id_torneo,

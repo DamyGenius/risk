@@ -65,4 +65,7 @@ values ('TIEMPO_TOLERANCIA_VALIDAR_OTP', 'Tiempo de tolerancia para validación d
 insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR)
 values ('ESTADO_IMPORTACION_PARTIDOS', 'Indica el estado de la importación de Partidos de Fantasy (E-En Ejecución/D-Detenido)', 'D');
 
+insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR)
+values ('ZONA_HORARIA_PRODUCCION', 'Zona horaria  del entorno de Producción', '-3:0');
+
 prompt Done.
