@@ -347,4 +347,46 @@ values ('PRI-CLA18', 21, null, null, null, 'N', 'C', 'F');
 insert into t_torneo_jornadas (ID_TORNEO, ID_JORNADA, TITULO, FECHA_TOPE, HORA_TOPE, ACTUAL, ESTADO, SITUACION)
 values ('PRI-CLA18', 22, null, null, null, 'N', 'C', 'F');
 
+insert into t_torneo_jornadas (ID_TORNEO, ID_JORNADA, TITULO, FECHA_TOPE, HORA_TOPE, ACTUAL, ESTADO, SITUACION)
+values ('PRI-CLA20', 1, 'FECHA 1', null, null, 'N', 'A', 'P');
+
+insert into t_torneo_jornadas (ID_TORNEO, ID_JORNADA, TITULO, FECHA_TOPE, HORA_TOPE, ACTUAL, ESTADO, SITUACION)
+values ('PRI-CLA20', 2, 'FECHA 2', null, null, 'N', 'A', 'P');
+
+insert into t_torneo_jornadas (ID_TORNEO, ID_JORNADA, TITULO, FECHA_TOPE, HORA_TOPE, ACTUAL, ESTADO, SITUACION)
+values ('PRI-CLA20', 3, 'FECHA 3', null, null, 'N', 'A', 'P');
+
+insert into t_torneo_jornadas (ID_TORNEO, ID_JORNADA, TITULO, FECHA_TOPE, HORA_TOPE, ACTUAL, ESTADO, SITUACION)
+values ('PRI-CLA20', 4, 'FECHA 4', null, null, 'N', 'A', 'P');
+
+insert into t_torneo_jornadas (ID_TORNEO, ID_JORNADA, TITULO, FECHA_TOPE, HORA_TOPE, ACTUAL, ESTADO, SITUACION)
+values ('PRI-CLA20', 5, 'FECHA 5', null, null, 'N', 'A', 'P');
+
+insert into t_torneo_jornadas (ID_TORNEO, ID_JORNADA, TITULO, FECHA_TOPE, HORA_TOPE, ACTUAL, ESTADO, SITUACION)
+values ('PRI-CLA20', 6, 'FECHA 6', null, null, 'N', 'A', 'P');
+
+insert into t_torneo_jornadas (ID_TORNEO, ID_JORNADA, TITULO, FECHA_TOPE, HORA_TOPE, ACTUAL, ESTADO, SITUACION)
+values ('PRI-CLA20', 7, 'FECHA 7', null, null, 'N', 'A', 'P');
+
+insert into t_torneo_jornadas (ID_TORNEO, ID_JORNADA, TITULO, FECHA_TOPE, HORA_TOPE, ACTUAL, ESTADO, SITUACION)
+values ('PRI-CLA20', 8, 'FECHA 8', null, null, 'N', 'A', 'P');
+
+insert into t_torneo_jornadas (ID_TORNEO, ID_JORNADA, TITULO, FECHA_TOPE, HORA_TOPE, ACTUAL, ESTADO, SITUACION)
+values ('PRI-CLA20', 9, 'FECHA 9', null, null, 'N', 'A', 'P');
+
+insert into t_torneo_jornadas (ID_TORNEO, ID_JORNADA, TITULO, FECHA_TOPE, HORA_TOPE, ACTUAL, ESTADO, SITUACION)
+values ('PRI-CLA20', 10, 'FECHA 10', null, null, 'N', 'A', 'P');
+
+insert into t_torneo_jornadas (ID_TORNEO, ID_JORNADA, TITULO, FECHA_TOPE, HORA_TOPE, ACTUAL, ESTADO, SITUACION)
+values ('PRI-CLA20', 11, 'FECHA 11', null, null, 'N', 'A', 'P');
+
+insert into t_torneo_jornadas (ID_TORNEO, ID_JORNADA, TITULO, FECHA_TOPE, HORA_TOPE, ACTUAL, ESTADO, SITUACION)
+values ('PRI-CLA20', 12, 'CUARTOS DE FINAL', null, null, 'N', 'A', 'P');
+
+insert into t_torneo_jornadas (ID_TORNEO, ID_JORNADA, TITULO, FECHA_TOPE, HORA_TOPE, ACTUAL, ESTADO, SITUACION)
+values ('PRI-CLA20', 13, 'SEMIFINAL', null, null, 'N', 'A', 'P');
+
+insert into t_torneo_jornadas (ID_TORNEO, ID_JORNADA, TITULO, FECHA_TOPE, HORA_TOPE, ACTUAL, ESTADO, SITUACION)
+values ('PRI-CLA20', 14, 'FINAL', null, null, 'N', 'A', 'P');
+
 prompt Done.

@@ -306,9 +306,7 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
   -- Planifica el trabajo de los partidos programados del torneo.
   PROCEDURE p_planificar_partidos(i_id_torneo  IN t_torneo_jornadas.id_torneo%TYPE DEFAULT NULL,
                                   i_id_partido IN t_partidos.id_partido%TYPE DEFAULT NULL) IS
-    l_id_torneo t_torneo_jornadas.id_torneo%TYPE := nvl(i_id_torneo,
-                                                        'PRI-APE20');
-    --TODO: dinamizar torneo por defecto
+    l_id_torneo t_torneo_jornadas.id_torneo%TYPE;
     --
     CURSOR c_partidos IS
       SELECT p.id_partido, p.fecha fecha_inicio
@@ -319,6 +317,10 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
       ;
   BEGIN
     EXECUTE IMMEDIATE 'ALTER SESSION SET TIME_ZONE = ''-4:0''';
+  
+    k_sistema.p_inicializar_parametros;
+    l_id_torneo := nvl(i_id_torneo,
+                       k_sistema.f_valor_parametro_string(k_sistema.c_torneo));
   
     FOR par IN c_partidos LOOP
       -- Crea el trabajo del cierre de predicciones

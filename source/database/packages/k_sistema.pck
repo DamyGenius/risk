@@ -36,6 +36,8 @@ CREATE OR REPLACE PACKAGE k_sistema IS
   c_fecha   CONSTANT VARCHAR2(50) := 'FECHA';
   c_usuario CONSTANT VARCHAR2(50) := 'USUARIO';
   --
+  c_torneo CONSTANT VARCHAR2(50) := 'TORNEO';
+  --
   c_direccion_ip    CONSTANT VARCHAR2(50) := 'DIRECCION_IP';
   c_id_servicio     CONSTANT VARCHAR2(50) := 'ID_SERVICIO';
   c_nombre_servicio CONSTANT VARCHAR2(50) := 'NOMBRE_SERVICIO';
@@ -211,6 +213,8 @@ CREATE OR REPLACE PACKAGE BODY k_sistema IS
       l_nombre         t_sistemas.nombre%TYPE;
       l_version_actual t_sistemas.version_actual%TYPE;
       l_fecha_actual   t_sistemas.fecha_actual%TYPE;
+      --
+      l_torneo_actual t_torneos.id_torneo%TYPE;
     BEGIN
       SELECT nombre, version_actual, fecha_actual
         INTO l_nombre, l_version_actual, l_fecha_actual
@@ -219,6 +223,12 @@ CREATE OR REPLACE PACKAGE BODY k_sistema IS
       p_definir_parametro_string(c_sistema, l_nombre);
       p_definir_parametro_string(c_version, l_version_actual);
       p_definir_parametro_date(c_fecha, l_fecha_actual);
+      --
+      SELECT id_torneo
+        INTO l_torneo_actual
+        FROM t_torneos a
+       WHERE actual = 'S';
+      p_definir_parametro_string(c_torneo, l_torneo_actual);
     EXCEPTION
       WHEN OTHERS THEN
         NULL;

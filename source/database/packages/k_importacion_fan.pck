@@ -98,6 +98,7 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
     l_partido  json_object_t;
   
     l_id                  t_partidos.id_importacion%TYPE;
+    l_id_torneo           t_torneos.id_torneo%TYPE;
     l_numerofecha         t_partidos.id_jornada%TYPE;
     l_id_club_local       t_partidos.id_club_local%TYPE;
     l_id_club_visitante   t_partidos.id_club_visitante%TYPE;
@@ -111,6 +112,9 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
     --
     rw_partido t_partidos%ROWTYPE;
   BEGIN
+    k_sistema.p_inicializar_parametros;
+    l_id_torneo := k_sistema.f_valor_parametro_string(k_sistema.c_torneo);
+  
     l_partidos := json_array_t(i_partidos);
   
     FOR i IN 0 .. l_partidos.get_size - 1 LOOP
@@ -152,7 +156,7 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
       rw_partido := lf_buscar_partido(l_id);
       IF rw_partido.id_partido IS NOT NULL THEN
         UPDATE t_partidos p
-           SET id_torneo            = 'PRI-APE20', --k_sistema.f_torneo, --TODO: obtener
+           SET id_torneo            = l_id_torneo,
                id_club_local        = l_id_club_local,
                id_club_visitante    = l_id_club_visitante,
                fecha                = l_fecha_partido,
@@ -166,7 +170,7 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
          WHERE p.id_partido = rw_partido.id_partido;
       ELSE
         INSERT INTO t_partidos
-          (id_torneo, --TODO: obtener
+          (id_torneo,
            id_club_local,
            id_club_visitante,
            fecha,
@@ -179,7 +183,7 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
            estado_predicciones,
            id_importacion)
         VALUES
-          ('PRI-APE20', --k_sistema.f_torneo, --TODO: obtener
+          (l_id_torneo,
            l_id_club_local,
            l_id_club_visitante,
            l_fecha_partido,

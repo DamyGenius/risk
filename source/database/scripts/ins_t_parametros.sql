@@ -35,7 +35,7 @@ insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR)
 values ('TIEMPO_EXPIRACION_REFRESH_TOKEN', 'Tiempo de expiración del Refresh Token en horas', '720');
 
 insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR)
-values ('URL_SERVICIOS_PRODUCCION', 'URL base de los Servicios Web del entorno de Producción', 'https://localhost:5001');
+values ('URL_SERVICIOS_PRODUCCION', 'URL base de los Servicios Web del entorno de Producción', 'https://ne-project-api.azurewebsites.net');
 
 insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR)
 values ('PAGINACION_CANTIDAD_DEFECTO_POR_PAGINA', 'Cantidad por defecto de elementos por página en paginación de listas', '30');
