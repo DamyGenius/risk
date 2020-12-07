@@ -319,7 +319,6 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
     EXECUTE IMMEDIATE 'ALTER SESSION SET TIME_ZONE = ''' ||
                       k_util.f_valor_parametro('ZONA_HORARIA_PRODUCCION') || '''';
   
-    k_sistema.p_inicializar_parametros;
     l_id_torneo := nvl(i_id_torneo,
                        k_sistema.f_valor_parametro_string(k_sistema.c_torneo));
   
