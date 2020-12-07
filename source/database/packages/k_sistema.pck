@@ -275,5 +275,8 @@ CREATE OR REPLACE PACKAGE BODY k_sistema IS
     END LOOP;
   END;
 
+BEGIN
+  -- Define parámetros por defecto
+  p_inicializar_parametros;
 END;
 /
