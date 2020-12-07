@@ -106,4 +106,40 @@ values ('SERVICIO:MSJ:LISTAR_MENSAJES_PENDIENTES', null, null);
 insert into t_permisos (ID_PERMISO, DESCRIPCION, DETALLE)
 values ('SERVICIO:MSJ:LISTAR_NOTIFICACIONES_PENDIENTES', null, null);
 
+insert into t_permisos (ID_PERMISO, DESCRIPCION, DETALLE)
+values ('SERVICIO:FAN:ABANDONAR_GRUPO', null, null);
+
+insert into t_permisos (ID_PERMISO, DESCRIPCION, DETALLE)
+values ('SERVICIO:FAN:DATOS_GRUPO', null, null);
+
+insert into t_permisos (ID_PERMISO, DESCRIPCION, DETALLE)
+values ('SERVICIO:FAN:EDITAR_GRUPO', null, null);
+
+insert into t_permisos (ID_PERMISO, DESCRIPCION, DETALLE)
+values ('SERVICIO:FAN:INVITAR_USUARIO', null, null);
+
+insert into t_permisos (ID_PERMISO, DESCRIPCION, DETALLE)
+values ('SERVICIO:FAN:LISTAR_CLUBES', null, null);
+
+insert into t_permisos (ID_PERMISO, DESCRIPCION, DETALLE)
+values ('SERVICIO:FAN:LISTAR_GRUPOS', null, null);
+
+insert into t_permisos (ID_PERMISO, DESCRIPCION, DETALLE)
+values ('SERVICIO:FAN:LISTAR_JORNADAS', null, null);
+
+insert into t_permisos (ID_PERMISO, DESCRIPCION, DETALLE)
+values ('SERVICIO:FAN:LISTAR_PARTIDOS', null, null);
+
+insert into t_permisos (ID_PERMISO, DESCRIPCION, DETALLE)
+values ('SERVICIO:FAN:LISTAR_PREDICCIONES_PARTIDOS', null, null);
+
+insert into t_permisos (ID_PERMISO, DESCRIPCION, DETALLE)
+values ('SERVICIO:FAN:REALIZAR_PREDICCION', null, null);
+
+insert into t_permisos (ID_PERMISO, DESCRIPCION, DETALLE)
+values ('SERVICIO:FAN:REGISTRAR_GRUPO', null, null);
+
+insert into t_permisos (ID_PERMISO, DESCRIPCION, DETALLE)
+values ('SERVICIO:FAN:RESPONDER_INVITACION', null, null);
+
 prompt Done.
