@@ -75,17 +75,20 @@ CREATE OR REPLACE PACKAGE BODY k_reporte_gen IS
     CASE l_formato
       WHEN k_reporte.c_formato_pdf THEN
         -- PDF
-        as_pdf3_v5.init;
-        as_pdf3_v5.set_page_format('A4');
-        as_pdf3_v5.set_page_orientation('PORTRAIT');
-        as_pdf3_v5.set_margins(25, 30, 25, 30, 'mm');
+        as_pdf3.init;
+        as_pdf3.set_page_format('A4');
+        as_pdf3.set_page_orientation('PORTRAIT');
+        as_pdf3.set_margins(25, 30, 25, 30, 'mm');
       
-        as_pdf3_v5.write(l_version_actual);
+        as_pdf3.write(l_version_actual);
       
-        l_contenido := as_pdf3_v5.get_pdf;
+        l_contenido := as_pdf3.get_pdf;
       
       ELSE
-        NULL;
+        k_servicio.p_respuesta_error(l_rsp,
+                                     'gen0002',
+                                     'Formato de salida no implementado');
+        RAISE k_servicio.ex_error_general;
     END CASE;
   
     RETURN k_reporte.f_archivo_ok(l_contenido, l_formato);

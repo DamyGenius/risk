@@ -46,6 +46,9 @@ CREATE OR REPLACE PACKAGE k_reporte IS
                            i_formato   IN VARCHAR2 DEFAULT NULL)
     RETURN y_archivo;
 
+  FUNCTION f_reporte_sql(i_id_reporte IN NUMBER,
+                         i_parametros IN y_parametros) RETURN y_archivo;
+
   FUNCTION f_procesar_reporte(i_id_reporte IN NUMBER,
                               i_parametros IN CLOB,
                               i_contexto   IN CLOB DEFAULT NULL) RETURN CLOB;
@@ -82,6 +85,7 @@ CREATE OR REPLACE PACKAGE BODY k_reporte IS
     l_archivo         y_archivo;
     l_nombre_reporte  t_operaciones.nombre%TYPE;
     l_dominio_reporte t_operaciones.dominio%TYPE;
+    l_tipo_reporte    t_reportes.tipo%TYPE;
     l_sentencia       VARCHAR2(4000);
   BEGIN
     -- Inicializa respuesta
@@ -89,8 +93,8 @@ CREATE OR REPLACE PACKAGE BODY k_reporte IS
   
     l_rsp.lugar := 'Buscando datos del reporte';
     BEGIN
-      SELECT upper(o.nombre), upper(o.dominio)
-        INTO l_nombre_reporte, l_dominio_reporte
+      SELECT upper(o.nombre), upper(o.dominio), r.tipo
+        INTO l_nombre_reporte, l_dominio_reporte, l_tipo_reporte
         FROM t_reportes r, t_operaciones o
        WHERE o.id_operacion = r.id_reporte
          AND o.activo = 'S'
@@ -99,7 +103,7 @@ CREATE OR REPLACE PACKAGE BODY k_reporte IS
       WHEN no_data_found THEN
         k_servicio.p_respuesta_error(l_rsp,
                                      k_servicio.c_servicio_no_implementado,
-                                     'Servicio inexistente o inactivo');
+                                     'Reporte inexistente o inactivo');
         RAISE k_servicio.ex_error_parametro;
     END;
   
@@ -174,33 +178,40 @@ CREATE OR REPLACE PACKAGE BODY k_reporte IS
       END IF;
     END IF;
   
-    l_rsp.lugar := 'Construyendo sentencia';
-    l_sentencia := 'BEGIN :1 := K_REPORTE_' || l_dominio_reporte || '.' ||
-                   l_nombre_reporte || '(:2); END;';
-  
-    l_rsp.lugar := 'Procesando reporte';
-    BEGIN
-      EXECUTE IMMEDIATE l_sentencia
-        USING OUT l_archivo, IN l_prms;
-    EXCEPTION
-      WHEN k_servicio.ex_servicio_no_implementado THEN
-        k_servicio.p_respuesta_error(l_rsp,
-                                     k_servicio.c_servicio_no_implementado,
-                                     'Servicio no implementado',
-                                     dbms_utility.format_error_stack);
-        RAISE k_servicio.ex_error_general;
-      WHEN OTHERS THEN
-        k_servicio.p_respuesta_error(l_rsp,
-                                     'api0004',
-                                     CASE
-                                     k_error.f_tipo_excepcion(utl_call_stack.error_number(1)) WHEN
-                                     k_error.c_user_defined_error THEN
-                                     utl_call_stack.error_msg(1) WHEN
-                                     k_error.c_oracle_predefined_error THEN
-                                     'Error al procesar servicio' END,
-                                     dbms_utility.format_error_stack);
-        RAISE k_servicio.ex_error_general;
-    END;
+    IF l_tipo_reporte = 'C' THEN
+      -- CONSULTA
+      l_archivo := f_reporte_sql(i_id_reporte, l_prms);
+    
+    ELSE
+      l_rsp.lugar := 'Construyendo sentencia';
+      l_sentencia := 'BEGIN :1 := K_REPORTE_' || l_dominio_reporte || '.' ||
+                     l_nombre_reporte || '(:2); END;';
+    
+      l_rsp.lugar := 'Procesando reporte';
+      BEGIN
+        EXECUTE IMMEDIATE l_sentencia
+          USING OUT l_archivo, IN l_prms;
+      EXCEPTION
+        WHEN k_servicio.ex_servicio_no_implementado THEN
+          k_servicio.p_respuesta_error(l_rsp,
+                                       k_servicio.c_servicio_no_implementado,
+                                       'Servicio no implementado',
+                                       dbms_utility.format_error_stack);
+          RAISE k_servicio.ex_error_general;
+        WHEN OTHERS THEN
+          k_servicio.p_respuesta_error(l_rsp,
+                                       'api0004',
+                                       CASE
+                                       k_error.f_tipo_excepcion(utl_call_stack.error_number(1)) WHEN
+                                       k_error.c_user_defined_error THEN
+                                       utl_call_stack.error_msg(1) WHEN
+                                       k_error.c_oracle_predefined_error THEN
+                                       'Error al procesar servicio' END,
+                                       dbms_utility.format_error_stack);
+          RAISE k_servicio.ex_error_general;
+      END;
+    
+    END IF;
   
     l_rsp.datos := l_archivo;
   
@@ -273,22 +284,60 @@ CREATE OR REPLACE PACKAGE BODY k_reporte IS
     CASE l_formato
       WHEN c_formato_pdf THEN
         -- PDF
-        as_pdf3_v5.init;
-        as_pdf3_v5.set_page_format('A4');
-        as_pdf3_v5.set_page_orientation('PORTRAIT');
-        as_pdf3_v5.set_margins(25, 30, 25, 30, 'mm');
+        as_pdf3.init;
+        as_pdf3.set_page_format('A4');
+        as_pdf3.set_page_orientation('PORTRAIT');
+        as_pdf3.set_margins(2.5, 3, 2.5, 3, 'cm');
+        as_pdf3.write('Código: ' || i_respuesta.codigo);
+        as_pdf3.write(utl_tcp.crlf);
+        as_pdf3.write('Mensaje: ' || i_respuesta.mensaje);
+        l_archivo.contenido := as_pdf3.get_pdf;
       
-        as_pdf3_v5.put_image(p_img    => k_archivo.f_recuperar_archivo(k_archivo.c_carpeta_imagenes,'ARCHIVO','x-mark-5-256.jpg').contenido,
-                             p_x      => 30,
-                             p_y      => 272,
-                             p_width  => 10,
-                             p_height => 10,
-                             p_um     => 'mm');
+      WHEN c_formato_docx THEN
+        -- DOCX
+        DECLARE
+          l_document  PLS_INTEGER;
+          l_paragraph PLS_INTEGER;
+        BEGIN
+          l_document          := zt_word.f_new_document;
+          l_paragraph         := zt_word.f_new_paragraph(p_doc_id => l_document,
+                                                         p_text   => 'Código: ' ||
+                                                                     i_respuesta.codigo);
+          l_paragraph         := zt_word.f_new_paragraph(p_doc_id => l_document,
+                                                         p_text   => 'Mensaje: ' ||
+                                                                     i_respuesta.mensaje);
+          l_archivo.contenido := zt_word.f_make_document(l_document);
+        END;
       
-        as_pdf3_v5.write('Código: ' || i_respuesta.codigo, 'mm', 45);
-        as_pdf3_v5.write(utl_tcp.crlf);
-        as_pdf3_v5.write('Mensaje: ' || i_respuesta.mensaje, 'mm', 45);
-        l_archivo.contenido := as_pdf3_v5.get_pdf;
+      WHEN c_formato_xlsx THEN
+        -- XLSX
+        as_xlsx.clear_workbook;
+        as_xlsx.new_sheet('Error');
+        as_xlsx.cell(1,
+                     1,
+                     'Código',
+                     p_fontid => as_xlsx.get_font(p_name => 'Calibri',
+                                                  p_bold => TRUE));
+        as_xlsx.cell(1,
+                     2,
+                     'Mensaje',
+                     p_fontid => as_xlsx.get_font(p_name => 'Calibri',
+                                                  p_bold => TRUE));
+        as_xlsx.cell(2, 1, i_respuesta.codigo);
+        as_xlsx.cell(2, 2, i_respuesta.mensaje);
+        -- as_xlsx.set_column_width(2, 100);
+        l_archivo.contenido := as_xlsx.finish;
+      
+      WHEN c_formato_txt THEN
+        -- TXT
+        DECLARE
+          l_txt CLOB;
+        BEGIN
+          l_txt               := 'Código: ' || i_respuesta.codigo ||
+                                 utl_tcp.crlf || 'Mensaje: ' ||
+                                 i_respuesta.mensaje;
+          l_archivo.contenido := k_util.clob_to_blob(l_txt);
+        END;
       
       ELSE
         raise_application_error(-20000, 'Formato de salida no soportado');
@@ -304,6 +353,201 @@ CREATE OR REPLACE PACKAGE BODY k_reporte IS
                                                  l_formato);
   
     RETURN l_archivo;
+  END;
+
+  FUNCTION f_reporte_sql(i_id_reporte IN NUMBER,
+                         i_parametros IN y_parametros) RETURN y_archivo IS
+    l_rsp             y_respuesta;
+    l_contenido       BLOB;
+    l_formato         VARCHAR2(10);
+    l_nombre_reporte  t_operaciones.nombre%TYPE;
+    l_dominio_reporte t_operaciones.dominio%TYPE;
+    l_consulta_sql    t_reportes.consulta_sql%TYPE;
+  BEGIN
+    -- Inicializa respuesta
+    l_rsp := NEW y_respuesta();
+  
+    l_rsp.lugar := 'Buscando datos del reporte';
+    BEGIN
+      SELECT upper(o.nombre), upper(o.dominio), r.consulta_sql
+        INTO l_nombre_reporte, l_dominio_reporte, l_consulta_sql
+        FROM t_reportes r, t_operaciones o
+       WHERE o.id_operacion = r.id_reporte
+         AND o.activo = 'S'
+         AND r.id_reporte = i_id_reporte;
+    EXCEPTION
+      WHEN no_data_found THEN
+        k_servicio.p_respuesta_error(l_rsp,
+                                     k_servicio.c_error_parametro,
+                                     'Reporte inexistente o inactivo');
+        RAISE k_servicio.ex_error_parametro;
+    END;
+  
+    l_rsp.lugar := 'Validando parámetros';
+    k_servicio.p_validar_parametro(l_rsp,
+                                   k_operacion.f_valor_parametro_string(i_parametros,
+                                                                        'formato') IN
+                                   (c_formato_pdf,
+                                    c_formato_docx,
+                                    c_formato_xlsx,
+                                    c_formato_txt),
+                                   'Formato de salida no soportado');
+  
+    l_formato := k_operacion.f_valor_parametro_string(i_parametros,
+                                                      'formato');
+  
+    IF l_consulta_sql IS NULL THEN
+      k_servicio.p_respuesta_error(l_rsp,
+                                   k_servicio.c_error_general,
+                                   'Consulta SQL no definida');
+      RAISE k_servicio.ex_error_parametro;
+    END IF;
+  
+    CASE l_formato
+      WHEN c_formato_pdf THEN
+        -- PDF
+        DECLARE
+          l_cursor   PLS_INTEGER;
+          l_col_cnt  PLS_INTEGER;
+          l_desc_tab dbms_sql.desc_tab2;
+          l_headers  as_pdf3.tp_headers;
+        BEGIN
+          as_pdf3.init;
+          as_pdf3.set_page_format('A4');
+          as_pdf3.set_page_orientation('LANDSCAPE');
+          as_pdf3.set_margins(1.27, 1.27, 1.27, 1.27, 'cm');
+          as_pdf3.set_font('helvetica', 8);
+        
+          l_cursor := dbms_sql.open_cursor;
+          dbms_sql.parse(l_cursor, l_consulta_sql, dbms_sql.native);
+          dbms_sql.describe_columns2(l_cursor, l_col_cnt, l_desc_tab);
+          l_headers := NEW as_pdf3.tp_headers();
+          FOR i IN 1 .. l_col_cnt LOOP
+            l_headers.extend;
+            l_headers(l_headers.count) := l_desc_tab(i).col_name;
+          END LOOP;
+        
+          as_pdf3.query2table(l_consulta_sql, NULL, l_headers);
+          l_contenido := as_pdf3.get_pdf;
+        END;
+      
+      WHEN c_formato_docx THEN
+        -- DOCX
+        DECLARE
+          l_document      PLS_INTEGER;
+          l_table         PLS_INTEGER;
+          l_cursor        PLS_INTEGER;
+          l_row_cnt       PLS_INTEGER;
+          l_col_cnt       PLS_INTEGER;
+          l_row_counter   PLS_INTEGER;
+          l_page          zt_word.r_page;
+          l_desc_tab      dbms_sql.desc_tab2;
+          l_columns_width VARCHAR2(4000);
+          l_buffer        VARCHAR2(32767);
+        BEGIN
+          l_document           := zt_word.f_new_document;
+          l_page               := zt_word.f_get_default_page(l_document);
+          l_page.orientation   := 'landscape';
+          l_page.margin_top    := 720; -- 1.27 cm
+          l_page.margin_bottom := 720; -- 1.27 cm
+          l_page.margin_left   := 720; -- 1.27 cm
+          l_page.margin_right  := 720; -- 1.27 cm
+          zt_word.p_set_default_page(l_document, l_page);
+        
+          -- Obtiene la cantidad total de registros de la consulta
+          EXECUTE IMMEDIATE 'SELECT COUNT(*) FROM (' || l_consulta_sql || ')'
+            INTO l_row_cnt;
+        
+          l_cursor := dbms_sql.open_cursor;
+          dbms_sql.parse(l_cursor, l_consulta_sql, dbms_sql.native);
+          dbms_sql.describe_columns2(l_cursor, l_col_cnt, l_desc_tab);
+        
+          FOR i IN 1 .. l_col_cnt LOOP
+            dbms_sql.define_column(l_cursor, i, l_buffer, 32767);
+            IF i > 1 THEN
+              l_columns_width := l_columns_width || ',';
+            END IF;
+            l_columns_width := l_columns_width || '0';
+          END LOOP;
+        
+          -- Crea una tabla con la cantidad calculada de filas y columnas
+          l_table := zt_word.f_new_table(p_doc_id        => l_document,
+                                         p_rows          => l_row_cnt + 1,
+                                         p_columns       => l_col_cnt,
+                                         p_columns_width => l_columns_width);
+        
+          -- Define los encabezados en la primera fila de la tabla
+          FOR i IN 1 .. l_col_cnt LOOP
+            zt_word.p_table_cell(p_doc_id           => l_document,
+                                 p_table_id         => l_table,
+                                 p_row              => 1,
+                                 p_column           => i,
+                                 p_alignment_h      => 'LEFT',
+                                 p_font             => zt_word.f_font(p_font_size => 9,
+                                                                      p_bold      => TRUE),
+                                 p_background_color => 'CCCCCC',
+                                 p_text             => l_desc_tab(i).col_name);
+          END LOOP;
+        
+          l_row_cnt := dbms_sql.execute(l_cursor);
+        
+          -- Define los campos a partir de la segunda fila de la tabla
+          l_row_counter := 1;
+          LOOP
+            EXIT WHEN dbms_sql.fetch_rows(l_cursor) = 0;
+            l_row_counter := l_row_counter + 1;
+            FOR i IN 1 .. l_col_cnt LOOP
+              IF l_desc_tab(i).col_type IN (dbms_types.typecode_blob) THEN
+                l_buffer := NULL;
+              ELSE
+                dbms_sql.column_value(l_cursor, i, l_buffer);
+              END IF;
+              l_buffer := REPLACE(l_buffer, '<', '&lt;');
+              l_buffer := REPLACE(l_buffer, '>', '&gt;');
+              l_buffer := REPLACE(l_buffer, '&', '&amp;');
+              l_buffer := REPLACE(l_buffer, '"', '&quot;');
+              l_buffer := REPLACE(l_buffer, '''', '&apos;');
+              l_buffer := nvl(l_buffer, ' ');
+              zt_word.p_table_cell(p_doc_id      => l_document,
+                                   p_table_id    => l_table,
+                                   p_row         => l_row_counter,
+                                   p_column      => i,
+                                   p_alignment_h => 'LEFT',
+                                   p_font        => zt_word.f_font(p_font_size => 9),
+                                   p_text        => l_buffer);
+            END LOOP;
+          END LOOP;
+        
+          dbms_sql.close_cursor(l_cursor);
+        
+          l_contenido := zt_word.f_make_document(l_document);
+        END;
+      
+      WHEN c_formato_xlsx THEN
+        -- XLSX
+        as_xlsx.clear_workbook;
+        as_xlsx.query2sheet(l_consulta_sql);
+        l_contenido := as_xlsx.finish;
+      
+      WHEN c_formato_txt THEN
+        -- TXT
+        csv.generate_clob(l_consulta_sql);
+        l_contenido := k_util.clob_to_blob(csv.get_clob);
+      
+    END CASE;
+  
+    RETURN f_archivo_ok(l_contenido, l_formato);
+  EXCEPTION
+    WHEN k_servicio.ex_error_parametro THEN
+      RETURN f_archivo_error(l_rsp, l_formato);
+    WHEN k_servicio.ex_error_general THEN
+      RETURN f_archivo_error(l_rsp, l_formato);
+    WHEN OTHERS THEN
+      k_servicio.p_respuesta_excepcion(l_rsp,
+                                       utl_call_stack.error_number(1),
+                                       utl_call_stack.error_msg(1),
+                                       dbms_utility.format_error_stack);
+      RETURN f_archivo_error(l_rsp, l_formato);
   END;
 
   FUNCTION f_procesar_reporte(i_id_reporte IN NUMBER,

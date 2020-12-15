@@ -28,7 +28,7 @@ namespace Risk.API.Models
     {
         public string Contenido { get; set; }
         public string Checksum { get; set; }
-        public int Tamano { get; set; }
+        public int? Tamano { get; set; }
         public string Nombre { get; set; }
         public string Extension { get; set; }
         public string TipoMime { get; set; }

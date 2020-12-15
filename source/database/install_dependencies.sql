@@ -22,6 +22,13 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-@@dependencies/as_pdf3_v5.11.sql
+@@dependencies/as_pdf3_4.txt
+@@dependencies/as_xlsx18.txt
+@@dependencies/as_zip10.txt
+@@dependencies/csv.sql
 @@dependencies/oos_util_totp.pks
 @@dependencies/oos_util_totp.pkb
+@@dependencies/ZT_QR.pks
+@@dependencies/ZT_QR.pkb
+@@dependencies/ZT_WORD.pks
+@@dependencies/ZT_WORD.pkb

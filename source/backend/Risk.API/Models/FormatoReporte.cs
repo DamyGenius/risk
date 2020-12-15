@@ -22,10 +22,13 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-drop package as_pdf3;
-drop package as_xlsx;
-drop package as_zip;
-drop package csv;
-drop package oos_util_totp;
-drop package zt_qr;
-drop package zt_word;
+namespace Risk.API.Models
+{
+    public enum FormatoReporte
+    {
+        Pdf,
+        Docx,
+        Xlsx,
+        Txt
+    }
+}

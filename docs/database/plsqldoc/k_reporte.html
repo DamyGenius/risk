@@ -51,6 +51,11 @@ Program units
 
 </TD></TR>
 <TR><TD VALIGN="TOP" CLASS="TYPE_ITEM">
+<A HREF="#F_REPORTE_SQL">f_reporte_sql</A>&nbsp;&nbsp;
+</TD><TD CLASS="DESC_TEXT" WIDTH=95%>
+
+</TD></TR>
+<TR><TD VALIGN="TOP" CLASS="TYPE_ITEM">
 <A HREF="#F_PROCESAR_REPORTE">f_procesar_reporte</A>&nbsp;&nbsp;
 </TD><TD CLASS="DESC_TEXT" WIDTH=95%>
 
@@ -150,6 +155,16 @@ f_archivo_error
 FUNCTION f_archivo_error(i_respuesta IN y_respuesta,
                          i_formato   IN VARCHAR2 DEFAULT NULL)
   RETURN y_archivo
+
+</PRE>
+<HR>
+<A NAME="F_REPORTE_SQL"></A>
+<P CLASS="TYPE_TITLE">
+f_reporte_sql
+</P>
+<PRE CLASS="DECL_TEXT">
+FUNCTION f_reporte_sql(i_id_reporte IN NUMBER,
+                       i_parametros IN y_parametros) RETURN y_archivo
 
 </PRE>
 <HR>
