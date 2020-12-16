@@ -130,8 +130,12 @@ prompt
 prompt Creando types...
 prompt -----------------------------------
 prompt
+@@types/y_cadenas.typ
 @@types/y_objeto.typ
 @@types/y_objetos.typ
+
+@@packages/k_util.pck
+
 @@types/y_dato.typ
 @@types/y_datos.typ
 @@types/y_archivo.typ
@@ -153,7 +157,6 @@ prompt
 @@types/y_correo.typ
 @@types/y_mensaje.typ
 @@types/y_notificacion.typ
-@@types/y_cadenas.typ
 
 @@types/y_club.typ
 @@types/y_partido.typ
@@ -167,16 +170,15 @@ prompt
 prompt Creando paquetes...
 prompt -----------------------------------
 prompt
-@@packages/k_util.pck
 @@packages/k_sistema.pck
 @@packages/k_auditoria.pck
+@@packages/k_archivo.pck
 @@packages/k_aplicacion.pck
 @@packages/k_usuario.pck
 @@packages/k_dispositivo.pck
 @@packages/k_sesion.pck
 @@packages/k_error.pck
 @@packages/k_dato.pck
-@@packages/k_archivo.pck
 @@packages/k_mensajeria.pck
 @@packages/k_autenticacion.pck
 @@packages/k_autorizacion.pck

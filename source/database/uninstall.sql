@@ -71,13 +71,13 @@ drop package k_operacion;
 drop package k_autorizacion;
 drop package k_autenticacion;
 drop package k_mensajeria;
-drop package k_archivo;
 drop package k_dato;
 drop package k_error;
 drop package k_sesion;
 drop package k_dispositivo;
 drop package k_usuario;
 drop package k_aplicacion;
+drop package k_archivo;
 drop package k_auditoria;
 drop package k_sistema;
 drop package k_util;
@@ -94,7 +94,6 @@ drop type y_partido_prediccion force;
 drop type y_partido force;
 drop type y_club force;
 
-drop type y_cadenas force;
 drop type y_notificacion force;
 drop type y_mensaje force;
 drop type y_correo force;
@@ -118,6 +117,7 @@ drop type y_datos force;
 drop type y_dato force;
 drop type y_objetos force;
 drop type y_objeto force;
+drop type y_cadenas force;
 
 prompt
 prompt Borrando tablas...
