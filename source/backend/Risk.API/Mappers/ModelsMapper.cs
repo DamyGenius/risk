@@ -26,7 +26,7 @@ using System.Collections.Generic;
 using Risk.API.Entities;
 using Risk.API.Models;
 
-namespace Risk.API.Helpers
+namespace Risk.API.Mappers
 {
     public static class ModelsMapper
     {
@@ -99,6 +99,7 @@ namespace Risk.API.Helpers
                 entity = new YArchivo
                 {
                     Contenido = model.Contenido,
+                    Url = model.Url,
                     Checksum = model.Checksum,
                     Tamano = model.Tamano,
                     Nombre = model.Nombre,

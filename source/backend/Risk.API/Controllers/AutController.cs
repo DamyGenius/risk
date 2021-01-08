@@ -23,18 +23,12 @@ SOFTWARE.
 */
 
 using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.IO;
 using System.Net.Mime;
-using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.NotificationHubs;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Linq;
 using Risk.API.Attributes;
 using Risk.API.Helpers;
@@ -59,130 +53,6 @@ namespace Risk.API.Controllers
             _autService = autService;
             _genService = genService;
             _notificationHubClientConnection = notificationHubClientConnection;
-        }
-
-        private string GenerarAccessToken(string usuario)
-        {
-            var respDatosUsuario = _autService.DatosUsuario(usuario);
-            if (!respDatosUsuario.Codigo.Equals(RiskConstants.CODIGO_OK))
-            {
-                return string.Empty;
-            }
-
-            Usuario datosUsuario = respDatosUsuario.Datos;
-
-            // Crea la lista de claims (pertenencias, características) del usuario
-            List<Claim> claims = new List<Claim>();
-
-            claims.Add(new Claim(ClaimTypes.Name, datosUsuario.Alias));
-            claims.Add(new Claim(ClaimTypes.GivenName, datosUsuario.Nombre ?? ""));
-            claims.Add(new Claim(ClaimTypes.Surname, datosUsuario.Apellido ?? ""));
-            claims.Add(new Claim(ClaimTypes.Email, datosUsuario.DireccionCorreo ?? ""));
-            //claimsList.Add(new Claim(ClaimTypes.HomePhone, usuario.NumeroTelefono ?? ""));
-
-            // Agrega los roles del usuario a la lista de claims
-            foreach (var rol in datosUsuario.Roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, rol.Nombre));
-            }
-
-            var respTiempoExpiracionToken = _autService.TiempoExpiracionToken(TipoToken.AccessToken);
-            if (!respTiempoExpiracionToken.Codigo.Equals(RiskConstants.CODIGO_OK))
-            {
-                return string.Empty;
-            }
-            int tiempoExpiracion = int.Parse(respTiempoExpiracionToken.Datos.Contenido);
-
-            var respValorParametro = _genService.ValorParametro("CLAVE_VALIDACION_ACCESS_TOKEN");
-            if (!respValorParametro.Codigo.Equals(RiskConstants.CODIGO_OK))
-            {
-                return string.Empty;
-            }
-            var signingKey = Encoding.ASCII.GetBytes(respValorParametro.Datos.Contenido);
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims.ToArray()),
-                Expires = DateTime.UtcNow.AddSeconds(tiempoExpiracion),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(signingKey), SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var createdToken = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(createdToken);
-        }
-
-        private void RegistrarDispositivoNotificationHub(string tokenDispositivo)
-        {
-            if (_notificationHubClientConnection.Hub == null)
-            {
-                return;
-            }
-
-            var respDatosDispositivo = _autService.DatosDispositivo(tokenDispositivo);
-            if (!respDatosDispositivo.Codigo.Equals(RiskConstants.CODIGO_OK))
-            {
-                return;
-            }
-
-            Dispositivo dispositivo = respDatosDispositivo.Datos;
-
-            if (dispositivo.TokenNotificacion == null || dispositivo.TokenNotificacion.Equals(string.Empty))
-            {
-                return;
-            }
-
-            NotificationPlatform platform;
-            switch (dispositivo.PlataformaNotificacion)
-            {
-                case "wns":
-                    platform = NotificationPlatform.Wns;
-                    break;
-                case "apns":
-                    platform = NotificationPlatform.Apns;
-                    break;
-                case "mpns":
-                    platform = NotificationPlatform.Mpns;
-                    break;
-                case "fcm":
-                    platform = NotificationPlatform.Fcm;
-                    break;
-                case "adm":
-                    platform = NotificationPlatform.Adm;
-                    break;
-                case "baidu":
-                    platform = NotificationPlatform.Baidu;
-                    break;
-                default:
-                    platform = NotificationPlatform.Fcm;
-                    break;
-            }
-
-            List<string> tags = new List<string>();
-            if (dispositivo.Suscripciones != null)
-            {
-                foreach (var item in dispositivo.Suscripciones)
-                {
-                    tags.Add(item.Contenido);
-                }
-            }
-
-            var templates = new Dictionary<string, InstallationTemplate>()
-            {
-                {"default_template", new InstallationTemplate { Body = dispositivo.TemplateNotificacion }}
-            };
-
-            Installation installation = new Installation
-            {
-                InstallationId = dispositivo.TokenDispositivo,
-                Platform = platform,
-                PushChannel = dispositivo.TokenNotificacion,
-                PushChannelExpired = false,
-                Tags = tags,
-                Templates = templates
-            };
-
-            _notificationHubClientConnection.Hub.CreateOrUpdateInstallation(installation);
         }
 
         [AllowAnonymous]
@@ -212,14 +82,14 @@ namespace Risk.API.Controllers
                 return ProcesarRespuesta(respValidarCredenciales);
             }
 
-            var accessToken = GenerarAccessToken(requestBody.Usuario);
+            var accessToken = TokenHelper.GenerarAccessToken(requestBody.Usuario, _autService, _genService);
             var refreshToken = TokenHelper.GenerarRefreshToken();
 
             var respIniciarSesion = _autService.IniciarSesion(requestBody.Usuario, accessToken, refreshToken, requestBody.TokenDispositivo);
 
             if (respIniciarSesion.Codigo.Equals(RiskConstants.CODIGO_OK))
             {
-                RegistrarDispositivoNotificationHub(requestBody.TokenDispositivo);
+                NotificationHubHelper.RegistrarDispositivo(requestBody.TokenDispositivo, _autService, _notificationHubClientConnection);
             }
 
             return ProcesarRespuesta(respIniciarSesion);
@@ -235,7 +105,7 @@ namespace Risk.API.Controllers
         {
             string usuario = TokenHelper.ObtenerUsuarioDeAccessToken(requestBody.AccessToken);
 
-            var accessTokenNuevo = GenerarAccessToken(usuario);
+            var accessTokenNuevo = TokenHelper.GenerarAccessToken(usuario, _autService, _genService);
             var refreshTokenNuevo = TokenHelper.GenerarRefreshToken();
 
             var respuesta = _autService.RefrescarSesion(requestBody.AccessToken, requestBody.RefreshToken, accessTokenNuevo, refreshTokenNuevo);
@@ -313,7 +183,7 @@ namespace Risk.API.Controllers
 
             if (respuesta.Codigo.Equals(RiskConstants.CODIGO_OK))
             {
-                RegistrarDispositivoNotificationHub(respuesta.Datos.Contenido);
+                NotificationHubHelper.RegistrarDispositivo(respuesta.Datos.Contenido, _autService, _notificationHubClientConnection);
             }
 
             return ProcesarRespuesta(respuesta);
@@ -355,10 +225,7 @@ namespace Risk.API.Controllers
                 return ProcesarRespuesta(respuesta);
             }
 
-            var archivo = respuesta.Datos;
-            byte[] contenido = GZipHelper.Decompress(Convert.FromBase64String(archivo.Contenido));
-
-            return File(contenido, archivo.TipoMime, string.Concat(archivo.Nombre, ".", archivo.Extension));
+            return ProcesarArchivo(respuesta.Datos);
         }
 
         [HttpPost("GuardarAvatarUsuario")]
@@ -368,25 +235,7 @@ namespace Risk.API.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
         public IActionResult GuardarAvatarUsuario([FromQuery, SwaggerParameter(Description = "Usuario", Required = true)] string usuario, [FromForm] GuardarArchivoRequestBody requestBody)
         {
-            string contenido = string.Empty;
-
-            if (requestBody.Archivo.Length > 0)
-            {
-                using (var ms = new MemoryStream())
-                {
-                    requestBody.Archivo.CopyTo(ms);
-                    contenido = Convert.ToBase64String(GZipHelper.Compress(ms.ToArray()));
-                }
-            }
-
-            Archivo archivo = new Archivo
-            {
-                Contenido = contenido,
-                Nombre = requestBody.Nombre,
-                Extension = requestBody.Extension
-            };
-
-            var respuesta = _genService.GuardarArchivo("T_USUARIOS", "AVATAR", usuario, archivo);
+            var respuesta = _genService.GuardarArchivo("T_USUARIOS", "AVATAR", usuario, ProcesarArchivo(requestBody));
             return ProcesarRespuesta(respuesta);
         }
 

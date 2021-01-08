@@ -22,7 +22,6 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-using System;
 using System.Net.Mime;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -232,15 +231,7 @@ namespace Risk.API.Controllers
                 return ProcesarRespuesta(respuesta);
             }
 
-            var archivo = respuesta.Datos;
-
-            if (archivo.Contenido == null)
-            {
-                return ProcesarRespuesta(respuesta);
-            }
-
-            byte[] contenido = GZipHelper.Decompress(Convert.FromBase64String(archivo.Contenido));
-            return File(contenido, archivo.TipoMime, string.Concat(archivo.Nombre, ".", archivo.Extension));
+            return ProcesarArchivo(respuesta.Datos);
         }
 
         [HttpGet("ReporteListarSignificados")]
@@ -257,15 +248,7 @@ namespace Risk.API.Controllers
                 return ProcesarRespuesta(respuesta);
             }
 
-            var archivo = respuesta.Datos;
-
-            if (archivo.Contenido == null)
-            {
-                return ProcesarRespuesta(respuesta);
-            }
-
-            byte[] contenido = GZipHelper.Decompress(Convert.FromBase64String(archivo.Contenido));
-            return File(contenido, archivo.TipoMime, string.Concat(archivo.Nombre, ".", archivo.Extension));
+            return ProcesarArchivo(respuesta.Datos);
         }
     }
 }

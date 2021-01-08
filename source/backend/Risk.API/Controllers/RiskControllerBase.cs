@@ -23,6 +23,8 @@ SOFTWARE.
 */
 
 using System;
+using System.IO;
+using System.Net;
 using System.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -43,7 +45,7 @@ namespace Risk.API.Controllers
             _enableHttpStatusCodes = _configuration.GetValue<bool>("EnableHttpStatusCodes");
         }
 
-        public IActionResult ProcesarRespuesta<T>(Respuesta<T> respuesta)
+        protected IActionResult ProcesarRespuesta<T>(Respuesta<T> respuesta)
         {
             if (respuesta.Codigo.Equals(RiskConstants.CODIGO_OK))
             {
@@ -69,7 +71,56 @@ namespace Risk.API.Controllers
             }
         }
 
-        public Pagina<T> ProcesarPagina<T>(Pagina<T> pagina)
+        protected FileContentResult ProcesarArchivo(Archivo archivo)
+        {
+            byte[] contenido = null;
+            if (archivo.Contenido != null)
+            {
+                contenido = GZipHelper.Decompress(Convert.FromBase64String(archivo.Contenido));
+            }
+            else if (archivo.Url != null)
+            {
+                using (var webClient = new WebClient())
+                {
+                    contenido = webClient.DownloadData(archivo.Url);
+                }
+            }
+
+            return File(contenido, archivo.TipoMime, string.Concat(archivo.Nombre, ".", archivo.Extension));
+        }
+
+        protected Archivo ProcesarArchivo(GuardarArchivoRequestBody requestBody)
+        {
+            string contenido = string.Empty;
+            string url = string.Empty;
+
+            if (requestBody.Archivo != null)
+            {
+                if (requestBody.Archivo.Length > 0)
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        requestBody.Archivo.CopyTo(ms);
+                        contenido = Convert.ToBase64String(GZipHelper.Compress(ms.ToArray()));
+                    }
+                }
+            }
+            else if (requestBody.Url != null)
+            {
+                url = requestBody.Url;
+            }
+
+
+            return new Archivo
+            {
+                Contenido = contenido,
+                Url = url,
+                Nombre = requestBody.Nombre,
+                Extension = requestBody.Extension
+            };
+        }
+
+        protected Pagina<T> ProcesarPagina<T>(Pagina<T> pagina)
         {
             Pagina<T> resp;
             if (pagina == null)
