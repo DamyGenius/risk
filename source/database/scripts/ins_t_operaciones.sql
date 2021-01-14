@@ -105,6 +105,9 @@ insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE,
 values (33, 'S', 'CAMBIAR_ESTADO_MENSAJERIA', 'MSJ', 'S', null, '0.1.0', 'N');
 
 insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL, LOG_ACTIVO)
+values (34, 'S', 'ACTIVAR_DESACTIVAR_MENSAJERIA', 'MSJ', 'S', null, '0.1.0', 'N');
+
+insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL, LOG_ACTIVO)
 values (36, 'R', 'LISTAR_SIGNIFICADOS', 'GEN', 'S', null, '0.1.0', 'N');
 
 insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL, LOG_ACTIVO)
@@ -160,5 +163,8 @@ values (56, 'T', 'PARTIDO_EN_JUEGO_{ID_PARTIDO}', 'FAN', 'S', 'Trabajo de actual
 
 insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL, LOG_ACTIVO)
 values (57, 'T', 'FIN_PARTIDO_{ID_PARTIDO}', 'FAN', 'S', 'Trabajo de cierre de partido en juego', null, 'N');
+
+insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL, LOG_ACTIVO)
+values (58, 'S', 'LISTAR_ERRORES', 'GEN', 'S', null, '0.1.0', 'N');
 
 prompt Done.

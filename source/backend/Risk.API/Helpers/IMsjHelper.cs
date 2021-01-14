@@ -23,19 +23,18 @@ SOFTWARE.
 */
 
 using System.Collections.Generic;
-using Risk.API.Client.Model;
+using Risk.API.Models;
 
-namespace Risk.Msj
+namespace Risk.API.Helpers
 {
-    public interface IRiskAPIClientConnection
+    public interface IMsjHelper
     {
-        bool MensajeriaActiva { get; set; }
-        void IniciarSesion();
-        void RefrescarSesion();
-        void FinalizarSesion();
-        void CambiarEstadoMensajeria(TipoMensajeria tipo, int id, EstadoMensajeria estado, string respuestaEnvio);
+        bool EnvioCorreosActivo();
+        bool EnvioNotificacionesActivo();
+        bool EnvioMensajesActivo();
         List<Correo> ListarCorreosPendientes();
         List<Notificacion> ListarNotificacionesPendientes();
         List<Mensaje> ListarMensajesPendientes();
+        void CambiarEstadoMensajeria(TipoMensajeria tipo, int id, EstadoMensajeria estado, string respuestaEnvio);
     }
 }

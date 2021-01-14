@@ -22,16 +22,15 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-using Risk.API.Models;
+using Newtonsoft.Json;
 
-namespace Risk.API.Services
+namespace Risk.API.Entities
 {
-    public interface IMsjService
+    public class YError
     {
-        Respuesta<Pagina<Mensaje>> ListarMensajesPendientes(PaginaParametros paginaParametros = null);
-        Respuesta<Pagina<Correo>> ListarCorreosPendientes(PaginaParametros paginaParametros = null);
-        Respuesta<Pagina<Notificacion>> ListarNotificacionesPendientes(PaginaParametros paginaParametros = null);
-        Respuesta<Dato> CambiarEstadoMensajeria(TipoMensajeria tipoMensajeria, int idMensajeria, EstadoMensajeria estado, string respuestaEnvio);
-        Respuesta<Dato> ActivarDesactivarMensajeria(TipoMensajeria tipoMensajeria, bool estado);
+        [JsonProperty("id_error")]
+        public string IdError { get; set; }
+        [JsonProperty("mensaje")]
+        public string Mensaje { get; set; }
     }
 }

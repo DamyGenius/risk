@@ -75,6 +75,9 @@ insert into t_permisos (ID_PERMISO, DESCRIPCION, DETALLE)
 values ('SERVICIO:GEN:LISTAR_DEPARTAMENTOS', null, null);
 
 insert into t_permisos (ID_PERMISO, DESCRIPCION, DETALLE)
+values ('SERVICIO:GEN:LISTAR_ERRORES', null, null);
+
+insert into t_permisos (ID_PERMISO, DESCRIPCION, DETALLE)
 values ('SERVICIO:GEN:LISTAR_PAISES', null, null);
 
 insert into t_permisos (ID_PERMISO, DESCRIPCION, DETALLE)
@@ -97,6 +100,9 @@ values ('SERVICIO:GEN:VERSION_SERVICIO', null, null);
 
 insert into t_permisos (ID_PERMISO, DESCRIPCION, DETALLE)
 values ('SERVICIO:GEN:VERSION_SISTEMA', null, null);
+
+insert into t_permisos (ID_PERMISO, DESCRIPCION, DETALLE)
+values ('SERVICIO:MSJ:ACTIVAR_DESACTIVAR_MENSAJERIA', null, null);
 
 insert into t_permisos (ID_PERMISO, DESCRIPCION, DETALLE)
 values ('SERVICIO:MSJ:CAMBIAR_ESTADO_MENSAJERIA', null, null);

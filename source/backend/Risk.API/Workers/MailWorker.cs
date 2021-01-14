@@ -1,3 +1,27 @@
+/*
+--------------------------------- MIT License ---------------------------------
+Copyright (c) 2019 jtsoya539
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-------------------------------------------------------------------------------
+*/
+
 using System;
 using System.IO;
 using System.Linq;
@@ -13,18 +37,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MimeKit;
-using Risk.API.Client.Model;
-using Risk.Msj.Helpers;
+using Risk.API.Helpers;
+using Risk.API.Models;
 
-namespace Risk.Msj
+namespace Risk.API.Workers
 {
-    public class WorkerMail : BackgroundService
+    public class MailWorker : BackgroundService
     {
-        private readonly ILogger<WorkerMail> _logger;
+        private readonly ILogger<MailWorker> _logger;
         private readonly IConfiguration _configuration;
-
-        // Risk Configuration
-        private readonly IRiskAPIClientConnection _riskAPIClientConnection;
+        private readonly IMsjHelper _msjHelper;
 
         // Mail Configuration
         private string mailboxFromName;
@@ -32,22 +54,31 @@ namespace Risk.Msj
         private SmtpClient smtpClient;
         private SaslMechanismOAuth2 oAuth2;
 
-        public WorkerMail(ILogger<WorkerMail> logger, IConfiguration configuration, IRiskAPIClientConnection riskAPIClientConnection)
+        public MailWorker(ILogger<MailWorker> logger, IConfiguration configuration, IMsjHelper msjHelper)
         {
             _logger = logger;
             _configuration = configuration;
-
-            // Risk Configuration
-            _riskAPIClientConnection = riskAPIClientConnection;
+            _msjHelper = msjHelper;
         }
 
         // Mail Configuration
-        private void Configurar()
+        private async Task Configurar()
         {
             mailboxFromName = _configuration["MailConfiguration:MailboxFromName"];
             mailboxFromAddress = _configuration["MailConfiguration:MailboxFromAddress"];
 
             smtpClient = new SmtpClient();
+            smtpClient.Connect("smtp.gmail.com", 465, SecureSocketOptions.SslOnConnect);
+
+            if (_configuration.GetValue<bool>("MailConfiguration:EnableOAuth2"))
+            {
+                await ConfigurarOAuth2Async();
+                smtpClient.Authenticate(oAuth2);
+            }
+            else
+            {
+                smtpClient.Authenticate(_configuration["MailConfiguration:UserName"], _configuration["MailConfiguration:Password"]);
+            }
         }
 
         private async Task ConfigurarOAuth2Async()
@@ -79,27 +110,16 @@ namespace Risk.Msj
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                if (_configuration.GetValue<bool>("EnableMail") && _riskAPIClientConnection.MensajeriaActiva)
+                if (_msjHelper.EnvioCorreosActivo())
                 {
-                    _logger.LogInformation($"WorkerMail running at: {DateTimeOffset.Now}");
+                    _logger.LogInformation("Ejecutando MailWorker");
 
-                    var mensajes = _riskAPIClientConnection.ListarCorreosPendientes();
+                    var mensajes = _msjHelper.ListarCorreosPendientes();
 
                     if (mensajes.Any())
                     {
                         // Mail Configuration
-                        Configurar();
-                        smtpClient.Connect("smtp.gmail.com", 465, SecureSocketOptions.SslOnConnect);
-
-                        if (_configuration.GetValue<bool>("MailConfiguration:EnableOAuth2"))
-                        {
-                            await ConfigurarOAuth2Async();
-                            smtpClient.Authenticate(oAuth2);
-                        }
-                        else
-                        {
-                            smtpClient.Authenticate(_configuration["MailConfiguration:UserName"], _configuration["MailConfiguration:Password"]);
-                        }
+                        await Configurar();
 
                         foreach (var item in mensajes)
                         {
@@ -174,12 +194,12 @@ namespace Risk.Msj
                                 smtpClient.Send(message);
 
                                 // Cambia estado de la mensajería a E-ENVIADO
-                                _riskAPIClientConnection.CambiarEstadoMensajeria(TipoMensajeria.Mail, item.IdCorreo, EstadoMensajeria.Enviado, "OK");
+                                _msjHelper.CambiarEstadoMensajeria(TipoMensajeria.Mail, item.IdCorreo, EstadoMensajeria.Enviado, "OK");
                             }
                             catch (Exception e)
                             {
                                 // Cambia estado de la mensajería a R-PROCESADO CON ERROR
-                                _riskAPIClientConnection.CambiarEstadoMensajeria(TipoMensajeria.Mail, item.IdCorreo, EstadoMensajeria.ProcesadoError, e.Message);
+                                _msjHelper.CambiarEstadoMensajeria(TipoMensajeria.Mail, item.IdCorreo, EstadoMensajeria.ProcesadoError, e.Message);
                             }
                         }
 
@@ -187,7 +207,7 @@ namespace Risk.Msj
                     }
                 }
 
-                await Task.Delay(TimeSpan.FromSeconds(_configuration.GetValue<double>("ExecuteDelaySeconds")), stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(_configuration.GetValue<double>("WorkerExecuteDelaySeconds")), stoppingToken);
             }
         }
     }

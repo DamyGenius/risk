@@ -22,33 +22,16 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-using System.IO;
-using System.IO.Compression;
+using Swashbuckle.AspNetCore.Annotations;
 
-namespace Risk.Msj.Helpers
+namespace Risk.API.Models
 {
-    public static class GZipHelper
+    [SwaggerSchema("Agrupa datos de Errores")]
+    public class Error
     {
-        public static byte[] Compress(byte[] data)
-        {
-            using (var compressedStream = new MemoryStream())
-            using (var zipStream = new GZipStream(compressedStream, CompressionMode.Compress))
-            {
-                zipStream.Write(data, 0, data.Length);
-                zipStream.Close();
-                return compressedStream.ToArray();
-            }
-        }
-
-        public static byte[] Decompress(byte[] data)
-        {
-            using (var compressedStream = new MemoryStream(data))
-            using (var zipStream = new GZipStream(compressedStream, CompressionMode.Decompress))
-            using (var resultStream = new MemoryStream())
-            {
-                zipStream.CopyTo(resultStream);
-                return resultStream.ToArray();
-            }
-        }
+        [SwaggerSchema("Identificador del error")]
+        public string IdError { get; set; }
+        [SwaggerSchema("Mensaje del error")]
+        public string Mensaje { get; set; }
     }
 }
