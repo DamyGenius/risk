@@ -62,6 +62,15 @@ CREATE OR REPLACE PACKAGE k_autenticacion IS
                             i_clave_nueva   IN VARCHAR2,
                             i_tipo_clave    IN CHAR DEFAULT 'A');
 
+  FUNCTION f_validar_credenciales_risk(i_id_usuario IN NUMBER,
+                                       i_clave      IN VARCHAR2,
+                                       i_tipo_clave IN CHAR DEFAULT 'A')
+    RETURN BOOLEAN;
+
+  FUNCTION f_validar_credenciales_oracle(i_usuario IN VARCHAR2,
+                                         i_clave   IN VARCHAR2)
+    RETURN BOOLEAN;
+
   FUNCTION f_validar_credenciales(i_usuario    IN VARCHAR2,
                                   i_clave      IN VARCHAR2,
                                   i_tipo_clave IN CHAR DEFAULT 'A')
@@ -569,27 +578,19 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
       raise_application_error(-20000, 'Credenciales inválidas');
   END;
 
-  FUNCTION f_validar_credenciales(i_usuario    IN VARCHAR2,
-                                  i_clave      IN VARCHAR2,
-                                  i_tipo_clave IN CHAR DEFAULT 'A')
+  FUNCTION f_validar_credenciales_risk(i_id_usuario IN NUMBER,
+                                       i_clave      IN VARCHAR2,
+                                       i_tipo_clave IN CHAR DEFAULT 'A')
     RETURN BOOLEAN IS
-    l_id_usuario  t_usuarios.id_usuario%TYPE;
     l_hash        t_usuario_claves.hash%TYPE;
     l_salt        t_usuario_claves.salt%TYPE;
     l_iteraciones t_usuario_claves.iteraciones%TYPE;
   BEGIN
-    -- Busca usuario
-    l_id_usuario := k_usuario.f_buscar_id(i_usuario);
-  
-    IF l_id_usuario IS NULL THEN
-      RAISE k_usuario.ex_usuario_inexistente;
-    END IF;
-  
     BEGIN
       SELECT c.hash, c.salt, c.iteraciones
         INTO l_hash, l_salt, l_iteraciones
         FROM t_usuario_claves c
-       WHERE c.id_usuario = l_id_usuario
+       WHERE c.id_usuario = i_id_usuario
          AND c.tipo = i_tipo_clave
          AND c.estado IN ('N', 'A');
     EXCEPTION
@@ -603,6 +604,68 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
                         utl_raw.length(hextoraw(l_hash))) THEN
       RAISE ex_credenciales_invalidas;
     END IF;
+  
+    RETURN TRUE;
+  EXCEPTION
+    WHEN ex_credenciales_invalidas THEN
+      RETURN FALSE;
+    WHEN OTHERS THEN
+      RETURN FALSE;
+  END;
+
+  -- https://stackoverflow.com/a/33043760
+  FUNCTION f_validar_credenciales_oracle(i_usuario IN VARCHAR2,
+                                         i_clave   IN VARCHAR2)
+    RETURN BOOLEAN IS
+  BEGIN
+    BEGIN
+      EXECUTE IMMEDIATE 'DROP DATABASE LINK password_test_loopback';
+    EXCEPTION
+      WHEN OTHERS THEN
+        NULL;
+    END;
+  
+    EXECUTE IMMEDIATE 'CREATE DATABASE LINK password_test_loopback CONNECT TO ' ||
+                      i_usuario || ' IDENTIFIED BY ' || i_clave ||
+                      ' USING ''' ||
+                      k_util.f_valor_parametro('BASE_DATOS_PRODUCCION') || '''';
+  
+    EXECUTE IMMEDIATE 'SELECT * FROM dual@password_test_loopback';
+  
+    EXECUTE IMMEDIATE 'DROP DATABASE LINK password_test_loopback';
+  
+    RETURN TRUE;
+  EXCEPTION
+    WHEN OTHERS THEN
+      RETURN FALSE;
+  END;
+
+  FUNCTION f_validar_credenciales(i_usuario    IN VARCHAR2,
+                                  i_clave      IN VARCHAR2,
+                                  i_tipo_clave IN CHAR DEFAULT 'A')
+    RETURN BOOLEAN IS
+    l_id_usuario t_usuarios.id_usuario%TYPE;
+  BEGIN
+    -- Busca usuario
+    l_id_usuario := k_usuario.f_buscar_id(i_usuario);
+  
+    IF l_id_usuario IS NULL THEN
+      RAISE k_usuario.ex_usuario_inexistente;
+    END IF;
+  
+    CASE k_util.f_valor_parametro('METODO_VALIDACION_CREDENCIALES')
+      WHEN 'RISK' THEN
+        IF NOT
+            f_validar_credenciales_risk(l_id_usuario, i_clave, i_tipo_clave) THEN
+          RAISE ex_credenciales_invalidas;
+        END IF;
+      WHEN 'ORACLE' THEN
+        IF NOT f_validar_credenciales_oracle(i_usuario, i_clave) THEN
+          RAISE ex_credenciales_invalidas;
+        END IF;
+      ELSE
+        RAISE ex_credenciales_invalidas;
+    END CASE;
   
     lp_registrar_autenticacion(l_id_usuario, i_tipo_clave);
     RETURN TRUE;
@@ -698,8 +761,10 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     END IF;
   
     -- Obtiene la fecha de expiracion del Access Token y Refresh Token
-    l_fecha_expiracion_access_token  := k_sesion.f_fecha_expiracion_access_token(i_access_token);
-    l_fecha_expiracion_refresh_token := k_sesion.f_fecha_expiracion_refresh_token(i_id_aplicacion);
+    l_fecha_expiracion_access_token := k_sesion.f_fecha_expiracion_access_token(i_access_token);
+    IF i_refresh_token IS NOT NULL THEN
+      l_fecha_expiracion_refresh_token := k_sesion.f_fecha_expiracion_refresh_token(i_id_aplicacion);
+    END IF;
   
     -- Inserta sesion
     INSERT INTO t_sesiones
@@ -766,8 +831,10 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     END IF;
   
     -- Obtiene la fecha de expiracion del Access Token y Refresh Token
-    l_fecha_expiracion_access_token  := k_sesion.f_fecha_expiracion_access_token(i_access_token_nuevo);
-    l_fecha_expiracion_refresh_token := k_sesion.f_fecha_expiracion_refresh_token(i_id_aplicacion);
+    l_fecha_expiracion_access_token := k_sesion.f_fecha_expiracion_access_token(i_access_token_nuevo);
+    IF i_refresh_token_nuevo IS NOT NULL THEN
+      l_fecha_expiracion_refresh_token := k_sesion.f_fecha_expiracion_refresh_token(i_id_aplicacion);
+    END IF;
   
     -- Actualiza sesion
     UPDATE t_sesiones
