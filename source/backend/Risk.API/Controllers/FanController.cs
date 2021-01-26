@@ -96,7 +96,7 @@ namespace Risk.API.Controllers
             [FromQuery, SwaggerParameter(Description = "Usuario", Required = true)] string usuario,
             [FromQuery, SwaggerParameter(Description = "Número de la página", Required = false)] int pagina,
             [FromQuery, SwaggerParameter(Description = "Cantidad de elementos por página", Required = false)] int porPagina,
-            [FromQuery, SwaggerParameter(Description = "No paginar? (S/N)", Required = false)] string noPaginar,
+            [FromQuery, SwaggerParameter(Description = "No paginar?", Required = false)] bool noPaginar,
             [FromQuery, SwaggerParameter(Description = "Orden (ASC/DESC)", Required = false)] OrdenLista orden)
         {
             PaginaParametros paginaParametros = new PaginaParametros
@@ -246,7 +246,7 @@ namespace Risk.API.Controllers
             [FromQuery, SwaggerParameter(Description = "", Required = false)] string incluirUsuarios,
             [FromQuery, SwaggerParameter(Description = "Número de la página", Required = false)] int pagina,
             [FromQuery, SwaggerParameter(Description = "Cantidad de elementos por página", Required = false)] int porPagina,
-            [FromQuery, SwaggerParameter(Description = "No paginar? (S/N)", Required = false)] string noPaginar)
+            [FromQuery, SwaggerParameter(Description = "No paginar?", Required = false)] bool noPaginar)
         {
             PaginaParametros paginaParametros = new PaginaParametros
             {
