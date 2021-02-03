@@ -36,7 +36,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Oracle.ManagedDataAccess.Client;
-using Risk.API.Entities;
 using Risk.API.Filters;
 using Risk.API.Helpers;
 using Risk.API.Middlewares;
@@ -211,9 +210,9 @@ namespace Risk.API
             else
             {
                 app.UseRiskExceptionHandler();
-            }
 
-            app.UseHttpsRedirection();
+                app.UseHttpsRedirection();
+            }
 
             app.UseStaticFiles();
 
