@@ -36,7 +36,11 @@ CREATE OR REPLACE PACKAGE k_operacion IS
   c_tipo_trabajo    CONSTANT CHAR(1) := 'T';
   c_tipo_parametros CONSTANT CHAR(1) := 'P';
 
+  c_id_log CONSTANT VARCHAR2(50) := 'ID_LOG';
+
   c_id_operacion_contexto CONSTANT PLS_INTEGER := 0;
+
+  PROCEDURE p_reservar_id_log(i_id_operacion IN NUMBER);
 
   PROCEDURE p_registrar_log(i_id_operacion IN NUMBER,
                             i_parametros   IN CLOB,
@@ -76,6 +80,28 @@ END;
 /
 CREATE OR REPLACE PACKAGE BODY k_operacion IS
 
+  PROCEDURE p_reservar_id_log(i_id_operacion IN NUMBER) IS
+    l_log_activo t_operaciones.log_activo%TYPE;
+  BEGIN
+    BEGIN
+      SELECT log_activo
+        INTO l_log_activo
+        FROM t_operaciones
+       WHERE id_operacion = i_id_operacion;
+    EXCEPTION
+      WHEN OTHERS THEN
+        l_log_activo := 'N';
+    END;
+  
+    IF l_log_activo = 'S' THEN
+      k_sistema.p_definir_parametro_number(c_id_log,
+                                           s_id_operacion_log.nextval);
+    END IF;
+  EXCEPTION
+    WHEN OTHERS THEN
+      NULL;
+  END;
+
   PROCEDURE p_registrar_log(i_id_operacion IN NUMBER,
                             i_parametros   IN CLOB,
                             i_respuesta    IN CLOB,
@@ -95,9 +121,13 @@ CREATE OR REPLACE PACKAGE BODY k_operacion IS
   
     IF l_log_activo = 'S' THEN
       INSERT INTO t_operacion_logs
-        (id_operacion, contexto, parametros, respuesta)
+        (id_operacion_log, id_operacion, contexto, parametros, respuesta)
       VALUES
-        (i_id_operacion, i_contexto, i_parametros, i_respuesta);
+        (k_sistema.f_valor_parametro_number(c_id_log),
+         i_id_operacion,
+         i_contexto,
+         i_parametros,
+         i_respuesta);
     END IF;
   
     COMMIT;
@@ -189,15 +219,15 @@ CREATE OR REPLACE PACKAGE BODY k_operacion IS
       IF par.obligatorio = 'S' THEN
         IF NOT l_json_object.has(par.nombre) THEN
           raise_application_error(-20000,
-                                  'Parámetro ' ||
-                                  nvl(par.etiqueta, par.nombre) ||
-                                  ' obligatorio');
+                                  k_error.f_mensaje_error('ora0003',
+                                                          nvl(par.etiqueta,
+                                                              par.nombre)));
         ELSE
           IF l_json_element.is_null THEN
             raise_application_error(-20000,
-                                    'Parámetro ' ||
-                                    nvl(par.etiqueta, par.nombre) ||
-                                    ' debe tener valor');
+                                    k_error.f_mensaje_error('ora0004',
+                                                            nvl(par.etiqueta,
+                                                                par.nombre)));
           END IF;
         END IF;
       END IF;
@@ -209,9 +239,9 @@ CREATE OR REPLACE PACKAGE BODY k_operacion IS
           IF l_json_element IS NOT NULL AND NOT l_json_element.is_null AND
              NOT l_json_element.is_string THEN
             raise_application_error(-20000,
-                                    'Parámetro ' ||
-                                    nvl(par.etiqueta, par.nombre) ||
-                                    ' de tipo incorrecto');
+                                    k_error.f_mensaje_error('ora0005',
+                                                            nvl(par.etiqueta,
+                                                                par.nombre)));
           END IF;
         
           l_parametro.valor := anydata.convertvarchar2(l_json_object.get_string(par.nombre));
@@ -222,18 +252,18 @@ CREATE OR REPLACE PACKAGE BODY k_operacion IS
           IF l_parametro.valor.accessvarchar2 IS NULL AND
              par.obligatorio = 'S' THEN
             raise_application_error(-20000,
-                                    'Parámetro ' ||
-                                    nvl(par.etiqueta, par.nombre) ||
-                                    ' debe tener valor');
+                                    k_error.f_mensaje_error('ora0004',
+                                                            nvl(par.etiqueta,
+                                                                par.nombre)));
           END IF;
           IF par.longitud_maxima IS NOT NULL AND
              nvl(length(l_parametro.valor.accessvarchar2), 0) >
              par.longitud_maxima THEN
             raise_application_error(-20000,
-                                    'Longitud del parámetro ' ||
-                                    nvl(par.etiqueta, par.nombre) ||
-                                    ' no debe ser superior a ' ||
-                                    to_char(par.longitud_maxima));
+                                    k_error.f_mensaje_error('ora0006',
+                                                            nvl(par.etiqueta,
+                                                                par.nombre),
+                                                            to_char(par.longitud_maxima)));
           END IF;
         
         WHEN 'N' THEN
@@ -241,9 +271,9 @@ CREATE OR REPLACE PACKAGE BODY k_operacion IS
           IF l_json_element IS NOT NULL AND NOT l_json_element.is_null AND
              NOT l_json_element.is_number THEN
             raise_application_error(-20000,
-                                    'Parámetro ' ||
-                                    nvl(par.etiqueta, par.nombre) ||
-                                    ' de tipo incorrecto');
+                                    k_error.f_mensaje_error('ora0005',
+                                                            nvl(par.etiqueta,
+                                                                par.nombre)));
           END IF;
         
           l_parametro.valor := anydata.convertnumber(l_json_object.get_number(par.nombre));
@@ -254,18 +284,18 @@ CREATE OR REPLACE PACKAGE BODY k_operacion IS
           IF l_parametro.valor.accessnumber IS NULL AND
              par.obligatorio = 'S' THEN
             raise_application_error(-20000,
-                                    'Parámetro ' ||
-                                    nvl(par.etiqueta, par.nombre) ||
-                                    ' debe tener valor');
+                                    k_error.f_mensaje_error('ora0004',
+                                                            nvl(par.etiqueta,
+                                                                par.nombre)));
           END IF;
           IF par.longitud_maxima IS NOT NULL AND
              nvl(length(to_char(abs(trunc(l_parametro.valor.accessnumber)))),
                  0) > par.longitud_maxima THEN
             raise_application_error(-20000,
-                                    'Longitud del parámetro ' ||
-                                    nvl(par.etiqueta, par.nombre) ||
-                                    ' no debe ser superior a ' ||
-                                    to_char(par.longitud_maxima));
+                                    k_error.f_mensaje_error('ora0006',
+                                                            nvl(par.etiqueta,
+                                                                par.nombre),
+                                                            to_char(par.longitud_maxima)));
           END IF;
         
         WHEN 'B' THEN
@@ -273,9 +303,9 @@ CREATE OR REPLACE PACKAGE BODY k_operacion IS
           IF l_json_element IS NOT NULL AND NOT l_json_element.is_null AND
              NOT l_json_element.is_boolean THEN
             raise_application_error(-20000,
-                                    'Parámetro ' ||
-                                    nvl(par.etiqueta, par.nombre) ||
-                                    ' de tipo incorrecto');
+                                    k_error.f_mensaje_error('ora0005',
+                                                            nvl(par.etiqueta,
+                                                                par.nombre)));
           END IF;
         
           l_parametro.valor := anydata.convertnumber(sys.diutil.bool_to_int(l_json_object.get_boolean(par.nombre)));
@@ -286,9 +316,9 @@ CREATE OR REPLACE PACKAGE BODY k_operacion IS
           IF l_parametro.valor.accessnumber IS NULL AND
              par.obligatorio = 'S' THEN
             raise_application_error(-20000,
-                                    'Parámetro ' ||
-                                    nvl(par.etiqueta, par.nombre) ||
-                                    ' debe tener valor');
+                                    k_error.f_mensaje_error('ora0004',
+                                                            nvl(par.etiqueta,
+                                                                par.nombre)));
           END IF;
         
         WHEN 'D' THEN
@@ -297,9 +327,9 @@ CREATE OR REPLACE PACKAGE BODY k_operacion IS
              NOT l_json_element.is_string /*l_json_element.is_date*/
            THEN
             raise_application_error(-20000,
-                                    'Parámetro ' ||
-                                    nvl(par.etiqueta, par.nombre) ||
-                                    ' de tipo incorrecto');
+                                    k_error.f_mensaje_error('ora0005',
+                                                            nvl(par.etiqueta,
+                                                                par.nombre)));
           END IF;
         
           l_parametro.valor := anydata.convertdate(l_json_object.get_date(par.nombre));
@@ -310,9 +340,9 @@ CREATE OR REPLACE PACKAGE BODY k_operacion IS
           END IF;
           IF l_parametro.valor.accessdate IS NULL AND par.obligatorio = 'S' THEN
             raise_application_error(-20000,
-                                    'Parámetro ' ||
-                                    nvl(par.etiqueta, par.nombre) ||
-                                    ' debe tener valor');
+                                    k_error.f_mensaje_error('ora0004',
+                                                            nvl(par.etiqueta,
+                                                                par.nombre)));
           END IF;
         
         WHEN 'O' THEN
@@ -320,9 +350,9 @@ CREATE OR REPLACE PACKAGE BODY k_operacion IS
           IF l_json_element IS NOT NULL AND NOT l_json_element.is_null AND
              NOT l_json_element.is_object THEN
             raise_application_error(-20000,
-                                    'Parámetro ' ||
-                                    nvl(par.etiqueta, par.nombre) ||
-                                    ' de tipo incorrecto');
+                                    k_error.f_mensaje_error('ora0005',
+                                                            nvl(par.etiqueta,
+                                                                par.nombre)));
           END IF;
         
           IF l_json_element IS NOT NULL THEN
@@ -336,16 +366,17 @@ CREATE OR REPLACE PACKAGE BODY k_operacion IS
           END IF;
           IF l_parametro.valor IS NULL AND par.obligatorio = 'S' THEN
             raise_application_error(-20000,
-                                    'Parámetro ' ||
-                                    nvl(par.etiqueta, par.nombre) ||
-                                    ' debe tener valor');
+                                    k_error.f_mensaje_error('ora0004',
+                                                            nvl(par.etiqueta,
+                                                                par.nombre)));
           END IF;
         
         ELSE
           raise_application_error(-20000,
-                                  'Tipo de dato de parámetro ' ||
-                                  nvl(par.etiqueta, par.nombre) ||
-                                  ' no soportado');
+                                  k_error.f_mensaje_error('ora0002',
+                                                          'parámetro',
+                                                          nvl(par.etiqueta,
+                                                              par.nombre)));
         
       END CASE;
     
@@ -360,45 +391,70 @@ CREATE OR REPLACE PACKAGE BODY k_operacion IS
     i             INTEGER;
     l_typeinfo    anytype;
     l_typecode    PLS_INTEGER;
+    l_seen_one    BOOLEAN := FALSE;
   BEGIN
     IF i_parametros IS NOT NULL THEN
       i := i_parametros.first;
       WHILE i IS NOT NULL LOOP
       
-        IF i_parametros(i).nombre NOT IN ('formato', 'pagina_parametros') THEN
+        IF lower(i_parametros(i).nombre) NOT IN
+           ('formato', 'pagina_parametros') THEN
           IF i_parametros(i).valor IS NOT NULL THEN
             l_typecode := i_parametros(i).valor.gettype(l_typeinfo);
           
             IF l_typecode = dbms_types.typecode_varchar2 THEN
               IF anydata.accessvarchar2(i_parametros(i).valor) IS NOT NULL THEN
-                l_filtros_sql := l_filtros_sql || ' AND ' || i_parametros(i).nombre ||
-                                 ' = ' ||
+                l_filtros_sql := l_filtros_sql || CASE l_seen_one
+                                   WHEN TRUE THEN
+                                    ' AND '
+                                   ELSE
+                                    ' WHERE '
+                                 END || i_parametros(i).nombre || ' = ' ||
                                  dbms_assert.enquote_literal('''' ||
-                                                             REPLACE(anydata.accessvarchar2(i_parametros(i).valor),
+                                                             REPLACE(anydata.accessvarchar2(i_parametros(i)
+                                                                                            .valor),
                                                                      '''',
                                                                      '''''') || '''');
+                l_seen_one    := TRUE;
               END IF;
             ELSIF l_typecode = dbms_types.typecode_number THEN
               IF anydata.accessnumber(i_parametros(i).valor) IS NOT NULL THEN
-                l_filtros_sql := l_filtros_sql || ' AND to_char(' || i_parametros(i).nombre ||
+                l_filtros_sql := l_filtros_sql || CASE l_seen_one
+                                   WHEN TRUE THEN
+                                    ' AND '
+                                   ELSE
+                                    ' WHERE '
+                                 END || 'to_char(' || i_parametros(i)
+                                .nombre ||
                                  ', ''TM'', ''NLS_NUMERIC_CHARACTERS = ''''.,'''''') = ' ||
                                  dbms_assert.enquote_literal('''' ||
-                                                             to_char(anydata.accessnumber(i_parametros(i).valor),
+                                                             to_char(anydata.accessnumber(i_parametros(i)
+                                                                                          .valor),
                                                                      'TM',
                                                                      'NLS_NUMERIC_CHARACTERS = ''.,''') || '''');
+                l_seen_one    := TRUE;
               END IF;
             ELSIF l_typecode = dbms_types.typecode_date THEN
               IF anydata.accessdate(i_parametros(i).valor) IS NOT NULL THEN
-                l_filtros_sql := l_filtros_sql || ' AND to_char(' || i_parametros(i).nombre ||
-                                 ', ''YYYY-MM-DD'') = ' ||
+                l_filtros_sql := l_filtros_sql || CASE l_seen_one
+                                   WHEN TRUE THEN
+                                    ' AND '
+                                   ELSE
+                                    ' WHERE '
+                                 END || 'to_char(' || i_parametros(i)
+                                .nombre || ', ''YYYY-MM-DD'') = ' ||
                                  dbms_assert.enquote_literal('''' ||
-                                                             to_char(anydata.accessdate(i_parametros(i).valor),
+                                                             to_char(anydata.accessdate(i_parametros(i)
+                                                                                        .valor),
                                                                      'YYYY-MM-DD') || '''');
+                l_seen_one    := TRUE;
               END IF;
             ELSE
               raise_application_error(-20000,
-                                      'Tipo de dato de filtro ' || i_parametros(i).nombre ||
-                                      ' no soportado');
+                                      k_error.f_mensaje_error('ora0002',
+                                                              'filtro',
+                                                              i_parametros(i)
+                                                              .nombre));
             END IF;
           END IF;
         END IF;
@@ -410,7 +466,7 @@ CREATE OR REPLACE PACKAGE BODY k_operacion IS
     RETURN l_filtros_sql;
   EXCEPTION
     WHEN value_error THEN
-      raise_application_error(-20000, 'Valor no permitido');
+      raise_application_error(-20000, k_error.f_mensaje_error('ora0001'));
   END;
 
   FUNCTION f_valor_parametro(i_parametros IN y_parametros,

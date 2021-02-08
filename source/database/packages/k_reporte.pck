@@ -157,7 +157,6 @@ CREATE OR REPLACE PACKAGE BODY k_reporte IS
     END;
   
     l_rsp.lugar := 'Definiendo parámetros en la sesión';
-    k_sistema.p_inicializar_parametros;
     k_sistema.p_definir_parametro_string(k_sistema.c_direccion_ip,
                                          k_operacion.f_valor_parametro_string(l_ctx,
                                                                               'direccion_ip'));
@@ -244,17 +243,19 @@ CREATE OR REPLACE PACKAGE BODY k_reporte IS
       RETURN l_rsp;
     WHEN OTHERS THEN
       ROLLBACK;
-      k_servicio.p_respuesta_error(l_rsp,
-                                   k_servicio.c_error_inesperado,
-                                   k_error.f_mensaje_error(k_servicio.c_error_inesperado),
-                                   dbms_utility.format_error_stack);
+      k_servicio.p_respuesta_excepcion(l_rsp,
+                                       utl_call_stack.error_number(1),
+                                       utl_call_stack.error_msg(1),
+                                       dbms_utility.format_error_stack);
       RETURN l_rsp;
   END;
 
   PROCEDURE p_limpiar_historial IS
   BEGIN
     UPDATE t_reportes
-       SET cantidad_ejecuciones = NULL, fecha_ultima_ejecucion = NULL;
+       SET cantidad_ejecuciones   = NULL,
+           fecha_ultima_ejecucion = NULL,
+           sql_ultima_ejecucion   = NULL;
   END;
 
   FUNCTION f_archivo_ok(i_contenido IN BLOB,
@@ -416,8 +417,7 @@ CREATE OR REPLACE PACKAGE BODY k_reporte IS
       RAISE k_servicio.ex_error_parametro;
     END IF;
   
-    l_consulta_sql := 'SELECT * FROM (' || l_consulta_sql ||
-                      ') WHERE 1 = 1' ||
+    l_consulta_sql := 'SELECT * FROM (' || l_consulta_sql || ')' ||
                       k_operacion.f_filtros_sql(i_parametros);
     -- Registra SQL
     lp_registrar_sql_ejecucion(i_id_reporte, l_consulta_sql);
@@ -574,8 +574,12 @@ CREATE OR REPLACE PACKAGE BODY k_reporte IS
                               i_contexto   IN CLOB DEFAULT NULL) RETURN CLOB IS
     l_rsp CLOB;
   BEGIN
+    -- Inicializa parámetros de la sesión
+    k_sistema.p_inicializar_parametros;
     -- Registra ejecución
     lp_registrar_ejecucion(i_id_reporte);
+    -- Reserva identificador para log
+    k_operacion.p_reservar_id_log(i_id_reporte);
     -- Procesa reporte
     l_rsp := lf_procesar_reporte(i_id_reporte, i_parametros, i_contexto)
              .to_json;
@@ -594,12 +598,16 @@ CREATE OR REPLACE PACKAGE BODY k_reporte IS
     l_rsp        CLOB;
     l_id_reporte t_reportes.id_reporte%TYPE;
   BEGIN
+    -- Inicializa parámetros de la sesión
+    k_sistema.p_inicializar_parametros;
     -- Busca reporte
     l_id_reporte := k_operacion.f_id_operacion(k_operacion.c_tipo_reporte,
                                                i_nombre,
                                                i_dominio);
     -- Registra ejecución
     lp_registrar_ejecucion(l_id_reporte);
+    -- Reserva identificador para log
+    k_operacion.p_reservar_id_log(l_id_reporte);
     -- Procesa reporte
     l_rsp := lf_procesar_reporte(l_id_reporte, i_parametros, i_contexto)
              .to_json;

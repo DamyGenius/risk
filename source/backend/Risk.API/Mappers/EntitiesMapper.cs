@@ -414,6 +414,41 @@ namespace Risk.API.Mappers
             return modelList;
         }
 
+        public static Aplicacion GetAplicacionFromEntity(SqlAplicacion entity)
+        {
+            Aplicacion model;
+            if (entity == null)
+            {
+                model = null;
+            }
+            else
+            {
+                model = new Aplicacion
+                {
+                    IdAplicacion = entity.IdAplicacion,
+                    Nombre = entity.Nombre,
+                    Tipo = entity.Tipo,
+                    Activo = GetBoolFromValue(entity.Activo),
+                    Detalle = entity.Detalle,
+                    VersionActual = entity.VersionActual
+                };
+            }
+            return model;
+        }
+
+        public static List<Aplicacion> GetAplicacionListFromEntity(List<SqlAplicacion> entityList)
+        {
+            List<Aplicacion> modelList = new List<Aplicacion>();
+            if (entityList != null)
+            {
+                foreach (var item in entityList)
+                {
+                    modelList.Add(GetAplicacionFromEntity(item));
+                }
+            }
+            return modelList;
+        }
+
         public static Mensaje GetMensajeFromEntity(YMensaje entity)
         {
             Mensaje model;
@@ -761,7 +796,7 @@ namespace Risk.API.Mappers
 
         public static TipoDispositivo GetTipoDispositivoEnumFromValue(string value)
         {
-            switch (value)
+            switch (value.ToUpper())
             {
                 case "M":
                     return TipoDispositivo.Mobile;
@@ -775,6 +810,19 @@ namespace Risk.API.Mappers
                     return TipoDispositivo.Watch;
                 default:
                     return TipoDispositivo.Mobile;
+            }
+        }
+
+        public static bool GetBoolFromValue(string value)
+        {
+            switch (value.ToUpper())
+            {
+                case "S":
+                    return true;
+                case "N":
+                    return false;
+                default:
+                    return false;
             }
         }
     }

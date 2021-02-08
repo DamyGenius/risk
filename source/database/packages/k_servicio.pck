@@ -180,7 +180,6 @@ CREATE OR REPLACE PACKAGE BODY k_servicio IS
     END;
   
     l_rsp.lugar := 'Definiendo parámetros en la sesión';
-    k_sistema.p_inicializar_parametros;
     k_sistema.p_definir_parametro_string(k_sistema.c_direccion_ip,
                                          k_operacion.f_valor_parametro_string(l_ctx,
                                                                               'direccion_ip'));
@@ -265,17 +264,19 @@ CREATE OR REPLACE PACKAGE BODY k_servicio IS
       RETURN l_rsp;
     WHEN OTHERS THEN
       ROLLBACK;
-      p_respuesta_error(l_rsp,
-                        c_error_inesperado,
-                        k_error.f_mensaje_error(c_error_inesperado),
-                        dbms_utility.format_error_stack);
+      p_respuesta_excepcion(l_rsp,
+                            utl_call_stack.error_number(1),
+                            utl_call_stack.error_msg(1),
+                            dbms_utility.format_error_stack);
       RETURN l_rsp;
   END;
 
   PROCEDURE p_limpiar_historial IS
   BEGIN
     UPDATE t_servicios
-       SET cantidad_ejecuciones = NULL, fecha_ultima_ejecucion = NULL;
+       SET cantidad_ejecuciones   = NULL,
+           fecha_ultima_ejecucion = NULL,
+           sql_ultima_ejecucion   = NULL;
   END;
 
   PROCEDURE p_validar_parametro(io_respuesta IN OUT NOCOPY y_respuesta,
@@ -307,12 +308,13 @@ CREATE OR REPLACE PACKAGE BODY k_servicio IS
                               i_mensaje_bd IN VARCHAR2 DEFAULT NULL) IS
   BEGIN
     IF i_codigo = c_ok THEN
-      io_respuesta.codigo  := c_error_inesperado;
-      io_respuesta.mensaje := k_error.f_mensaje_error(io_respuesta.codigo);
+      io_respuesta.codigo := c_error_general;
     ELSE
-      io_respuesta.codigo  := substr(i_codigo, 1, 10);
-      io_respuesta.mensaje := substr(i_mensaje, 1, 4000);
+      io_respuesta.codigo := substr(i_codigo, 1, 10);
     END IF;
+    io_respuesta.mensaje    := substr(k_error.f_mensaje_excepcion(i_mensaje),
+                                      1,
+                                      4000);
     io_respuesta.mensaje_bd := substr(i_mensaje_bd, 1, 4000);
     io_respuesta.datos      := NULL;
   END;
@@ -332,7 +334,9 @@ CREATE OR REPLACE PACKAGE BODY k_servicio IS
           k_error.c_oracle_predefined_error THEN
       p_respuesta_error(io_respuesta,
                         c_error_inesperado,
-                        k_error.f_mensaje_error(c_error_inesperado),
+                        k_error.f_mensaje_error(c_error_inesperado,
+                                                to_char(nvl(k_sistema.f_valor_parametro_number(k_operacion.c_id_log),
+                                                            0))),
                         i_error_stack);
     END IF;
   END;
@@ -496,8 +500,7 @@ CREATE OR REPLACE PACKAGE BODY k_servicio IS
       RAISE ex_error_parametro;
     END IF;
   
-    l_consulta_sql := 'SELECT * FROM (' || l_consulta_sql ||
-                      ') WHERE 1 = 1' ||
+    l_consulta_sql := 'SELECT * FROM (' || l_consulta_sql || ')' ||
                       k_operacion.f_filtros_sql(i_parametros);
     -- Registra SQL
     lp_registrar_sql_ejecucion(i_id_servicio, l_consulta_sql);
@@ -608,8 +611,12 @@ CREATE OR REPLACE PACKAGE BODY k_servicio IS
     RETURN CLOB IS
     l_rsp CLOB;
   BEGIN
+    -- Inicializa parámetros de la sesión
+    k_sistema.p_inicializar_parametros;
     -- Registra ejecución
     lp_registrar_ejecucion(i_id_servicio);
+    -- Reserva identificador para log
+    k_operacion.p_reservar_id_log(i_id_servicio);
     -- Procesa servicio
     l_rsp := lf_procesar_servicio(i_id_servicio, i_parametros, i_contexto)
              .to_json;
@@ -628,12 +635,16 @@ CREATE OR REPLACE PACKAGE BODY k_servicio IS
     l_rsp         CLOB;
     l_id_servicio t_servicios.id_servicio%TYPE;
   BEGIN
+    -- Inicializa parámetros de la sesión
+    k_sistema.p_inicializar_parametros;
     -- Busca servicio
     l_id_servicio := k_operacion.f_id_operacion(k_operacion.c_tipo_servicio,
                                                 i_nombre,
                                                 i_dominio);
     -- Registra ejecución
     lp_registrar_ejecucion(l_id_servicio);
+    -- Reserva identificador para log
+    k_operacion.p_reservar_id_log(l_id_servicio);
     -- Procesa servicio
     l_rsp := lf_procesar_servicio(l_id_servicio, i_parametros, i_contexto)
              .to_json;
