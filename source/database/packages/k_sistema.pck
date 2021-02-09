@@ -36,6 +36,8 @@ CREATE OR REPLACE PACKAGE k_sistema IS
   c_fecha   CONSTANT VARCHAR2(50) := 'FECHA';
   c_usuario CONSTANT VARCHAR2(50) := 'USUARIO';
   --
+  c_nombre_tipo CONSTANT VARCHAR2(50) := 'NOMBRE_TIPO';
+  --
   c_torneo CONSTANT VARCHAR2(50) := 'TORNEO';
   --
   c_direccion_ip     CONSTANT VARCHAR2(50) := 'DIRECCION_IP';

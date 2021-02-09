@@ -133,6 +133,7 @@ prompt
 @@types/y_objetos.typ
 
 @@packages/k_util.pck
+@@packages/k_sistema.pck
 
 @@types/y_dato.typ
 @@types/y_datos.typ
@@ -169,7 +170,6 @@ prompt
 prompt Creando paquetes...
 prompt -----------------------------------
 prompt
-@@packages/k_sistema.pck
 @@packages/k_auditoria.pck
 @@packages/k_archivo.pck
 @@packages/k_aplicacion.pck
