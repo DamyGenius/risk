@@ -76,8 +76,6 @@ CREATE OR REPLACE TYPE BODY y_respuesta IS
     l_respuesta    y_respuesta;
     l_json_object  json_object_t;
     l_json_element json_element_t;
-    l_anydata      anydata;
-    l_result       PLS_INTEGER;
   BEGIN
     l_json_object := json_object_t.parse(i_json);
   
@@ -92,9 +90,20 @@ CREATE OR REPLACE TYPE BODY y_respuesta IS
     IF l_json_element IS NULL OR l_json_element.is_null THEN
       l_respuesta.datos := NULL;
     ELSE
-      l_anydata := k_util.json_to_objeto(l_json_element.to_clob,
-                                         k_sistema.f_valor_parametro_string(k_sistema.c_nombre_tipo));
-      l_result  := l_anydata.getobject(l_respuesta.datos);
+      DECLARE
+        l_anydata anydata;
+        l_result  PLS_INTEGER;
+        l_tipo    VARCHAR2(100);
+      BEGIN
+        -- Busca nombre del tipo para hacer el parse
+        l_tipo := k_sistema.f_desencolar;
+        --
+        l_anydata := k_util.json_to_objeto(l_json_element.to_clob, l_tipo);
+        l_result  := l_anydata.getobject(l_respuesta.datos);
+      EXCEPTION
+        WHEN OTHERS THEN
+          l_respuesta.datos := NULL;
+      END;
     END IF;
   
     RETURN l_respuesta;

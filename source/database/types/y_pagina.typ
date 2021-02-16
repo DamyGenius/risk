@@ -81,11 +81,7 @@ CREATE OR REPLACE TYPE BODY y_pagina IS
   STATIC FUNCTION parse_json(i_json IN CLOB) RETURN y_objeto IS
     l_pagina      y_pagina;
     l_json_object json_object_t;
-    l_objeto      y_objeto;
-    l_objetos     y_objetos;
     l_json_array  json_array_t;
-    l_anydata     anydata;
-    l_result      PLS_INTEGER;
   BEGIN
     l_json_object := json_object_t.parse(i_json);
   
@@ -99,19 +95,34 @@ CREATE OR REPLACE TYPE BODY y_pagina IS
   
     l_json_array := l_json_object.get_array('elementos');
   
-    IF l_json_array IS NULL THEN
+    IF l_json_array IS NULL OR l_json_array.is_null OR
+       l_json_array.get_size = 0 THEN
       l_pagina.elementos := NEW y_objetos();
     ELSE
-      l_objetos := NEW y_objetos();
-      FOR i IN 0 .. l_json_array.get_size - 1 LOOP
-        l_objeto  := NULL;
-        l_anydata := k_util.json_to_objeto(l_json_array.get(i).to_clob,
-                                           k_sistema.f_valor_parametro_string(k_sistema.c_nombre_tipo));
-        l_result  := l_anydata.getobject(l_objeto);
-        l_objetos.extend;
-        l_objetos(l_objetos.count) := l_objeto;
-      END LOOP;
-      l_pagina.elementos := l_objetos;
+      DECLARE
+        l_anydata anydata;
+        l_result  PLS_INTEGER;
+        l_tipo    VARCHAR2(100);
+        l_objeto  y_objeto;
+        l_objetos y_objetos;
+      BEGIN
+        -- Busca nombre del tipo para hacer el parse
+        l_tipo := k_sistema.f_desencolar;
+        --
+        l_objetos := NEW y_objetos();
+        FOR i IN 0 .. l_json_array.get_size - 1 LOOP
+          l_objeto  := NULL;
+          l_anydata := k_util.json_to_objeto(l_json_array.get(i).to_clob,
+                                             l_tipo);
+          l_result  := l_anydata.getobject(l_objeto);
+          l_objetos.extend;
+          l_objetos(l_objetos.count) := l_objeto;
+        END LOOP;
+        l_pagina.elementos := l_objetos;
+      EXCEPTION
+        WHEN OTHERS THEN
+          l_pagina.elementos := NEW y_objetos();
+      END;
     END IF;
   
     RETURN l_pagina;
@@ -137,8 +148,7 @@ CREATE OR REPLACE TYPE BODY y_pagina IS
       i            := self.elementos.first;
       WHILE i IS NOT NULL LOOP
         l_json_array.append(json_object_t.parse(nvl(self.elementos(i).json,
-                                                    self.elementos(i)
-                                                    .to_json)));
+                                                    self.elementos(i).to_json)));
         i := self.elementos.next(i);
       END LOOP;
       l_json_object.put('elementos', l_json_array);
