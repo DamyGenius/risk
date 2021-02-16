@@ -398,7 +398,7 @@ CREATE OR REPLACE PACKAGE BODY k_sistema IS
   END;
 
   PROCEDURE p_imprimir_cola IS
-    i PLS_INTEGER;
+    i INTEGER;
   BEGIN
     IF g_cola IS NOT NULL THEN
       i := g_cola.first;
