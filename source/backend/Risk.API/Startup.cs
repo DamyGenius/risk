@@ -117,13 +117,13 @@ namespace Risk.API
             services.AddSingleton<IGenService, GenService>();
             services.AddSingleton<IMsjService, MsjService>();
 
+            services.AddSingleton<IFanService, FanService>();
+
             // Add Msj helper and senders
             services.AddSingleton<IMsjHelper, MsjHelper>();
             services.AddSingleton<IMsjSender<Correo>, GmailSender>();
             services.AddSingleton<IMsjSender<Notificacion>, NotificationHubSender>();
             services.AddSingleton<IMsjSender<Mensaje>, TwilioSender>();
-
-            services.AddScoped<IFanService, FanService>();
 
             services.AddSingleton<ISecurityTokenValidator, RiskSecurityTokenValidator>();
             services.AddSingleton<IPostConfigureOptions<JwtBearerOptions>, RiskJwtBearerPostConfigureOptions>();
