@@ -22,25 +22,33 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-using System.Data;
-using Oracle.ManagedDataAccess.Client;
+using System.Collections.Generic;
+using Microsoft.OpenApi.Models;
+using Risk.API.Helpers;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Risk.API.Helpers
+namespace Risk.API.Filters
 {
-    public class RiskDbConnectionFactory : IDbConnectionFactory
+    public class ServiceVersionOperationFilter : IOperationFilter
     {
-        private readonly string _connectionString;
-
-        public RiskDbConnectionFactory(string connectionString)
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            _connectionString = connectionString;
-        }
+            if (operation.Parameters == null)
+            {
+                operation.Parameters = new List<OpenApiParameter>();
+            }
 
-        public IDbConnection CreateConnection()
-        {
-            var con = new OracleConnection(_connectionString);
-            //con.KeepAlive = true;
-            return con;
+            operation.Parameters.Add(new OpenApiParameter
+            {
+                Name = RiskConstants.HEADER_RISK_SERVICE_VERSION,
+                Description = "Versión del Servicio",
+                In = ParameterLocation.Header,
+                Required = false,
+                Schema = new OpenApiSchema()
+                {
+                    Type = "string"
+                }
+            });
         }
     }
 }
