@@ -42,6 +42,7 @@ using Risk.API.Helpers;
 using Risk.API.Middlewares;
 using Risk.API.Models;
 using Risk.API.Services;
+using Risk.API.Workers;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace Risk.API
@@ -124,6 +125,14 @@ namespace Risk.API
             services.AddSingleton<IMsjSender<Correo>, GmailSender>();
             services.AddSingleton<IMsjSender<Notificacion>, NotificationHubSender>();
             services.AddSingleton<IMsjSender<Mensaje>, TwilioSender>();
+
+            // Add Msj workers
+            if (Configuration.GetValue<bool>("MsjConfiguration:EnableMailWorker"))
+                services.AddHostedService<MailWorker>();
+            if (Configuration.GetValue<bool>("MsjConfiguration:EnablePushWorker"))
+                services.AddHostedService<PushWorker>();
+            if (Configuration.GetValue<bool>("MsjConfiguration:EnableSMSWorker"))
+                services.AddHostedService<SMSWorker>();
 
             services.AddSingleton<ISecurityTokenValidator, RiskSecurityTokenValidator>();
             services.AddSingleton<IPostConfigureOptions<JwtBearerOptions>, RiskJwtBearerPostConfigureOptions>();
