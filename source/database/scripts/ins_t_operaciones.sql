@@ -164,7 +164,7 @@ insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE,
 values (57, 'T', 'FIN_PARTIDO_{ID_PARTIDO}', 'FAN', 'S', 'Trabajo de cierre de partido en juego', '0.1.0', 0);
 
 insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL, NIVEL_LOG)
-values (51, 'S', 'LISTAR_ERRORES', 'GEN', 'S', null, '0.1.0', 0);
+values (58, 'S', 'LISTAR_ERRORES', 'GEN', 'S', null, '0.1.0', 0);
 
 insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL, NIVEL_LOG)
 values (59, 'S', 'LISTAR_APLICACIONES', 'GEN', 'S', null, '0.1.0', 0);
