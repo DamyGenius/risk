@@ -63,7 +63,7 @@ insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('POLITICA_VALIDACION_CLAVE_TRANSACCIONAL', 'CARACTERES_PROHIBIDOS', '&:@', 'T', 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
-values ('TIPO_OPERACION', 'P', 'PAR√ÅMETROS', null, 'S');
+values ('TIPO_OPERACION', 'P', 'PAR¡METROS', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('TIPO_MENSAJERIA', 'M', 'MAIL', null, 'S');
@@ -135,10 +135,10 @@ insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('ESTADO_SESION', 'F', 'FINALIZADO', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
-values ('TIPO_PERSONA', 'F', 'F√çSICA', null, 'S');
+values ('TIPO_PERSONA', 'F', 'FÕSICA', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
-values ('TIPO_PERSONA', 'J', 'JUR√çDICA', null, 'S');
+values ('TIPO_PERSONA', 'J', 'JURÕDICA', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('TIPO_APLICACION', 'W', 'WEB', null, 'S');
@@ -150,7 +150,7 @@ insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('TIPO_APLICACION', 'D', 'DESKTOP', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
-values ('ESTADO_USUARIO', 'A', 'ACTIVO', null, 'S');
+values ('ESTADO_USUARIO', 'A', 'ACTIVO', 'USUARIO', 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('ESTADO_USUARIO', 'I', 'INACTIVO', null, 'S');
@@ -159,7 +159,7 @@ insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('ESTADO_USUARIO', 'B', 'BLOQUEADO', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
-values ('TIPO_SERVICIO', 'T', 'TRANSACCI√ìN', null, 'S');
+values ('TIPO_SERVICIO', 'T', 'TRANSACCI”N', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('TIPO_SERVICIO', 'P', 'PROCESO', null, 'S');
@@ -189,7 +189,7 @@ insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('DOMINIO_OPERACION', 'GEN', 'GENERAL', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
-values ('DOMINIO_OPERACION', 'AUT', 'AUTENTICACI√ìN', null, 'S');
+values ('DOMINIO_OPERACION', 'AUT', 'AUTENTICACI”N', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('DOMINIO_OPERACION', 'API', 'SERVICIO', null, 'S');
@@ -198,13 +198,13 @@ insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('DOMINIO_SERVICIO', 'FAN', 'FANTASY', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
-values ('ESTADO_SESION', 'I', 'INV√ÅLIDO', null, 'S');
+values ('ESTADO_SESION', 'I', 'INV¡LIDO', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
-values ('ESTADO_MENSAJERIA', 'P', 'PENDIENTE DE ENV√çO', null, 'S');
+values ('ESTADO_MENSAJERIA', 'P', 'PENDIENTE DE ENVÕO', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
-values ('ESTADO_MENSAJERIA', 'N', 'EN PROCESO DE ENV√çO', null, 'S');
+values ('ESTADO_MENSAJERIA', 'N', 'EN PROCESO DE ENVÕO', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('ESTADO_MENSAJERIA', 'E', 'ENVIADO', null, 'S');
@@ -213,7 +213,7 @@ insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('ESTADO_MENSAJERIA', 'R', 'PROCESADO CON ERROR', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
-values ('DOMINIO_OPERACION', 'MSJ', 'MENSAJER√çA', null, 'S');
+values ('DOMINIO_OPERACION', 'MSJ', 'MENSAJERÕA', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('ESTADO_MENSAJERIA', 'A', 'ANULADO', null, 'S');
@@ -225,7 +225,7 @@ insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('TIPO_GRUPO', 'GLO', 'GLOBAL', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
-values ('TIPO_GRUPO', 'PUB', 'P√öBLICO', null, 'N');
+values ('TIPO_GRUPO', 'PUB', 'P⁄BLICO', null, 'N');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('TIPO_DATO_PARAMETRO', 'O', 'OBJECT', null, 'S');
@@ -273,7 +273,7 @@ insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('ESTADO_PARTIDO', 'S', 'SUSPENDIDO', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
-values ('ESTADO_USUARIO', 'P', 'PENDIENTE DE ACTIVACI√ìN', null, 'S');
+values ('ESTADO_USUARIO', 'P', 'PENDIENTE DE ACTIVACI”N', 'USUARIO_NUEVO', 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('TIPO_OPERACION', 'S', 'SERVICIO', null, 'S');

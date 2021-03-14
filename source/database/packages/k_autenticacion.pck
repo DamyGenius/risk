@@ -1,4 +1,4 @@
-CREATE OR REPLACE PACKAGE k_autenticacion IS
+﻿CREATE OR REPLACE PACKAGE k_autenticacion IS
 
   /**
   Agrupa operaciones relacionadas con la autenticacion de usuarios
@@ -344,6 +344,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     l_id_usuario          t_usuarios.id_usuario%TYPE;
     l_alias               t_usuarios.alias%TYPE;
     l_confirmacion_activa VARCHAR2(1);
+    l_estado_usuario      t_usuarios.estado%TYPE;
     l_body                CLOB;
   BEGIN
     -- Valida clave
@@ -372,6 +373,12 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
   
     l_confirmacion_activa := nvl(k_util.f_valor_parametro('CONFIRMACION_DIRECCION_CORREO'),
                                  'N');
+    l_estado_usuario      := CASE l_confirmacion_activa
+                               WHEN 'S' THEN
+                                'P' -- PENDIENTE DE ACTIVACIÓN
+                               ELSE
+                                'A' -- ACTIVO
+                             END;
   
     -- Inserta usuario
     INSERT INTO t_usuarios
@@ -379,23 +386,26 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     VALUES
       (i_alias,
        l_id_persona,
-       CASE l_confirmacion_activa WHEN 'S' THEN 'P' -- PENDIENTE DE ACTIVACIÓN
-       ELSE 'A' -- ACTIVO
-       END,
+       l_estado_usuario,
        i_direccion_correo,
        i_numero_telefono)
-    RETURNING id_usuario, alias
-         INTO l_id_usuario, l_alias;
+    RETURNING id_usuario, alias INTO l_id_usuario, l_alias;
   
     INSERT INTO t_rol_usuarios
       (id_rol, id_usuario)
       SELECT id_rol, l_id_usuario
         FROM t_roles
-       WHERE nombre = k_util.f_valor_parametro('NOMBRE_ROL_DEFECTO');
-
+       WHERE nombre =
+             nvl(k_util.f_referencia_codigo('ESTADO_USUARIO',
+                                            l_estado_usuario),
+                 k_util.f_valor_parametro('NOMBRE_ROL_DEFECTO'));
+  
     -- Registra club del usuario
     IF i_id_club IS NOT NULL THEN
-      k_dato.p_guardar_dato_string('T_USUARIOS', 'ID_CLUB', l_alias, i_id_club);
+      k_dato.p_guardar_dato_string('T_USUARIOS',
+                                   'ID_CLUB',
+                                   l_alias,
+                                   i_id_club);
     END IF;
   
     p_registrar_clave(i_alias, i_clave, c_clave_acceso);
@@ -450,8 +460,7 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
            direccion_correo = nvl(i_direccion_correo, direccion_correo),
            numero_telefono  = nvl(i_numero_telefono, numero_telefono)
      WHERE alias = i_alias_antiguo
-    RETURNING id_persona, alias
-         INTO l_id_persona, l_alias;
+    RETURNING id_persona, alias INTO l_id_persona, l_alias;
   
     IF SQL%NOTFOUND THEN
       raise_application_error(-20000, 'Usuario inexistente');
@@ -468,10 +477,13 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     IF SQL%NOTFOUND THEN
       raise_application_error(-20000, 'Persona inexistente');
     END IF;
-
+  
     -- Registra club del usuario
     IF i_id_club IS NOT NULL THEN
-      k_dato.p_guardar_dato_string('T_USUARIOS', 'ID_CLUB', l_alias, i_id_club);
+      k_dato.p_guardar_dato_string('T_USUARIOS',
+                                   'ID_CLUB',
+                                   l_alias,
+                                   i_id_club);
     END IF;
   END;
 
@@ -718,12 +730,21 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
   
     -- Valida estado de usuario
     l_estado_usuario := k_usuario.f_estado(l_id_usuario);
-    IF l_estado_usuario <> 'A' THEN
-      raise_application_error(-20000,
-                              'Usuario ' ||
-                              k_util.f_formatear_titulo(k_util.f_significado_codigo('ESTADO_USUARIO',
-                                                                                    l_estado_usuario)));
-    END IF;
+    BEGIN
+      SELECT TRIM(column_value) estado
+        INTO l_estado_usuario
+        FROM k_util.f_separar_cadenas(k_util.f_valor_parametro('ESTADOS_ACTIVOS_USUARIO'),
+                                      ',')
+       WHERE TRIM(column_value) = l_estado_usuario;
+    EXCEPTION
+      WHEN no_data_found THEN
+        raise_application_error(-20000,
+                                'Usuario ' ||
+                                k_util.f_formatear_titulo(k_util.f_significado_codigo('ESTADO_USUARIO',
+                                                                                      l_estado_usuario)));
+      WHEN OTHERS THEN
+        NULL;
+    END;
   
     -- Busca dispositivo
     l_id_dispositivo := k_dispositivo.f_id_dispositivo(i_token_dispositivo);
