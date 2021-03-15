@@ -440,4 +440,22 @@ values (59, 'CLAVE', '0.1.0', 2, 'S', 'S', null, 50, 'N', null, 'Clave de la apl
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
 values (59, 'PAGINA_PARAMETROS', '0.1.0', 10, 'S', 'O', 'Y_PAGINA_PARAMETROS', null, 'N', null, null, null);
 
+insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
+values (60, 'USUARIO_SOLICITADO', '0.1.0', 1, 'S', 'S', null, null, 'S', null, null, null);
+
+insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
+values (61, 'ID_AMISTAD', '0.1.0', 1, 'S', 'N', null, null, 'S', null, null, null);
+
+insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
+values (61, 'RESPUESTA', '0.1.0', 2, 'S', 'S', null, 8, 'S', null, null, null);
+
+insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
+values (62, 'USUARIO', '0.1.0', 1, 'S', 'N', null, null, 'S', null, null, null);
+
+insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
+values (62, 'TIPO', '0.1.0', 2, 'S', 'S', null, 12, 'N', null, null, null);
+
+insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
+values (62, 'ACEPTADO', '0.1.0', 3, 'S', 'S', null, 1, 'N', null, null, null);
+
 prompt Done.

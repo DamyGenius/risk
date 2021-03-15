@@ -86,6 +86,7 @@ prompt
 prompt Borrando types...
 prompt -----------------------------------
 prompt
+drop type y_amigo force;
 drop type y_grupo force;
 drop type y_grupo_usuario force;
 drop type y_jornada force;
@@ -124,6 +125,7 @@ prompt
 prompt Borrando tablas...
 prompt -----------------------------------
 prompt
+drop table t_amigos cascade constraints;
 drop table t_grupo_usuarios cascade constraints;
 drop table t_grupos cascade constraints;
 drop table t_predicciones cascade constraints;
@@ -175,6 +177,7 @@ prompt
 prompt Borrando secuencias...
 prompt -----------------------------------
 prompt
+drop sequence s_id_amistad;
 drop sequence s_id_grupo;
 drop sequence s_id_partido;
 

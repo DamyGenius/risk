@@ -169,4 +169,13 @@ values (58, 'S', 'LISTAR_ERRORES', 'GEN', 'S', null, '0.1.0', 0);
 insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL, NIVEL_LOG)
 values (59, 'S', 'LISTAR_APLICACIONES', 'GEN', 'S', null, '0.1.0', 0);
 
+insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL, NIVEL_LOG)
+values (60, 'S', 'SOLICITAR_AMISTAD', 'FAN', 'S', null, '0.1.0', 0);
+
+insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL, NIVEL_LOG)
+values (61, 'S', 'RESPONDER_SOLICITUD_AMISTAD', 'FAN', 'S', null, '0.1.0', 0);
+
+insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL, NIVEL_LOG)
+values (62, 'S', 'LISTAR_AMIGOS', 'FAN', 'S', null, '0.1.0', 0);
+
 prompt Done.

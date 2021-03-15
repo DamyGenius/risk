@@ -72,6 +72,7 @@ prompt
 
 @@sequences/s_id_partido.seq
 @@sequences/s_id_grupo.seq
+@@sequences/s_id_amistad.seq
 
 prompt
 prompt Creando tablas...
@@ -123,6 +124,7 @@ prompt
 @@tables/t_predicciones.tab
 @@tables/t_grupos.tab
 @@tables/t_grupo_usuarios.tab
+@@tables/t_amigos.tab
 
 prompt
 prompt Creando types...
@@ -165,6 +167,7 @@ prompt
 @@types/y_jornada.typ
 @@types/y_grupo_usuario.typ
 @@types/y_grupo.typ
+@@types/y_amigo.typ
 
 prompt
 prompt Creando paquetes...
@@ -235,6 +238,7 @@ prompt
 @@triggers/gf_planteles.trg
 @@triggers/gs_partidos.trg
 @@triggers/gs_grupos.trg
+@@triggers/gs_amigos.trg
 
 prompt
 prompt Ejecutando scripts...

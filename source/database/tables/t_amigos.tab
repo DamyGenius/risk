@@ -1,0 +1,27 @@
+create table T_AMIGOS
+(
+  id_amistad             NUMBER not null,
+  id_usuario_solicitante NUMBER(10) not null,
+  id_usuario_solicitado  NUMBER(10) not null,
+  fecha_creacion         DATE,
+  token_aceptacion       VARCHAR2(50),
+  aceptado               VARCHAR2(1) default 'N',
+  fecha_aceptacion       DATE,
+)
+;
+comment on table T_AMIGOS
+  is 'Amigos y Solicitudes de Amistad';
+comment on column T_AMIGOS.id_usuario_solicitante
+  is 'Usuario solicitante';
+comment on column T_AMIGOS.id_usuario_solicitado
+  is 'Usuario solicitado';
+alter table T_AMIGOS
+  add constraint PK_AMIGOS primary key (ID_AMISTAD);
+alter table T_AMIGOS
+  add constraint UK_AMI_SOLICITANTE_SOLICITADO unique (ID_USUARIO_SOLICITANTE, ID_USUARIO_SOLICITADO);
+alter table T_AMIGOS
+  add constraint FK_AMIGOS_USUARIOS1 foreign key (ID_USUARIO_SOLICITANTE)
+  references T_USUARIOS (ID_USUARIO);
+alter table T_AMIGOS
+  add constraint FK_AMIGOS_USUARIOS2 foreign key (ID_USUARIO_SOLICITADO)
+  references T_USUARIOS (ID_USUARIO);
