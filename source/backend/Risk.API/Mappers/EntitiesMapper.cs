@@ -825,5 +825,40 @@ namespace Risk.API.Mappers
                     return false;
             }
         }
+
+        public static Amigo GetAmigoFromEntity(YAmigo entity)
+        {
+            Amigo model;
+            if (entity == null)
+            {
+                model = null;
+            }
+            else
+            {
+                Enum.TryParse(entity.Tipo, out TipoAmigo tipoAmigo);
+                model = new Amigo
+                {
+                    IdUsuario = entity.IdUsuario,
+                    AliasUsuario = entity.AliasUsuario,
+                    VersionAvatar = entity.VersionAvatar,
+                    Puntos = entity.Puntos,
+                    Ranking = entity.Ranking,
+                    TokenAceptacion = entity.TokenAceptacion,
+                    Aceptado = entity.Aceptado,
+                    TipoAmigo = tipoAmigo
+                };
+            }
+            return model;
+        }
+
+        public static List<Amigo> GetAmigoListFromEntity(List<YAmigo> entityList)
+        {
+            List<Amigo> modelList = new List<Amigo>();
+            foreach (var item in entityList)
+            {
+                modelList.Add(GetAmigoFromEntity(item));
+            }
+            return modelList;
+        }
     }
 }

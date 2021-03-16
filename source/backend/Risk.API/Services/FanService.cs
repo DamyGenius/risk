@@ -49,6 +49,9 @@ namespace Risk.API.Services
         private const string NOMBRE_ABANDONAR_GRUPO = "ABANDONAR_GRUPO";
         private const string NOMBRE_INVITAR_USUARIO = "INVITAR_USUARIO";
         private const string NOMBRE_RESPONDER_INVITACION = "RESPONDER_INVITACION";
+        private const string NOMBRE_SOLICITAR_AMISTAD = "SOLICITAR_AMISTAD";
+        private const string NOMBRE_RESPONDER_SOLICITUD_AMISTAD = "SOLICITAR_AMISTAD";
+        private const string NOMBRE_LISTAR_AMIGOS = "LISTAR_AMIGOS";
 
         public FanService(ILogger<FanService> logger, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDbConnectionFactory dbConnectionFactory)
             : base(logger, configuration, httpContextAccessor, dbConnectionFactory)
@@ -290,6 +293,57 @@ namespace Risk.API.Services
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
 
             return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
+        }
+
+        public Respuesta<Dato> SolicitarAmistad(string usuarioSolicitado)
+        {
+            JObject prms = new JObject();
+            prms.Add("usuario_solicitado", usuarioSolicitado);
+
+            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+                NOMBRE_SOLICITAR_AMISTAD,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
+
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
+        }
+
+        public Respuesta<Dato> ResponderSolicitudAmistad(int idAmistad, RespuestaInvitacion respuestaSolicitud)
+        {
+            JObject prms = new JObject();
+            prms.Add("id_amistad", idAmistad);
+            prms.Add("respuesta", respuestaSolicitud.ToString());
+
+            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+                NOMBRE_RESPONDER_SOLICITUD_AMISTAD,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
+
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
+        }
+
+        public Respuesta<Pagina<Amigo>> ListarAmigos(string usuario, TipoAmigo? tipo = null, string aceptado = null)
+        {
+            JObject prms = new JObject();
+            prms.Add("usuario", usuario);
+            prms.Add("tipo", tipo.ToString());
+            prms.Add("aceptado", aceptado);
+
+            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+                NOMBRE_LISTAR_AMIGOS,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YPagina<YAmigo>>>(rsp);
+
+            Pagina<Amigo> datos = null;
+            if (entityRsp.Datos != null)
+            {
+                datos = EntitiesMapper.GetPaginaFromEntity<Amigo, YAmigo>(entityRsp.Datos, EntitiesMapper.GetAmigoListFromEntity(entityRsp.Datos.Elementos));
+            }
+
+            return EntitiesMapper.GetRespuestaFromEntity<Pagina<Amigo>, YPagina<YAmigo>>(entityRsp, datos);
         }
     }
 }

@@ -272,7 +272,7 @@ namespace Risk.API.Controllers
             return ProcesarRespuesta(respuesta);
         }
 
-        [HttpPost("InvitarUsuario")]
+        [HttpGet("InvitarUsuario")]
         [SwaggerOperation(OperationId = "InvitarUsuario", Summary = "InvitarUsuario", Description = "Permite invitar a un usuario a un grupo")]
         [Consumes(MediaTypeNames.Application.Json)]
         [Produces(MediaTypeNames.Application.Json)]
@@ -284,7 +284,7 @@ namespace Risk.API.Controllers
             return ProcesarRespuesta(respuesta);
         }
 
-        [HttpPost("ResponderInvitacion")]
+        [HttpGet("ResponderInvitacion")]
         [SwaggerOperation(OperationId = "ResponderInvitacion", Summary = "ResponderInvitacion", Description = "Permite responder a invitación de un grupo")]
         [Consumes(MediaTypeNames.Application.Json)]
         [Produces(MediaTypeNames.Application.Json)]
@@ -293,6 +293,39 @@ namespace Risk.API.Controllers
             [FromQuery, SwaggerParameter(Description = "Respuesta a Invitación (ACEPTAR/RECHAZAR)", Required = true)] RespuestaInvitacion respuestaInvitacion)
         {
             var respuesta = _fanService.ResponderInvitacion(idGrupo, respuestaInvitacion);
+            return ProcesarRespuesta(respuesta);
+        }
+
+        [HttpGet("SolicitarAmistad")]
+        [SwaggerOperation(OperationId = "SolicitarAmistad", Summary = "SolicitarAmistad", Description = "Permite solicitar amistad a un usuario")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
+        public IActionResult SolicitarAmistad([FromQuery, SwaggerParameter(Description = "UsuarioSolicitado", Required = true)] string usuarioSolicitado)
+        {
+            var respuesta = _fanService.SolicitarAmistad(usuarioSolicitado);
+            return ProcesarRespuesta(respuesta);
+        }
+
+        [HttpGet("ResponderSolicitudAmistad")]
+        [SwaggerOperation(OperationId = "ResponderSolicitudAmistad", Summary = "ResponderSolicitudAmistad", Description = "Permite responder a una solicitud de amistad")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
+        public IActionResult ResponderSolicitudAmistad([FromQuery, SwaggerParameter(Description = "Identificador de la amistad", Required = true)] int idAmistad,
+            [FromQuery, SwaggerParameter(Description = "Respuesta a Solicitud (ACEPTAR/RECHAZAR)", Required = true)] RespuestaInvitacion respuestaSolicitud)
+        {
+            var respuesta = _fanService.ResponderSolicitudAmistad(idAmistad, respuestaSolicitud);
+            return ProcesarRespuesta(respuesta);
+        }
+
+        [HttpGet("ListarAmigos")]
+        [SwaggerOperation(OperationId = "ListarAmigos", Summary = "ListarAmigos", Description = "Obtiene lista de amigos de un usuario")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Club>>))]
+        public IActionResult ListarAmigos([FromQuery, SwaggerParameter(Description = "Usuario", Required = true)] string usuario,
+            [FromQuery, SwaggerParameter(Description = "Tipo (SOLICITANTE/SOLICITADO)", Required = false)] TipoAmigo tipo,
+            [FromQuery, SwaggerParameter(Description = "Solicitud aceptada (S/N)", Required = false)] string aceptado)
+        {
+            var respuesta = _fanService.ListarAmigos(usuario, tipo, aceptado);
             return ProcesarRespuesta(respuesta);
         }
     }
