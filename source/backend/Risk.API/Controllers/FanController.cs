@@ -320,7 +320,7 @@ namespace Risk.API.Controllers
         [HttpGet("ListarAmigos")]
         [SwaggerOperation(OperationId = "ListarAmigos", Summary = "ListarAmigos", Description = "Obtiene lista de amigos de un usuario")]
         [Produces(MediaTypeNames.Application.Json)]
-        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Club>>))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Amigo>>))]
         public IActionResult ListarAmigos([FromQuery, SwaggerParameter(Description = "Usuario", Required = true)] string usuario,
             [FromQuery, SwaggerParameter(Description = "Tipo (SOLICITANTE/SOLICITADO)", Required = false)] TipoAmigo tipo,
             [FromQuery, SwaggerParameter(Description = "Solicitud aceptada (S/N)", Required = false)] string aceptado)
