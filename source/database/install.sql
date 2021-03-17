@@ -73,6 +73,7 @@ prompt
 @@sequences/s_id_partido.seq
 @@sequences/s_id_grupo.seq
 @@sequences/s_id_amistad.seq
+@@sequences/s_id_comentario.seq
 
 prompt
 prompt Creando tablas...
@@ -125,6 +126,7 @@ prompt
 @@tables/t_grupos.tab
 @@tables/t_grupo_usuarios.tab
 @@tables/t_amigos.tab
+@@tables/t_comentarios.tab
 
 prompt
 prompt Creando types...
@@ -239,6 +241,7 @@ prompt
 @@triggers/gs_partidos.trg
 @@triggers/gs_grupos.trg
 @@triggers/gs_amigos.trg
+@@triggers/gs_comentarios.trg
 
 prompt
 prompt Ejecutando scripts...

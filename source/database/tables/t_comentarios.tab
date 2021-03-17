@@ -1,0 +1,29 @@
+create table T_COMENTARIOS
+(
+  id_comentario  NUMBER not null,
+  tipo           VARCHAR2(1) not null,
+  referencia     NUMBER not null,
+  id_usuario     NUMBER(10) not null,
+  contenido      VARCHAR2(2000),
+  ref_comentario NUMBER not null
+)
+;
+comment on table T_COMENTARIOS
+  is 'Comentarios';
+comment on column T_COMENTARIOS.id_comentario
+  is 'Identificador del comentario';
+comment on column T_COMENTARIOS.tipo
+  is 'Tipo de comentario: si es para posts, imágenes, albums, etc.';
+comment on column T_COMENTARIOS.referencia
+  is 'Referencia del comentario: Id del post, imagen o album según el caso.';
+comment on column T_COMENTARIOS.id_usuario
+  is 'Usuario que crea el comentario';
+comment on column T_COMENTARIOS.contenido
+  is 'Contenido del comentario';
+comment on column T_COMENTARIOS.ref_comentario
+  is 'Identificador del comentario superior, en caso de ser comentario de otro comentario';
+alter table T_COMENTARIOS
+  add constraint PK_COMENTARIOS primary key (ID_COMENTARIO);
+alter table T_COMENTARIOS
+  add constraint FK_COMENTARIOS_USUARIOS foreign key (ID_USUARIO)
+  references T_USUARIOS (ID_USUARIO);
