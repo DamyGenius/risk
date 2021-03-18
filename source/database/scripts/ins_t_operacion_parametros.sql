@@ -458,4 +458,16 @@ values (62, 'TIPO', '0.1.0', 2, 'S', 'S', null, 12, 'N', null, null, null);
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
 values (62, 'ACEPTADO', '0.1.0', 3, 'S', 'S', null, 1, 'N', null, null, null);
 
+insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
+values (63, 'TIPO', '0.1.0', 1, 'S', 'S', null, 1, 'S', null, null, null);
+
+insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
+values (63, 'REFERENCIA', '0.1.0', 2, 'S', 'N', null, null, 'S', null, null, null);
+
+insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
+values (63, 'CONTENIDO', '0.1.0', 3, 'S', 'S', null, null, 'S', null, null, null);
+
+insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
+values (63, 'REF_COMENTARIO', '0.1.0', 4, 'S', 'N', null, null, 'N', null, null, null);
+
 prompt Done.

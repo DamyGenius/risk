@@ -5,7 +5,7 @@ create table T_COMENTARIOS
   referencia     NUMBER not null,
   id_usuario     NUMBER(10) not null,
   contenido      VARCHAR2(2000),
-  ref_comentario NUMBER not null
+  ref_comentario NUMBER
 )
 ;
 comment on table T_COMENTARIOS

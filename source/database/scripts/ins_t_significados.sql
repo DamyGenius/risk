@@ -344,4 +344,13 @@ values ('TIPO_REPORTE', 'H', 'AD HOC', null, 'S');
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('TIPO_REPORTE', 'C', 'CONSULTA', null, 'S');
 
+insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
+values ('TIPO_COMENTARIO', 'P', 'POST', null, 'N');
+
+insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
+values ('TIPO_COMENTARIO', 'A', 'ALBUM', null, 'N');
+
+insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
+values ('TIPO_COMENTARIO', 'T', 'PARTIDO', null, 'S');
+
 prompt Done.
