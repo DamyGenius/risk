@@ -161,4 +161,7 @@ values (62, 'T', null, null);
 insert into t_servicios (ID_SERVICIO, TIPO, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
 values (63, 'T', null, null);
 
+insert into t_servicios (ID_SERVICIO, TIPO, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION, CONSULTA_SQL, SQL_ULTIMA_EJECUCION)
+values (64, 'C', null, null, 'SELECT * FROM t_comentarios ORDER BY id_comentario', null);
+
 prompt Done.
