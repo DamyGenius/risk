@@ -274,7 +274,6 @@ namespace Risk.API.Controllers
 
         [HttpGet("InvitarUsuario")]
         [SwaggerOperation(OperationId = "InvitarUsuario", Summary = "InvitarUsuario", Description = "Permite invitar a un usuario a un grupo")]
-        [Consumes(MediaTypeNames.Application.Json)]
         [Produces(MediaTypeNames.Application.Json)]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
         public IActionResult InvitarUsuario([FromQuery, SwaggerParameter(Description = "Identificador del grupo", Required = true)] int idGrupo,
@@ -286,7 +285,6 @@ namespace Risk.API.Controllers
 
         [HttpGet("ResponderInvitacion")]
         [SwaggerOperation(OperationId = "ResponderInvitacion", Summary = "ResponderInvitacion", Description = "Permite responder a invitación de un grupo")]
-        [Consumes(MediaTypeNames.Application.Json)]
         [Produces(MediaTypeNames.Application.Json)]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
         public IActionResult ResponderInvitacion([FromQuery, SwaggerParameter(Description = "Identificador del grupo", Required = true)] int idGrupo,
@@ -322,10 +320,23 @@ namespace Risk.API.Controllers
         [Produces(MediaTypeNames.Application.Json)]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Amigo>>))]
         public IActionResult ListarAmigos([FromQuery, SwaggerParameter(Description = "Usuario", Required = true)] string usuario,
-            [FromQuery, SwaggerParameter(Description = "Tipo (SOLICITANTE/SOLICITADO)", Required = false)] TipoAmigo tipo,
+            [FromQuery, SwaggerParameter(Description = "Tipo (Solicitante/Solicitado)", Required = false)] TipoAmigo tipo,
             [FromQuery, SwaggerParameter(Description = "Solicitud aceptada (S/N)", Required = false)] string aceptado)
         {
             var respuesta = _fanService.ListarAmigos(usuario, tipo, aceptado);
+            return ProcesarRespuesta(respuesta);
+        }
+
+        [HttpPost("RealizarComentarioPartido")]
+        [SwaggerOperation(OperationId = "RealizarComentarioPartido", Summary = "RealizarComentarioPartido", Description = "Permite realizar comentarios de un partido")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
+        public IActionResult RealizarComentarioPartido([FromQuery, SwaggerParameter(Description = "Identificador del partido", Required = true)] int idPartido,
+            [FromQuery, SwaggerParameter(Description = "Referencia al comentario superior, si es un comentario de otro comentario", Required = false)] long referenciaComentario,
+            [FromBody] RealizarComentarioRequestBody requestBody)
+        {
+            var respuesta = _fanService.RealizarComentario(TipoComentario.Partido, idPartido, requestBody.Contenido, referenciaComentario);
             return ProcesarRespuesta(respuesta);
         }
     }

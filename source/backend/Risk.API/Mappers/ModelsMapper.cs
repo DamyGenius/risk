@@ -300,5 +300,20 @@ namespace Risk.API.Mappers
                 return "N";
             }
         }
+ 
+        public static string GetValueFromTipoComentarioEnum(TipoComentario enumeration)
+        {
+            switch (enumeration)
+            {
+                case TipoComentario.Album:
+                    return "A";
+                case TipoComentario.Post:
+                    return "P";
+                case TipoComentario.Partido:
+                    return "T";
+                default:
+                    return string.Empty;
+            }
+        }
     }
 }

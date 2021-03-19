@@ -52,6 +52,7 @@ namespace Risk.API.Services
         private const string NOMBRE_SOLICITAR_AMISTAD = "SOLICITAR_AMISTAD";
         private const string NOMBRE_RESPONDER_SOLICITUD_AMISTAD = "SOLICITAR_AMISTAD";
         private const string NOMBRE_LISTAR_AMIGOS = "LISTAR_AMIGOS";
+        private const string NOMBRE_REALIZAR_COMENTARIO = "REALIZAR_COMENTARIO";
 
         public FanService(ILogger<FanService> logger, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDbConnectionFactory dbConnectionFactory)
             : base(logger, configuration, httpContextAccessor, dbConnectionFactory)
@@ -344,6 +345,23 @@ namespace Risk.API.Services
             }
 
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<Amigo>, YPagina<YAmigo>>(entityRsp, datos);
+        }
+
+        public Respuesta<Dato> RealizarComentario(TipoComentario tipo, long referencia, string contenido, long? referenciaComentario)
+        {
+            JObject prms = new JObject();
+            prms.Add("tipo", ModelsMapper.GetValueFromTipoComentarioEnum(tipo));
+            prms.Add("referencia", referencia);
+            prms.Add("contenido", contenido);
+            prms.Add("ref_comentario", referenciaComentario);
+
+            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+                NOMBRE_REALIZAR_COMENTARIO,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
+
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
         }
     }
 }

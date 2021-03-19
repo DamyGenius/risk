@@ -24,9 +24,10 @@ SOFTWARE.
 
 namespace Risk.API.Models
 {
-    public enum TipoAmigo
+    public enum TipoComentario
     {
-        Solicitante,
-        Solicitado
+        Post,
+        Album,
+        Partido
     }
 }

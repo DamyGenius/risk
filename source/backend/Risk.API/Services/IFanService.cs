@@ -43,5 +43,6 @@ namespace Risk.API.Services
         Respuesta<Dato> SolicitarAmistad(string usuarioSolicitado);
         Respuesta<Dato> ResponderSolicitudAmistad(int idAmistad, RespuestaInvitacion respuestaSolicitud);
         Respuesta<Pagina<Amigo>> ListarAmigos(string usuario, TipoAmigo? tipo = null, string aceptado = null);
+        Respuesta<Dato> RealizarComentario(TipoComentario tipo, long referencia, string contenido, long? referenciaComentario);
     }
 }
