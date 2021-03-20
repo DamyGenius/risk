@@ -31,8 +31,5 @@ namespace Risk.API.Models
         public int? VersionAvatar { get; set; }
         public int? Puntos { get; set; }
         public int? Ranking { get; set; }
-        public string TokenAceptacion { get; set; }
-        public string Aceptado { get; set; }
-        public TipoAmigo TipoAmigo { get; set; }
     }
 }

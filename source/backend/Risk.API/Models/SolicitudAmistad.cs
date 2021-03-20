@@ -24,9 +24,14 @@ SOFTWARE.
 
 namespace Risk.API.Models
 {
-    public enum TipoAmigo
+    public class SolicitudAmistad
     {
-        SOLICITANTE,
-        SOLICITADO
+        public int IdUsuario { get; set; }
+        public string AliasUsuario { get; set; }
+        public int? VersionAvatar { get; set; }
+        public int? Puntos { get; set; }
+        public int? Ranking { get; set; }
+        public string TokenAceptacion { get; set; }
+        public TipoSolicitudAmistad TipoSolicitud { get; set; }
     }
 }

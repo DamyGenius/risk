@@ -835,7 +835,6 @@ namespace Risk.API.Mappers
             }
             else
             {
-                Enum.TryParse(entity.Tipo, out TipoAmigo tipoAmigo);
                 model = new Amigo
                 {
                     IdUsuario = entity.IdUsuario,
@@ -843,9 +842,31 @@ namespace Risk.API.Mappers
                     VersionAvatar = entity.VersionAvatar,
                     Puntos = entity.Puntos,
                     Ranking = entity.Ranking,
+                };
+            }
+            return model;
+        }
+
+        public static SolicitudAmistad GetSolicitudAmistadFromEntity(YAmigo entity)
+        {
+            SolicitudAmistad model;
+            if (entity == null)
+            {
+                model = null;
+            }
+            else
+            {
+                Enum.TryParse(entity.Tipo, out TipoAmigo tipoAmigo);
+                var tipoSolicitud = tipoAmigo==TipoAmigo.SOLICITANTE?TipoSolicitudAmistad.Enviada:TipoSolicitudAmistad.Recibida;
+                model = new SolicitudAmistad
+                {
+                    IdUsuario = entity.IdUsuario,
+                    AliasUsuario = entity.AliasUsuario,
+                    VersionAvatar = entity.VersionAvatar,
+                    Puntos = entity.Puntos,
+                    Ranking = entity.Ranking,
                     TokenAceptacion = entity.TokenAceptacion,
-                    Aceptado = entity.Aceptado,
-                    TipoAmigo = tipoAmigo
+                    TipoSolicitud = tipoSolicitud
                 };
             }
             return model;

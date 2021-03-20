@@ -24,9 +24,9 @@ SOFTWARE.
 
 namespace Risk.API.Models
 {
-    public enum TipoAmigo
+    public enum TipoSolicitudAmistad
     {
-        SOLICITANTE,
-        SOLICITADO
+        Enviada,
+        Recibida
     }
 }
