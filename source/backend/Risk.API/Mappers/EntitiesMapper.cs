@@ -847,6 +847,16 @@ namespace Risk.API.Mappers
             return model;
         }
 
+        public static List<Amigo> GetAmigoListFromEntity(List<YAmigo> entityList)
+        {
+            List<Amigo> modelList = new List<Amigo>();
+            foreach (var item in entityList)
+            {
+                modelList.Add(GetAmigoFromEntity(item));
+            }
+            return modelList;
+        }
+
         public static SolicitudAmistad GetSolicitudAmistadFromEntity(YAmigo entity)
         {
             SolicitudAmistad model;
@@ -872,12 +882,12 @@ namespace Risk.API.Mappers
             return model;
         }
 
-        public static List<Amigo> GetAmigoListFromEntity(List<YAmigo> entityList)
+        public static List<SolicitudAmistad> GetSolicitudAmistadListFromEntity(List<YAmigo> entityList)
         {
-            List<Amigo> modelList = new List<Amigo>();
+            List<SolicitudAmistad> modelList = new List<SolicitudAmistad>();
             foreach (var item in entityList)
             {
-                modelList.Add(GetAmigoFromEntity(item));
+                modelList.Add(GetSolicitudAmistadFromEntity(item));
             }
             return modelList;
         }

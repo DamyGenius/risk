@@ -301,6 +301,19 @@ namespace Risk.API.Mappers
             }
         }
  
+        public static TipoAmigo? GetTipoAmigoFromTipoSolicitudAmistadEnum(TipoSolicitudAmistad? enumeration)
+        {
+            switch (enumeration)
+            {
+                case TipoSolicitudAmistad.Enviada:
+                    return TipoAmigo.SOLICITANTE;
+                case TipoSolicitudAmistad.Recibida:
+                    return TipoAmigo.SOLICITADO;
+                default:
+                    return null;
+            }
+        }
+
         public static string GetValueFromTipoComentarioEnum(TipoComentario enumeration)
         {
             switch (enumeration)

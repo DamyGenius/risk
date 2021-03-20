@@ -321,22 +321,18 @@ namespace Risk.API.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Amigo>>))]
         public IActionResult ListarAmigos([FromQuery, SwaggerParameter(Description = "Usuario", Required = true)] string usuario)
         {
-            var respuesta = _fanService.ListarAmigos(usuario, null, "S");
+            var respuesta = _fanService.ListarAmigos(usuario);
             return ProcesarRespuesta(respuesta);
         }
 
         [HttpGet("ListarSolicitudesAmistad")]
         [SwaggerOperation(OperationId = "ListarSolicitudesAmistad", Summary = "ListarSolicitudesAmistad", Description = "Obtiene lista de solicitudes de amistad de un usuario")]
         [Produces(MediaTypeNames.Application.Json)]
-        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Amigo>>))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<SolicitudAmistad>>))]
         public IActionResult ListarSolicitudesAmistad([FromQuery, SwaggerParameter(Description = "Usuario", Required = true)] string usuario,
-            [FromQuery, SwaggerParameter(Description = "Tipo (Enviada/Recibida)", Required = false)] TipoSolicitudAmistad tipo)
+            [FromQuery, SwaggerParameter(Description = "Tipo (Enviada/Recibida)", Required = false)] TipoSolicitudAmistad? tipo)
         {
-            TipoAmigo? tipoAmigo = null;
-            if (tipo.Equals(TipoSolicitudAmistad.Enviada)) tipoAmigo = TipoAmigo.SOLICITANTE;
-            else if (tipo.Equals(TipoSolicitudAmistad.Recibida)) tipoAmigo = TipoAmigo.SOLICITADO;
-
-            var respuesta = _fanService.ListarAmigos(usuario, tipoAmigo, "N");
+            var respuesta = _fanService.ListarSolicitudesAmistad(usuario, tipo);
             return ProcesarRespuesta(respuesta);
         }
 

@@ -325,12 +325,11 @@ namespace Risk.API.Services
             return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
         }
 
-        public Respuesta<Pagina<Amigo>> ListarAmigos(string usuario, TipoAmigo? tipo = null, string aceptado = null)
+        public Respuesta<Pagina<Amigo>> ListarAmigos(string usuario)
         {
             JObject prms = new JObject();
             prms.Add("usuario", usuario);
-            prms.Add("tipo", tipo.ToString());
-            prms.Add("aceptado", aceptado);
+            prms.Add("aceptado", "S");
 
             string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
                 NOMBRE_LISTAR_AMIGOS,
@@ -345,6 +344,28 @@ namespace Risk.API.Services
             }
 
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<Amigo>, YPagina<YAmigo>>(entityRsp, datos);
+        }
+
+        public Respuesta<Pagina<SolicitudAmistad>> ListarSolicitudesAmistad(string usuario, TipoSolicitudAmistad? tipo = null)
+        {
+            JObject prms = new JObject();
+            prms.Add("usuario", usuario);
+            prms.Add("tipo", ModelsMapper.GetTipoAmigoFromTipoSolicitudAmistadEnum(tipo).ToString());
+            prms.Add("aceptado", "N");
+
+            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+                NOMBRE_LISTAR_AMIGOS,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YPagina<YAmigo>>>(rsp);
+
+            Pagina<SolicitudAmistad> datos = null;
+            if (entityRsp.Datos != null)
+            {
+                datos = EntitiesMapper.GetPaginaFromEntity<SolicitudAmistad, YAmigo>(entityRsp.Datos, EntitiesMapper.GetSolicitudAmistadListFromEntity(entityRsp.Datos.Elementos));
+            }
+
+            return EntitiesMapper.GetRespuestaFromEntity<Pagina<SolicitudAmistad>, YPagina<YAmigo>>(entityRsp, datos);
         }
 
         public Respuesta<Dato> RealizarComentario(TipoComentario tipo, long referencia, string contenido, long? referenciaComentario)
