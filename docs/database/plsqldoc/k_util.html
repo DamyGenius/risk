@@ -61,6 +61,11 @@ Retorna el valor que se encuenta en la posicion indicada dentro de una cadena Si
 
 </TD></TR>
 <TR><TD VALIGN="TOP" CLASS="TYPE_ITEM">
+<A HREF="#F_ESCAPAR_TEXTO">f_escapar_texto</A>&nbsp;&nbsp;
+</TD><TD CLASS="DESC_TEXT" WIDTH=95%>
+
+</TD></TR>
+<TR><TD VALIGN="TOP" CLASS="TYPE_ITEM">
 <A HREF="#F_FORMATEAR_TITULO">f_formatear_titulo</A>&nbsp;&nbsp;
 </TD><TD CLASS="DESC_TEXT" WIDTH=95%>
 
@@ -87,6 +92,11 @@ Retorna el significado de un codigo dentro de un dominio
 </TD></TR>
 <TR><TD VALIGN="TOP" CLASS="TYPE_ITEM">
 <A HREF="#F_HASH">f_hash</A>&nbsp;&nbsp;
+</TD><TD CLASS="DESC_TEXT" WIDTH=95%>
+
+</TD></TR>
+<TR><TD VALIGN="TOP" CLASS="TYPE_ITEM">
+<A HREF="#P_INICIALIZAR_HTML">p_inicializar_html</A>&nbsp;&nbsp;
 </TD><TD CLASS="DESC_TEXT" WIDTH=95%>
 
 </TD></TR>
@@ -193,9 +203,10 @@ ex_tipo_inexistente EXCEPTION;
 p_generar_trigger_secuencia
 </P>
 <PRE CLASS="DECL_TEXT">
-PROCEDURE p_generar_trigger_secuencia(i_tabla   IN VARCHAR2,
-                                      i_campo   IN VARCHAR2,
-                                      i_trigger IN VARCHAR2 DEFAULT NULL)
+PROCEDURE p_generar_trigger_secuencia(i_tabla    IN VARCHAR2,
+                                      i_campo    IN VARCHAR2,
+                                      i_trigger  IN VARCHAR2 DEFAULT NULL,
+                                      i_ejecutar IN BOOLEAN DEFAULT TRUE)
 
 </PRE>
 <P CLASS="DESC_TEXT">
@@ -241,6 +252,13 @@ i_trigger&nbsp;&nbsp;
 Trigger<br>
 
 </TD></TR>
+<TR><TD VALIGN="TOP" CLASS="LIST_ITEM" WIDTH=1%>
+</TD><TD VALIGN="TOP" CLASS="LIST_ITEM" WIDTH=1%>
+i_ejecutar&nbsp;&nbsp;
+</TD><TD CLASS="DESC_TEXT" WIDTH=95%>
+Ejecutar la(s) sentencia(s)?<br>
+
+</TD></TR>
 </TABLE>
 <BR>
 <HR>
@@ -249,8 +267,9 @@ Trigger<br>
 p_generar_type_objeto
 </P>
 <PRE CLASS="DECL_TEXT">
-PROCEDURE p_generar_type_objeto(i_tabla IN VARCHAR2,
-                                i_type  IN VARCHAR2 DEFAULT NULL)
+PROCEDURE p_generar_type_objeto(i_tabla    IN VARCHAR2,
+                                i_type     IN VARCHAR2 DEFAULT NULL,
+                                i_ejecutar IN BOOLEAN DEFAULT TRUE)
 
 </PRE>
 <HR>
@@ -393,6 +412,15 @@ FUNCTION f_reemplazar_acentos(i_cadena IN VARCHAR2) RETURN VARCHAR2
 
 </PRE>
 <HR>
+<A NAME="F_ESCAPAR_TEXTO"></A>
+<P CLASS="TYPE_TITLE">
+f_escapar_texto
+</P>
+<PRE CLASS="DECL_TEXT">
+FUNCTION f_escapar_texto(i_texto IN CLOB) RETURN CLOB
+
+</PRE>
+<HR>
 <A NAME="F_FORMATEAR_TITULO"></A>
 <P CLASS="TYPE_TITLE">
 f_formatear_titulo
@@ -498,6 +526,15 @@ f_hash
 <PRE CLASS="DECL_TEXT">
 FUNCTION f_hash(i_data      IN VARCHAR2,
                 i_hash_type IN PLS_INTEGER) RETURN VARCHAR2
+
+</PRE>
+<HR>
+<A NAME="P_INICIALIZAR_HTML"></A>
+<P CLASS="TYPE_TITLE">
+p_inicializar_html
+</P>
+<PRE CLASS="DECL_TEXT">
+PROCEDURE p_inicializar_html
 
 </PRE>
 <HR>

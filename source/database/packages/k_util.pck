@@ -41,13 +41,16 @@ CREATE OR REPLACE PACKAGE k_util IS
   %param i_tabla Tabla
   %param i_campo Campo
   %param i_trigger Trigger
+  %param i_ejecutar Ejecutar la(s) sentencia(s)?
   */
-  PROCEDURE p_generar_trigger_secuencia(i_tabla   IN VARCHAR2,
-                                        i_campo   IN VARCHAR2,
-                                        i_trigger IN VARCHAR2 DEFAULT NULL);
+  PROCEDURE p_generar_trigger_secuencia(i_tabla    IN VARCHAR2,
+                                        i_campo    IN VARCHAR2,
+                                        i_trigger  IN VARCHAR2 DEFAULT NULL,
+                                        i_ejecutar IN BOOLEAN DEFAULT TRUE);
 
-  PROCEDURE p_generar_type_objeto(i_tabla IN VARCHAR2,
-                                  i_type  IN VARCHAR2 DEFAULT NULL);
+  PROCEDURE p_generar_type_objeto(i_tabla    IN VARCHAR2,
+                                  i_type     IN VARCHAR2 DEFAULT NULL,
+                                  i_ejecutar IN BOOLEAN DEFAULT TRUE);
 
   /**
   Retorna una tabla de cadenas delimitadas por un separador
@@ -79,6 +82,8 @@ CREATE OR REPLACE PACKAGE k_util IS
 
   FUNCTION f_reemplazar_acentos(i_cadena IN VARCHAR2) RETURN VARCHAR2;
 
+  FUNCTION f_escapar_texto(i_texto IN CLOB) RETURN CLOB;
+
   FUNCTION f_formatear_titulo(i_titulo IN VARCHAR2) RETURN VARCHAR2
     DETERMINISTIC;
 
@@ -103,6 +108,8 @@ CREATE OR REPLACE PACKAGE k_util IS
 
   FUNCTION f_hash(i_data      IN VARCHAR2,
                   i_hash_type IN PLS_INTEGER) RETURN VARCHAR2 DETERMINISTIC;
+
+  PROCEDURE p_inicializar_html;
 
   FUNCTION f_html RETURN CLOB;
 
@@ -139,9 +146,10 @@ END;
 /
 CREATE OR REPLACE PACKAGE BODY k_util IS
 
-  PROCEDURE p_generar_trigger_secuencia(i_tabla   IN VARCHAR2,
-                                        i_campo   IN VARCHAR2,
-                                        i_trigger IN VARCHAR2 DEFAULT NULL) IS
+  PROCEDURE p_generar_trigger_secuencia(i_tabla    IN VARCHAR2,
+                                        i_campo    IN VARCHAR2,
+                                        i_trigger  IN VARCHAR2 DEFAULT NULL,
+                                        i_ejecutar IN BOOLEAN DEFAULT TRUE) IS
     l_sentencia VARCHAR2(4000);
     l_trigger   VARCHAR2(30);
   BEGIN
@@ -149,7 +157,11 @@ CREATE OR REPLACE PACKAGE BODY k_util IS
   
     -- Genera secuencia
     l_sentencia := 'CREATE SEQUENCE s_' || lower(i_campo);
-    EXECUTE IMMEDIATE l_sentencia;
+    IF i_ejecutar THEN
+      EXECUTE IMMEDIATE l_sentencia;
+    ELSE
+      dbms_output.put_line(l_sentencia);
+    END IF;
   
     -- Genera trigger
     l_sentencia := 'CREATE OR REPLACE TRIGGER ' || l_trigger || '
@@ -185,11 +197,16 @@ BEGIN
                    lower(i_campo) || '.nextval;
   END IF;
 END;';
-    EXECUTE IMMEDIATE l_sentencia;
+    IF i_ejecutar THEN
+      EXECUTE IMMEDIATE l_sentencia;
+    ELSE
+      dbms_output.put_line(l_sentencia);
+    END IF;
   END;
 
-  PROCEDURE p_generar_type_objeto(i_tabla IN VARCHAR2,
-                                  i_type  IN VARCHAR2 DEFAULT NULL) IS
+  PROCEDURE p_generar_type_objeto(i_tabla    IN VARCHAR2,
+                                  i_type     IN VARCHAR2 DEFAULT NULL,
+                                  i_ejecutar IN BOOLEAN DEFAULT TRUE) IS
     l_sentencia VARCHAR2(4000);
     l_type      VARCHAR2(30);
     l_comments  VARCHAR2(4000);
@@ -297,8 +314,11 @@ SOFTWARE.
 
   OVERRIDING MEMBER FUNCTION to_json RETURN CLOB
 )';
-    dbms_output.put_line(l_sentencia);
-    EXECUTE IMMEDIATE l_sentencia;
+    IF i_ejecutar THEN
+      EXECUTE IMMEDIATE l_sentencia;
+    ELSE
+      dbms_output.put_line(l_sentencia);
+    END IF;
   
     -- Genera type body
     l_campos1 := '';
@@ -356,8 +376,11 @@ SOFTWARE.
   END;
 
 END;';
-    dbms_output.put_line(l_sentencia);
-    EXECUTE IMMEDIATE l_sentencia;
+    IF i_ejecutar THEN
+      EXECUTE IMMEDIATE l_sentencia;
+    ELSE
+      dbms_output.put_line(l_sentencia);
+    END IF;
   END;
 
   FUNCTION f_separar_cadenas(i_cadena    VARCHAR2,
@@ -429,6 +452,37 @@ END;';
     RETURN translate(i_cadena,
                      'áéíóúàèìòùâêîôûäëïöüçãõÁÉÍÓÚÀÈÌÒÙÂÊÎÔÛÄËÏÖÜÇÃÕ',
                      'aeiouaeiouaeiouaeioucaoAEIOUAEIOUAEIOUAEIOUCAO');
+  END;
+
+  FUNCTION f_escapar_texto(i_texto IN CLOB) RETURN CLOB IS
+    l_tmp CLOB;
+  BEGIN
+    l_tmp := i_texto;
+    --
+    l_tmp := REPLACE(l_tmp, '&', '&' || 'amp;');
+    l_tmp := REPLACE(l_tmp, '''', '&' || 'apos;');
+    l_tmp := REPLACE(l_tmp, '"', '&' || 'quot;');
+    l_tmp := REPLACE(l_tmp, '>', '&' || 'gt;');
+    l_tmp := REPLACE(l_tmp, '<', '&' || 'lt;');
+    --
+    l_tmp := REPLACE(l_tmp, 'Á', '&' || 'Aacute;');
+    l_tmp := REPLACE(l_tmp, 'É', '&' || 'Eacute;');
+    l_tmp := REPLACE(l_tmp, 'Í', '&' || 'Iacute;');
+    l_tmp := REPLACE(l_tmp, 'Ó', '&' || 'Oacute;');
+    l_tmp := REPLACE(l_tmp, 'Ú', '&' || 'Uacute;');
+    l_tmp := REPLACE(l_tmp, 'Ñ', '&' || 'Ntilde;');
+    l_tmp := REPLACE(l_tmp, 'Ü', '&' || 'Uuml;');
+    l_tmp := REPLACE(l_tmp, 'Ç', '&' || 'Ccedil;');
+    --
+    l_tmp := REPLACE(l_tmp, 'á', '&' || 'aacute;');
+    l_tmp := REPLACE(l_tmp, 'é', '&' || 'eacute;');
+    l_tmp := REPLACE(l_tmp, 'í', '&' || 'iacute;');
+    l_tmp := REPLACE(l_tmp, 'ó', '&' || 'oacute;');
+    l_tmp := REPLACE(l_tmp, 'ú', '&' || 'uacute;');
+    l_tmp := REPLACE(l_tmp, 'ñ', '&' || 'ntilde;');
+    l_tmp := REPLACE(l_tmp, 'ü', '&' || 'uuml;');
+    l_tmp := REPLACE(l_tmp, 'ç', '&' || 'ccedil;');
+    RETURN l_tmp;
   END;
 
   FUNCTION f_formatear_titulo(i_titulo IN VARCHAR2) RETURN VARCHAR2
@@ -582,6 +636,13 @@ END;';
   BEGIN
     RETURN to_char(rawtohex(dbms_crypto.hash(utl_raw.cast_to_raw(i_data),
                                              i_hash_type)));
+  END;
+
+  PROCEDURE p_inicializar_html IS
+  BEGIN
+    owa.init_cgi_env(NEW owa.vc_arr());
+    htp.init;
+    htp.adddefaulthtmlhdr(FALSE);
   END;
 
   FUNCTION f_html RETURN CLOB IS

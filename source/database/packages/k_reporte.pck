@@ -34,7 +34,8 @@ CREATE OR REPLACE PACKAGE k_reporte IS
   c_formato_pdf  CONSTANT VARCHAR2(10) := 'PDF';
   c_formato_docx CONSTANT VARCHAR2(10) := 'DOCX';
   c_formato_xlsx CONSTANT VARCHAR2(10) := 'XLSX';
-  c_formato_txt  CONSTANT VARCHAR2(10) := 'TXT';
+  c_formato_csv  CONSTANT VARCHAR2(10) := 'CSV';
+  c_formato_html CONSTANT VARCHAR2(10) := 'HTML';
 
   PROCEDURE p_limpiar_historial;
 
@@ -360,8 +361,8 @@ CREATE OR REPLACE PACKAGE BODY k_reporte IS
         -- as_xlsx.set_column_width(2, 100);
         l_archivo.contenido := as_xlsx.finish;
       
-      WHEN c_formato_txt THEN
-        -- TXT
+      WHEN c_formato_csv THEN
+        -- CSV
         DECLARE
           l_txt CLOB;
         BEGIN
@@ -370,6 +371,27 @@ CREATE OR REPLACE PACKAGE BODY k_reporte IS
                                  i_respuesta.mensaje;
           l_archivo.contenido := k_util.clob_to_blob(l_txt);
         END;
+      
+      WHEN c_formato_html THEN
+        -- HTML
+        k_util.p_inicializar_html;
+        htp.htmlopen;
+        htp.headopen;
+        htp.p('<meta charset="utf-8">');
+        htp.meta(NULL, 'author', k_sistema.f_usuario);
+        htp.meta(NULL, 'description', '');
+        htp.title(k_sistema.f_valor_parametro_string(k_sistema.c_nombre_operacion));
+        htp.headclose;
+        htp.bodyopen;
+        htp.header(1, k_util.f_escapar_texto('Código'));
+        htp.p('<p>' || k_util.f_escapar_texto(i_respuesta.codigo) ||
+              '</p>');
+        htp.header(1, k_util.f_escapar_texto('Mensaje'));
+        htp.p('<p>' || k_util.f_escapar_texto(i_respuesta.mensaje) ||
+              '</p>');
+        htp.bodyclose;
+        htp.htmlclose;
+        l_archivo.contenido := k_util.clob_to_blob(k_util.f_html);
       
       ELSE
         raise_application_error(-20000, 'Formato de salida no soportado');
@@ -422,7 +444,8 @@ CREATE OR REPLACE PACKAGE BODY k_reporte IS
                                    (c_formato_pdf,
                                     c_formato_docx,
                                     c_formato_xlsx,
-                                    c_formato_txt),
+                                    c_formato_csv,
+                                    c_formato_html),
                                    'Formato de salida no soportado');
   
     l_formato := k_operacion.f_valor_parametro_string(i_parametros,
@@ -566,10 +589,64 @@ CREATE OR REPLACE PACKAGE BODY k_reporte IS
         as_xlsx.query2sheet(l_consulta_sql);
         l_contenido := as_xlsx.finish;
       
-      WHEN c_formato_txt THEN
-        -- TXT
+      WHEN c_formato_csv THEN
+        -- CSV
         csv.generate_clob(l_consulta_sql);
         l_contenido := k_util.clob_to_blob(csv.get_clob);
+      
+      WHEN c_formato_html THEN
+        -- HTML
+        DECLARE
+          -- https://dba.stackexchange.com/a/6780
+          l_ctx   dbms_xmlgen.ctxhandle;
+          l_xml   xmltype;
+          l_table CLOB;
+        BEGIN
+          l_ctx := dbms_xmlgen.newcontext(l_consulta_sql);
+          dbms_xmlgen.setnullhandling(l_ctx, dbms_xmlgen.empty_tag);
+          dbms_xmlgen.setprettyprinting(l_ctx, FALSE);
+          l_xml := dbms_xmlgen.getxmltype(l_ctx);
+        
+          IF dbms_xmlgen.getnumrowsprocessed(l_ctx) > 0 AND
+             l_xml IS NOT NULL THEN
+            l_table := l_xml.transform(xmltype('<?xml version="1.0" encoding="ISO-8859-1"?>
+  <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <xsl:output method="html"/>
+  <xsl:template match="/">
+    <table border="1" cellspacing="0">
+      <tr bgcolor="lightgray">
+        <xsl:for-each select="/ROWSET/ROW[1]/*">
+          <th><xsl:value-of select="name()"/></th>
+        </xsl:for-each>
+      </tr>
+      <xsl:for-each select="/ROWSET/*">
+        <tr>
+          <xsl:for-each select="./*">
+            <td><xsl:value-of select="text()"/></td>
+          </xsl:for-each>
+        </tr>
+      </xsl:for-each>
+    </table>
+  </xsl:template>
+  </xsl:stylesheet>')).getclobval;
+          END IF;
+        
+          dbms_xmlgen.closecontext(l_ctx);
+          --
+          k_util.p_inicializar_html;
+          htp.htmlopen;
+          htp.headopen;
+          htp.p('<meta charset="utf-8">');
+          htp.meta(NULL, 'author', k_sistema.f_usuario);
+          htp.meta(NULL, 'description', '');
+          htp.title(k_sistema.f_valor_parametro_string(k_sistema.c_nombre_operacion));
+          htp.headclose;
+          htp.bodyopen;
+          htp.p(l_table);
+          htp.bodyclose;
+          htp.htmlclose;
+          l_contenido := k_util.clob_to_blob(k_util.f_html);
+        END;
       
     END CASE;
   
