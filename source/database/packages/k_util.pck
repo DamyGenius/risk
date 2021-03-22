@@ -60,10 +60,14 @@ CREATE OR REPLACE PACKAGE k_util IS
   %param i_separador Caracter separador. Por defecto '~'
   %return Tabla de cadenas
   */
-  FUNCTION f_separar_cadenas(i_cadena    VARCHAR2,
-                             i_separador VARCHAR2 DEFAULT '~')
+  FUNCTION f_separar_cadenas(i_cadena    IN VARCHAR2,
+                             i_separador IN VARCHAR2 DEFAULT '~')
     RETURN y_cadenas
     PIPELINED;
+
+  FUNCTION f_clob_to_cadenas(i_clob          IN CLOB,
+                             i_buffer_length IN NUMBER DEFAULT 32767)
+    RETURN y_cadenas;
 
   /**
   Retorna el valor que se encuenta en la posicion indicada dentro de una cadena
@@ -383,13 +387,14 @@ END;';
     END IF;
   END;
 
-  FUNCTION f_separar_cadenas(i_cadena    VARCHAR2,
-                             i_separador VARCHAR2 DEFAULT '~')
+  FUNCTION f_separar_cadenas(i_cadena    IN VARCHAR2,
+                             i_separador IN VARCHAR2 DEFAULT '~')
     RETURN y_cadenas
     PIPELINED IS
     l_idx    PLS_INTEGER;
-    l_cadena VARCHAR2(32767) := i_cadena;
+    l_cadena VARCHAR2(32767);
   BEGIN
+    l_cadena := i_cadena;
     LOOP
       l_idx := instr(l_cadena, i_separador);
       IF l_idx > 0 THEN
@@ -401,6 +406,29 @@ END;';
       END IF;
     END LOOP;
     RETURN;
+  END;
+
+  FUNCTION f_clob_to_cadenas(i_clob          IN CLOB,
+                             i_buffer_length IN NUMBER DEFAULT 32767)
+    RETURN y_cadenas IS
+    l_cadenas y_cadenas;
+    l_length  INTEGER;
+    k         NUMBER;
+  BEGIN
+    l_cadenas := NEW y_cadenas();
+  
+    l_length := dbms_lob.getlength(i_clob);
+    IF l_length > 0 AND i_buffer_length > 0 THEN
+      k := ceil(l_length / i_buffer_length);
+      l_cadenas.extend(k);
+      FOR i IN 1 .. k LOOP
+        l_cadenas(i) := dbms_lob.substr(i_clob,
+                                        i_buffer_length,
+                                        1 + i_buffer_length * (i - 1));
+      END LOOP;
+    END IF;
+  
+    RETURN l_cadenas;
   END;
 
   FUNCTION f_valor_posicion(i_cadena    IN VARCHAR2,
@@ -640,7 +668,10 @@ END;';
 
   PROCEDURE p_inicializar_html IS
   BEGIN
-    owa.init_cgi_env(NEW owa.vc_arr());
+    -- owa.init_cgi_env(NEW owa.vc_arr());
+    owa.num_cgi_vars := 0;
+    -- https://forums.allroundautomations.com/ubb/ubbthreads.php?ubb=showflat&Number=60068
+    htp.htbuf_len := floor(255 / 4);
     htp.init;
     htp.adddefaulthtmlhdr(FALSE);
   END;
