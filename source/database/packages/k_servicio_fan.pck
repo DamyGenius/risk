@@ -1373,8 +1373,8 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
   END;
 
   FUNCTION listar_amigos(i_parametros IN y_parametros) RETURN y_respuesta IS
-    c_solicitante CONSTANT VARCHAR2(8) := 'SOLICITANTE';
-    c_solicitado  CONSTANT VARCHAR2(8) := 'SOLICITADO';
+    c_solicitante CONSTANT VARCHAR2(12) := 'SOLICITANTE';
+    c_solicitado  CONSTANT VARCHAR2(12) := 'SOLICITADO';
   
     l_rsp     y_respuesta;
     l_pagina  y_pagina;
