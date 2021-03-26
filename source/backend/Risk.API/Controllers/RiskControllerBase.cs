@@ -27,8 +27,6 @@ using System.IO;
 using System.Net;
 using System.Net.Mime;
 using System.Web;
-using iText.Html2pdf;
-using iText.Html2pdf.Attach.Impl;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -80,6 +78,10 @@ namespace Risk.API.Controllers
             if (archivo.Contenido != null)
             {
                 contenido = GZipHelper.Decompress(Convert.FromBase64String(archivo.Contenido));
+                if (archivo.TipoMime.Contains("text/", StringComparison.OrdinalIgnoreCase))
+                {
+                    contenido = EncodingHelper.ConvertToUTF8(contenido, _configuration["OracleConfiguration:CharacterSet"]);
+                }
             }
             else if (archivo.Url != null)
             {
@@ -89,18 +91,12 @@ namespace Risk.API.Controllers
                 }
             }
 
-            if (archivo.Extension.Equals("html") && archivo.TipoMime.Equals(MediaTypeNames.Application.Pdf))
+            if (archivo.Extension.Equals(RiskConstants.FORMATO_HTML, StringComparison.OrdinalIgnoreCase) &&
+                HtmlHelper.ObtenerMetaContent(contenido, RiskConstants.META_FORMAT).Equals(RiskConstants.FORMATO_PDF, StringComparison.OrdinalIgnoreCase))
             {
-                archivo.Extension = "pdf";
-
-                ConverterProperties properties = new ConverterProperties();
-                // properties.SetBaseUri("");
-                properties.SetOutlineHandler(OutlineHandler.CreateStandardHandler());
-                using (var ms = new MemoryStream())
-                {
-                    HtmlConverter.ConvertToPdf(new MemoryStream(contenido), ms, properties);
-                    contenido = ms.ToArray();
-                }
+                contenido = PdfHelper.ConvertToPdf(contenido);
+                archivo.Extension = RiskConstants.FORMATO_PDF.ToLower();
+                archivo.TipoMime = MediaTypeNames.Application.Pdf;
             }
 
             return File(contenido, archivo.TipoMime, string.Concat(archivo.Nombre, ".", archivo.Extension));

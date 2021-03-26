@@ -37,6 +37,15 @@ CREATE OR REPLACE PACKAGE k_reporte IS
   c_formato_csv  CONSTANT VARCHAR2(10) := 'CSV';
   c_formato_html CONSTANT VARCHAR2(10) := 'HTML';
 
+  -- Orientaciones
+  c_orientacion_vertical   CONSTANT VARCHAR2(10) := 'PORTRAIT';
+  c_orientacion_horizontal CONSTANT VARCHAR2(10) := 'LANDSCAPE';
+
+  -- Nombres de metadatos para conversión de reportes HTML a PDF
+  c_meta_format           CONSTANT VARCHAR2(30) := 'risk:format';
+  c_meta_page_size        CONSTANT VARCHAR2(30) := 'risk:page_size';
+  c_meta_page_orientation CONSTANT VARCHAR2(30) := 'risk:page_orientation';
+
   PROCEDURE p_limpiar_historial;
 
   FUNCTION f_archivo_ok(i_contenido IN BLOB,
@@ -374,24 +383,27 @@ CREATE OR REPLACE PACKAGE BODY k_reporte IS
       
       WHEN c_formato_html THEN
         -- HTML
-        k_util.p_inicializar_html;
+        k_html.p_inicializar;
         htp.htmlopen;
         htp.headopen;
         htp.p('<meta charset="utf-8">');
+        htp.meta(NULL, c_meta_format, c_formato_pdf);
+        htp.meta(NULL, c_meta_page_size, 'A4');
+        htp.meta(NULL, c_meta_page_orientation, c_orientacion_vertical);
         htp.meta(NULL, 'author', k_sistema.f_usuario);
         htp.meta(NULL, 'description', '');
         htp.title(k_sistema.f_valor_parametro_string(k_sistema.c_nombre_operacion));
         htp.headclose;
         htp.bodyopen;
-        htp.header(1, k_util.f_escapar_texto('Código'));
-        htp.p('<p>' || k_util.f_escapar_texto(i_respuesta.codigo) ||
+        htp.header(1, k_html.f_escapar_texto('Código'));
+        htp.p('<p>' || k_html.f_escapar_texto(i_respuesta.codigo) ||
               '</p>');
-        htp.header(1, k_util.f_escapar_texto('Mensaje'));
-        htp.p('<p>' || k_util.f_escapar_texto(i_respuesta.mensaje) ||
+        htp.header(1, k_html.f_escapar_texto('Mensaje'));
+        htp.p('<p>' || k_html.f_escapar_texto(i_respuesta.mensaje) ||
               '</p>');
         htp.bodyclose;
         htp.htmlclose;
-        l_archivo.contenido := k_util.clob_to_blob(k_util.f_html);
+        l_archivo.contenido := k_util.clob_to_blob(k_html.f_html);
       
       ELSE
         raise_application_error(-20000, 'Formato de salida no soportado');
@@ -598,11 +610,9 @@ CREATE OR REPLACE PACKAGE BODY k_reporte IS
         -- HTML
         DECLARE
           -- https://dba.stackexchange.com/a/6780
-          l_ctx     dbms_xmlgen.ctxhandle;
-          l_xml     xmltype;
-          l_table   CLOB;
-          l_cadenas y_cadenas;
-          i         INTEGER;
+          l_ctx   dbms_xmlgen.ctxhandle;
+          l_xml   xmltype;
+          l_table CLOB;
         BEGIN
           l_ctx := dbms_xmlgen.newcontext(l_consulta_sql);
           dbms_xmlgen.setnullhandling(l_ctx, dbms_xmlgen.empty_tag);
@@ -611,7 +621,7 @@ CREATE OR REPLACE PACKAGE BODY k_reporte IS
         
           IF dbms_xmlgen.getnumrowsprocessed(l_ctx) > 0 AND
              l_xml IS NOT NULL THEN
-            l_table := l_xml.transform(xmltype('<?xml version="1.0" encoding="ISO-8859-1"?>
+            l_table := l_xml.transform(xmltype('<?xml version="1.0" encoding="UTF-8"?>
   <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:output method="html"/>
   <xsl:template match="/">
@@ -635,26 +645,24 @@ CREATE OR REPLACE PACKAGE BODY k_reporte IS
         
           dbms_xmlgen.closecontext(l_ctx);
           --
-          k_util.p_inicializar_html;
+          k_html.p_inicializar;
           htp.htmlopen;
           htp.headopen;
           htp.p('<meta charset="utf-8">');
+          htp.meta(NULL, c_meta_format, c_formato_pdf);
+          htp.meta(NULL, c_meta_page_size, 'A4');
+          htp.meta(NULL, c_meta_page_orientation, c_orientacion_horizontal);
           htp.meta(NULL, 'author', k_sistema.f_usuario);
           htp.meta(NULL, 'description', '');
           htp.title(k_sistema.f_valor_parametro_string(k_sistema.c_nombre_operacion));
           htp.headclose;
           htp.bodyopen;
           --
-          l_cadenas := k_util.f_clob_to_cadenas(l_table);
-          i         := l_cadenas.first;
-          WHILE i IS NOT NULL LOOP
-            htp.prn(l_cadenas(i));
-            i := l_cadenas.next(i);
-          END LOOP;
+          k_html.p_print(nvl(l_table, '&' || 'nbsp;'));
           --
           htp.bodyclose;
           htp.htmlclose;
-          l_contenido := k_util.clob_to_blob(k_util.f_html);
+          l_contenido := k_util.clob_to_blob(k_html.f_html);
         END;
       
     END CASE;
