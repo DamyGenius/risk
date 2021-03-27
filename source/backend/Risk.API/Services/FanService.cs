@@ -50,7 +50,7 @@ namespace Risk.API.Services
         private const string NOMBRE_INVITAR_USUARIO = "INVITAR_USUARIO";
         private const string NOMBRE_RESPONDER_INVITACION = "RESPONDER_INVITACION";
         private const string NOMBRE_SOLICITAR_AMISTAD = "SOLICITAR_AMISTAD";
-        private const string NOMBRE_RESPONDER_SOLICITUD_AMISTAD = "SOLICITAR_AMISTAD";
+        private const string NOMBRE_RESPONDER_SOLICITUD_AMISTAD = "RESPONDER_SOLICITUD_AMISTAD";
         private const string NOMBRE_LISTAR_AMIGOS = "LISTAR_AMIGOS";
         private const string NOMBRE_REALIZAR_COMENTARIO = "REALIZAR_COMENTARIO";
 
