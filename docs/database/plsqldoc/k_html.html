@@ -36,6 +36,11 @@ Program units
 </TD></TR></TABLE>
 <TABLE CLASS="SUB_TABLE">
 <TR><TD VALIGN="TOP" CLASS="TYPE_ITEM">
+<A HREF="#F_QUERY2TABLE">f_query2table</A>&nbsp;&nbsp;
+</TD><TD CLASS="DESC_TEXT" WIDTH=95%>
+
+</TD></TR>
+<TR><TD VALIGN="TOP" CLASS="TYPE_ITEM">
 <A HREF="#F_ESCAPAR_TEXTO">f_escapar_texto</A>&nbsp;&nbsp;
 </TD><TD CLASS="DESC_TEXT" WIDTH=95%>
 
@@ -55,8 +60,22 @@ Program units
 </TD><TD CLASS="DESC_TEXT" WIDTH=95%>
 
 </TD></TR>
+<TR><TD VALIGN="TOP" CLASS="TYPE_ITEM">
+<A HREF="#P_FONT_FACE">p_font_face</A>&nbsp;&nbsp;
+</TD><TD CLASS="DESC_TEXT" WIDTH=95%>
+
+</TD></TR>
 </TABLE>
 <BR>
+<HR>
+<A NAME="F_QUERY2TABLE"></A>
+<P CLASS="TYPE_TITLE">
+f_query2table
+</P>
+<PRE CLASS="DECL_TEXT">
+FUNCTION f_query2table(i_query IN CLOB) RETURN CLOB
+
+</PRE>
 <HR>
 <A NAME="F_ESCAPAR_TEXTO"></A>
 <P CLASS="TYPE_TITLE">
@@ -91,6 +110,15 @@ p_print
 </P>
 <PRE CLASS="DECL_TEXT">
 PROCEDURE p_print(i_clob IN CLOB)
+
+</PRE>
+<HR>
+<A NAME="P_FONT_FACE"></A>
+<P CLASS="TYPE_TITLE">
+p_font_face
+</P>
+<PRE CLASS="DECL_TEXT">
+PROCEDURE p_font_face(i_fuentes IN VARCHAR2)
 
 </PRE>
 <P>&nbsp;</P>
