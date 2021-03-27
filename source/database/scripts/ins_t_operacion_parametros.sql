@@ -444,7 +444,7 @@ insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO
 values (60, 'USUARIO_SOLICITADO', '0.1.0', 1, 'S', 'S', null, null, 'S', null, null, null);
 
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
-values (61, 'ID_AMISTAD', '0.1.0', 1, 'S', 'N', null, null, 'S', null, null, null);
+values (61, 'USUARIO_SOLICITANTE', '0.1.0', 1, 'S', 'S', null, null, 'S', null, null, null);
 
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
 values (61, 'RESPUESTA', '0.1.0', 2, 'S', 'S', null, 8, 'S', null, null, null);

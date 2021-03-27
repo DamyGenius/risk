@@ -298,7 +298,7 @@ namespace Risk.API.Controllers
         [SwaggerOperation(OperationId = "SolicitarAmistad", Summary = "SolicitarAmistad", Description = "Permite solicitar amistad a un usuario")]
         [Produces(MediaTypeNames.Application.Json)]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
-        public IActionResult SolicitarAmistad([FromQuery, SwaggerParameter(Description = "UsuarioSolicitado", Required = true)] string usuarioSolicitado)
+        public IActionResult SolicitarAmistad([FromQuery, SwaggerParameter(Description = "Usuario Solicitado", Required = true)] string usuarioSolicitado)
         {
             var respuesta = _fanService.SolicitarAmistad(usuarioSolicitado);
             return ProcesarRespuesta(respuesta);
@@ -308,10 +308,10 @@ namespace Risk.API.Controllers
         [SwaggerOperation(OperationId = "ResponderSolicitudAmistad", Summary = "ResponderSolicitudAmistad", Description = "Permite responder a una solicitud de amistad")]
         [Produces(MediaTypeNames.Application.Json)]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
-        public IActionResult ResponderSolicitudAmistad([FromQuery, SwaggerParameter(Description = "Identificador de la amistad", Required = true)] int idAmistad,
+        public IActionResult ResponderSolicitudAmistad([FromQuery, SwaggerParameter(Description = "Usuario Solicitante", Required = true)] string usuarioSolicitante,
             [FromQuery, SwaggerParameter(Description = "Respuesta a Solicitud (ACEPTAR/RECHAZAR)", Required = true)] RespuestaInvitacion respuestaSolicitud)
         {
-            var respuesta = _fanService.ResponderSolicitudAmistad(idAmistad, respuestaSolicitud);
+            var respuesta = _fanService.ResponderSolicitudAmistad(usuarioSolicitante, respuestaSolicitud);
             return ProcesarRespuesta(respuesta);
         }
 

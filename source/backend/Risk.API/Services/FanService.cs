@@ -310,10 +310,10 @@ namespace Risk.API.Services
             return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
         }
 
-        public Respuesta<Dato> ResponderSolicitudAmistad(int idAmistad, RespuestaInvitacion respuestaSolicitud)
+        public Respuesta<Dato> ResponderSolicitudAmistad(string usuarioSolicitante, RespuestaInvitacion respuestaSolicitud)
         {
             JObject prms = new JObject();
-            prms.Add("id_amistad", idAmistad);
+            prms.Add("usuario_solicitante", usuarioSolicitante);
             prms.Add("respuesta", respuestaSolicitud.ToString());
 
             string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
