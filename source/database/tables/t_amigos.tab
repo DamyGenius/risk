@@ -6,7 +6,7 @@ create table T_AMIGOS
   fecha_creacion         DATE,
   token_aceptacion       VARCHAR2(50),
   aceptado               VARCHAR2(1) default 'N',
-  fecha_aceptacion       DATE,
+  fecha_aceptacion       DATE
 )
 ;
 comment on table T_AMIGOS
