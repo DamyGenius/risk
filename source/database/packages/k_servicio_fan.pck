@@ -243,18 +243,18 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
     l_pagina.cantidad_elementos := l_objetos.count;
     l_pagina.elementos          := l_objetos;
   
-    k_servicio.p_respuesta_ok(l_rsp, l_pagina);
+    k_operacion.p_respuesta_ok(l_rsp, l_pagina);
     RETURN l_rsp;
   EXCEPTION
-    WHEN k_servicio.ex_error_parametro THEN
+    WHEN k_operacion.ex_error_parametro THEN
       RETURN l_rsp;
-    WHEN k_servicio.ex_error_general THEN
+    WHEN k_operacion.ex_error_general THEN
       RETURN l_rsp;
     WHEN OTHERS THEN
-      k_servicio.p_respuesta_excepcion(l_rsp,
-                                       utl_call_stack.error_number(1),
-                                       utl_call_stack.error_msg(1),
-                                       dbms_utility.format_error_stack);
+      k_operacion.p_respuesta_excepcion(l_rsp,
+                                        utl_call_stack.error_number(1),
+                                        utl_call_stack.error_msg(1),
+                                        dbms_utility.format_error_stack);
       RETURN l_rsp;
   END;
 
@@ -325,18 +325,18 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
     l_pagina.cantidad_elementos := l_objetos.count;
     l_pagina.elementos          := l_objetos;
   
-    k_servicio.p_respuesta_ok(l_rsp, l_pagina);
+    k_operacion.p_respuesta_ok(l_rsp, l_pagina);
     RETURN l_rsp;
   EXCEPTION
-    WHEN k_servicio.ex_error_parametro THEN
+    WHEN k_operacion.ex_error_parametro THEN
       RETURN l_rsp;
-    WHEN k_servicio.ex_error_general THEN
+    WHEN k_operacion.ex_error_general THEN
       RETURN l_rsp;
     WHEN OTHERS THEN
-      k_servicio.p_respuesta_excepcion(l_rsp,
-                                       utl_call_stack.error_number(1),
-                                       utl_call_stack.error_msg(1),
-                                       dbms_utility.format_error_stack);
+      k_operacion.p_respuesta_excepcion(l_rsp,
+                                        utl_call_stack.error_number(1),
+                                        utl_call_stack.error_msg(1),
+                                        dbms_utility.format_error_stack);
       RETURN l_rsp;
   END;
 
@@ -421,9 +421,9 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
                                                                    'orden');
   
     l_rsp.lugar := 'Validando parámetros';
-    k_servicio.p_validar_parametro(l_rsp,
-                                   l_usuario IS NOT NULL,
-                                   'Debe ingresar usuario');
+    k_operacion.p_validar_parametro(l_rsp,
+                                    l_usuario IS NOT NULL,
+                                    'Debe ingresar usuario');
   
     FOR ele IN cr_elementos(l_id_partido,
                             l_id_torneo,
@@ -458,18 +458,18 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
                                                l_pagina_parametros.por_pagina,
                                                l_pagina_parametros.no_paginar);
   
-    k_servicio.p_respuesta_ok(l_rsp, l_pagina);
+    k_operacion.p_respuesta_ok(l_rsp, l_pagina);
     RETURN l_rsp;
   EXCEPTION
-    WHEN k_servicio.ex_error_parametro THEN
+    WHEN k_operacion.ex_error_parametro THEN
       RETURN l_rsp;
-    WHEN k_servicio.ex_error_general THEN
+    WHEN k_operacion.ex_error_general THEN
       RETURN l_rsp;
     WHEN OTHERS THEN
-      k_servicio.p_respuesta_excepcion(l_rsp,
-                                       utl_call_stack.error_number(1),
-                                       utl_call_stack.error_msg(1),
-                                       dbms_utility.format_error_stack);
+      k_operacion.p_respuesta_excepcion(l_rsp,
+                                        utl_call_stack.error_number(1),
+                                        utl_call_stack.error_msg(1),
+                                        dbms_utility.format_error_stack);
       RETURN l_rsp;
   END;
 
@@ -550,14 +550,14 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
                                                                'incluir_partidos');
   
     l_rsp.lugar := 'Validando parámetros';
-    k_servicio.p_validar_parametro(l_rsp,
-                                   l_id_torneo IS NOT NULL,
-                                   'Debe ingresar torneo');
+    k_operacion.p_validar_parametro(l_rsp,
+                                    l_id_torneo IS NOT NULL,
+                                    'Debe ingresar torneo');
   
     FOR ele IN cr_jornadas(l_id_torneo,
                            l_id_jornada,
                            l_estado /*,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   k_autenticacion.f_id_usuario(l_usuario)*/) LOOP
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   k_autenticacion.f_id_usuario(l_usuario)*/) LOOP
       l_objeto            := NEW y_jornada();
       l_partidos          := NEW y_partidos();
       l_objeto.id_torneo  := ele.id_torneo;
@@ -606,18 +606,18 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
     l_pagina.cantidad_elementos := l_objetos.count;
     l_pagina.elementos          := l_objetos;
   
-    k_servicio.p_respuesta_ok(l_rsp, l_pagina);
+    k_operacion.p_respuesta_ok(l_rsp, l_pagina);
     RETURN l_rsp;
   EXCEPTION
-    WHEN k_servicio.ex_error_parametro THEN
+    WHEN k_operacion.ex_error_parametro THEN
       RETURN l_rsp;
-    WHEN k_servicio.ex_error_general THEN
+    WHEN k_operacion.ex_error_general THEN
       RETURN l_rsp;
     WHEN OTHERS THEN
-      k_servicio.p_respuesta_excepcion(l_rsp,
-                                       utl_call_stack.error_number(1),
-                                       utl_call_stack.error_msg(1),
-                                       dbms_utility.format_error_stack);
+      k_operacion.p_respuesta_excepcion(l_rsp,
+                                        utl_call_stack.error_number(1),
+                                        utl_call_stack.error_msg(1),
+                                        dbms_utility.format_error_stack);
       RETURN l_rsp;
   END;
 
@@ -642,24 +642,24 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
                                                         'usuario');
   
     l_rsp.lugar := 'Validando parámetros';
-    k_servicio.p_validar_parametro(l_rsp,
-                                   l_partido IS NOT NULL,
-                                   'Debe ingresar partido');
-    k_servicio.p_validar_parametro(l_rsp,
-                                   l_usuario IS NOT NULL,
-                                   'Debe ingresar usuario');
-    k_servicio.p_validar_parametro(l_rsp,
-                                   k_operacion.f_valor_parametro_number(i_parametros,
-                                                                        'goles_club_local') IS NOT NULL,
-                                   'Debe ingresar goles_club_local');
-    k_servicio.p_validar_parametro(l_rsp,
-                                   k_operacion.f_valor_parametro_number(i_parametros,
-                                                                        'goles_club_visitante') IS NOT NULL,
-                                   'Debe ingresar goles_club_visitante');
-    k_servicio.p_validar_parametro(l_rsp,
-                                   k_operacion.f_valor_parametro_number(i_parametros,
-                                                                        'id_sincronizacion') IS NOT NULL,
-                                   'Debe ingresar id_sincronizacion');
+    k_operacion.p_validar_parametro(l_rsp,
+                                    l_partido IS NOT NULL,
+                                    'Debe ingresar partido');
+    k_operacion.p_validar_parametro(l_rsp,
+                                    l_usuario IS NOT NULL,
+                                    'Debe ingresar usuario');
+    k_operacion.p_validar_parametro(l_rsp,
+                                    k_operacion.f_valor_parametro_number(i_parametros,
+                                                                         'goles_club_local') IS NOT NULL,
+                                    'Debe ingresar goles_club_local');
+    k_operacion.p_validar_parametro(l_rsp,
+                                    k_operacion.f_valor_parametro_number(i_parametros,
+                                                                         'goles_club_visitante') IS NOT NULL,
+                                    'Debe ingresar goles_club_visitante');
+    k_operacion.p_validar_parametro(l_rsp,
+                                    k_operacion.f_valor_parametro_number(i_parametros,
+                                                                         'id_sincronizacion') IS NOT NULL,
+                                    'Debe ingresar id_sincronizacion');
     -- Validar estado de predicciones del partido
     BEGIN
       SELECT MIN(p.estado_predicciones)
@@ -667,9 +667,9 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
         FROM t_partidos p
        WHERE p.id_partido = l_partido;
     END;
-    k_servicio.p_validar_parametro(l_rsp,
-                                   l_estado = 'P',
-                                   'Partido no disponible');
+    k_operacion.p_validar_parametro(l_rsp,
+                                    l_estado = 'P',
+                                    'Partido no disponible');
     /* TODO: text="Validar que el usuario exista" */
   
     l_rsp.lugar := 'Realizando prediccion';
@@ -721,18 +721,18 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
          s.goles_club_visitante,
          s.id_sincronizacion);
   
-    k_servicio.p_respuesta_ok(l_rsp, l_dato);
+    k_operacion.p_respuesta_ok(l_rsp, l_dato);
     RETURN l_rsp;
   EXCEPTION
-    WHEN k_servicio.ex_error_parametro THEN
+    WHEN k_operacion.ex_error_parametro THEN
       RETURN l_rsp;
-    WHEN k_servicio.ex_error_general THEN
+    WHEN k_operacion.ex_error_general THEN
       RETURN l_rsp;
     WHEN OTHERS THEN
-      k_servicio.p_respuesta_excepcion(l_rsp,
-                                       utl_call_stack.error_number(1),
-                                       utl_call_stack.error_msg(1),
-                                       dbms_utility.format_error_stack);
+      k_operacion.p_respuesta_excepcion(l_rsp,
+                                        utl_call_stack.error_number(1),
+                                        utl_call_stack.error_msg(1),
+                                        dbms_utility.format_error_stack);
       RETURN l_rsp;
   END;
 
@@ -748,11 +748,11 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
     l_rsp := NEW y_respuesta();
   
     l_rsp.lugar := 'Validando parámetros';
-    k_servicio.p_validar_parametro(l_rsp,
-                                   k_operacion.f_valor_parametro_string(i_parametros,
-                                                                        'tipo') IN
-                                   ('GLO', 'PRI', 'PUB'),
-                                   'Tipo de grupo incorrecto');
+    k_operacion.p_validar_parametro(l_rsp,
+                                    k_operacion.f_valor_parametro_string(i_parametros,
+                                                                         'tipo') IN
+                                    ('GLO', 'PRI', 'PUB'),
+                                    'Tipo de grupo incorrecto');
   
     -- Busca usuario
     l_id_usuario_administrador := k_usuario.f_id_usuario(k_sistema.f_valor_parametro_string(k_sistema.c_usuario));
@@ -806,18 +806,18 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
     l_rsp.lugar := 'Cargando datos del grupo';
     l_grupo     := lf_datos_grupo(l_id_grupo);
   
-    k_servicio.p_respuesta_ok(l_rsp, l_grupo);
+    k_operacion.p_respuesta_ok(l_rsp, l_grupo);
     RETURN l_rsp;
   EXCEPTION
-    WHEN k_servicio.ex_error_parametro THEN
+    WHEN k_operacion.ex_error_parametro THEN
       RETURN l_rsp;
-    WHEN k_servicio.ex_error_general THEN
+    WHEN k_operacion.ex_error_general THEN
       RETURN l_rsp;
     WHEN OTHERS THEN
-      k_servicio.p_respuesta_excepcion(l_rsp,
-                                       utl_call_stack.error_number(1),
-                                       utl_call_stack.error_msg(1),
-                                       dbms_utility.format_error_stack);
+      k_operacion.p_respuesta_excepcion(l_rsp,
+                                        utl_call_stack.error_number(1),
+                                        utl_call_stack.error_msg(1),
+                                        dbms_utility.format_error_stack);
       RETURN l_rsp;
   END;
 
@@ -830,11 +830,11 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
     l_rsp := NEW y_respuesta();
   
     l_rsp.lugar := 'Validando parámetros';
-    k_servicio.p_validar_parametro(l_rsp,
-                                   k_operacion.f_valor_parametro_string(i_parametros,
-                                                                        'tipo') IN
-                                   ('GLO', 'PRI', 'PUB'),
-                                   'Tipo de grupo incorrecto');
+    k_operacion.p_validar_parametro(l_rsp,
+                                    k_operacion.f_valor_parametro_string(i_parametros,
+                                                                         'tipo') IN
+                                    ('GLO', 'PRI', 'PUB'),
+                                    'Tipo de grupo incorrecto');
   
     l_rsp.lugar := 'Buscando datos del grupo';
     BEGIN
@@ -845,30 +845,32 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
              k_operacion.f_valor_parametro_number(i_parametros, 'id_grupo');
     EXCEPTION
       WHEN no_data_found THEN
-        k_servicio.p_respuesta_error(l_rsp, 'fan0001', 'Grupo inexistente');
-        RAISE k_servicio.ex_error_general;
+        k_operacion.p_respuesta_error(l_rsp,
+                                      'fan0001',
+                                      'Grupo inexistente');
+        RAISE k_operacion.ex_error_general;
       WHEN OTHERS THEN
-        k_servicio.p_respuesta_error(l_rsp,
-                                     'fan0002',
-                                     'Error al buscar grupo');
-        RAISE k_servicio.ex_error_general;
+        k_operacion.p_respuesta_error(l_rsp,
+                                      'fan0002',
+                                      'Error al buscar grupo');
+        RAISE k_operacion.ex_error_general;
     END;
   
     -- Valida tipo
     IF l_tipo <> 'PRI' THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'fan0003',
-                                   'Sólo los grupos privados se pueden editar');
-      RAISE k_servicio.ex_error_general;
+      k_operacion.p_respuesta_error(l_rsp,
+                                    'fan0003',
+                                    'Sólo los grupos privados se pueden editar');
+      RAISE k_operacion.ex_error_general;
     END IF;
   
     -- Valida usuario administrador
     IF k_sistema.f_valor_parametro_number(k_sistema.c_id_usuario) <>
        l_id_usuario_administrador THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'fan0004',
-                                   'Sólo el administrador puede editar los datos del grupo');
-      RAISE k_servicio.ex_error_general;
+      k_operacion.p_respuesta_error(l_rsp,
+                                    'fan0004',
+                                    'Sólo el administrador puede editar los datos del grupo');
+      RAISE k_operacion.ex_error_general;
     END IF;
   
     l_rsp.lugar := 'Editando grupo';
@@ -886,18 +888,18 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
      WHERE a.id_grupo =
            k_operacion.f_valor_parametro_number(i_parametros, 'id_grupo');
   
-    k_servicio.p_respuesta_ok(l_rsp);
+    k_operacion.p_respuesta_ok(l_rsp);
     RETURN l_rsp;
   EXCEPTION
-    WHEN k_servicio.ex_error_parametro THEN
+    WHEN k_operacion.ex_error_parametro THEN
       RETURN l_rsp;
-    WHEN k_servicio.ex_error_general THEN
+    WHEN k_operacion.ex_error_general THEN
       RETURN l_rsp;
     WHEN OTHERS THEN
-      k_servicio.p_respuesta_excepcion(l_rsp,
-                                       utl_call_stack.error_number(1),
-                                       utl_call_stack.error_msg(1),
-                                       dbms_utility.format_error_stack);
+      k_operacion.p_respuesta_excepcion(l_rsp,
+                                        utl_call_stack.error_number(1),
+                                        utl_call_stack.error_msg(1),
+                                        dbms_utility.format_error_stack);
       RETURN l_rsp;
   END;
 
@@ -909,27 +911,27 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
     l_rsp := NEW y_respuesta();
   
     l_rsp.lugar := 'Validando parametros';
-    k_servicio.p_validar_parametro(l_rsp,
-                                   k_operacion.f_valor_parametro_number(i_parametros,
-                                                                        'id_grupo') IS NOT NULL,
-                                   'Debe ingresar id_grupo');
+    k_operacion.p_validar_parametro(l_rsp,
+                                    k_operacion.f_valor_parametro_number(i_parametros,
+                                                                         'id_grupo') IS NOT NULL,
+                                    'Debe ingresar id_grupo');
   
     l_rsp.lugar := 'Cargando datos del grupo';
     l_grupo     := lf_datos_grupo(k_operacion.f_valor_parametro_number(i_parametros,
                                                                        'id_grupo'));
   
-    k_servicio.p_respuesta_ok(l_rsp, l_grupo);
+    k_operacion.p_respuesta_ok(l_rsp, l_grupo);
     RETURN l_rsp;
   EXCEPTION
-    WHEN k_servicio.ex_error_parametro THEN
+    WHEN k_operacion.ex_error_parametro THEN
       RETURN l_rsp;
-    WHEN k_servicio.ex_error_general THEN
+    WHEN k_operacion.ex_error_general THEN
       RETURN l_rsp;
     WHEN OTHERS THEN
-      k_servicio.p_respuesta_excepcion(l_rsp,
-                                       utl_call_stack.error_number(1),
-                                       utl_call_stack.error_msg(1),
-                                       dbms_utility.format_error_stack);
+      k_operacion.p_respuesta_excepcion(l_rsp,
+                                        utl_call_stack.error_number(1),
+                                        utl_call_stack.error_msg(1),
+                                        dbms_utility.format_error_stack);
       RETURN l_rsp;
   END;
 
@@ -972,10 +974,10 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
     l_elementos := NEW y_objetos();
   
     l_rsp.lugar := 'Validando parametros';
-    k_servicio.p_validar_parametro(l_rsp,
-                                   k_operacion.f_valor_parametro_object(i_parametros,
-                                                                        'pagina_parametros') IS NOT NULL,
-                                   'Debe ingresar pagina_parametros');
+    k_operacion.p_validar_parametro(l_rsp,
+                                    k_operacion.f_valor_parametro_object(i_parametros,
+                                                                         'pagina_parametros') IS NOT NULL,
+                                    'Debe ingresar pagina_parametros');
     l_pagina_parametros := treat(k_operacion.f_valor_parametro_object(i_parametros,
                                                                       'pagina_parametros') AS
                                  y_pagina_parametros);
@@ -999,18 +1001,18 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
                                                l_pagina_parametros.por_pagina,
                                                l_pagina_parametros.no_paginar);
   
-    k_servicio.p_respuesta_ok(l_rsp, l_pagina);
+    k_operacion.p_respuesta_ok(l_rsp, l_pagina);
     RETURN l_rsp;
   EXCEPTION
-    WHEN k_servicio.ex_error_parametro THEN
+    WHEN k_operacion.ex_error_parametro THEN
       RETURN l_rsp;
-    WHEN k_servicio.ex_error_general THEN
+    WHEN k_operacion.ex_error_general THEN
       RETURN l_rsp;
     WHEN OTHERS THEN
-      k_servicio.p_respuesta_excepcion(l_rsp,
-                                       utl_call_stack.error_number(1),
-                                       utl_call_stack.error_msg(1),
-                                       dbms_utility.format_error_stack);
+      k_operacion.p_respuesta_excepcion(l_rsp,
+                                        utl_call_stack.error_number(1),
+                                        utl_call_stack.error_msg(1),
+                                        dbms_utility.format_error_stack);
       RETURN l_rsp;
   END;
 
@@ -1033,9 +1035,9 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
                                                         'id_grupo');
   
     l_rsp.lugar := 'Validando parametros';
-    k_servicio.p_validar_parametro(l_rsp,
-                                   l_id_grupo IS NOT NULL,
-                                   'Debe ingresar id_grupo');
+    k_operacion.p_validar_parametro(l_rsp,
+                                    l_id_grupo IS NOT NULL,
+                                    'Debe ingresar id_grupo');
   
     -- TODO: Otras validaciones internas. Ej: tipo de grupo
     -- TODO: Si se elimina al usuario administrador, actualizar a un nuevo administrador
@@ -1045,18 +1047,18 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
      WHERE a.id_grupo = l_id_grupo
        AND a.id_usuario = k_usuario.f_id_usuario(l_usuario);
   
-    k_servicio.p_respuesta_ok(l_rsp, l_dato);
+    k_operacion.p_respuesta_ok(l_rsp, l_dato);
     RETURN l_rsp;
   EXCEPTION
-    WHEN k_servicio.ex_error_parametro THEN
+    WHEN k_operacion.ex_error_parametro THEN
       RETURN l_rsp;
-    WHEN k_servicio.ex_error_general THEN
+    WHEN k_operacion.ex_error_general THEN
       RETURN l_rsp;
     WHEN OTHERS THEN
-      k_servicio.p_respuesta_excepcion(l_rsp,
-                                       utl_call_stack.error_number(1),
-                                       utl_call_stack.error_msg(1),
-                                       dbms_utility.format_error_stack);
+      k_operacion.p_respuesta_excepcion(l_rsp,
+                                        utl_call_stack.error_number(1),
+                                        utl_call_stack.error_msg(1),
+                                        dbms_utility.format_error_stack);
       RETURN l_rsp;
   END;
 
@@ -1084,37 +1086,41 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
              k_operacion.f_valor_parametro_number(i_parametros, 'id_grupo');
     EXCEPTION
       WHEN no_data_found THEN
-        k_servicio.p_respuesta_error(l_rsp, 'fan0001', 'Grupo inexistente');
-        RAISE k_servicio.ex_error_general;
+        k_operacion.p_respuesta_error(l_rsp,
+                                      'fan0001',
+                                      'Grupo inexistente');
+        RAISE k_operacion.ex_error_general;
       WHEN OTHERS THEN
-        k_servicio.p_respuesta_error(l_rsp,
-                                     'fan0002',
-                                     'Error al buscar grupo');
-        RAISE k_servicio.ex_error_general;
+        k_operacion.p_respuesta_error(l_rsp,
+                                      'fan0002',
+                                      'Error al buscar grupo');
+        RAISE k_operacion.ex_error_general;
     END;
   
     l_id_usuario := k_usuario.f_buscar_id(k_operacion.f_valor_parametro_string(i_parametros,
                                                                                'usuario'));
     IF l_id_usuario IS NULL THEN
-      k_servicio.p_respuesta_error(l_rsp, 'fan0003', 'Usuario inexistente');
-      RAISE k_servicio.ex_error_general;
+      k_operacion.p_respuesta_error(l_rsp,
+                                    'fan0003',
+                                    'Usuario inexistente');
+      RAISE k_operacion.ex_error_general;
     END IF;
   
     -- Valida tipo
     IF l_tipo <> 'PRI' THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'fan0004',
-                                   'Sólo en grupos privados se puede invitar usuarios');
-      RAISE k_servicio.ex_error_general;
+      k_operacion.p_respuesta_error(l_rsp,
+                                    'fan0004',
+                                    'Sólo en grupos privados se puede invitar usuarios');
+      RAISE k_operacion.ex_error_general;
     END IF;
   
     -- Valida usuario administrador
     IF nvl(l_todos_invitan, 'N') <> 'S' AND k_sistema.f_valor_parametro_number(k_sistema.c_id_usuario) <>
        l_id_usuario_administrador THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'fan0005',
-                                   'Sólo el administrador puede invitar usuarios al grupo');
-      RAISE k_servicio.ex_error_general;
+      k_operacion.p_respuesta_error(l_rsp,
+                                    'fan0005',
+                                    'Sólo el administrador puede invitar usuarios al grupo');
+      RAISE k_operacion.ex_error_general;
     END IF;
   
     l_rsp.lugar := 'Registrando usuario en el grupo';
@@ -1138,37 +1144,37 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
       RETURNING token_activacion INTO l_token_activacion;
     EXCEPTION
       WHEN dup_val_on_index THEN
-        k_servicio.p_respuesta_error(l_rsp,
-                                     'fan0006',
-                                     'Usuario ya pertenece al grupo o tiene una invitación pendiente');
-        RAISE k_servicio.ex_error_general;
+        k_operacion.p_respuesta_error(l_rsp,
+                                      'fan0006',
+                                      'Usuario ya pertenece al grupo o tiene una invitación pendiente');
+        RAISE k_operacion.ex_error_general;
       WHEN OTHERS THEN
-        k_servicio.p_respuesta_error(l_rsp,
-                                     'fan0007',
-                                     'Error al crear invitación');
-        RAISE k_servicio.ex_error_general;
+        k_operacion.p_respuesta_error(l_rsp,
+                                      'fan0007',
+                                      'Error al crear invitación');
+        RAISE k_operacion.ex_error_general;
     END;
   
     l_rsp.lugar := 'Enviando mensajería';
     IF k_mensajeria.f_enviar_mensaje(l_token_activacion, l_id_usuario) <>
        k_mensajeria.c_ok THEN
       NULL;
-      -- k_servicio.p_respuesta_error(l_rsp, 'fan0008', 'Error al enviar invitación');
-      -- RAISE k_servicio.ex_error_general;
+      -- k_operacion.p_respuesta_error(l_rsp, 'fan0008', 'Error al enviar invitación');
+      -- RAISE k_operacion.ex_error_general;
     END IF;
   
-    k_servicio.p_respuesta_ok(l_rsp, l_dato);
+    k_operacion.p_respuesta_ok(l_rsp, l_dato);
     RETURN l_rsp;
   EXCEPTION
-    WHEN k_servicio.ex_error_parametro THEN
+    WHEN k_operacion.ex_error_parametro THEN
       RETURN l_rsp;
-    WHEN k_servicio.ex_error_general THEN
+    WHEN k_operacion.ex_error_general THEN
       RETURN l_rsp;
     WHEN OTHERS THEN
-      k_servicio.p_respuesta_excepcion(l_rsp,
-                                       utl_call_stack.error_number(1),
-                                       utl_call_stack.error_msg(1),
-                                       dbms_utility.format_error_stack);
+      k_operacion.p_respuesta_excepcion(l_rsp,
+                                        utl_call_stack.error_number(1),
+                                        utl_call_stack.error_msg(1),
+                                        dbms_utility.format_error_stack);
       RETURN l_rsp;
   END;
 
@@ -1198,16 +1204,16 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
                                                         'respuesta');
   
     l_rsp.lugar := 'Validando parametros';
-    k_servicio.p_validar_parametro(l_rsp,
-                                   l_id_grupo IS NOT NULL,
-                                   'Debe ingresar id_grupo');
-    k_servicio.p_validar_parametro(l_rsp,
-                                   l_respuesta IS NOT NULL,
-                                   'Debe ingresar respuesta');
-    k_servicio.p_validar_parametro(l_rsp,
-                                   l_respuesta IN (c_aceptar, c_rechazar),
-                                   'Valores posibles de respuesta: ' || '[' ||
-                                   c_aceptar || '], [' || c_rechazar || ']');
+    k_operacion.p_validar_parametro(l_rsp,
+                                    l_id_grupo IS NOT NULL,
+                                    'Debe ingresar id_grupo');
+    k_operacion.p_validar_parametro(l_rsp,
+                                    l_respuesta IS NOT NULL,
+                                    'Debe ingresar respuesta');
+    k_operacion.p_validar_parametro(l_rsp,
+                                    l_respuesta IN (c_aceptar, c_rechazar),
+                                    'Valores posibles de respuesta: ' || '[' ||
+                                    c_aceptar || '], [' || c_rechazar || ']');
     --TODO: Agregar otras validaciones si es necesario
   
     l_rsp.lugar := 'Respondiendo invitación del grupo';
@@ -1222,18 +1228,18 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
          AND a.id_usuario = k_usuario.f_id_usuario(l_usuario);
     END IF;
   
-    k_servicio.p_respuesta_ok(l_rsp, l_dato);
+    k_operacion.p_respuesta_ok(l_rsp, l_dato);
     RETURN l_rsp;
   EXCEPTION
-    WHEN k_servicio.ex_error_parametro THEN
+    WHEN k_operacion.ex_error_parametro THEN
       RETURN l_rsp;
-    WHEN k_servicio.ex_error_general THEN
+    WHEN k_operacion.ex_error_general THEN
       RETURN l_rsp;
     WHEN OTHERS THEN
-      k_servicio.p_respuesta_excepcion(l_rsp,
-                                       utl_call_stack.error_number(1),
-                                       utl_call_stack.error_msg(1),
-                                       dbms_utility.format_error_stack);
+      k_operacion.p_respuesta_excepcion(l_rsp,
+                                        utl_call_stack.error_number(1),
+                                        utl_call_stack.error_msg(1),
+                                        dbms_utility.format_error_stack);
       RETURN l_rsp;
   END;
 
@@ -1252,10 +1258,10 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
     l_solicitado := k_usuario.f_buscar_id(k_operacion.f_valor_parametro_string(i_parametros,
                                                                                'usuario_solicitado'));
     IF l_solicitado IS NULL THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'fan0003',
-                                   'Debe ingresar usuario solicitado');
-      RAISE k_servicio.ex_error_general;
+      k_operacion.p_respuesta_error(l_rsp,
+                                    'fan0003',
+                                    'Debe ingresar usuario solicitado');
+      RAISE k_operacion.ex_error_general;
     END IF;
   
     l_rsp.lugar := 'Registrando solicitud de amistad';
@@ -1275,15 +1281,15 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
       RETURNING token_aceptacion INTO l_token_aceptacion;
     EXCEPTION
       WHEN dup_val_on_index THEN
-        k_servicio.p_respuesta_error(l_rsp,
-                                     'fan0006',
-                                     'Usuario es amigo o tiene una solicitud pendiente');
-        RAISE k_servicio.ex_error_general;
+        k_operacion.p_respuesta_error(l_rsp,
+                                      'fan0006',
+                                      'Usuario es amigo o tiene una solicitud pendiente');
+        RAISE k_operacion.ex_error_general;
       WHEN OTHERS THEN
-        k_servicio.p_respuesta_error(l_rsp,
-                                     'fan0007',
-                                     'Error al solicitar amistad');
-        RAISE k_servicio.ex_error_general;
+        k_operacion.p_respuesta_error(l_rsp,
+                                      'fan0007',
+                                      'Error al solicitar amistad');
+        RAISE k_operacion.ex_error_general;
     END;
   
     l_rsp.lugar := 'Enviando mensajería';
@@ -1291,22 +1297,22 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
                                      k_usuario.f_id_usuario(l_solicitado)) <>
        k_mensajeria.c_ok THEN
       NULL;
-      -- k_servicio.p_respuesta_error(l_rsp, 'fan0008', 'Error al solicitar amistad');
-      -- RAISE k_servicio.ex_error_general;
+      -- k_operacion.p_respuesta_error(l_rsp, 'fan0008', 'Error al solicitar amistad');
+      -- RAISE k_operacion.ex_error_general;
     END IF;
   
-    k_servicio.p_respuesta_ok(l_rsp, l_dato);
+    k_operacion.p_respuesta_ok(l_rsp, l_dato);
     RETURN l_rsp;
   EXCEPTION
-    WHEN k_servicio.ex_error_parametro THEN
+    WHEN k_operacion.ex_error_parametro THEN
       RETURN l_rsp;
-    WHEN k_servicio.ex_error_general THEN
+    WHEN k_operacion.ex_error_general THEN
       RETURN l_rsp;
     WHEN OTHERS THEN
-      k_servicio.p_respuesta_excepcion(l_rsp,
-                                       utl_call_stack.error_number(1),
-                                       utl_call_stack.error_msg(1),
-                                       dbms_utility.format_error_stack);
+      k_operacion.p_respuesta_excepcion(l_rsp,
+                                        utl_call_stack.error_number(1),
+                                        utl_call_stack.error_msg(1),
+                                        dbms_utility.format_error_stack);
       RETURN l_rsp;
   END;
 
@@ -1336,16 +1342,16 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
                                                           'respuesta');
   
     l_rsp.lugar := 'Validando parametros';
-    k_servicio.p_validar_parametro(l_rsp,
-                                   l_solicitante IS NOT NULL,
-                                   'Debe ingresar usuario solicitante');
-    k_servicio.p_validar_parametro(l_rsp,
-                                   l_respuesta IS NOT NULL,
-                                   'Debe ingresar respuesta');
-    k_servicio.p_validar_parametro(l_rsp,
-                                   l_respuesta IN (c_aceptar, c_rechazar),
-                                   'Valores posibles de respuesta: ' || '[' ||
-                                   c_aceptar || '], [' || c_rechazar || ']');
+    k_operacion.p_validar_parametro(l_rsp,
+                                    l_solicitante IS NOT NULL,
+                                    'Debe ingresar usuario solicitante');
+    k_operacion.p_validar_parametro(l_rsp,
+                                    l_respuesta IS NOT NULL,
+                                    'Debe ingresar respuesta');
+    k_operacion.p_validar_parametro(l_rsp,
+                                    l_respuesta IN (c_aceptar, c_rechazar),
+                                    'Valores posibles de respuesta: ' || '[' ||
+                                    c_aceptar || '], [' || c_rechazar || ']');
     --TODO: Agregar otras validaciones si es necesario
   
     l_rsp.lugar := 'Respondiendo solicitud de amistad';
@@ -1363,24 +1369,24 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
     END IF;
   
     IF SQL%NOTFOUND THEN
-      k_servicio.p_respuesta_error(l_rsp,
-                                   'fan0004',
-                                   'Solicitud inexistente');
-      RAISE k_servicio.ex_error_general;
+      k_operacion.p_respuesta_error(l_rsp,
+                                    'fan0004',
+                                    'Solicitud inexistente');
+      RAISE k_operacion.ex_error_general;
     END IF;
   
-    k_servicio.p_respuesta_ok(l_rsp, l_dato);
+    k_operacion.p_respuesta_ok(l_rsp, l_dato);
     RETURN l_rsp;
   EXCEPTION
-    WHEN k_servicio.ex_error_parametro THEN
+    WHEN k_operacion.ex_error_parametro THEN
       RETURN l_rsp;
-    WHEN k_servicio.ex_error_general THEN
+    WHEN k_operacion.ex_error_general THEN
       RETURN l_rsp;
     WHEN OTHERS THEN
-      k_servicio.p_respuesta_excepcion(l_rsp,
-                                       utl_call_stack.error_number(1),
-                                       utl_call_stack.error_msg(1),
-                                       dbms_utility.format_error_stack);
+      k_operacion.p_respuesta_excepcion(l_rsp,
+                                        utl_call_stack.error_number(1),
+                                        utl_call_stack.error_msg(1),
+                                        dbms_utility.format_error_stack);
       RETURN l_rsp;
   END;
 
@@ -1461,18 +1467,18 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
     l_pagina.cantidad_elementos := l_objetos.count;
     l_pagina.elementos          := l_objetos;
   
-    k_servicio.p_respuesta_ok(l_rsp, l_pagina);
+    k_operacion.p_respuesta_ok(l_rsp, l_pagina);
     RETURN l_rsp;
   EXCEPTION
-    WHEN k_servicio.ex_error_parametro THEN
+    WHEN k_operacion.ex_error_parametro THEN
       RETURN l_rsp;
-    WHEN k_servicio.ex_error_general THEN
+    WHEN k_operacion.ex_error_general THEN
       RETURN l_rsp;
     WHEN OTHERS THEN
-      k_servicio.p_respuesta_excepcion(l_rsp,
-                                       utl_call_stack.error_number(1),
-                                       utl_call_stack.error_msg(1),
-                                       dbms_utility.format_error_stack);
+      k_operacion.p_respuesta_excepcion(l_rsp,
+                                        utl_call_stack.error_number(1),
+                                        utl_call_stack.error_msg(1),
+                                        dbms_utility.format_error_stack);
       RETURN l_rsp;
   END;
 
@@ -1502,15 +1508,15 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
                                                              'ref_comentario');
   
     l_rsp.lugar := 'Validando parámetros';
-    k_servicio.p_validar_parametro(l_rsp,
-                                   l_tipo IS NOT NULL,
-                                   'Debe ingresar tipo de comentario');
-    k_servicio.p_validar_parametro(l_rsp,
-                                   l_referencia IS NOT NULL,
-                                   'Debe ingresar referencia del comentario');
-    k_servicio.p_validar_parametro(l_rsp,
-                                   l_contenido IS NOT NULL,
-                                   'Debe ingresar contenido del comentario');
+    k_operacion.p_validar_parametro(l_rsp,
+                                    l_tipo IS NOT NULL,
+                                    'Debe ingresar tipo de comentario');
+    k_operacion.p_validar_parametro(l_rsp,
+                                    l_referencia IS NOT NULL,
+                                    'Debe ingresar referencia del comentario');
+    k_operacion.p_validar_parametro(l_rsp,
+                                    l_contenido IS NOT NULL,
+                                    'Debe ingresar contenido del comentario');
   
     l_rsp.lugar := 'Registrando comentario';
     BEGIN
@@ -1520,29 +1526,29 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
         (l_tipo, l_referencia, l_id_usuario, l_contenido, l_ref_comentario);
     EXCEPTION
       WHEN dup_val_on_index THEN
-        k_servicio.p_respuesta_error(l_rsp,
-                                     'fan0006',
-                                     'Comentario duplicado');
-        RAISE k_servicio.ex_error_general;
+        k_operacion.p_respuesta_error(l_rsp,
+                                      'fan0006',
+                                      'Comentario duplicado');
+        RAISE k_operacion.ex_error_general;
       WHEN OTHERS THEN
-        k_servicio.p_respuesta_error(l_rsp,
-                                     'fan0007',
-                                     'Error al realizar comentario');
-        RAISE k_servicio.ex_error_general;
+        k_operacion.p_respuesta_error(l_rsp,
+                                      'fan0007',
+                                      'Error al realizar comentario');
+        RAISE k_operacion.ex_error_general;
     END;
   
-    k_servicio.p_respuesta_ok(l_rsp, l_dato);
+    k_operacion.p_respuesta_ok(l_rsp, l_dato);
     RETURN l_rsp;
   EXCEPTION
-    WHEN k_servicio.ex_error_parametro THEN
+    WHEN k_operacion.ex_error_parametro THEN
       RETURN l_rsp;
-    WHEN k_servicio.ex_error_general THEN
+    WHEN k_operacion.ex_error_general THEN
       RETURN l_rsp;
     WHEN OTHERS THEN
-      k_servicio.p_respuesta_excepcion(l_rsp,
-                                       utl_call_stack.error_number(1),
-                                       utl_call_stack.error_msg(1),
-                                       dbms_utility.format_error_stack);
+      k_operacion.p_respuesta_excepcion(l_rsp,
+                                        utl_call_stack.error_number(1),
+                                        utl_call_stack.error_msg(1),
+                                        dbms_utility.format_error_stack);
       RETURN l_rsp;
   END;
 
