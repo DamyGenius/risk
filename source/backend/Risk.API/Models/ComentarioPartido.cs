@@ -24,9 +24,14 @@ SOFTWARE.
 
 namespace Risk.API.Models
 {
-    public class RealizarComentarioRequestBody
+    public class ComentarioPartido
     {
-        public string Usuario { get; set; }
+        public long IdComentario { get; set; }
+        public int IdPartido { get; set; }
+        public int IdUsuario { get; set; }
+        public string AliasUsuario { get; set; }
+        public int? VersionAvatar { get; set; }
         public string Contenido { get; set; }
+        public long? ReferenciaComentario { get; set; }
     }
 }

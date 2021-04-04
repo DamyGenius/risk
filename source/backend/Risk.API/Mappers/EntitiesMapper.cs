@@ -891,5 +891,45 @@ namespace Risk.API.Mappers
             }
             return modelList;
         }
+
+        public static ComentarioPartido GetComentarioPartidoFromEntity(YComentario entity)
+        {
+            ComentarioPartido model;
+            if (entity == null)
+            {
+                model = null;
+            }
+            else
+            {
+                if (!entity.Tipo.Equals(ModelsMapper.GetValueFromTipoComentarioEnum(TipoComentario.Partido)))
+                {
+                    model = null;
+                }
+                else
+                {
+                    model = new ComentarioPartido
+                    {
+                        IdComentario = entity.IdComentario,
+                        IdPartido = entity.Referencia,
+                        IdUsuario = entity.IdUsuario,
+                        AliasUsuario = entity.AliasUsuario,
+                        VersionAvatar = entity.VersionAvatar,
+                        Contenido = entity.Contenido,
+                        ReferenciaComentario = entity.ReferenciaComentario
+                    };
+                }
+            }
+            return model;
+        }
+
+        public static List<ComentarioPartido> GetComentarioPartidoListFromEntity(List<YComentario> entityList)
+        {
+            List<ComentarioPartido> modelList = new List<ComentarioPartido>();
+            foreach (var item in entityList)
+            {
+                modelList.Add(GetComentarioPartidoFromEntity(item));
+            }
+            return modelList;
+        }
     }
 }

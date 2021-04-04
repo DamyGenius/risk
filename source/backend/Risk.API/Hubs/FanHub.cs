@@ -1,6 +1,6 @@
 /*
 --------------------------------- MIT License ---------------------------------
-Copyright (c) 2019 jtsoya539
+Copyright (c) 2021 DamyGenius
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,11 +22,30 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-namespace Risk.API.Models
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
+using Risk.API.Models;
+using Risk.API.Services;
+using System.Threading.Tasks;
+
+namespace Risk.API.Hubs
 {
-    public class RealizarComentarioRequestBody
+    [Authorize(Roles = "ADMINISTRADOR,USUARIO,USUARIO_NUEVO")]
+    public class FanHub : Hub
     {
-        public string Usuario { get; set; }
-        public string Contenido { get; set; }
+        private async Task AgregarAlGrupo(string groupName)
+            => await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+
+        private async Task SacarDelGrupo(string groupName)
+            => await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
+
+        public async Task AgregarAlPartido(int idPartido)
+            => await AgregarAlGrupo($"partido-{idPartido}");
+
+        public async Task SacarDelPartido(int idPartido)
+            => await SacarDelGrupo($"partido-{idPartido}");
+
+        public async Task ComentarPartido(int idPartido, string usuario, string contenido)
+            => await Clients.Group($"partido-{idPartido}").SendAsync("comentarpartido", usuario, contenido);
     }
 }

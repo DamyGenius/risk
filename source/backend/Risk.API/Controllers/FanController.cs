@@ -28,9 +28,10 @@ using System.Net.Mime;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
-using Risk.API.Attributes;
 using Risk.API.Helpers;
+using Risk.API.Hubs;
 using Risk.API.Models;
 using Risk.API.Services;
 using Swashbuckle.AspNetCore.Annotations;
@@ -45,11 +46,13 @@ namespace Risk.API.Controllers
     {
         private readonly IFanService _fanService;
         private readonly IGenService _genService;
+        private readonly IHubContext<FanHub> _hubContext;
 
-        public FanController(IFanService fanService, IGenService genService, IConfiguration configuration) : base(configuration)
+        public FanController(IFanService fanService, IGenService genService, IHubContext<FanHub> hubContext, IConfiguration configuration) : base(configuration)
         {
             _fanService = fanService;
             _genService = genService;
+            _hubContext = hubContext;
         }
 
         [AllowAnonymous]
@@ -345,7 +348,28 @@ namespace Risk.API.Controllers
             [FromQuery, SwaggerParameter(Description = "Referencia al comentario superior, si es un comentario de otro comentario", Required = false)] long referenciaComentario,
             [FromBody] RealizarComentarioRequestBody requestBody)
         {
-            var respuesta = _fanService.RealizarComentario(TipoComentario.Partido, idPartido, requestBody.Contenido, referenciaComentario);
+            var respuesta = _fanService.RealizarComentario(TipoComentario.Partido, idPartido, requestBody.Usuario, requestBody.Contenido, referenciaComentario);
+            _hubContext.Clients.Group($"partido-{idPartido}").SendAsync("comentarpartido", requestBody.Usuario, requestBody.Contenido);
+            return ProcesarRespuesta(respuesta);
+        }
+
+        [HttpGet("ListarComentariosPartido")]
+        [SwaggerOperation(OperationId = "ListarComentariosPartido", Summary = "ListarComentariosPartido", Description = "Obtiene lista de comentarios de un partido")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<ComentarioPartido>>))]
+        public IActionResult ListarComentariosPartido([FromQuery, SwaggerParameter(Description = "Identificador del partido", Required = true)] int idPartido,
+            [FromQuery, SwaggerParameter(Description = "Referencia al comentario superior", Required = false)] long referenciaComentario,
+            [FromQuery, SwaggerParameter(Description = "Número de la página", Required = false)] int pagina,
+            [FromQuery, SwaggerParameter(Description = "Cantidad de elementos por página", Required = false)] int porPagina,
+            [FromQuery, SwaggerParameter(Description = "No paginar?", Required = false)] bool noPaginar)
+        {
+            PaginaParametros paginaParametros = new PaginaParametros
+            {
+                Pagina = pagina,
+                PorPagina = porPagina,
+                NoPaginar = noPaginar
+            };
+            var respuesta = _fanService.ListarComentariosPartido(idPartido, referenciaComentario, paginaParametros);
             return ProcesarRespuesta(respuesta);
         }
     }

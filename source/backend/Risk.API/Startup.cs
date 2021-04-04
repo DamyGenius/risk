@@ -44,6 +44,7 @@ using Risk.API.Models;
 using Risk.API.Services;
 using Risk.API.Workers;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using Risk.API.Hubs;
 
 namespace Risk.API
 {
@@ -203,6 +204,9 @@ namespace Risk.API
                 c.SchemaFilter<NotNullableSchemaFilter>();
             });
             services.AddSwaggerGenNewtonsoftSupport();
+
+            // Add Core SignalR services
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -247,6 +251,7 @@ namespace Risk.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<FanHub>("/fanHub");
             });
 
             appLifetime.ApplicationStopping.Register(OnShutdown);

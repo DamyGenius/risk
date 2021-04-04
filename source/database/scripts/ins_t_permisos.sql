@@ -163,4 +163,10 @@ values ('SERVICIO:FAN:RESPONDER_SOLICITUD_AMISTAD', null, null);
 insert into t_permisos (ID_PERMISO, DESCRIPCION, DETALLE)
 values ('SERVICIO:FAN:LISTAR_AMIGOS', null, null);
 
+insert into t_permisos (ID_PERMISO, DESCRIPCION, DETALLE)
+values ('SERVICIO:FAN:REALIZAR_COMENTARIO', null, null);
+
+insert into t_permisos (ID_PERMISO, DESCRIPCION, DETALLE)
+values ('SERVICIO:FAN:LISTAR_COMENTARIOS', null, null);
+
 prompt Done.
