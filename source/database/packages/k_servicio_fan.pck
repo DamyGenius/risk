@@ -1139,7 +1139,7 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
          NULL,
          NULL,
          'P',
-         k_aplicacion.f_generar_clave,
+         k_autenticacion.f_randombytes_base64,
          'N')
       RETURNING token_activacion INTO l_token_activacion;
     EXCEPTION
@@ -1275,7 +1275,7 @@ CREATE OR REPLACE PACKAGE BODY k_servicio_fan IS
       VALUES
         (k_sistema.f_valor_parametro_number(k_sistema.c_id_usuario),
          k_usuario.f_id_usuario(l_solicitado),
-         k_aplicacion.f_generar_clave,
+         k_autenticacion.f_randombytes_base64,
          'N',
          SYSDATE)
       RETURNING token_aceptacion INTO l_token_aceptacion;
