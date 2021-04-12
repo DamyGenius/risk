@@ -38,6 +38,15 @@ CREATE OR REPLACE PACKAGE k_autenticacion IS
   c_metodo_validacion_risk   CONSTANT VARCHAR2(10) := 'RISK';
   c_metodo_validacion_oracle CONSTANT VARCHAR2(10) := 'ORACLE';
 
+  FUNCTION f_randombytes_hex RETURN VARCHAR2;
+
+  FUNCTION f_randombytes_base64 RETURN VARCHAR2;
+
+  FUNCTION f_salt RETURN VARCHAR2;
+
+  FUNCTION f_hash(i_clave IN VARCHAR2,
+                  i_salt  IN VARCHAR2) RETURN VARCHAR2;
+
   PROCEDURE p_validar_clave(i_usuario    IN VARCHAR2,
                             i_clave      IN VARCHAR2,
                             i_tipo_clave IN CHAR DEFAULT 'A');
@@ -61,6 +70,10 @@ CREATE OR REPLACE PACKAGE k_autenticacion IS
   PROCEDURE p_registrar_clave(i_alias      IN VARCHAR2,
                               i_clave      IN VARCHAR2,
                               i_tipo_clave IN CHAR DEFAULT 'A');
+
+  PROCEDURE p_restablecer_clave(i_alias      IN VARCHAR2,
+                                i_clave      IN VARCHAR2,
+                                i_tipo_clave IN CHAR DEFAULT 'A');
 
   PROCEDURE p_cambiar_clave(i_alias         IN VARCHAR2,
                             i_clave_antigua IN VARCHAR2,
@@ -196,6 +209,27 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
   EXCEPTION
     WHEN OTHERS THEN
       ROLLBACK;
+  END;
+
+  FUNCTION f_randombytes_hex RETURN VARCHAR2 IS
+  BEGIN
+    RETURN rawtohex(dbms_crypto.randombytes(c_longitud_bytes));
+  END;
+
+  FUNCTION f_randombytes_base64 RETURN VARCHAR2 IS
+  BEGIN
+    RETURN utl_raw.cast_to_varchar2(utl_encode.base64_encode(dbms_crypto.randombytes(c_longitud_bytes)));
+  END;
+
+  FUNCTION f_salt RETURN VARCHAR2 IS
+  BEGIN
+    RETURN f_randombytes_hex;
+  END;
+
+  FUNCTION f_hash(i_clave IN VARCHAR2,
+                  i_salt  IN VARCHAR2) RETURN VARCHAR2 IS
+  BEGIN
+    RETURN pbkdf2(i_clave, i_salt, c_iteraciones, c_longitud_bytes);
   END;
 
   PROCEDURE p_validar_clave(i_usuario    IN VARCHAR2,
@@ -499,9 +533,6 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     l_hash       t_usuario_claves.hash%TYPE;
     l_salt       t_usuario_claves.salt%TYPE;
   BEGIN
-    -- Valida clave
-    p_validar_clave(i_alias, i_clave, i_tipo_clave);
-  
     -- Busca usuario
     l_id_usuario := k_usuario.f_id_usuario(i_alias);
   
@@ -509,10 +540,13 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
       RAISE k_usuario.ex_usuario_inexistente;
     END IF;
   
+    -- Valida clave
+    p_validar_clave(i_alias, i_clave, i_tipo_clave);
+  
     -- Genera salt
-    l_salt := rawtohex(dbms_crypto.randombytes(c_longitud_bytes));
+    l_salt := f_salt;
     -- Genera hash
-    l_hash := pbkdf2(i_clave, l_salt, c_iteraciones, c_longitud_bytes);
+    l_hash := f_hash(i_clave, l_salt);
   
     -- Inserta clave de usuario
     INSERT INTO t_usuario_claves
@@ -543,6 +577,48 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
                               'Usuario ya tiene una clave registrada');
   END;
 
+  PROCEDURE p_restablecer_clave(i_alias      IN VARCHAR2,
+                                i_clave      IN VARCHAR2,
+                                i_tipo_clave IN CHAR DEFAULT 'A') IS
+    l_id_usuario t_usuarios.id_usuario%TYPE;
+    l_hash       t_usuario_claves.hash%TYPE;
+    l_salt       t_usuario_claves.salt%TYPE;
+  BEGIN
+    -- Busca usuario
+    l_id_usuario := k_usuario.f_id_usuario(i_alias);
+  
+    IF l_id_usuario IS NULL THEN
+      RAISE k_usuario.ex_usuario_inexistente;
+    END IF;
+  
+    -- Valida clave
+    p_validar_clave(i_alias, i_clave, i_tipo_clave);
+  
+    -- Genera salt
+    l_salt := f_salt;
+    -- Genera hash
+    l_hash := f_hash(i_clave, l_salt);
+  
+    -- Actualiza clave de usuario
+    UPDATE t_usuario_claves
+       SET HASH                       = l_hash,
+           salt                       = l_salt,
+           algoritmo                  = c_algoritmo,
+           iteraciones                = c_iteraciones,
+           estado                     = 'N',
+           cantidad_intentos_fallidos = 0,
+           fecha_ultima_autenticacion = NULL
+     WHERE id_usuario = l_id_usuario
+       AND tipo = i_tipo_clave;
+  
+    IF SQL%NOTFOUND THEN
+      raise_application_error(-20000, 'Usuario sin clave registrada');
+    END IF;
+  EXCEPTION
+    WHEN k_usuario.ex_usuario_inexistente THEN
+      raise_application_error(-20000, 'Usuario inexistente');
+  END;
+
   PROCEDURE p_cambiar_clave(i_alias         IN VARCHAR2,
                             i_clave_antigua IN VARCHAR2,
                             i_clave_nueva   IN VARCHAR2,
@@ -551,9 +627,6 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
     l_hash       t_usuario_claves.hash%TYPE;
     l_salt       t_usuario_claves.salt%TYPE;
   BEGIN
-    -- Valida clave
-    p_validar_clave(i_alias, i_clave_nueva, i_tipo_clave);
-  
     -- Busca usuario
     l_id_usuario := k_usuario.f_id_usuario(i_alias);
   
@@ -565,10 +638,13 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
       RAISE ex_credenciales_invalidas;
     END IF;
   
+    -- Valida clave
+    p_validar_clave(i_alias, i_clave_nueva, i_tipo_clave);
+  
     -- Genera salt
-    l_salt := rawtohex(dbms_crypto.randombytes(c_longitud_bytes));
+    l_salt := f_salt;
     -- Genera hash
-    l_hash := pbkdf2(i_clave_nueva, l_salt, c_iteraciones, c_longitud_bytes);
+    l_hash := f_hash(i_clave_nueva, l_salt);
   
     -- Actualiza clave de usuario
     UPDATE t_usuario_claves
@@ -582,16 +658,14 @@ CREATE OR REPLACE PACKAGE BODY k_autenticacion IS
      WHERE id_usuario = l_id_usuario
        AND tipo = i_tipo_clave
        AND estado IN ('N', 'A');
-    /*IF SQL%NOTFOUND THEN
-      RAISE ex_credenciales_invalidas;
-    END IF;*/
+  
+    IF SQL%NOTFOUND THEN
+      raise_application_error(-20000, 'Usuario sin clave activa');
+    END IF;
   EXCEPTION
     WHEN k_usuario.ex_usuario_inexistente THEN
       raise_application_error(-20000, 'Credenciales inválidas');
     WHEN ex_credenciales_invalidas THEN
-      raise_application_error(-20000, 'Credenciales inválidas');
-    WHEN OTHERS THEN
-      lp_registrar_intento_fallido(l_id_usuario, i_tipo_clave);
       raise_application_error(-20000, 'Credenciales inválidas');
   END;
 
