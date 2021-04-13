@@ -251,7 +251,7 @@ namespace Risk.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<FanHub>("/fanHub");
+                endpoints.MapHub<FanHub>("/Api/fanHub");
             });
 
             appLifetime.ApplicationStopping.Register(OnShutdown);
