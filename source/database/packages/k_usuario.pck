@@ -43,11 +43,16 @@ CREATE OR REPLACE PACKAGE k_usuario IS
 
   FUNCTION f_estado(i_id_usuario IN NUMBER) RETURN VARCHAR2;
 
+  FUNCTION f_origen(i_id_usuario IN NUMBER) RETURN VARCHAR2;
+
   FUNCTION f_validar_alias(i_alias VARCHAR2) RETURN BOOLEAN;
 
   FUNCTION f_version_avatar(i_alias IN VARCHAR2) RETURN NUMBER;
 
   FUNCTION f_datos_usuario(i_id_usuario IN NUMBER) RETURN y_usuario;
+
+  FUNCTION f_existe_usuario_externo(i_origen     IN VARCHAR2,
+                                    i_id_externo IN VARCHAR2) RETURN BOOLEAN;
 
   PROCEDURE p_cambiar_estado(i_id_usuario IN NUMBER,
                              i_estado     IN VARCHAR2);
@@ -64,7 +69,8 @@ CREATE OR REPLACE PACKAGE BODY k_usuario IS
         INTO l_id_usuario
         FROM t_usuarios
        WHERE (upper(alias) = upper(i_usuario) OR
-             upper(direccion_correo) = upper(i_usuario));
+             upper(direccion_correo) = upper(i_usuario) OR
+             id_externo = i_usuario);
     EXCEPTION
       WHEN no_data_found THEN
         l_id_usuario := NULL;
@@ -140,6 +146,23 @@ CREATE OR REPLACE PACKAGE BODY k_usuario IS
         l_estado := NULL;
     END;
     RETURN l_estado;
+  END;
+
+  FUNCTION f_origen(i_id_usuario IN NUMBER) RETURN VARCHAR2 IS
+    l_origen t_usuarios.origen%TYPE;
+  BEGIN
+    BEGIN
+      SELECT u.origen
+        INTO l_origen
+        FROM t_usuarios u
+       WHERE u.id_usuario = i_id_usuario;
+    EXCEPTION
+      WHEN no_data_found THEN
+        l_origen := NULL;
+      WHEN OTHERS THEN
+        l_origen := NULL;
+    END;
+    RETURN l_origen;
   END;
 
   FUNCTION f_validar_alias(i_alias VARCHAR2) RETURN BOOLEAN IS
@@ -233,6 +256,23 @@ CREATE OR REPLACE PACKAGE BODY k_usuario IS
     l_usuario.roles := l_roles;
   
     RETURN l_usuario;
+  END;
+
+  FUNCTION f_existe_usuario_externo(i_origen     IN VARCHAR2,
+                                    i_id_externo IN VARCHAR2) RETURN BOOLEAN IS
+    l_existe_usuario VARCHAR2(1) := 'N';
+  BEGIN
+    SELECT decode(nvl(COUNT(1), 0), 0, 'N', 'S')
+      INTO l_existe_usuario
+      FROM t_usuarios us
+     WHERE us.origen = i_origen
+       AND us.id_externo = i_id_externo;
+  
+    IF l_existe_usuario = 'S' THEN
+      RETURN TRUE;
+    ELSE
+      RETURN FALSE;
+    END IF;
   END;
 
   PROCEDURE p_cambiar_estado(i_id_usuario IN NUMBER,
