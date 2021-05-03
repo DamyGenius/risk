@@ -48,6 +48,8 @@ SOFTWARE.
   numero_telefono VARCHAR2(160),
 /** Version del avatar del usuario */
   version_avatar NUMBER(10),
+/** Origen del usuario */
+  origen CHAR(1),
 /** Puntos generales */
   puntos NUMBER(15),
 /** Ranking general */
@@ -56,7 +58,7 @@ SOFTWARE.
   roles y_objetos,
 
 /**
-Constructor del objeto sin par√°metros.
+Constructor del objeto sin par·metros.
 
 %author jtsoya539 30/3/2020 10:08:08
 %return Objeto del tipo y_usuario.
@@ -87,6 +89,7 @@ CREATE OR REPLACE TYPE BODY y_usuario IS
     self.direccion_correo := NULL;
     self.numero_telefono  := NULL;
     self.version_avatar   := NULL;
+    self.origen           := NULL;
     self.puntos           := NULL;
     self.ranking          := NULL;
     self.roles            := NEW y_objetos();
@@ -112,6 +115,7 @@ CREATE OR REPLACE TYPE BODY y_usuario IS
     l_usuario.direccion_correo := l_json_object.get_string('direccion_correo');
     l_usuario.numero_telefono  := l_json_object.get_string('numero_telefono');
     l_usuario.version_avatar   := l_json_object.get_string('version_avatar');
+    l_usuario.origen           := l_json_object.get_string('origen');
     l_usuario.puntos           := l_json_object.get_string('puntos');
     l_usuario.ranking          := l_json_object.get_string('ranking');
   
@@ -149,6 +153,7 @@ CREATE OR REPLACE TYPE BODY y_usuario IS
     l_json_object.put('direccion_correo', self.direccion_correo);
     l_json_object.put('numero_telefono', self.numero_telefono);
     l_json_object.put('version_avatar', self.version_avatar);
+    l_json_object.put('origen', self.origen);
     l_json_object.put('puntos', self.puntos);
     l_json_object.put('ranking', self.ranking);
   

@@ -48,7 +48,11 @@ namespace Risk.API.Models
         public string NumeroTelefono { get; set; }
         [SwaggerSchema("Version del avatar del usuario")]
         public int? VersionAvatar { get; set; }
+        [SwaggerSchema("Origen del usuario")]
+        public OrigenSesion Origen { get; set; }
+        [SwaggerSchema("Puntos generales del usuario")]
         public int? Puntos { get; set; }
+        [SwaggerSchema("Ranking del usuario")]
         public int? Ranking { get; set; }
         [SwaggerSchema("Roles del usuario")]
         public List<Rol> Roles { get; set; }

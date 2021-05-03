@@ -217,6 +217,7 @@ CREATE OR REPLACE PACKAGE BODY k_usuario IS
              u.direccion_correo,
              u.numero_telefono,
              k_archivo.f_version_archivo('T_USUARIOS', 'AVATAR', u.alias),
+             u.origen,
              g.puntos,
              g.ranking
         INTO l_usuario.id_usuario,
@@ -228,6 +229,7 @@ CREATE OR REPLACE PACKAGE BODY k_usuario IS
              l_usuario.direccion_correo,
              l_usuario.numero_telefono,
              l_usuario.version_avatar,
+             l_usuario.origen,
              l_usuario.puntos,
              l_usuario.ranking
         FROM t_usuarios u, t_personas p, t_grupo_usuarios g
