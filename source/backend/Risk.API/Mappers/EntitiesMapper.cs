@@ -816,6 +816,9 @@ namespace Risk.API.Mappers
 
         public static OrigenSesion GetOrigenSesionEnumFromValue(string value)
         {
+            if (value == null)
+                return OrigenSesion.Risk;
+
             switch (value.ToUpper())
             {
                 case "G":
