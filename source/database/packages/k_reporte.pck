@@ -56,6 +56,8 @@ CREATE OR REPLACE PACKAGE k_reporte IS
                            i_formato   IN VARCHAR2 DEFAULT NULL)
     RETURN y_archivo;
 
+  FUNCTION f_formato(i_parametros IN y_parametros) RETURN VARCHAR2;
+
   FUNCTION f_reporte_sql(i_id_reporte IN NUMBER,
                          i_parametros IN y_parametros) RETURN y_archivo;
 
@@ -421,6 +423,21 @@ CREATE OR REPLACE PACKAGE BODY k_reporte IS
     RETURN l_archivo;
   END;
 
+  FUNCTION f_formato(i_parametros IN y_parametros) RETURN VARCHAR2 IS
+  BEGIN
+    RETURN upper(substr(nvl(k_operacion.f_valor_parametro_string(i_parametros,
+                                                                 'formato'),
+                            k_util.f_valor_parametro('REPORTE_FORMATO_SALIDA_DEFECTO')),
+                        1,
+                        10));
+  
+  EXCEPTION
+    WHEN OTHERS THEN
+      RETURN upper(substr(k_util.f_valor_parametro('REPORTE_FORMATO_SALIDA_DEFECTO'),
+                          1,
+                          10));
+  END;
+
   FUNCTION f_reporte_sql(i_id_reporte IN NUMBER,
                          i_parametros IN y_parametros) RETURN y_archivo IS
     l_rsp             y_respuesta;
@@ -450,18 +467,7 @@ CREATE OR REPLACE PACKAGE BODY k_reporte IS
     END;
   
     l_rsp.lugar := 'Validando parámetros';
-    k_operacion.p_validar_parametro(l_rsp,
-                                    k_operacion.f_valor_parametro_string(i_parametros,
-                                                                         'formato') IN
-                                    (c_formato_pdf,
-                                     c_formato_docx,
-                                     c_formato_xlsx,
-                                     c_formato_csv,
-                                     c_formato_html),
-                                    'Formato de salida no soportado');
-  
-    l_formato := k_operacion.f_valor_parametro_string(i_parametros,
-                                                      'formato');
+    l_formato   := f_formato(i_parametros);
   
     IF l_consulta_sql IS NULL THEN
       k_operacion.p_respuesta_error(l_rsp,

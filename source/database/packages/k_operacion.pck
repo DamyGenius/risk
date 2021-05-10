@@ -45,8 +45,9 @@ CREATE OR REPLACE PACKAGE k_operacion IS
   c_error_inesperado         CONSTANT VARCHAR2(10) := 'ser9999';
 
   -- Otras constantes
-  c_id_log                CONSTANT VARCHAR2(50) := 'ID_LOG';
-  c_id_operacion_contexto CONSTANT PLS_INTEGER := 0;
+  c_id_log                 CONSTANT VARCHAR2(50) := 'ID_LOG';
+  c_id_operacion_contexto  CONSTANT PLS_INTEGER := 0;
+  c_id_ope_par_automaticos CONSTANT PLS_INTEGER := 1000;
 
   -- Excepciones
   ex_servicio_no_implementado EXCEPTION;
@@ -303,12 +304,37 @@ CREATE OR REPLACE PACKAGE BODY k_operacion IS
              op.obligatorio,
              op.valor_defecto,
              op.etiqueta,
-             op.detalle
+             op.detalle,
+             op.valores_posibles
         FROM t_operacion_parametros op, t_operaciones o
        WHERE o.id_operacion = op.id_operacion
          AND op.activo = 'S'
          AND op.id_operacion = i_id_operacion
          AND op.version = nvl(i_version, o.version_actual)
+      UNION
+      -- Parámetros automáticos
+      SELECT op.id_operacion,
+             lower(op.nombre) nombre,
+             op.orden,
+             op.activo,
+             op.tipo_dato,
+             op.formato,
+             op.longitud_maxima,
+             op.obligatorio,
+             op.valor_defecto,
+             op.etiqueta,
+             op.detalle,
+             op.valores_posibles
+        FROM t_operacion_parametros op
+       WHERE op.activo = 'S'
+         AND op.id_operacion = c_id_ope_par_automaticos
+         AND EXISTS (SELECT 1
+                FROM t_operaciones o
+               WHERE lower(op.nombre) IN
+                     (SELECT lower(TRIM(column_value))
+                        FROM k_util.f_separar_cadenas(o.parametros_automaticos,
+                                                      ','))
+                 AND o.id_operacion = i_id_operacion)
        ORDER BY orden;
   BEGIN
     -- Inicializa respuesta
@@ -375,6 +401,14 @@ CREATE OR REPLACE PACKAGE BODY k_operacion IS
                                                                 par.nombre),
                                                             to_char(par.longitud_maxima)));
           END IF;
+          IF par.valores_posibles IS NOT NULL AND
+             NOT k_util.f_existe_codigo(par.valores_posibles,
+                                        l_parametro.valor.accessvarchar2) THEN
+            raise_application_error(-20000,
+                                    k_error.f_mensaje_error('ora0007',
+                                                            nvl(par.etiqueta,
+                                                                par.nombre)));
+          END IF;
         
         WHEN 'N' THEN
           -- Number
@@ -406,6 +440,14 @@ CREATE OR REPLACE PACKAGE BODY k_operacion IS
                                                             nvl(par.etiqueta,
                                                                 par.nombre),
                                                             to_char(par.longitud_maxima)));
+          END IF;
+          IF par.valores_posibles IS NOT NULL AND NOT
+              k_util.f_existe_codigo(par.valores_posibles,
+                                                                          to_char(l_parametro.valor.accessnumber)) THEN
+            raise_application_error(-20000,
+                                    k_error.f_mensaje_error('ora0007',
+                                                            nvl(par.etiqueta,
+                                                                par.nombre)));
           END IF;
         
         WHEN 'B' THEN
@@ -465,7 +507,7 @@ CREATE OR REPLACE PACKAGE BODY k_operacion IS
                                                                 par.nombre)));
           END IF;
         
-          IF l_json_element IS NOT NULL THEN
+          IF l_json_element IS NOT NULL AND l_json_element.is_object THEN
             l_parametro.valor := k_util.json_to_objeto(l_json_element.to_clob,
                                                        par.formato);
           END IF;
@@ -521,8 +563,7 @@ CREATE OR REPLACE PACKAGE BODY k_operacion IS
                                     ' WHERE '
                                  END || i_parametros(i).nombre || ' = ' ||
                                  dbms_assert.enquote_literal('''' ||
-                                                             REPLACE(anydata.accessvarchar2(i_parametros(i)
-                                                                                            .valor),
+                                                             REPLACE(anydata.accessvarchar2(i_parametros(i).valor),
                                                                      '''',
                                                                      '''''') || '''');
                 l_seen_one    := TRUE;
@@ -534,12 +575,10 @@ CREATE OR REPLACE PACKAGE BODY k_operacion IS
                                     ' AND '
                                    ELSE
                                     ' WHERE '
-                                 END || 'to_char(' || i_parametros(i)
-                                .nombre ||
+                                 END || 'to_char(' || i_parametros(i).nombre ||
                                  ', ''TM'', ''NLS_NUMERIC_CHARACTERS = ''''.,'''''') = ' ||
                                  dbms_assert.enquote_literal('''' ||
-                                                             to_char(anydata.accessnumber(i_parametros(i)
-                                                                                          .valor),
+                                                             to_char(anydata.accessnumber(i_parametros(i).valor),
                                                                      'TM',
                                                                      'NLS_NUMERIC_CHARACTERS = ''.,''') || '''');
                 l_seen_one    := TRUE;
@@ -551,11 +590,10 @@ CREATE OR REPLACE PACKAGE BODY k_operacion IS
                                     ' AND '
                                    ELSE
                                     ' WHERE '
-                                 END || 'to_char(' || i_parametros(i)
-                                .nombre || ', ''YYYY-MM-DD'') = ' ||
+                                 END || 'to_char(' || i_parametros(i).nombre ||
+                                 ', ''YYYY-MM-DD'') = ' ||
                                  dbms_assert.enquote_literal('''' ||
-                                                             to_char(anydata.accessdate(i_parametros(i)
-                                                                                        .valor),
+                                                             to_char(anydata.accessdate(i_parametros(i).valor),
                                                                      'YYYY-MM-DD') || '''');
                 l_seen_one    := TRUE;
               END IF;
@@ -563,8 +601,7 @@ CREATE OR REPLACE PACKAGE BODY k_operacion IS
               raise_application_error(-20000,
                                       k_error.f_mensaje_error('ora0002',
                                                               'filtro',
-                                                              i_parametros(i)
-                                                              .nombre));
+                                                              i_parametros(i).nombre));
             END IF;
           END IF;
         END IF;

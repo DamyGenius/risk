@@ -147,9 +147,6 @@ insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO
 values (16, 'ID_PAIS', '0.1.0', 1, 'S', 'N', null, null, 'N', null, null, null);
 
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
-values (16, 'PAGINA_PARAMETROS', '0.1.0', 10, 'S', 'O', 'Y_PAGINA_PARAMETROS', null, 'N', null, null, null);
-
-insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
 values (17, 'TIPO_TOKEN', '0.1.0', 1, 'S', 'S', null, null, 'N', 'A', null, null);
 
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
@@ -175,9 +172,6 @@ values (19, 'REFERENCIA', '0.1.0', 3, 'S', 'S', null, null, 'S', null, null, nul
 
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
 values (19, 'ARCHIVO', '0.1.0', 4, 'S', 'O', 'Y_ARCHIVO', null, 'S', null, null, null);
-
-insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
-values (20, 'FORMATO', '0.1.0', 1, 'S', 'S', null, 4, 'S', 'PDF', null, null);
 
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
 values (21, 'TOKEN_DISPOSITIVO', '0.1.0', 1, 'S', 'S', null, null, 'S', null, null, null);
@@ -207,9 +201,6 @@ insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO
 values (25, 'ID_PAIS', '0.1.0', 2, 'S', 'N', null, null, 'N', null, null, null);
 
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
-values (25, 'PAGINA_PARAMETROS', '0.1.0', 10, 'S', 'O', 'Y_PAGINA_PARAMETROS', null, 'N', null, null, null);
-
-insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
 values (26, 'ID_CIUDAD', '0.1.0', 1, 'S', 'N', null, null, 'N', null, null, null);
 
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
@@ -217,9 +208,6 @@ values (26, 'ID_PAIS', '0.1.0', 2, 'S', 'N', null, null, 'N', null, null, null);
 
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
 values (26, 'ID_DEPARTAMENTO', '0.1.0', 3, 'S', 'N', null, null, 'N', null, null, null);
-
-insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
-values (26, 'PAGINA_PARAMETROS', '0.1.0', 10, 'S', 'O', 'Y_PAGINA_PARAMETROS', null, 'N', null, null, null);
 
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
 values (27, 'ID_BARRIO', '0.1.0', 1, 'S', 'N', null, null, 'N', null, null, null);
@@ -234,25 +222,10 @@ insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO
 values (27, 'ID_CIUDAD', '0.1.0', 4, 'S', 'N', null, null, 'N', null, null, null);
 
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
-values (27, 'PAGINA_PARAMETROS', '0.1.0', 10, 'S', 'O', 'Y_PAGINA_PARAMETROS', null, 'N', null, null, null);
-
-insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
 values (28, 'REFERENCIA', '0.1.0', 1, 'S', 'S', null, null, 'S', null, null, null);
 
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
 values (29, 'DOMINIO', '0.1.0', 1, 'S', 'S', null, null, 'S', null, null, null);
-
-insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
-values (29, 'PAGINA_PARAMETROS', '0.1.0', 10, 'S', 'O', 'Y_PAGINA_PARAMETROS', null, 'N', null, null, null);
-
-insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
-values (30, 'PAGINA_PARAMETROS', '0.1.0', 10, 'S', 'O', 'Y_PAGINA_PARAMETROS', null, 'N', null, null, null);
-
-insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
-values (31, 'PAGINA_PARAMETROS', '0.1.0', 10, 'S', 'O', 'Y_PAGINA_PARAMETROS', null, 'N', null, null, null);
-
-insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
-values (32, 'PAGINA_PARAMETROS', '0.1.0', 10, 'S', 'O', 'Y_PAGINA_PARAMETROS', null, 'N', null, null, null);
 
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
 values (33, 'TIPO_MENSAJERIA', '0.1.0', 1, 'S', 'S', null, null, 'S', null, null, null);
@@ -271,9 +244,6 @@ values (34, 'TIPO_MENSAJERIA', '0.1.0', 1, 'S', 'S', null, 1, 'S', null, null, n
 
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
 values (34, 'ESTADO', '0.1.0', 2, 'S', 'S', null, 1, 'S', null, null, null);
-
-insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
-values (36, 'FORMATO', '0.1.0', 1, 'S', 'S', null, 4, 'S', 'PDF', null, null);
 
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
 values (36, 'DOMINIO', '0.1.0', 2, 'S', 'S', null, null, 'N', null, null, null);
@@ -447,16 +417,16 @@ insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO
 values (58, 'ID_ERROR', '0.1.0', 1, 'S', 'S', null, null, 'N', null, null, null);
 
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
-values (58, 'PAGINA_PARAMETROS', '0.1.0', 10, 'S', 'O', 'Y_PAGINA_PARAMETROS', null, 'N', null, null, null);
-
-insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
 values (59, 'ID_APLICACION', '0.1.0', 1, 'S', 'S', null, 5, 'N', null, 'Identificador de la aplicación', null);
 
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
 values (59, 'CLAVE', '0.1.0', 2, 'S', 'S', null, 50, 'N', null, 'Clave de la aplicación', null);
 
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
-values (59, 'PAGINA_PARAMETROS', '0.1.0', 10, 'S', 'O', 'Y_PAGINA_PARAMETROS', null, 'N', null, null, null);
+values (1000, 'PAGINA_PARAMETROS', '0.1.0', 100, 'S', 'O', 'Y_PAGINA_PARAMETROS', null, 'N', '{}', null, 'Parámetros para paginación de elementos');
+
+insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
+values (1000, 'FORMATO', '0.1.0', 101, 'S', 'S', null, 4, 'N', 'PDF', null, 'Formato de salida de reporte');
 
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE)
 values (60, 'USUARIO_SOLICITADO', '0.1.0', 1, 'S', 'S', null, null, 'S', null, null, null);
