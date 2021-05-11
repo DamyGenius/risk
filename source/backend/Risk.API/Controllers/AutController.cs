@@ -438,7 +438,7 @@ namespace Risk.API.Controllers
             UsuarioExterno usuario = TokenHelper.ObtenerUsuarioDeTokenFacebook(requestBody.FbToken, _genService);
 
             // Registrar el usuario
-            var respRegistrarUsuario = _autService.RegistrarUsuario(usuario.Alias, null, usuario.Nombre, usuario.Apellido, usuario.DireccionCorreo, null, usuario.Origen, usuario.IdExterno);
+            var respRegistrarUsuario = _autService.RegistrarUsuario(usuario.Alias, null, usuario.Nombre, usuario.Apellido, usuario.DireccionCorreo, null, null, usuario.Origen, usuario.IdExterno);
 
             if (!respRegistrarUsuario.Codigo.Equals(RiskConstants.CODIGO_OK) && !respRegistrarUsuario.Codigo.Equals(RiskConstants.CODIGO_ERROR_USUARIO_EXTERNO_EXISTENTE))
             {
