@@ -5,6 +5,7 @@ using Risk.API.Client.Api;
 using Risk.API.Client.Client;
 using Risk.API.Client.Model;
 using Risk.Forms.Helpers;
+using Risk.Forms.Resources.Resx;
 using Xamarin.Essentials.Interfaces;
 
 namespace Risk.Forms.ViewModels
@@ -56,7 +57,7 @@ namespace Risk.Forms.ViewModels
 
         async void ExecuteIniciarSesionCommand()
         {
-            UserDialogs.Instance.ShowLoading("Cargando...");
+            UserDialogs.Instance.ShowLoading(AppResources.ShowLoadingTitle);
             SesionRespuesta sesionRespuesta = await _autApi.IniciarSesionAsync(null, new IniciarSesionRequestBody
             {
                 Usuario = Usuario,
@@ -64,7 +65,7 @@ namespace Risk.Forms.ViewModels
             });
             UserDialogs.Instance.HideLoading();
 
-            if (sesionRespuesta.Codigo.Equals("0"))
+            if (sesionRespuesta.Codigo.Equals(RiskConstants.CODIGO_OK))
             {
                 await _secureStorage.SetAsync(RiskConstants.ACCESS_TOKEN, sesionRespuesta.Datos.AccessToken);
                 await _secureStorage.SetAsync(RiskConstants.REFRESH_TOKEN, sesionRespuesta.Datos.RefreshToken);
@@ -72,7 +73,7 @@ namespace Risk.Forms.ViewModels
                 var config = (Configuration)_autApi.Configuration;
                 config.AccessToken = sesionRespuesta.Datos.AccessToken;
 
-                App.IsUserLoggedIn = true;
+                App.Current.Properties[RiskConstants.IS_USER_LOGGED_IN] = true;
                 await NavigationService.NavigateAsync("/NavigationPage/MainPage");
             }
             else
