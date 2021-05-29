@@ -79,7 +79,7 @@ prompt
 prompt Creando tablas...
 prompt -----------------------------------
 prompt
-@@tables/t_sistemas.tab
+@@tables/t_modulos.tab
 @@tables/t_aplicaciones.tab
 @@tables/t_errores.tab
 @@tables/t_significados.tab
@@ -238,6 +238,7 @@ prompt
 @@triggers/gb_datos.trg
 @@triggers/gb_archivos.trg
 @@triggers/gb_mensajes.trg
+@@triggers/gf_operaciones.trg
 
 @@triggers/gf_planteles.trg
 @@triggers/gs_partidos.trg
@@ -251,7 +252,7 @@ prompt -----------------------------------
 prompt
 @@install_audit.sql
 @@compile_schema.sql
-@@scripts/ins_t_sistemas.sql
+@@scripts/ins_t_modulos.sql
 @@scripts/ins_t_aplicaciones.sql
 @@scripts/ins_t_significados.sql
 @@scripts/ins_t_errores.sql
@@ -262,7 +263,6 @@ prompt
 @@scripts/ins_t_servicios.sql
 @@scripts/ins_t_trabajos.sql
 @@scripts/ins_t_roles.sql
-@@scripts/ins_t_permisos.sql
 @@scripts/ins_t_rol_permisos.sql
 @@scripts/ins_t_paises.sql
 @@scripts/ins_t_departamentos.sql
