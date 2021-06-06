@@ -1,4 +1,4 @@
-CREATE OR REPLACE TYPE y_partido UNDER y_objeto
+CREATE OR REPLACE TYPE y_partido force UNDER y_objeto
 (
 /**
 Agrupa datos de un partido.
@@ -30,17 +30,18 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-  id_partido        NUMBER(10),
-  id_torneo         VARCHAR2(12),
-  id_club_local     VARCHAR2(5),
-  id_club_visitante VARCHAR2(5),
-  fecha             DATE,
-  hora              VARCHAR2(5),
-  id_jornada        NUMBER(3),
-  id_estadio        NUMBER(6),
-  goles_local       NUMBER(3),
-  goles_visitante   NUMBER(3),
-  estado            VARCHAR2(300),
+  id_partido           NUMBER(10),
+  id_torneo            VARCHAR2(12),
+  id_club_local        VARCHAR2(5),
+  id_club_visitante    VARCHAR2(5),
+  fecha                DATE,
+  hora                 VARCHAR2(5),
+  id_jornada           NUMBER(3),
+  id_estadio           NUMBER(6),
+  goles_local          NUMBER(3),
+  goles_visitante      NUMBER(3),
+  estado               VARCHAR2(300),
+  cantidad_comentarios VARCHAR2(20),
 /**
 Constructor del objeto sin parámetros.
 
@@ -65,17 +66,18 @@ CREATE OR REPLACE TYPE BODY y_partido IS
 
   CONSTRUCTOR FUNCTION y_partido RETURN SELF AS RESULT AS
   BEGIN
-    self.id_partido        := NULL;
-    self.id_torneo         := NULL;
-    self.id_club_local     := NULL;
-    self.id_club_visitante := NULL;
-    self.fecha             := NULL;
-    self.hora              := NULL;
-    self.id_jornada        := NULL;
-    self.id_estadio        := NULL;
-    self.goles_local       := NULL;
-    self.goles_visitante   := NULL;
-    self.estado            := NULL;
+    self.id_partido           := NULL;
+    self.id_torneo            := NULL;
+    self.id_club_local        := NULL;
+    self.id_club_visitante    := NULL;
+    self.fecha                := NULL;
+    self.hora                 := NULL;
+    self.id_jornada           := NULL;
+    self.id_estadio           := NULL;
+    self.goles_local          := NULL;
+    self.goles_visitante      := NULL;
+    self.estado               := NULL;
+    self.cantidad_comentarios := NULL;
     RETURN;
   END;
 
@@ -85,18 +87,19 @@ CREATE OR REPLACE TYPE BODY y_partido IS
   BEGIN
     l_json_object := json_object_t.parse(i_json);
   
-    l_objeto                   := NEW y_partido();
-    l_objeto.id_partido        := l_json_object.get_number('id_partido');
-    l_objeto.id_torneo         := l_json_object.get_string('id_torneo');
-    l_objeto.id_club_local     := l_json_object.get_string('id_club_local');
-    l_objeto.id_club_visitante := l_json_object.get_string('id_club_visitante');
-    l_objeto.fecha             := l_json_object.get_date('fecha');
-    l_objeto.hora              := l_json_object.get_string('hora');
-    l_objeto.id_jornada        := l_json_object.get_number('id_jornada');
-    l_objeto.id_estadio        := l_json_object.get_number('id_estadio');
-    l_objeto.goles_local       := l_json_object.get_number('goles_local');
-    l_objeto.goles_visitante   := l_json_object.get_number('goles_visitante');
-    l_objeto.estado            := l_json_object.get_string('estado');
+    l_objeto                      := NEW y_partido();
+    l_objeto.id_partido           := l_json_object.get_number('id_partido');
+    l_objeto.id_torneo            := l_json_object.get_string('id_torneo');
+    l_objeto.id_club_local        := l_json_object.get_string('id_club_local');
+    l_objeto.id_club_visitante    := l_json_object.get_string('id_club_visitante');
+    l_objeto.fecha                := l_json_object.get_date('fecha');
+    l_objeto.hora                 := l_json_object.get_string('hora');
+    l_objeto.id_jornada           := l_json_object.get_number('id_jornada');
+    l_objeto.id_estadio           := l_json_object.get_number('id_estadio');
+    l_objeto.goles_local          := l_json_object.get_number('goles_local');
+    l_objeto.goles_visitante      := l_json_object.get_number('goles_visitante');
+    l_objeto.estado               := l_json_object.get_string('estado');
+    l_objeto.cantidad_comentarios := l_json_object.get_string('cantidad_comentarios');
   
     RETURN l_objeto;
   END;
@@ -116,6 +119,7 @@ CREATE OR REPLACE TYPE BODY y_partido IS
     l_json_object.put('goles_local', self.goles_local);
     l_json_object.put('goles_visitante', self.goles_visitante);
     l_json_object.put('estado', self.estado);
+    l_json_object.put('cantidad_comentarios', self.cantidad_comentarios);
     RETURN l_json_object.to_clob;
   END;
 

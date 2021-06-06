@@ -625,6 +625,7 @@ namespace Risk.API.Mappers
                     GolesLocal = entity.GolesLocal,
                     GolesVisitante = entity.GolesVisitante,
                     Estado = entity.Estado,
+                    CantidadComentarios = entity.CantidadComentarios
                 };
             }
             return model;
@@ -662,10 +663,11 @@ namespace Risk.API.Mappers
                     GolesLocal = entity.GolesLocal,
                     GolesVisitante = entity.GolesVisitante,
                     Estado = entity.Estado,
+                    CantidadComentarios = entity.CantidadComentarios,
                     PrediccionGolesLocal = entity.PredicGolesLocal,
                     PrediccionGolesVisitante = entity.PredicGolesVisitante,
                     Puntos = entity.Puntos,
-                    Sincronizacion = entity.Sincronizacion,
+                    Sincronizacion = entity.Sincronizacion
                 };
             }
             return model;

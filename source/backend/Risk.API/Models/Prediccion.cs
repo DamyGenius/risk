@@ -39,6 +39,7 @@ namespace Risk.API.Models
         public int? GolesLocal { get; set; }
         public int? GolesVisitante { get; set; }
         public string Estado { get; set; }
+        public string CantidadComentarios { get; set; }
         public int? PrediccionGolesLocal { get; set; }
         public int? PrediccionGolesVisitante { get; set; }
         public int? Puntos { get; set; }
