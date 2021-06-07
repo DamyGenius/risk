@@ -625,7 +625,8 @@ namespace Risk.API.Mappers
                     GolesLocal = entity.GolesLocal,
                     GolesVisitante = entity.GolesVisitante,
                     Estado = entity.Estado,
-                    CantidadComentarios = entity.CantidadComentarios
+                    CantidadComentarios = entity.CantidadComentarios,
+                    CantidadReacciones = entity.CantidadReacciones
                 };
             }
             return model;
@@ -664,6 +665,7 @@ namespace Risk.API.Mappers
                     GolesVisitante = entity.GolesVisitante,
                     Estado = entity.Estado,
                     CantidadComentarios = entity.CantidadComentarios,
+                    CantidadReacciones = entity.CantidadReacciones,
                     PrediccionGolesLocal = entity.PredicGolesLocal,
                     PrediccionGolesVisitante = entity.PredicGolesVisitante,
                     Puntos = entity.Puntos,
@@ -832,6 +834,30 @@ namespace Risk.API.Mappers
             }
         }
 
+        public static Reaccion? GetReaccionEnumFromValue(string value)
+        {
+            if (value == null)
+                return null;
+
+            switch (value.ToUpper())
+            {
+                case "L":
+                    return Reaccion.Like;
+                case "V":
+                    return Reaccion.Love;
+                case "H":
+                    return Reaccion.Haha;
+                case "W":
+                    return Reaccion.Wow;
+                case "S":
+                    return Reaccion.Sad;
+                case "A":
+                    return Reaccion.Angry;
+                default:
+                    return null;
+            }
+        }
+
         public static bool GetBoolFromValue(string value)
         {
             switch (value.ToUpper())
@@ -947,6 +973,46 @@ namespace Risk.API.Mappers
             foreach (var item in entityList)
             {
                 modelList.Add(GetComentarioPartidoFromEntity(item));
+            }
+            return modelList;
+        }
+
+        public static ReaccionPartido GetReaccionPartidoFromEntity(YReaccion entity)
+        {
+            ReaccionPartido model;
+            if (entity == null)
+            {
+                model = null;
+            }
+            else
+            {
+                if (!entity.Tipo.Equals(ModelsMapper.GetValueFromTipoReaccionEnum(TipoReaccion.Partido)))
+                {
+                    model = null;
+                }
+                else
+                {
+                    model = new ReaccionPartido
+                    {
+                        IdReaccion = entity.IdReaccion,
+                        IdPartido = entity.Referencia,
+                        IdUsuario = entity.IdUsuario,
+                        AliasUsuario = entity.AliasUsuario,
+                        VersionAvatar = entity.VersionAvatar,
+                        Reaccion = GetReaccionEnumFromValue(entity.Reaccion),
+                        ReferenciaComentario = entity.ReferenciaComentario
+                    };
+                }
+            }
+            return model;
+        }
+
+        public static List<ReaccionPartido> GetReaccionPartidoListFromEntity(List<YReaccion> entityList)
+        {
+            List<ReaccionPartido> modelList = new List<ReaccionPartido>();
+            foreach (var item in entityList)
+            {
+                modelList.Add(GetReaccionPartidoFromEntity(item));
             }
             return modelList;
         }

@@ -22,28 +22,27 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-using System;
+using Newtonsoft.Json;
 
-namespace Risk.API.Models
+namespace Risk.API.Entities
 {
-    public class Prediccion
+    public class YReaccion
     {
-        public int IdPartido { get; set; }
-        public string IdTorneo { get; set; }
-        public string IdClubLocal { get; set; }
-        public string IdClubVisitante { get; set; }
-        public DateTime? Fecha { get; set; }
-        public string Hora { get; set; }
-        public int? IdJornada { get; set; }
-        public int? IdEstadio { get; set; }
-        public int? GolesLocal { get; set; }
-        public int? GolesVisitante { get; set; }
-        public string Estado { get; set; }
-        public string CantidadComentarios { get; set; }
-        public string CantidadReacciones { get; set; }
-        public int? PrediccionGolesLocal { get; set; }
-        public int? PrediccionGolesVisitante { get; set; }
-        public int? Puntos { get; set; }
-        public int? Sincronizacion { get; set; }
+        [JsonProperty("id_reaccion")]
+        public long IdReaccion { get; set; }
+        [JsonProperty("tipo")]
+        public string Tipo { get; set; }
+        [JsonProperty("referencia")]
+        public int Referencia { get; set; }
+        [JsonProperty("id_usuario")]
+        public int IdUsuario { get; set; }
+        [JsonProperty("alias_usuario")]
+        public string AliasUsuario { get; set; }
+        [JsonProperty("version_avatar")]
+        public int? VersionAvatar { get; set; }
+        [JsonProperty("reaccion")]
+        public string Reaccion { get; set; }
+        [JsonProperty("ref_comentario")]
+        public long? ReferenciaComentario { get; set; }
     }
 }

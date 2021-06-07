@@ -54,6 +54,8 @@ namespace Risk.API.Services
         private const string NOMBRE_LISTAR_AMIGOS = "LISTAR_AMIGOS";
         private const string NOMBRE_REALIZAR_COMENTARIO = "REALIZAR_COMENTARIO";
         private const string NOMBRE_LISTAR_COMENTARIOS = "LISTAR_COMENTARIOS";
+        private const string NOMBRE_REACCIONAR = "REACCIONAR";
+        private const string NOMBRE_LISTAR_REACCIONES = "LISTAR_REACCIONES";
 
         public FanService(ILogger<FanService> logger, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDbConnectionFactory dbConnectionFactory)
             : base(logger, configuration, httpContextAccessor, dbConnectionFactory)
@@ -410,6 +412,49 @@ namespace Risk.API.Services
             }
 
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<ComentarioPartido>, YPagina<YComentario>>(entityRsp, datos);
+        }
+
+        public Respuesta<Dato> Reaccionar(TipoReaccion tipo, long referencia, string usuario, Reaccion reaccion, long? referenciaComentario)
+        {
+            JObject prms = new JObject();
+            prms.Add("tipo", ModelsMapper.GetValueFromTipoReaccionEnum(tipo));
+            prms.Add("referencia", referencia);
+            //prms.Add("usuario", usuario);
+            prms.Add("reaccion", ModelsMapper.GetValueFromReaccionEnum(reaccion));
+            prms.Add("ref_comentario", referenciaComentario);
+
+            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+                NOMBRE_REACCIONAR,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
+
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
+        }
+
+        public Respuesta<Pagina<ReaccionPartido>> ListarReaccionesPartido(int idPartido, long referenciaComentario, PaginaParametros paginaParametros = null)
+        {
+            JObject prms = new JObject();
+            prms.Add("tipo", ModelsMapper.GetValueFromTipoReaccionEnum(TipoReaccion.Partido));
+            prms.Add("referencia", idPartido);
+            if (paginaParametros != null)
+            {
+                prms.Add("pagina_parametros", JToken.FromObject(ModelsMapper.GetYPaginaParametrosFromModel(paginaParametros)));
+            }
+
+            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+                NOMBRE_LISTAR_REACCIONES,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YPagina<YReaccion>>>(rsp);
+
+            Pagina<ReaccionPartido> datos = null;
+            if (entityRsp.Datos != null)
+            {
+                datos = EntitiesMapper.GetPaginaFromEntity<ReaccionPartido, YReaccion>(entityRsp.Datos, EntitiesMapper.GetReaccionPartidoListFromEntity(entityRsp.Datos.Elementos));
+            }
+
+            return EntitiesMapper.GetRespuestaFromEntity<Pagina<ReaccionPartido>, YPagina<YReaccion>>(entityRsp, datos);
         }
     }
 }

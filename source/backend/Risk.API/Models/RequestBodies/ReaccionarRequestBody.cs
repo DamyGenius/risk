@@ -22,28 +22,11 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-using System;
-
 namespace Risk.API.Models
 {
-    public class Prediccion
+    public class ReaccionarRequestBody
     {
-        public int IdPartido { get; set; }
-        public string IdTorneo { get; set; }
-        public string IdClubLocal { get; set; }
-        public string IdClubVisitante { get; set; }
-        public DateTime? Fecha { get; set; }
-        public string Hora { get; set; }
-        public int? IdJornada { get; set; }
-        public int? IdEstadio { get; set; }
-        public int? GolesLocal { get; set; }
-        public int? GolesVisitante { get; set; }
-        public string Estado { get; set; }
-        public string CantidadComentarios { get; set; }
-        public string CantidadReacciones { get; set; }
-        public int? PrediccionGolesLocal { get; set; }
-        public int? PrediccionGolesVisitante { get; set; }
-        public int? Puntos { get; set; }
-        public int? Sincronizacion { get; set; }
+        public string Usuario { get; set; }
+        public Reaccion Reaccion { get; set; }
     }
 }

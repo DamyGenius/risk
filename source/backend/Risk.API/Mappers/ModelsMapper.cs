@@ -345,5 +345,41 @@ namespace Risk.API.Mappers
                     return string.Empty;
             }
         }
+
+        public static string GetValueFromTipoReaccionEnum(TipoReaccion enumeration)
+        {
+            switch (enumeration)
+            {
+                case TipoReaccion.Album:
+                    return "A";
+                case TipoReaccion.Post:
+                    return "P";
+                case TipoReaccion.Partido:
+                    return "T";
+                default:
+                    return string.Empty;
+            }
+        }
+
+        public static string GetValueFromReaccionEnum(Reaccion enumeration)
+        {
+            switch (enumeration)
+            {
+                case Reaccion.Like:
+                    return "L";
+                case Reaccion.Love:
+                    return "V";
+                case Reaccion.Haha:
+                    return "H";
+                case Reaccion.Wow:
+                    return "W";
+                case Reaccion.Sad:
+                    return "S";
+                case Reaccion.Angry:
+                    return "A";
+                default:
+                    return string.Empty;
+            }
+        }
     }
 }

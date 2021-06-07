@@ -53,5 +53,7 @@ namespace Risk.API.Entities
         public string Estado { get; set; }
         [JsonProperty("cantidad_comentarios")]
         public string CantidadComentarios { get; set; }
+        [JsonProperty("cantidad_reacciones")]
+        public string CantidadReacciones { get; set; }
     }
 }

@@ -372,5 +372,38 @@ namespace Risk.API.Controllers
             var respuesta = _fanService.ListarComentariosPartido(idPartido, referenciaComentario, paginaParametros);
             return ProcesarRespuesta(respuesta);
         }
+
+        [HttpPost("ReaccionarPartido")]
+        [SwaggerOperation(OperationId = "ReaccionarPartido", Summary = "ReaccionarPartido", Description = "Permite reaccionar a un partido")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
+        public IActionResult ReaccionarPartido([FromQuery, SwaggerParameter(Description = "Identificador del partido", Required = true)] int idPartido,
+            [FromQuery, SwaggerParameter(Description = "Referencia al comentario, si es la reaccion de un comentario", Required = false)] long referenciaComentario,
+            [FromBody] ReaccionarRequestBody requestBody)
+        {
+            var respuesta = _fanService.Reaccionar(TipoReaccion.Partido, idPartido, requestBody.Usuario, requestBody.Reaccion, referenciaComentario);
+            return ProcesarRespuesta(respuesta);
+        }
+
+        [HttpGet("ListarReaccionesPartido")]
+        [SwaggerOperation(OperationId = "ListarReaccionesPartido", Summary = "ListarReaccionesPartido", Description = "Obtiene lista de reacciones de un partido")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<ReaccionPartido>>))]
+        public IActionResult ListarReaccionesPartido([FromQuery, SwaggerParameter(Description = "Identificador del partido", Required = true)] int idPartido,
+            [FromQuery, SwaggerParameter(Description = "Referencia al comentario, si es la reaccion de un comentario", Required = false)] long referenciaComentario,
+            [FromQuery, SwaggerParameter(Description = "Número de la página", Required = false)] int pagina,
+            [FromQuery, SwaggerParameter(Description = "Cantidad de elementos por página", Required = false)] int porPagina,
+            [FromQuery, SwaggerParameter(Description = "No paginar?", Required = false)] bool noPaginar)
+        {
+            PaginaParametros paginaParametros = new PaginaParametros
+            {
+                Pagina = pagina,
+                PorPagina = porPagina,
+                NoPaginar = noPaginar
+            };
+            var respuesta = _fanService.ListarReaccionesPartido(idPartido, referenciaComentario, paginaParametros);
+            return ProcesarRespuesta(respuesta);
+        }
     }
 }
