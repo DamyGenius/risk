@@ -42,6 +42,7 @@ SOFTWARE.
   goles_visitante      NUMBER(3),
   estado               VARCHAR2(300),
   cantidad_comentarios VARCHAR2(20),
+  cantidad_reacciones  VARCHAR2(20),
 /**
 Constructor del objeto sin parámetros.
 
@@ -78,6 +79,7 @@ CREATE OR REPLACE TYPE BODY y_partido IS
     self.goles_visitante      := NULL;
     self.estado               := NULL;
     self.cantidad_comentarios := NULL;
+    self.cantidad_reacciones  := NULL;
     RETURN;
   END;
 
@@ -100,6 +102,7 @@ CREATE OR REPLACE TYPE BODY y_partido IS
     l_objeto.goles_visitante      := l_json_object.get_number('goles_visitante');
     l_objeto.estado               := l_json_object.get_string('estado');
     l_objeto.cantidad_comentarios := l_json_object.get_string('cantidad_comentarios');
+    l_objeto.cantidad_reacciones  := l_json_object.get_string('cantidad_reacciones');
   
     RETURN l_objeto;
   END;
@@ -120,6 +123,7 @@ CREATE OR REPLACE TYPE BODY y_partido IS
     l_json_object.put('goles_visitante', self.goles_visitante);
     l_json_object.put('estado', self.estado);
     l_json_object.put('cantidad_comentarios', self.cantidad_comentarios);
+    l_json_object.put('cantidad_reacciones', self.cantidad_reacciones);
     RETURN l_json_object.to_clob;
   END;
 

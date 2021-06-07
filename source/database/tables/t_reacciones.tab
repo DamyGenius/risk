@@ -1,0 +1,29 @@
+create table T_REACCIONES
+(
+  id_reaccion    NUMBER not null,
+  tipo           VARCHAR2(1) not null,
+  referencia     NUMBER not null,
+  id_usuario     NUMBER(10) not null,
+  reaccion       VARCHAR2(2000),
+  ref_comentario NUMBER
+)
+;
+comment on table T_REACCIONES
+  is 'Reacciones';
+comment on column T_REACCIONES.id_reaccion
+  is 'Identificador de la reaccion';
+comment on column T_REACCIONES.tipo
+  is 'Tipo de reaccion: si es para posts, imágenes, albums, etc.';
+comment on column T_REACCIONES.referencia
+  is 'Referencia de la reaccion: Id del post, imagen o album según el caso.';
+comment on column T_REACCIONES.id_usuario
+  is 'Usuario que reacciona';
+comment on column T_REACCIONES.reaccion
+  is 'Reaccion: Me gusta, Me encanta, Me sorprende, Me enoja, etc.';
+comment on column T_REACCIONES.ref_comentario
+  is 'Identificador del comentario, en caso de ser reaccion a un comentario';
+alter table T_REACCIONES
+  add constraint PK_REACCIONES primary key (ID_REACCION);
+alter table T_REACCIONES
+  add constraint FK_REACCIONES_USUARIOS foreign key (ID_USUARIO)
+  references T_USUARIOS (ID_USUARIO);

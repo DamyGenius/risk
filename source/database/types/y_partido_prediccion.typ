@@ -57,18 +57,20 @@ CREATE OR REPLACE TYPE BODY y_partido_prediccion IS
 
   CONSTRUCTOR FUNCTION y_partido_prediccion RETURN SELF AS RESULT AS
   BEGIN
-    self.id_partido        := NULL;
-    self.id_torneo         := NULL;
-    self.id_club_local     := NULL;
-    self.id_club_visitante := NULL;
-    self.fecha             := NULL;
-    self.hora              := NULL;
-    self.id_jornada        := NULL;
-    self.id_estadio        := NULL;
-    self.goles_local       := NULL;
-    self.goles_visitante   := NULL;
-    self.estado            := NULL;
-
+    self.id_partido           := NULL;
+    self.id_torneo            := NULL;
+    self.id_club_local        := NULL;
+    self.id_club_visitante    := NULL;
+    self.fecha                := NULL;
+    self.hora                 := NULL;
+    self.id_jornada           := NULL;
+    self.id_estadio           := NULL;
+    self.goles_local          := NULL;
+    self.goles_visitante      := NULL;
+    self.estado               := NULL;
+    self.cantidad_comentarios := NULL;
+    self.cantidad_reacciones  := NULL;
+  
     self.predic_goles_local     := NULL;
     self.predic_goles_visitante := NULL;
     self.puntos                 := NULL;
@@ -82,24 +84,26 @@ CREATE OR REPLACE TYPE BODY y_partido_prediccion IS
   BEGIN
     l_json_object := json_object_t.parse(i_json);
   
-    l_objeto                   := NEW y_partido_prediccion();
-    l_objeto.id_partido        := l_json_object.get_number('id_partido');
-    l_objeto.id_torneo         := l_json_object.get_string('id_torneo');
-    l_objeto.id_club_local     := l_json_object.get_string('id_club_local');
-    l_objeto.id_club_visitante := l_json_object.get_string('id_club_visitante');
-    l_objeto.fecha             := l_json_object.get_date('fecha');
-    l_objeto.hora              := l_json_object.get_string('hora');
-    l_objeto.id_jornada        := l_json_object.get_number('id_jornada');
-    l_objeto.id_estadio        := l_json_object.get_number('id_estadio');
-    l_objeto.goles_local       := l_json_object.get_number('goles_local');
-    l_objeto.goles_visitante   := l_json_object.get_number('goles_visitante');
-    l_objeto.estado            := l_json_object.get_string('estado');
+    l_objeto                      := NEW y_partido_prediccion();
+    l_objeto.id_partido           := l_json_object.get_number('id_partido');
+    l_objeto.id_torneo            := l_json_object.get_string('id_torneo');
+    l_objeto.id_club_local        := l_json_object.get_string('id_club_local');
+    l_objeto.id_club_visitante    := l_json_object.get_string('id_club_visitante');
+    l_objeto.fecha                := l_json_object.get_date('fecha');
+    l_objeto.hora                 := l_json_object.get_string('hora');
+    l_objeto.id_jornada           := l_json_object.get_number('id_jornada');
+    l_objeto.id_estadio           := l_json_object.get_number('id_estadio');
+    l_objeto.goles_local          := l_json_object.get_number('goles_local');
+    l_objeto.goles_visitante      := l_json_object.get_number('goles_visitante');
+    l_objeto.estado               := l_json_object.get_string('estado');
+    l_objeto.cantidad_comentarios := l_json_object.get_string('cantidad_comentarios');
+    l_objeto.cantidad_reacciones  := l_json_object.get_string('cantidad_reacciones');
   
     l_objeto.predic_goles_local     := l_json_object.get_string('predic_goles_local');
     l_objeto.predic_goles_visitante := l_json_object.get_string('predic_goles_visitante');
     l_objeto.puntos                 := l_json_object.get_string('puntos');
     l_objeto.sincronizacion         := l_json_object.get_string('sincronizacion');
-
+  
     RETURN l_objeto;
   END;
 
@@ -118,9 +122,12 @@ CREATE OR REPLACE TYPE BODY y_partido_prediccion IS
     l_json_object.put('goles_local', self.goles_local);
     l_json_object.put('goles_visitante', self.goles_visitante);
     l_json_object.put('estado', self.estado);
-
+    l_json_object.put('cantidad_comentarios', self.cantidad_comentarios);
+    l_json_object.put('cantidad_reacciones', self.cantidad_reacciones);
+  
     l_json_object.put('predic_goles_local', self.predic_goles_local);
-    l_json_object.put('predic_goles_visitante', self.predic_goles_visitante);
+    l_json_object.put('predic_goles_visitante',
+                      self.predic_goles_visitante);
     l_json_object.put('puntos', self.puntos);
     l_json_object.put('sincronizacion', self.sincronizacion);
     RETURN l_json_object.to_clob;

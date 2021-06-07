@@ -450,6 +450,27 @@ insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO
 values (64, 'PAGINA_PARAMETROS', '0.1.0', 10, 'S', 'O', 'Y_PAGINA_PARAMETROS', null, 'N', null, null, null, null);
 
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE, VALORES_POSIBLES)
+values (65, 'TIPO', '0.1.0', 1, 'S', 'S', null, 1, 'S', null, null, null, null);
+
+insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE, VALORES_POSIBLES)
+values (65, 'REFERENCIA', '0.1.0', 2, 'S', 'N', null, null, 'S', null, null, null, null);
+
+insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE, VALORES_POSIBLES)
+values (65, 'REACCION', '0.1.0', 3, 'S', 'S', null, 1, 'S', null, null, null, null);
+
+insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE, VALORES_POSIBLES)
+values (65, 'REF_COMENTARIO', '0.1.0', 4, 'S', 'N', null, null, 'N', null, null, null, null);
+
+insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE, VALORES_POSIBLES)
+values (66, 'TIPO', '0.1.0', 1, 'S', 'S', null, 1, 'S', null, null, null, null);
+
+insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE, VALORES_POSIBLES)
+values (66, 'REFERENCIA', '0.1.0', 2, 'S', 'N', null, null, 'S', null, null, null, null);
+
+insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE, VALORES_POSIBLES)
+values (66, 'PAGINA_PARAMETROS', '0.1.0', 10, 'S', 'O', 'Y_PAGINA_PARAMETROS', null, 'N', null, null, null, null);
+
+insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE, VALORES_POSIBLES)
 values (1000, 'PAGINA_PARAMETROS', '0.1.0', 100, 'S', 'O', 'Y_PAGINA_PARAMETROS', null, 'N', '{}', null, 'Parámetros para paginación de elementos', null);
 
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE, VALORES_POSIBLES)

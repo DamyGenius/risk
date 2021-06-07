@@ -182,6 +182,12 @@ values (63, 'S', 'REALIZAR_COMENTARIO', 'FAN', 'S', null, '0.1.0', 0);
 insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL, NIVEL_LOG)
 values (64, 'S', 'LISTAR_COMENTARIOS', 'FAN', 'S', null, '0.1.0', 0);
 
+insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL, NIVEL_LOG)
+values (65, 'S', 'REACCIONAR', 'FAN', 'S', null, '0.1.0', 0);
+
+insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL, NIVEL_LOG)
+values (66, 'S', 'LISTAR_REACCIONES', 'FAN', 'S', null, '0.1.0', 0);
+
 insert into t_operaciones (ID_OPERACION, TIPO, NOMBRE, DOMINIO, ACTIVO, DETALLE, VERSION_ACTUAL, NIVEL_LOG, PARAMETROS_AUTOMATICOS)
 values (1000, 'P', 'PARAMETROS_AUTOMATICOS', null, 'S', 'Parámetros automáticos', '0.1.0', 0, null);
 
