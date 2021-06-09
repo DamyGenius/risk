@@ -70,6 +70,7 @@ CREATE OR REPLACE TYPE BODY y_partido_prediccion IS
     self.estado               := NULL;
     self.cantidad_comentarios := NULL;
     self.cantidad_reacciones  := NULL;
+    self.mi_reaccion          := NULL;
   
     self.predic_goles_local     := NULL;
     self.predic_goles_visitante := NULL;
@@ -98,6 +99,7 @@ CREATE OR REPLACE TYPE BODY y_partido_prediccion IS
     l_objeto.estado               := l_json_object.get_string('estado');
     l_objeto.cantidad_comentarios := l_json_object.get_string('cantidad_comentarios');
     l_objeto.cantidad_reacciones  := l_json_object.get_string('cantidad_reacciones');
+    l_objeto.mi_reaccion          := l_json_object.get_string('mi_reaccion');
   
     l_objeto.predic_goles_local     := l_json_object.get_string('predic_goles_local');
     l_objeto.predic_goles_visitante := l_json_object.get_string('predic_goles_visitante');
@@ -124,6 +126,7 @@ CREATE OR REPLACE TYPE BODY y_partido_prediccion IS
     l_json_object.put('estado', self.estado);
     l_json_object.put('cantidad_comentarios', self.cantidad_comentarios);
     l_json_object.put('cantidad_reacciones', self.cantidad_reacciones);
+    l_json_object.put('mi_reaccion', self.mi_reaccion);
   
     l_json_object.put('predic_goles_local', self.predic_goles_local);
     l_json_object.put('predic_goles_visitante',

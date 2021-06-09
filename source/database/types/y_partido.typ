@@ -43,6 +43,7 @@ SOFTWARE.
   estado               VARCHAR2(300),
   cantidad_comentarios VARCHAR2(20),
   cantidad_reacciones  VARCHAR2(20),
+  mi_reaccion          VARCHAR2(1),
 /**
 Constructor del objeto sin parámetros.
 
@@ -80,6 +81,7 @@ CREATE OR REPLACE TYPE BODY y_partido IS
     self.estado               := NULL;
     self.cantidad_comentarios := NULL;
     self.cantidad_reacciones  := NULL;
+    self.mi_reaccion          := NULL;
     RETURN;
   END;
 
@@ -103,6 +105,7 @@ CREATE OR REPLACE TYPE BODY y_partido IS
     l_objeto.estado               := l_json_object.get_string('estado');
     l_objeto.cantidad_comentarios := l_json_object.get_string('cantidad_comentarios');
     l_objeto.cantidad_reacciones  := l_json_object.get_string('cantidad_reacciones');
+    l_objeto.mi_reaccion          := l_json_object.get_string('mi_reaccion');
   
     RETURN l_objeto;
   END;
@@ -124,6 +127,7 @@ CREATE OR REPLACE TYPE BODY y_partido IS
     l_json_object.put('estado', self.estado);
     l_json_object.put('cantidad_comentarios', self.cantidad_comentarios);
     l_json_object.put('cantidad_reacciones', self.cantidad_reacciones);
+    l_json_object.put('mi_reaccion', self.mi_reaccion);
     RETURN l_json_object.to_clob;
   END;
 
