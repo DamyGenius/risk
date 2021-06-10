@@ -170,6 +170,12 @@ insert into t_rol_permisos (ID_ROL, ID_PERMISO, CONSULTAR, INSERTAR, ACTUALIZAR,
 values (2, 'SERVICIO:FAN:LISTAR_COMENTARIOS', 'N', 'N', 'N', 'N');
 
 insert into t_rol_permisos (ID_ROL, ID_PERMISO, CONSULTAR, INSERTAR, ACTUALIZAR, ELIMINAR)
+values (2, 'SERVICIO:FAN:REACCIONAR', 'N', 'N', 'N', 'N');
+
+insert into t_rol_permisos (ID_ROL, ID_PERMISO, CONSULTAR, INSERTAR, ACTUALIZAR, ELIMINAR)
+values (2, 'SERVICIO:FAN:LISTAR_REACCIONES', 'N', 'N', 'N', 'N');
+
+insert into t_rol_permisos (ID_ROL, ID_PERMISO, CONSULTAR, INSERTAR, ACTUALIZAR, ELIMINAR)
 values (4, 'REPORTE:GEN:LISTAR_SIGNIFICADOS', 'N', 'N', 'N', 'N');
 
 insert into t_rol_permisos (ID_ROL, ID_PERMISO, CONSULTAR, INSERTAR, ACTUALIZAR, ELIMINAR)
@@ -297,5 +303,8 @@ values (4, 'SERVICIO:FAN:LISTAR_AMIGOS', 'N', 'N', 'N', 'N');
 
 insert into t_rol_permisos (ID_ROL, ID_PERMISO, CONSULTAR, INSERTAR, ACTUALIZAR, ELIMINAR)
 values (4, 'SERVICIO:FAN:LISTAR_COMENTARIOS', 'N', 'N', 'N', 'N');
+
+insert into t_rol_permisos (ID_ROL, ID_PERMISO, CONSULTAR, INSERTAR, ACTUALIZAR, ELIMINAR)
+values (4, 'SERVICIO:FAN:LISTAR_REACCIONES', 'N', 'N', 'N', 'N');
 
 prompt Done.
