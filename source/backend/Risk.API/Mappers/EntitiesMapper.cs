@@ -626,7 +626,8 @@ namespace Risk.API.Mappers
                     GolesVisitante = entity.GolesVisitante,
                     Estado = entity.Estado,
                     CantidadComentarios = entity.CantidadComentarios,
-                    CantidadReacciones = entity.CantidadReacciones
+                    CantidadReacciones = entity.CantidadReacciones,
+                    MiReaccion = GetReaccionEnumFromValue(entity.MiReaccion)
                 };
             }
             return model;
@@ -666,6 +667,7 @@ namespace Risk.API.Mappers
                     Estado = entity.Estado,
                     CantidadComentarios = entity.CantidadComentarios,
                     CantidadReacciones = entity.CantidadReacciones,
+                    MiReaccion = GetReaccionEnumFromValue(entity.MiReaccion),
                     PrediccionGolesLocal = entity.PredicGolesLocal,
                     PrediccionGolesVisitante = entity.PredicGolesVisitante,
                     Puntos = entity.Puntos,

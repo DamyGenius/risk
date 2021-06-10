@@ -41,5 +41,6 @@ namespace Risk.API.Models
         public string Estado { get; set; }
         public string CantidadComentarios { get; set; }
         public string CantidadReacciones { get; set; }
+        public Reaccion MiReaccion { get; set; }
     }
 }

@@ -55,6 +55,8 @@ namespace Risk.API.Entities
         public string CantidadComentarios { get; set; }
         [JsonProperty("cantidad_reacciones")]
         public string CantidadReacciones { get; set; }
+        [JsonProperty("mi_reaccion")]
+        public string MiReaccion { get; set; }
         [JsonProperty("predic_goles_local")]
         public int? PredicGolesLocal { get; set; }
         [JsonProperty("predic_goles_visitante")]
