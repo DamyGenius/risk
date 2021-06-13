@@ -24,8 +24,14 @@ SOFTWARE.
 
 namespace Risk.API.Models
 {
-    public class ReaccionarRequestBody
+    public class GrupoMensaje
     {
-        public Reaccion Reaccion { get; set; }
+        public long IdGrupoMensaje { get; set; }
+        public int IdGrupo { get; set; }
+        public int IdUsuario { get; set; }
+        public string AliasUsuario { get; set; }
+        public int? VersionAvatar { get; set; }
+        public string Contenido { get; set; }
+        public long? ReferenciaMensaje { get; set; }
     }
 }

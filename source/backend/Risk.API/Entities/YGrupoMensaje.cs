@@ -22,10 +22,25 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-namespace Risk.API.Models
+using Newtonsoft.Json;
+
+namespace Risk.API.Entities
 {
-    public class ReaccionarRequestBody
+    public class YGrupoMensaje
     {
-        public Reaccion Reaccion { get; set; }
+        [JsonProperty("id_grupo_mensaje")]
+        public long IdGrupoMensaje { get; set; }
+        [JsonProperty("id_grupo")]
+        public int IdGrupo { get; set; }
+        [JsonProperty("id_usuario")]
+        public int IdUsuario { get; set; }
+        [JsonProperty("alias_usuario")]
+        public string AliasUsuario { get; set; }
+        [JsonProperty("version_avatar")]
+        public int? VersionAvatar { get; set; }
+        [JsonProperty("contenido")]
+        public string Contenido { get; set; }
+        [JsonProperty("ref_mensaje")]
+        public long? ReferenciaMensaje { get; set; }
     }
 }

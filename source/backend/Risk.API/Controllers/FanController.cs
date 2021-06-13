@@ -382,7 +382,7 @@ namespace Risk.API.Controllers
             [FromQuery, SwaggerParameter(Description = "Referencia al comentario, si es la reaccion de un comentario", Required = false)] long referenciaComentario,
             [FromBody] ReaccionarRequestBody requestBody)
         {
-            var respuesta = _fanService.Reaccionar(TipoReaccion.Partido, idPartido, requestBody.Usuario, requestBody.Reaccion, referenciaComentario);
+            var respuesta = _fanService.Reaccionar(TipoReaccion.Partido, idPartido, requestBody.Reaccion, referenciaComentario);
             return ProcesarRespuesta(respuesta);
         }
 
@@ -403,6 +403,40 @@ namespace Risk.API.Controllers
                 NoPaginar = noPaginar
             };
             var respuesta = _fanService.ListarReaccionesPartido(idPartido, referenciaComentario, paginaParametros);
+            return ProcesarRespuesta(respuesta);
+        }
+
+        [HttpPost("EnviarMensajeGrupo")]
+        [SwaggerOperation(OperationId = "EnviarMensajeGrupo", Summary = "EnviarMensajeGrupo", Description = "Permite enviar mensajes a un grupo")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
+        public IActionResult EnviarMensajeGrupo([FromQuery, SwaggerParameter(Description = "Identificador del grupo", Required = true)] int idGrupo,
+            [FromQuery, SwaggerParameter(Description = "Referencia al mensaje superior, si es una respuesta a otro mensaje", Required = false)] long referenciaMensaje,
+            [FromBody] EnviarMensajeRequestBody requestBody)
+        {
+            var respuesta = _fanService.EnviarMensajeGrupo(idGrupo, requestBody.Usuario, requestBody.Contenido, referenciaMensaje);
+            _hubContext.Clients.Group($"grupo-{idGrupo}").SendAsync("mensajechatgrupal", requestBody.Usuario, requestBody.Contenido);
+            return ProcesarRespuesta(respuesta);
+        }
+
+        [HttpGet("ListarMensajesGrupo")]
+        [SwaggerOperation(OperationId = "ListarMensajesGrupo", Summary = "ListarMensajesGrupo", Description = "Obtiene lista de mensajes de un grupo")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<GrupoMensaje>>))]
+        public IActionResult ListarMensajesGrupo([FromQuery, SwaggerParameter(Description = "Identificador del grupo", Required = true)] int idGrupo,
+            [FromQuery, SwaggerParameter(Description = "Referencia al mensaje superior", Required = false)] long referenciaMensaje,
+            [FromQuery, SwaggerParameter(Description = "Número de la página", Required = false)] int pagina,
+            [FromQuery, SwaggerParameter(Description = "Cantidad de elementos por página", Required = false)] int porPagina,
+            [FromQuery, SwaggerParameter(Description = "No paginar?", Required = false)] bool noPaginar)
+        {
+            PaginaParametros paginaParametros = new PaginaParametros
+            {
+                Pagina = pagina,
+                PorPagina = porPagina,
+                NoPaginar = noPaginar
+            };
+            var respuesta = _fanService.ListarMensajesGrupo(idGrupo, referenciaMensaje, paginaParametros);
             return ProcesarRespuesta(respuesta);
         }
     }

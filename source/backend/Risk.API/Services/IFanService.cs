@@ -46,7 +46,9 @@ namespace Risk.API.Services
         Respuesta<Pagina<SolicitudAmistad>> ListarSolicitudesAmistad(string usuario, TipoSolicitudAmistad? tipo = null);
         Respuesta<Dato> RealizarComentario(TipoComentario tipo, long referencia, string usuario, string contenido, long? referenciaComentario);
         Respuesta<Pagina<ComentarioPartido>> ListarComentariosPartido(int idPartido, long referenciaComentario, PaginaParametros paginaParametros = null);
-        Respuesta<Dato> Reaccionar(TipoReaccion tipo, long referencia, string usuario, Reaccion reaccion, long? referenciaComentario);
+        Respuesta<Dato> Reaccionar(TipoReaccion tipo, long referencia, Reaccion reaccion, long? referenciaComentario);
         Respuesta<Pagina<ReaccionPartido>> ListarReaccionesPartido(int idPartido, long referenciaComentario, PaginaParametros paginaParametros = null);
+        Respuesta<Dato> EnviarMensajeGrupo(int idGrupo, string usuario, string contenido, long? referenciaMensaje);
+        Respuesta<Pagina<GrupoMensaje>> ListarMensajesGrupo(int idGrupo, long referenciaMensaje, PaginaParametros paginaParametros = null);
     }
 }

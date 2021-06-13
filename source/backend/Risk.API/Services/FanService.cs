@@ -56,6 +56,8 @@ namespace Risk.API.Services
         private const string NOMBRE_LISTAR_COMENTARIOS = "LISTAR_COMENTARIOS";
         private const string NOMBRE_REACCIONAR = "REACCIONAR";
         private const string NOMBRE_LISTAR_REACCIONES = "LISTAR_REACCIONES";
+        private const string NOMBRE_ENVIAR_MENSAJE_GRUPO = "ENVIAR_MENSAJE_GRUPO";
+        private const string NOMBRE_LISTAR_MENSAJES_GRUPO = "LISTAR_MENSAJES_GRUPO";
 
         public FanService(ILogger<FanService> logger, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDbConnectionFactory dbConnectionFactory)
             : base(logger, configuration, httpContextAccessor, dbConnectionFactory)
@@ -414,12 +416,11 @@ namespace Risk.API.Services
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<ComentarioPartido>, YPagina<YComentario>>(entityRsp, datos);
         }
 
-        public Respuesta<Dato> Reaccionar(TipoReaccion tipo, long referencia, string usuario, Reaccion reaccion, long? referenciaComentario)
+        public Respuesta<Dato> Reaccionar(TipoReaccion tipo, long referencia, Reaccion reaccion, long? referenciaComentario)
         {
             JObject prms = new JObject();
             prms.Add("tipo", ModelsMapper.GetValueFromTipoReaccionEnum(tipo));
             prms.Add("referencia", referencia);
-            //prms.Add("usuario", usuario);
             prms.Add("reaccion", ModelsMapper.GetValueFromReaccionEnum(reaccion));
             prms.Add("ref_comentario", referenciaComentario);
 
@@ -455,6 +456,47 @@ namespace Risk.API.Services
             }
 
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<ReaccionPartido>, YPagina<YReaccion>>(entityRsp, datos);
+        }
+
+        public Respuesta<Dato> EnviarMensajeGrupo(int idGrupo, string usuario, string contenido, long? referenciaMensaje)
+        {
+            JObject prms = new JObject();
+            prms.Add("id_grupo", idGrupo);
+            //prms.Add("usuario", usuario);
+            prms.Add("contenido", contenido);
+            prms.Add("ref_mensaje", referenciaMensaje);
+
+            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+                NOMBRE_ENVIAR_MENSAJE_GRUPO,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
+
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
+        }
+
+        public Respuesta<Pagina<GrupoMensaje>> ListarMensajesGrupo(int idGrupo, long referenciaMensaje, PaginaParametros paginaParametros = null)
+        {
+            JObject prms = new JObject();
+            prms.Add("id_grupo", idGrupo);
+            if (paginaParametros != null)
+            {
+                prms.Add("pagina_parametros", JToken.FromObject(ModelsMapper.GetYPaginaParametrosFromModel(paginaParametros)));
+            }
+
+            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+                NOMBRE_LISTAR_MENSAJES_GRUPO,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YPagina<YGrupoMensaje>>>(rsp);
+
+            Pagina<GrupoMensaje> datos = null;
+            if (entityRsp.Datos != null)
+            {
+                datos = EntitiesMapper.GetPaginaFromEntity<GrupoMensaje, YGrupoMensaje>(entityRsp.Datos, EntitiesMapper.GetGrupoMensajeListFromEntity(entityRsp.Datos.Elementos));
+            }
+
+            return EntitiesMapper.GetRespuestaFromEntity<Pagina<GrupoMensaje>, YPagina<YGrupoMensaje>>(entityRsp, datos);
         }
     }
 }

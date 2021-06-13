@@ -1018,5 +1018,38 @@ namespace Risk.API.Mappers
             }
             return modelList;
         }
+
+        public static GrupoMensaje GetGrupoMensajeFromEntity(YGrupoMensaje entity)
+        {
+            GrupoMensaje model;
+            if (entity == null)
+            {
+                model = null;
+            }
+            else
+            {
+                model = new GrupoMensaje
+                {
+                    IdGrupoMensaje = entity.IdGrupoMensaje,
+                    IdGrupo = entity.IdGrupo,
+                    IdUsuario = entity.IdUsuario,
+                    AliasUsuario = entity.AliasUsuario,
+                    VersionAvatar = entity.VersionAvatar,
+                    Contenido = entity.Contenido,
+                    ReferenciaMensaje = entity.ReferenciaMensaje
+                };
+            }
+            return model;
+        }
+
+        public static List<GrupoMensaje> GetGrupoMensajeListFromEntity(List<YGrupoMensaje> entityList)
+        {
+            List<GrupoMensaje> modelList = new List<GrupoMensaje>();
+            foreach (var item in entityList)
+            {
+                modelList.Add(GetGrupoMensajeFromEntity(item));
+            }
+            return modelList;
+        }
     }
 }

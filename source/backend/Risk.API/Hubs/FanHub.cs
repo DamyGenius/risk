@@ -47,5 +47,14 @@ namespace Risk.API.Hubs
 
         public async Task ComentarPartido(int idPartido, string usuario, string contenido)
             => await Clients.Group($"partido-{idPartido}").SendAsync("comentarpartido", usuario, contenido);
+
+        public async Task AgregarAlChatGrupal(int idGrupo)
+            => await AgregarAlGrupo($"grupo-{idGrupo}");
+
+        public async Task SacarDelChatGrupal(int idGrupo)
+            => await SacarDelGrupo($"grupo-{idGrupo}");
+
+        public async Task MensajeChatGrupal(int idGrupo, string usuario, string contenido)
+            => await Clients.Group($"grupo-{idGrupo}").SendAsync("mensajechatgrupal", usuario, contenido);
     }
 }
