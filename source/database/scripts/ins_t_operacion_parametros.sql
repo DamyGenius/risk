@@ -471,6 +471,21 @@ insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO
 values (66, 'PAGINA_PARAMETROS', '0.1.0', 10, 'S', 'O', 'Y_PAGINA_PARAMETROS', null, 'N', null, null, null, null);
 
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE, VALORES_POSIBLES)
+values (67, 'ID_GRUPO', '0.1.0', 1, 'S', 'N', null, null, 'S', null, null, null, null);
+
+insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE, VALORES_POSIBLES)
+values (67, 'CONTENIDO', '0.1.0', 2, 'S', 'S', null, null, 'S', null, null, null, null);
+
+insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE, VALORES_POSIBLES)
+values (67, 'REF_MENSAJE', '0.1.0', 3, 'S', 'N', null, null, 'N', null, null, null, null);
+
+insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE, VALORES_POSIBLES)
+values (68, 'ID_GRUPO', '0.1.0', 1, 'S', 'N', null, null, 'S', null, null, null, null);
+
+insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE, VALORES_POSIBLES)
+values (68, 'PAGINA_PARAMETROS', '0.1.0', 10, 'S', 'O', 'Y_PAGINA_PARAMETROS', null, 'N', null, null, null, null);
+
+insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE, VALORES_POSIBLES)
 values (1000, 'PAGINA_PARAMETROS', '0.1.0', 100, 'S', 'O', 'Y_PAGINA_PARAMETROS', null, 'N', '{}', null, 'Parámetros para paginación de elementos', null);
 
 insert into t_operacion_parametros (ID_OPERACION, NOMBRE, VERSION, ORDEN, ACTIVO, TIPO_DATO, FORMATO, LONGITUD_MAXIMA, OBLIGATORIO, VALOR_DEFECTO, ETIQUETA, DETALLE, VALORES_POSIBLES)

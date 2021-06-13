@@ -190,4 +190,19 @@ values (66, 'C', null, null, 'SELECT a.id_reaccion,
  WHERE a.id_usuario = b.id_usuario
  ORDER BY id_reaccion', null);
 
+insert into t_servicios (ID_SERVICIO, TIPO, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION)
+values (67, 'T', null, null);
+
+insert into t_servicios (ID_SERVICIO, TIPO, CANTIDAD_EJECUCIONES, FECHA_ULTIMA_EJECUCION, CONSULTA_SQL, SQL_ULTIMA_EJECUCION)
+values (68, 'C', null, null, 'SELECT a.id_grupo_mensaje,
+       a.id_grupo,
+       a.id_usuario,
+       b.alias alias_usuario,
+       k_usuario.f_version_avatar(b.alias) version_avatar,
+       a.contenido,
+       a.ref_mensaje
+  FROM t_grupo_mensajes a, t_usuarios b
+ WHERE a.id_usuario = b.id_usuario
+ ORDER BY id_grupo_mensaje', null);
+
 prompt Done.
