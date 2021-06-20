@@ -395,6 +395,7 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
       k_trabajo.p_crear_o_editar_trabajo(i_id_trabajo => k_trabajo.c_partido_en_juego,
                                          i_parametros => '{"id_partido":"' ||
                                                          i_id_partido || '"}');
+      $if k_modulo.c_instalado_msj $then
       -- Notifica del partido en juego a todos los dispositivos suscriptos
       l_result := k_mensajeria.f_enviar_notificacion(i_titulo      => l_club_local ||
                                                                       ' vs. ' ||
@@ -402,6 +403,7 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
                                                      i_contenido   => 'El partido ' ||
                                                                       'está comenzando.',
                                                      i_suscripcion => 'default');
+      $end
     
     END IF;
   END;
@@ -474,6 +476,7 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
       k_trabajo.p_eliminar_trabajo(i_id_trabajo => k_trabajo.c_partido_en_juego,
                                    i_parametros => '{"id_partido":"' ||
                                                    i_id_partido || '"}');
+      $if k_modulo.c_instalado_msj $then
       -- Notifica del partido finalizado a todos los dispositivos suscriptos
       l_result := k_mensajeria.f_enviar_notificacion(i_titulo      => l_club_local ||
                                                                       ' vs. ' ||
@@ -483,6 +486,7 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
                                                                       l_goles_local || '-' ||
                                                                       l_goles_visitante || '.',
                                                      i_suscripcion => 'default');
+      $end
     END IF;
   END;
 
