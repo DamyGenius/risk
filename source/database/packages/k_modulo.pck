@@ -1,21 +1,25 @@
-CREATE OR REPLACE TRIGGER gb_usuarios
-  BEFORE INSERT OR UPDATE OR DELETE ON t_usuarios
-  FOR EACH ROW
-BEGIN
+CREATE OR REPLACE PACKAGE k_modulo IS
+
+  /**
+  Agrupa operaciones relacionadas con los módulos
+
+  %author jtsoya539 27/3/2020 16:58:36
+  */
+
   /*
   --------------------------------- MIT License ---------------------------------
   Copyright (c) 2019 jtsoya539
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in all
   copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,33 +30,15 @@ BEGIN
   -------------------------------------------------------------------------------
   */
 
-  -- Valida alias de usuario
-  IF inserting OR
-     (updating AND nvl(:new.alias, 'X') <> nvl(:old.alias, 'X')) THEN
-    IF NOT k_usuario.f_validar_alias(:new.alias) THEN
-      raise_application_error(-20000, 'Alias de usuario inválido');
-    END IF;
-  END IF;
+  -- Constantes
+  c_instalado_risk CONSTANT BOOLEAN := TRUE;
+  c_instalado_msj  CONSTANT BOOLEAN := FALSE;
 
-  $if k_modulo.c_instalado_msj $then
-  -- Valida dirección de correo
-  IF inserting OR (updating AND nvl(:new.direccion_correo, 'X') <>
-     nvl(:old.direccion_correo, 'X')) THEN
-    IF NOT k_mensajeria.f_validar_direccion_correo(:new.direccion_correo) THEN
-      raise_application_error(-20000,
-                              'Dirección de correo electrónico inválida');
-    END IF;
-  END IF;
-  $end
-
-  $if k_modulo.c_instalado_msj $then
-  -- Valida número de teléfono
-  IF inserting OR (updating AND nvl(:new.numero_telefono, 'X') <>
-     nvl(:old.numero_telefono, 'X')) THEN
-    IF NOT k_mensajeria.f_validar_numero_telefono(:new.numero_telefono) THEN
-      raise_application_error(-20000, 'Número de teléfono inválido');
-    END IF;
-  END IF;
-  $end
 END;
 /
+
+CREATE OR REPLACE PACKAGE BODY k_modulo IS
+
+END;
+/
+

@@ -65,10 +65,6 @@ prompt
 @@sequences/s_id_sesion.seq
 @@sequences/s_id_usuario.seq
 @@sequences/s_id_dispositivo.seq
-@@sequences/s_id_correo.seq
-@@sequences/s_id_correo_adjunto.seq
-@@sequences/s_id_mensaje.seq
-@@sequences/s_id_notificacion.seq
 
 @@sequences/s_id_partido.seq
 @@sequences/s_id_grupo.seq
@@ -107,10 +103,6 @@ prompt
 @@tables/t_dispositivo_ubicaciones.tab
 @@tables/t_sesiones.tab
 @@tables/t_usuario_claves.tab
-@@tables/t_correos.tab
-@@tables/t_correo_adjuntos.tab
-@@tables/t_mensajes.tab
-@@tables/t_notificaciones.tab
 @@tables/t_dato_definiciones.tab
 @@tables/t_datos.tab
 @@tables/t_archivo_definiciones.tab
@@ -162,9 +154,6 @@ prompt
 @@types/y_departamento.typ
 @@types/y_ciudad.typ
 @@types/y_barrio.typ
-@@types/y_correo.typ
-@@types/y_mensaje.typ
-@@types/y_notificacion.typ
 
 @@types/y_club.typ
 @@types/y_partido.typ
@@ -179,6 +168,7 @@ prompt
 prompt Creando paquetes...
 prompt -----------------------------------
 prompt
+@@packages/k_modulo.pck
 @@packages/k_auditoria.pck
 @@packages/k_archivo.pck
 @@packages/k_html.pck
@@ -188,7 +178,6 @@ prompt
 @@packages/k_sesion.pck
 @@packages/k_error.pck
 @@packages/k_dato.pck
-@@packages/k_mensajeria.pck
 @@packages/k_autenticacion.pck
 @@packages/k_autorizacion.pck
 @@packages/k_operacion.pck
@@ -197,7 +186,6 @@ prompt
 @@packages/k_trabajo.pck
 @@packages/k_servicio_aut.pck
 @@packages/k_servicio_gen.pck
-@@packages/k_servicio_msj.pck
 @@packages/k_reporte_gen.pck
 
 @@packages/k_servicio_fan.pck
@@ -227,10 +215,6 @@ prompt
 @@triggers/gs_sesiones.trg
 @@triggers/gs_usuarios.trg
 @@triggers/gs_dispositivos.trg
-@@triggers/gs_correos.trg
-@@triggers/gs_correo_adjuntos.trg
-@@triggers/gs_mensajes.trg
-@@triggers/gs_notificaciones.trg
 @@triggers/gb_operaciones.trg
 @@triggers/gb_operacion_parametros.trg
 @@triggers/gb_reportes.trg
@@ -241,7 +225,6 @@ prompt
 @@triggers/gb_personas.trg
 @@triggers/gb_datos.trg
 @@triggers/gb_archivos.trg
-@@triggers/gb_mensajes.trg
 @@triggers/gf_operaciones.trg
 
 @@triggers/gf_planteles.trg
@@ -256,7 +239,6 @@ prompt
 prompt Ejecutando scripts...
 prompt -----------------------------------
 prompt
-@@install_audit.sql
 @@compile_schema.sql
 @@scripts/ins_t_modulos.sql
 @@scripts/ins_t_aplicaciones.sql

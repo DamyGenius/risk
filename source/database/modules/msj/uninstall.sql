@@ -22,7 +22,7 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-spool install.log
+spool uninstall.log
 
 set feedback off
 set define off
@@ -41,27 +41,73 @@ prompt ###################################
 
 prompt
 prompt ===================================
-prompt Migracion iniciada
+prompt Desinstalacion iniciada
 prompt ===================================
 prompt
 
 prompt
-prompt Ejecutando migracion...
+prompt Borrando paquetes...
 prompt -----------------------------------
 prompt
-@@upd_t_modulos.sql
+drop package k_servicio_msj;
+drop package k_mensajeria;
 
 prompt
-prompt Registrando migracion...
+prompt Borrando types...
 prompt -----------------------------------
 prompt
-@@ins_t_migraciones.sql
+drop type y_notificacion force;
+drop type y_mensaje force;
+drop type y_correo force;
+
+prompt
+prompt Borrando vistas...
+prompt -----------------------------------
+prompt
+
+prompt
+prompt Borrando tablas...
+prompt -----------------------------------
+prompt
+drop table t_notificaciones cascade constraints;
+drop table t_mensajes cascade constraints;
+drop table t_correo_adjuntos cascade constraints;
+drop table t_correos cascade constraints;
+
+prompt
+prompt Borrando secuencias...
+prompt -----------------------------------
+prompt
+drop sequence s_id_correo;
+drop sequence s_id_correo_adjunto;
+drop sequence s_id_mensaje;
+drop sequence s_id_notificacion;
+
+prompt
+prompt Desinstalando dependencias...
+prompt -----------------------------------
+prompt
+@@uninstall_dependencies.sql
+
+prompt
+prompt Vaciando papelera de reciclaje...
+prompt -----------------------------------
+prompt
+purge recyclebin;
+
+prompt
+prompt Ejecutando scripts...
+prompt -----------------------------------
+prompt
+@@../../packages/k_modulo.pck
+@@../../compile_schema.sql
+@@scripts/del_t_modulos.sql
 commit;
 /
 
 prompt
 prompt ===================================
-prompt Migracion finalizada
+prompt Desinstalacion finalizada
 prompt ===================================
 prompt
 

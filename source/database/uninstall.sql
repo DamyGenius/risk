@@ -61,7 +61,6 @@ drop package k_datos_fan;
 drop package k_servicio_fan;
 
 drop package k_reporte_gen;
-drop package k_servicio_msj;
 drop package k_servicio_gen;
 drop package k_servicio_aut;
 drop package k_trabajo;
@@ -70,7 +69,6 @@ drop package k_servicio;
 drop package k_operacion;
 drop package k_autorizacion;
 drop package k_autenticacion;
-drop package k_mensajeria;
 drop package k_dato;
 drop package k_error;
 drop package k_sesion;
@@ -80,6 +78,7 @@ drop package k_aplicacion;
 drop package k_html;
 drop package k_archivo;
 drop package k_auditoria;
+drop package k_modulo;
 drop package k_sistema;
 drop package k_util;
 
@@ -96,9 +95,6 @@ drop type y_partido_prediccion force;
 drop type y_partido force;
 drop type y_club force;
 
-drop type y_notificacion force;
-drop type y_mensaje force;
-drop type y_correo force;
 drop type y_barrio force;
 drop type y_ciudad force;
 drop type y_departamento force;
@@ -146,10 +142,6 @@ drop table t_archivos cascade constraints;
 drop table t_archivo_definiciones cascade constraints;
 drop table t_datos cascade constraints;
 drop table t_dato_definiciones cascade constraints;
-drop table t_notificaciones cascade constraints;
-drop table t_mensajes cascade constraints;
-drop table t_correo_adjuntos cascade constraints;
-drop table t_correos cascade constraints;
 drop table t_usuario_claves cascade constraints;
 drop table t_sesiones cascade constraints;
 drop table t_dispositivo_ubicaciones cascade constraints;
@@ -198,10 +190,6 @@ drop sequence s_id_operacion_log;
 drop sequence s_id_sesion;
 drop sequence s_id_usuario;
 drop sequence s_id_dispositivo;
-drop sequence s_id_correo;
-drop sequence s_id_correo_adjunto;
-drop sequence s_id_mensaje;
-drop sequence s_id_notificacion;
 
 prompt
 prompt Desinstalando dependencias...

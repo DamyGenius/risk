@@ -41,27 +41,77 @@ prompt ###################################
 
 prompt
 prompt ===================================
-prompt Migracion iniciada
+prompt Instalacion iniciada
 prompt ===================================
 prompt
 
 prompt
-prompt Ejecutando migracion...
+prompt Instalando dependencias...
 prompt -----------------------------------
 prompt
-@@upd_t_modulos.sql
+@@install_dependencies.sql
 
 prompt
-prompt Registrando migracion...
+prompt Creando secuencias...
 prompt -----------------------------------
 prompt
-@@ins_t_migraciones.sql
+@@sequences/s_id_correo.seq
+@@sequences/s_id_correo_adjunto.seq
+@@sequences/s_id_mensaje.seq
+@@sequences/s_id_notificacion.seq
+
+prompt
+prompt Creando tablas...
+prompt -----------------------------------
+prompt
+@@tables/t_correos.tab
+@@tables/t_correo_adjuntos.tab
+@@tables/t_mensajes.tab
+@@tables/t_notificaciones.tab
+
+prompt
+prompt Creando vistas...
+prompt -----------------------------------
+prompt
+
+prompt
+prompt Creando types...
+prompt -----------------------------------
+prompt
+@@types/y_correo.typ
+@@types/y_mensaje.typ
+@@types/y_notificacion.typ
+
+prompt
+prompt Creando paquetes...
+prompt -----------------------------------
+prompt
+@@packages/k_mensajeria.pck
+@@packages/k_servicio_msj.pck
+
+prompt
+prompt Creando triggers...
+prompt -----------------------------------
+prompt
+@@triggers/gs_correos.trg
+@@triggers/gs_correo_adjuntos.trg
+@@triggers/gs_mensajes.trg
+@@triggers/gs_notificaciones.trg
+@@triggers/gb_mensajes.trg
+
+prompt
+prompt Ejecutando scripts...
+prompt -----------------------------------
+prompt
+@@packages/k_modulo.pck
+@@../../compile_schema.sql
+@@scripts/ins_t_modulos.sql
 commit;
 /
 
 prompt
 prompt ===================================
-prompt Migracion finalizada
+prompt Instalacion finalizada
 prompt ===================================
 prompt
 
