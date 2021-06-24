@@ -34,6 +34,7 @@ namespace Risk.API.Helpers
     {
         public const string SUSCRIPCION_DEFECTO = "default";
         public const string SUSCRIPCION_USUARIO = "user";
+        public const string SUSCRIPCION_GRUPO = "group";
 
         public static void RegistrarDispositivo(string tokenDispositivo, IAutService autService, INotificationHubClientConnection notificationHubClientConnection)
         {
@@ -121,6 +122,11 @@ namespace Risk.API.Helpers
                 reg.Tags.Add(newTag);
                 await notificationHubClientConnection.Hub.UpdateRegistrationAsync(reg);
             }
+        }
+
+        public static async Task AgregarSuscripcionGrupo(string usuario, string idGrupo, INotificationHubClientConnection notificationHubClientConnection)
+        {
+            await AgregarSuscripcion($"{SUSCRIPCION_USUARIO}{usuario}", $"{SUSCRIPCION_GRUPO}{idGrupo}", notificationHubClientConnection);
         }
     }
 }

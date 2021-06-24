@@ -32,10 +32,13 @@ CREATE OR REPLACE PACKAGE k_dispositivo IS
 
   c_suscripcion_defecto CONSTANT VARCHAR2(120) := 'default';
   c_suscripcion_usuario CONSTANT VARCHAR2(120) := 'user';
+  c_suscripcion_grupo   CONSTANT VARCHAR2(120) := 'group';
 
   FUNCTION f_suscripcion_defecto RETURN VARCHAR2;
 
   FUNCTION f_suscripcion_usuario(i_id_usuario IN NUMBER) RETURN VARCHAR2;
+
+  FUNCTION f_suscripcion_grupo(i_id_grupo IN NUMBER) RETURN VARCHAR2;
 
   FUNCTION f_id_dispositivo(i_token_dispositivo IN VARCHAR2) RETURN NUMBER;
 
@@ -83,6 +86,11 @@ CREATE OR REPLACE PACKAGE BODY k_dispositivo IS
   FUNCTION f_suscripcion_usuario(i_id_usuario IN NUMBER) RETURN VARCHAR2 IS
   BEGIN
     RETURN c_suscripcion_usuario || '_' || to_char(i_id_usuario);
+  END;
+
+  FUNCTION f_suscripcion_grupo(i_id_grupo IN NUMBER) RETURN VARCHAR2 IS
+  BEGIN
+    RETURN c_suscripcion_grupo || '_' || to_char(i_id_grupo);
   END;
 
   FUNCTION f_id_dispositivo(i_token_dispositivo IN VARCHAR2) RETURN NUMBER IS
