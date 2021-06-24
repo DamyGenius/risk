@@ -223,7 +223,7 @@ namespace Risk.API.Controllers
             {
                 var idUsuario = respuesta.Datos.IdUsuarioAdministrador.ToString();
                 var idGrupo = respuesta.Datos.IdGrupo.ToString();
-                NotificationHubHelper.AgregarSuscripcionGrupo(idUsuario, idGrupo, _notificationHub);
+                _ = NotificationHubHelper.AgregarSuscripcionGrupo(idUsuario, idGrupo, _notificationHub);
             }
             return ProcesarRespuesta(respuesta);
         }
@@ -308,7 +308,7 @@ namespace Risk.API.Controllers
             {
                 var idUsuario = respuesta.Datos.Contenido;
                 var idGrupoS = idGrupo.ToString();
-                NotificationHubHelper.AgregarSuscripcionGrupo(idUsuario, idGrupoS, _notificationHub);
+                _ = NotificationHubHelper.AgregarSuscripcionGrupo(idUsuario, idGrupoS, _notificationHub);
             }
             return ProcesarRespuesta(respuesta);
         }
