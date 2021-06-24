@@ -46,16 +46,12 @@ namespace Risk.API.Controllers
     {
         private readonly IFanService _fanService;
         private readonly IGenService _genService;
-        private readonly IAutService _autService;
-        private readonly INotificationHubClientConnection _notificationHub;
         private readonly IHubContext<FanHub> _hubContext;
 
-        public FanController(IFanService fanService, IGenService genService, IAutService autService, INotificationHubClientConnection notificationHub, IHubContext<FanHub> hubContext, IConfiguration configuration) : base(configuration)
+        public FanController(IFanService fanService, IGenService genService, IHubContext<FanHub> hubContext, IConfiguration configuration) : base(configuration)
         {
             _fanService = fanService;
             _genService = genService;
-            _autService = autService;
-            _notificationHub = notificationHub;
             _hubContext = hubContext;
         }
 
@@ -219,12 +215,6 @@ namespace Risk.API.Controllers
         public IActionResult RegistrarGrupo([FromBody] RegistrarGrupoRequestBody requestBody)
         {
             var respuesta = _fanService.RegistrarGrupo(requestBody.Descripcion, requestBody.Tipo, requestBody.IdJornadaInicio, requestBody.TodosInvitan, requestBody.IdClub);
-            if (respuesta.Codigo.Equals(RiskConstants.CODIGO_OK))
-            {
-                var idUsuario = respuesta.Datos.IdUsuarioAdministrador.ToString();
-                var idGrupo = respuesta.Datos.IdGrupo.ToString();
-                _ = NotificationHubHelper.AgregarSuscripcionGrupo(idUsuario, idGrupo, _notificationHub);
-            }
             return ProcesarRespuesta(respuesta);
         }
 
@@ -304,12 +294,6 @@ namespace Risk.API.Controllers
             [FromQuery, SwaggerParameter(Description = "Respuesta a Invitación (ACEPTAR/RECHAZAR)", Required = true)] RespuestaInvitacion respuestaInvitacion)
         {
             var respuesta = _fanService.ResponderInvitacion(idGrupo, respuestaInvitacion);
-            if (respuestaInvitacion.Equals(RespuestaInvitacion.ACEPTAR) && respuesta.Codigo.Equals(RiskConstants.CODIGO_OK))
-            {
-                var idUsuario = respuesta.Datos.Contenido;
-                var idGrupoS = idGrupo.ToString();
-                _ = NotificationHubHelper.AgregarSuscripcionGrupo(idUsuario, idGrupoS, _notificationHub);
-            }
             return ProcesarRespuesta(respuesta);
         }
 
