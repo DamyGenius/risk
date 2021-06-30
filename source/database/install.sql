@@ -78,6 +78,7 @@ prompt Creando tablas...
 prompt -----------------------------------
 prompt
 @@tables/t_modulos.tab
+@@tables/t_dominios.tab
 @@tables/t_aplicaciones.tab
 @@tables/t_errores.tab
 @@tables/t_significados.tab
@@ -242,17 +243,12 @@ prompt -----------------------------------
 prompt
 @@compile_schema.sql
 @@scripts/ins_t_modulos.sql
+@@scripts/ins_t_dominios.sql
 @@scripts/ins_t_aplicaciones.sql
 @@scripts/ins_t_significados.sql
 @@scripts/ins_t_errores.sql
 @@scripts/ins_t_parametros.sql
-@@scripts/ins_t_operaciones.sql
-@@scripts/ins_t_operacion_parametros.sql
-@@scripts/ins_t_reportes.sql
-@@scripts/ins_t_servicios.sql
-@@scripts/ins_t_trabajos.sql
 @@scripts/ins_t_roles.sql
-@@scripts/ins_t_rol_permisos.sql
 @@scripts/ins_t_paises.sql
 @@scripts/ins_t_departamentos.sql
 @@scripts/ins_t_archivo_definiciones.sql
@@ -260,6 +256,7 @@ prompt
 @@scripts/ins_t_usuarios.sql
 @@scripts/ins_t_usuario_claves.sql
 @@scripts/ins_t_rol_usuarios.sql
+@@scripts/operations/install.sql
 
 @@scripts/ins_t_divisiones.sql
 @@scripts/ins_t_clubes.sql

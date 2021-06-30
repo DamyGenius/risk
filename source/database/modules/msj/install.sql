@@ -107,7 +107,9 @@ prompt
 @@packages/k_modulo.pck
 @@../../compile_schema.sql
 @@scripts/ins_t_modulos.sql
+@@scripts/ins_t_dominios.sql
 @@scripts/ins_t_notificacion_plantillas.sql
+@@scripts/operations/install.sql
 commit;
 /
 

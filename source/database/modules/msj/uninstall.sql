@@ -102,6 +102,8 @@ prompt -----------------------------------
 prompt
 @@../../packages/k_modulo.pck
 @@../../compile_schema.sql
+@@scripts/operations/uninstall.sql
+@@scripts/del_t_dominios.sql
 @@scripts/del_t_modulos.sql
 commit;
 /
