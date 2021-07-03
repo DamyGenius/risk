@@ -188,7 +188,7 @@ begin
    AND (c.fecha_aceptacion <= a.fecha)
    AND c.estado = 'A'
    AND c.aceptado = 'S'
- ORDER BY id_grupo_mensaje!';
+ ORDER BY id_grupo_mensaje DESC!';
   l_clob(6) :=q'!!';
 
   insert into t_servicios

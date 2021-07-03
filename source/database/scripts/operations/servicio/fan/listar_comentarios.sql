@@ -231,7 +231,7 @@ begin
        a.ref_comentario
   FROM t_comentarios a, t_usuarios b
  WHERE a.id_usuario = b.id_usuario
- ORDER BY id_comentario!';
+ ORDER BY id_comentario DESC!';
   l_clob(6) :=q'!!';
 
   insert into t_servicios
