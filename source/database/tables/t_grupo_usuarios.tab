@@ -6,7 +6,8 @@ create table T_GRUPO_USUARIOS
   ranking          NUMBER(6),
   estado           VARCHAR2(1),
   token_activacion VARCHAR2(50),
-  aceptado         VARCHAR2(1) default 'N'
+  aceptado         VARCHAR2(1) default 'N',
+  fecha_aceptacion TIMESTAMP(2) WITH TIME ZONE
 )
 ;
 comment on table T_GRUPO_USUARIOS
@@ -21,4 +22,3 @@ alter table T_GRUPO_USUARIOS
 alter table T_GRUPO_USUARIOS
   add constraint FK_GRUPO_USUARIOS_USUARIOS foreign key (ID_USUARIO)
   references T_USUARIOS (ID_USUARIO);
-

@@ -4,7 +4,8 @@ create table T_GRUPO_MENSAJES
   id_grupo         NUMBER not null,
   id_usuario       NUMBER(10) not null,
   contenido        VARCHAR2(2000),
-  ref_mensaje      NUMBER
+  ref_mensaje      NUMBER,
+  fecha            TIMESTAMP(2) WITH TIME ZONE default CURRENT_TIMESTAMP not null
 )
 ;
 comment on table T_GRUPO_MENSAJES
@@ -16,9 +17,11 @@ comment on column T_GRUPO_MENSAJES.id_grupo
 comment on column T_GRUPO_MENSAJES.id_usuario
   is 'Identificador del usuario';
 comment on column T_GRUPO_MENSAJES.contenido
-  is 'Contenido del comentario';
+  is 'Contenido del mensaje';
 comment on column T_GRUPO_MENSAJES.ref_mensaje
   is 'Identificador del mensaje superior, en caso de ser respuesta de otro mensaje';
+comment on column T_GRUPO_MENSAJES.fecha
+  is 'Fecha del mensaje';
 alter table T_GRUPO_MENSAJES
   add constraint PK_GRUPO_MENSAJES primary key (ID_GRUPO_MENSAJE);
 alter table T_GRUPO_MENSAJES
