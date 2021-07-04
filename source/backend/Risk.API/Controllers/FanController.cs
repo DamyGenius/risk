@@ -354,7 +354,7 @@ namespace Risk.API.Controllers
         }
 
         [HttpGet("ListarComentariosPartido")]
-        [SwaggerOperation(OperationId = "ListarComentariosPartido", Summary = "ListarComentariosPartido", Description = "Obtiene lista de comentarios de un partido")]
+        [SwaggerOperation(OperationId = "ListarComentariosPartido", Summary = "ListarComentariosPartido", Description = "Obtiene lista de comentarios de un partido en orden descendente")]
         [Produces(MediaTypeNames.Application.Json)]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<ComentarioPartido>>))]
         public IActionResult ListarComentariosPartido([FromQuery, SwaggerParameter(Description = "Identificador del partido", Required = true)] int idPartido,
@@ -421,7 +421,7 @@ namespace Risk.API.Controllers
         }
 
         [HttpGet("ListarMensajesGrupo")]
-        [SwaggerOperation(OperationId = "ListarMensajesGrupo", Summary = "ListarMensajesGrupo", Description = "Obtiene lista de mensajes de un grupo")]
+        [SwaggerOperation(OperationId = "ListarMensajesGrupo", Summary = "ListarMensajesGrupo", Description = "Obtiene lista de mensajes de un grupo en orden descendente")]
         [Produces(MediaTypeNames.Application.Json)]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<GrupoMensaje>>))]
         public IActionResult ListarMensajesGrupo([FromQuery, SwaggerParameter(Description = "Identificador del grupo", Required = true)] int idGrupo,
