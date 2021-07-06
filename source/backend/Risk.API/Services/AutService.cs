@@ -100,7 +100,7 @@ namespace Risk.API.Services
             prms.Add("access_token", accessToken);
             prms.Add("refresh_token", refreshToken);
             prms.Add("token_dispositivo", tokenDispositivo);
-            prms.Add("origen",  ModelsMapper.GetValueFromOrigenSesionEnum(origen));
+            prms.Add("origen", ModelsMapper.GetValueFromOrigenSesionEnum(origen));
             prms.Add("dato_externo", datoExterno);
 
             string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
@@ -109,7 +109,7 @@ namespace Risk.API.Services
                 prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YSesion>>(rsp);
 
-            return EntitiesMapper.GetRespuestaFromEntity<Sesion, YSesion>(entityRsp, EntitiesMapper.GetSesionFromEntity(entityRsp.Datos));
+            return EntitiesMapper.GetRespuestaFromEntity<Sesion, YSesion>(entityRsp, EntitiesMapper.GetModelFromEntity<Sesion, YSesion>(entityRsp.Datos));
         }
 
         public Respuesta<Sesion> RefrescarSesion(string accessTokenAntiguo, string refreshTokenAntiguo, string accessTokenNuevo, string refreshTokenNuevo, OrigenSesion? origen = null, string datoExterno = null)
@@ -119,7 +119,7 @@ namespace Risk.API.Services
             prms.Add("refresh_token_antiguo", refreshTokenAntiguo);
             prms.Add("access_token_nuevo", accessTokenNuevo);
             prms.Add("refresh_token_nuevo", refreshTokenNuevo);
-            prms.Add("origen",  ModelsMapper.GetValueFromOrigenSesionEnum(origen));
+            prms.Add("origen", ModelsMapper.GetValueFromOrigenSesionEnum(origen));
             prms.Add("dato_externo", datoExterno);
 
             string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
@@ -128,7 +128,7 @@ namespace Risk.API.Services
                 prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YSesion>>(rsp);
 
-            return EntitiesMapper.GetRespuestaFromEntity<Sesion, YSesion>(entityRsp, EntitiesMapper.GetSesionFromEntity(entityRsp.Datos));
+            return EntitiesMapper.GetRespuestaFromEntity<Sesion, YSesion>(entityRsp, EntitiesMapper.GetModelFromEntity<Sesion, YSesion>(entityRsp.Datos));
         }
 
         public Respuesta<Dato> RegistrarClave(string usuario, string clave, TipoClave tipoClave)
@@ -157,7 +157,7 @@ namespace Risk.API.Services
             prms.Add("direccion_correo", direccionCorreo);
             prms.Add("numero_telefono", numeroTelefono);
             prms.Add("id_club", idClub);
-            prms.Add("origen",  ModelsMapper.GetValueFromOrigenSesionEnum(origen));
+            prms.Add("origen", ModelsMapper.GetValueFromOrigenSesionEnum(origen));
             prms.Add("id_externo", idExterno);
 
             string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
@@ -210,7 +210,7 @@ namespace Risk.API.Services
                 prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YUsuario>>(rsp);
 
-            return EntitiesMapper.GetRespuestaFromEntity<Usuario, YUsuario>(entityRsp, EntitiesMapper.GetUsuarioFromEntity(entityRsp.Datos));
+            return EntitiesMapper.GetRespuestaFromEntity<Usuario, YUsuario>(entityRsp, EntitiesMapper.GetModelFromEntity<Usuario, YUsuario>(entityRsp.Datos));
         }
 
         public Respuesta<Dato> ValidarClaveAplicacion(string claveAplicacion)
@@ -233,7 +233,7 @@ namespace Risk.API.Services
 
             if (dispositivo != null)
             {
-                prms.Add("dispositivo", JToken.FromObject(ModelsMapper.GetYDispositivoFromModel(dispositivo)));
+                prms.Add("dispositivo", JToken.FromObject(ModelsMapper.GetEntityFromModel<Dispositivo, YDispositivo>(dispositivo)));
             }
 
             string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
@@ -256,7 +256,7 @@ namespace Risk.API.Services
                 prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDispositivo>>(rsp);
 
-            return EntitiesMapper.GetRespuestaFromEntity<Dispositivo, YDispositivo>(entityRsp, EntitiesMapper.GetDispositivoFromEntity(entityRsp.Datos));
+            return EntitiesMapper.GetRespuestaFromEntity<Dispositivo, YDispositivo>(entityRsp, EntitiesMapper.GetModelFromEntity<Dispositivo, YDispositivo>(entityRsp.Datos));
         }
 
         public Respuesta<Dato> RegistrarUbicacion(string tokenDispositivo, double latitud, double longitud)

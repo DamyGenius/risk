@@ -132,7 +132,7 @@ namespace Risk.API.Services
             Pagina<Significado> datos = null;
             if (entityRsp.Datos != null)
             {
-                datos = EntitiesMapper.GetPaginaFromEntity<Significado, YSignificado>(entityRsp.Datos, EntitiesMapper.GetSignificadoListFromEntity(entityRsp.Datos.Elementos));
+                datos = EntitiesMapper.GetPaginaFromEntity<Significado, YSignificado>(entityRsp.Datos, EntitiesMapper.GetModelListFromEntity<Significado, YSignificado>(entityRsp.Datos.Elementos));
             }
 
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<Significado>, YPagina<YSignificado>>(entityRsp, datos);
@@ -157,7 +157,7 @@ namespace Risk.API.Services
             Pagina<Pais> datos = null;
             if (entityRsp.Datos != null)
             {
-                datos = EntitiesMapper.GetPaginaFromEntity<Pais, YPais>(entityRsp.Datos, EntitiesMapper.GetPaisListFromEntity(entityRsp.Datos.Elementos));
+                datos = EntitiesMapper.GetPaginaFromEntity<Pais, YPais>(entityRsp.Datos, EntitiesMapper.GetModelListFromEntity<Pais, YPais>(entityRsp.Datos.Elementos));
             }
 
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<Pais>, YPagina<YPais>>(entityRsp, datos);
@@ -183,7 +183,7 @@ namespace Risk.API.Services
             Pagina<Departamento> datos = null;
             if (entityRsp.Datos != null)
             {
-                datos = EntitiesMapper.GetPaginaFromEntity<Departamento, YDepartamento>(entityRsp.Datos, EntitiesMapper.GetDepartamentoListFromEntity(entityRsp.Datos.Elementos));
+                datos = EntitiesMapper.GetPaginaFromEntity<Departamento, YDepartamento>(entityRsp.Datos, EntitiesMapper.GetModelListFromEntity<Departamento, YDepartamento>(entityRsp.Datos.Elementos));
             }
 
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<Departamento>, YPagina<YDepartamento>>(entityRsp, datos);
@@ -210,7 +210,7 @@ namespace Risk.API.Services
             Pagina<Ciudad> datos = null;
             if (entityRsp.Datos != null)
             {
-                datos = EntitiesMapper.GetPaginaFromEntity<Ciudad, YCiudad>(entityRsp.Datos, EntitiesMapper.GetCiudadListFromEntity(entityRsp.Datos.Elementos));
+                datos = EntitiesMapper.GetPaginaFromEntity<Ciudad, YCiudad>(entityRsp.Datos, EntitiesMapper.GetModelListFromEntity<Ciudad, YCiudad>(entityRsp.Datos.Elementos));
             }
 
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<Ciudad>, YPagina<YCiudad>>(entityRsp, datos);
@@ -238,7 +238,7 @@ namespace Risk.API.Services
             Pagina<Barrio> datos = null;
             if (entityRsp.Datos != null)
             {
-                datos = EntitiesMapper.GetPaginaFromEntity<Barrio, YBarrio>(entityRsp.Datos, EntitiesMapper.GetBarrioListFromEntity(entityRsp.Datos.Elementos));
+                datos = EntitiesMapper.GetPaginaFromEntity<Barrio, YBarrio>(entityRsp.Datos, EntitiesMapper.GetModelListFromEntity<Barrio, YBarrio>(entityRsp.Datos.Elementos));
             }
 
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<Barrio>, YPagina<YBarrio>>(entityRsp, datos);
@@ -263,7 +263,7 @@ namespace Risk.API.Services
             Pagina<Error> datos = null;
             if (entityRsp.Datos != null)
             {
-                datos = EntitiesMapper.GetPaginaFromEntity<Error, YError>(entityRsp.Datos, EntitiesMapper.GetErrorListFromEntity(entityRsp.Datos.Elementos));
+                datos = EntitiesMapper.GetPaginaFromEntity<Error, YError>(entityRsp.Datos, EntitiesMapper.GetModelListFromEntity<Error, YError>(entityRsp.Datos.Elementos));
             }
 
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<Error>, YPagina<YError>>(entityRsp, datos);
@@ -289,7 +289,7 @@ namespace Risk.API.Services
             Pagina<Aplicacion> datos = null;
             if (entityRsp.Datos != null)
             {
-                datos = EntitiesMapper.GetPaginaFromEntity<Aplicacion, SqlAplicacion>(entityRsp.Datos, EntitiesMapper.GetAplicacionListFromEntity(entityRsp.Datos.Elementos));
+                datos = EntitiesMapper.GetPaginaFromEntity<Aplicacion, SqlAplicacion>(entityRsp.Datos, EntitiesMapper.GetModelListFromEntity<Aplicacion, SqlAplicacion>(entityRsp.Datos.Elementos));
             }
 
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<Aplicacion>, YPagina<SqlAplicacion>>(entityRsp, datos);
@@ -309,7 +309,7 @@ namespace Risk.API.Services
                 prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YArchivo>>(rsp);
 
-            return EntitiesMapper.GetRespuestaFromEntity<Archivo, YArchivo>(entityRsp, EntitiesMapper.GetArchivoFromEntity(entityRsp.Datos));
+            return EntitiesMapper.GetRespuestaFromEntity<Archivo, YArchivo>(entityRsp, EntitiesMapper.GetModelFromEntity<Archivo, YArchivo>(entityRsp.Datos));
         }
 
         public Respuesta<Dato> GuardarArchivo(string tabla, string campo, string referencia, Archivo archivo)
@@ -321,7 +321,7 @@ namespace Risk.API.Services
 
             if (archivo != null)
             {
-                prms.Add("archivo", JToken.FromObject(ModelsMapper.GetYArchivoFromModel(archivo)));
+                prms.Add("archivo", JToken.FromObject(ModelsMapper.GetEntityFromModel<Archivo, YArchivo>(archivo)));
             }
 
             string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
@@ -358,7 +358,7 @@ namespace Risk.API.Services
                 prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YArchivo>>(rsp);
 
-            return EntitiesMapper.GetRespuestaFromEntity<Archivo, YArchivo>(entityRsp, EntitiesMapper.GetArchivoFromEntity(entityRsp.Datos));
+            return EntitiesMapper.GetRespuestaFromEntity<Archivo, YArchivo>(entityRsp, EntitiesMapper.GetModelFromEntity<Archivo, YArchivo>(entityRsp.Datos));
         }
 
         public Respuesta<Archivo> ReporteListarSignificados(FormatoReporte formato, string dominio)
@@ -373,7 +373,7 @@ namespace Risk.API.Services
                 prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YArchivo>>(rsp);
 
-            return EntitiesMapper.GetRespuestaFromEntity<Archivo, YArchivo>(entityRsp, EntitiesMapper.GetArchivoFromEntity(entityRsp.Datos));
+            return EntitiesMapper.GetRespuestaFromEntity<Archivo, YArchivo>(entityRsp, EntitiesMapper.GetModelFromEntity<Archivo, YArchivo>(entityRsp.Datos));
         }
     }
 }

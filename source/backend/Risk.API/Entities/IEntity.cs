@@ -22,26 +22,12 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-using Risk.API.Entities;
-using Swashbuckle.AspNetCore.Annotations;
+using Risk.API.Models;
 
-namespace Risk.API.Models
+namespace Risk.API.Entities
 {
-    [SwaggerSchema("Plantilla de notificaciones push")]
-    public class Plantilla : IModel
+    public interface IEntity
     {
-        [SwaggerSchema("Contenido de la plantilla")]
-        public string Contenido { get; set; }
-        [SwaggerSchema("Nombre de la plantilla")]
-        public string Nombre { get; set; }
-
-        public IEntity ConvertToEntity()
-        {
-            return new YPlantilla
-            {
-                Contenido = this.Contenido,
-                Nombre = this.Nombre
-            };
-        }
+        IModel ConvertToModel();
     }
 }
