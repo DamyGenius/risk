@@ -72,6 +72,8 @@ namespace Risk.API.Entities
                 NumeroTelefono = this.NumeroTelefono,
                 VersionAvatar = this.VersionAvatar,
                 Origen = EntitiesMapper.GetOrigenSesionEnumFromValue(this.Origen),
+                Puntos = this.Puntos,
+                Ranking = this.Ranking,
                 Roles = EntitiesMapper.GetModelListFromEntity<Rol, YRol>(this.Roles)
             };
         }
