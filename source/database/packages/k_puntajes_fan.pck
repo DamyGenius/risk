@@ -397,12 +397,26 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
                                                          i_id_partido || '"}');
       $if k_modulo.c_instalado_msj $then
       -- Notifica del partido en juego a todos los dispositivos suscriptos
-      l_result := k_mensajeria.f_enviar_notificacion(i_titulo      => l_club_local ||
-                                                                      ' vs. ' ||
-                                                                      l_club_visitante,
-                                                     i_contenido   => 'El partido ' ||
-                                                                      'está comenzando.',
-                                                     i_suscripcion => 'default');
+      DECLARE
+        l_json_object json_object_t;
+        l_result      PLS_INTEGER;
+      BEGIN
+        l_json_object := NEW json_object_t();
+        l_json_object.put('tipo', 'PARTIDO'); --TODO: convertir a constante
+        l_json_object.put('identificador', i_id_partido);
+      
+        l_result := k_mensajeria.f_enviar_notificacion(i_titulo      => l_club_local ||
+                                                                        ' vs. ' ||
+                                                                        l_club_visitante,
+                                                       i_contenido   => 'El partido ' ||
+                                                                        'está comenzando.',
+                                                       i_datos_extra => l_json_object.to_clob,
+                                                       i_suscripcion => 'ESPECIAL' || '&&' || --TODO: convertir a constante
+                                                                        'default');
+      EXCEPTION
+        WHEN OTHERS THEN
+          NULL;
+      END;
       $end
     
     END IF;
@@ -478,14 +492,28 @@ CREATE OR REPLACE PACKAGE BODY k_puntajes_fan IS
                                                    i_id_partido || '"}');
       $if k_modulo.c_instalado_msj $then
       -- Notifica del partido finalizado a todos los dispositivos suscriptos
-      l_result := k_mensajeria.f_enviar_notificacion(i_titulo      => l_club_local ||
-                                                                      ' vs. ' ||
-                                                                      l_club_visitante,
-                                                     i_contenido   => 'El partido ' ||
-                                                                      'finalizó ' ||
-                                                                      l_goles_local || '-' ||
-                                                                      l_goles_visitante || '.',
-                                                     i_suscripcion => 'default');
+      DECLARE
+        l_json_object json_object_t;
+        l_result      PLS_INTEGER;
+      BEGIN
+        l_json_object := NEW json_object_t();
+        l_json_object.put('tipo', 'PARTIDO'); --TODO: convertir a constante
+        l_json_object.put('identificador', i_id_partido);
+      
+        l_result := k_mensajeria.f_enviar_notificacion(i_titulo      => l_club_local ||
+                                                                        ' vs. ' ||
+                                                                        l_club_visitante,
+                                                       i_contenido   => 'El partido ' ||
+                                                                        'finalizó ' ||
+                                                                        l_goles_local || '-' ||
+                                                                        l_goles_visitante || '.',
+                                                       i_datos_extra => l_json_object.to_clob,
+                                                       i_suscripcion => 'ESPECIAL' || '&&' || --TODO: convertir a constante
+                                                                        'default');
+      EXCEPTION
+        WHEN OTHERS THEN
+          NULL;
+      END;
       $end
     END IF;
   END;
