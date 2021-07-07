@@ -180,7 +180,9 @@ begin
        b.alias alias_usuario,
        k_usuario.f_version_avatar(b.alias) version_avatar,
        a.contenido,
-       a.ref_mensaje
+       a.ref_mensaje,
+       CAST(a.fecha at TIME ZONE
+            k_util.f_valor_parametro('ZONA_HORARIA_PRODUCCION') AS DATE) fecha
   FROM t_grupo_mensajes a, t_usuarios b, t_grupo_usuarios c
  WHERE a.id_usuario = b.id_usuario
    AND a.id_grupo = c.id_grupo

@@ -60,6 +60,6 @@ insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR, ID_DOMINIO)
 values ('ESTADO_IMPORTACION_PARTIDOS', 'Indica el estado de la importación de Partidos de Fantasy (E-En Ejecución/D-Detenido)', 'D', null);
 
 insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR, ID_DOMINIO)
-values ('ZONA_HORARIA_PRODUCCION', 'Zona horaria  del entorno de Producción', '-3:0', null);
+values ('ZONA_HORARIA_PRODUCCION', 'Zona horaria  del entorno de Producción', '-4:0', null);
 
 prompt Done.
