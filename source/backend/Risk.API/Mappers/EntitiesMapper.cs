@@ -147,7 +147,7 @@ namespace Risk.API.Mappers
                     Estado = entity.Estado,
                     CantidadComentarios = entity.CantidadComentarios,
                     CantidadReacciones = entity.CantidadReacciones,
-                    MiReaccion = GetReaccionEnumFromValue(entity.MiReaccion)
+                    MiReaccion = entity.MiReaccion.GetEnumValue<Reaccion>()
                 };
             }
             return model;
@@ -187,7 +187,7 @@ namespace Risk.API.Mappers
                     Estado = entity.Estado,
                     CantidadComentarios = entity.CantidadComentarios,
                     CantidadReacciones = entity.CantidadReacciones,
-                    MiReaccion = GetReaccionEnumFromValue(entity.MiReaccion),
+                    MiReaccion = entity.MiReaccion.GetEnumValue<Reaccion>(),
                     PrediccionGolesLocal = entity.PredicGolesLocal,
                     PrediccionGolesVisitante = entity.PredicGolesVisitante,
                     Puntos = entity.Puntos,
@@ -319,30 +319,6 @@ namespace Risk.API.Mappers
                 }
             }
             return modelList;
-        }
-
-        public static Reaccion? GetReaccionEnumFromValue(string value)
-        {
-            if (value == null)
-                return null;
-
-            switch (value.ToUpper())
-            {
-                case "L":
-                    return Reaccion.Like;
-                case "V":
-                    return Reaccion.Love;
-                case "H":
-                    return Reaccion.Haha;
-                case "W":
-                    return Reaccion.Wow;
-                case "S":
-                    return Reaccion.Sad;
-                case "A":
-                    return Reaccion.Angry;
-                default:
-                    return null;
-            }
         }
 
         public static bool GetBoolFromValue(string value)
@@ -486,7 +462,7 @@ namespace Risk.API.Mappers
                         IdUsuario = entity.IdUsuario,
                         AliasUsuario = entity.AliasUsuario,
                         VersionAvatar = entity.VersionAvatar,
-                        Reaccion = GetReaccionEnumFromValue(entity.Reaccion),
+                        Reaccion = entity.Reaccion.GetEnumValue<Reaccion>(),
                         ReferenciaComentario = entity.ReferenciaComentario
                     };
                 }
