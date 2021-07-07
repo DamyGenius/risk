@@ -27,6 +27,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Risk.API.Attributes;
 using Risk.API.Entities;
 using Risk.API.Helpers;
 using Risk.API.Mappers;
@@ -70,7 +71,7 @@ namespace Risk.API.Services
             prms.Add("id_club", idClub);
             prms.Add("id_division", idDivision);
 
-            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
                 NOMBRE_LISTAR_CLUBES,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
@@ -92,7 +93,7 @@ namespace Risk.API.Services
             prms.Add("torneo", torneo);
             prms.Add("estado", estado);
 
-            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
                 NOMBRE_LISTAR_PARTIDOS,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
@@ -117,11 +118,11 @@ namespace Risk.API.Services
             prms.Add("usuario", usuario);
             if (paginaParametros != null)
             {
-                prms.Add("pagina_parametros", JToken.FromObject(ModelsMapper.GetYPaginaParametrosFromModel(paginaParametros)));
+                prms.Add("pagina_parametros", JToken.FromObject(ModelsMapper.GetEntityFromModel<PaginaParametros, YPaginaParametros>(paginaParametros)));
             }
             prms.Add("orden", orden.ToString());
 
-            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
                 NOMBRE_LISTAR_PREDICCIONES_PARTIDOS,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
@@ -145,7 +146,7 @@ namespace Risk.API.Services
             prms.Add("usuario", usuario);
             prms.Add("incluir_partidos", incluirPartidos);
 
-            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
                 NOMBRE_LISTAR_JORNADAS,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
@@ -169,13 +170,13 @@ namespace Risk.API.Services
             prms.Add("goles_club_visitante", golesClubVisitante);
             prms.Add("id_sincronizacion", idSincronizacion);
 
-            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
                 NOMBRE_REALIZAR_PREDICCION,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
 
-            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetModelFromEntity<Dato, YDato>(entityRsp.Datos));
         }
 
         public Respuesta<Grupo> RegistrarGrupo(string descripcion, string tipo, int idJornadaInicio, string todosInvitan, string idClub)
@@ -187,7 +188,7 @@ namespace Risk.API.Services
             prms.Add("todos_invitan", todosInvitan);
             prms.Add("id_club", idClub);
 
-            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
                 NOMBRE_REGISTRAR_GRUPO,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
@@ -206,13 +207,13 @@ namespace Risk.API.Services
             prms.Add("todos_invitan", todosInvitan);
             prms.Add("id_club", idClub);
 
-            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
                 NOMBRE_EDITAR_GRUPO,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
 
-            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetModelFromEntity<Dato, YDato>(entityRsp.Datos));
         }
 
         public Respuesta<Grupo> DatosGrupo(int idGrupo)
@@ -220,7 +221,7 @@ namespace Risk.API.Services
             JObject prms = new JObject();
             prms.Add("id_grupo", idGrupo);
 
-            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
                 NOMBRE_DATOS_GRUPO,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
@@ -239,10 +240,10 @@ namespace Risk.API.Services
 
             if (paginaParametros != null)
             {
-                prms.Add("pagina_parametros", JToken.FromObject(ModelsMapper.GetYPaginaParametrosFromModel(paginaParametros)));
+                prms.Add("pagina_parametros", JToken.FromObject(ModelsMapper.GetEntityFromModel<PaginaParametros, YPaginaParametros>(paginaParametros)));
             }
 
-            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
                 NOMBRE_LISTAR_GRUPOS,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
@@ -262,13 +263,13 @@ namespace Risk.API.Services
             JObject prms = new JObject();
             prms.Add("id_grupo", idGrupo);
 
-            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
                 NOMBRE_ABANDONAR_GRUPO,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
 
-            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetModelFromEntity<Dato, YDato>(entityRsp.Datos));
         }
 
         public Respuesta<Dato> InvitarUsuario(int idGrupo, string usuario)
@@ -277,13 +278,13 @@ namespace Risk.API.Services
             prms.Add("id_grupo", idGrupo);
             prms.Add("usuario", usuario);
 
-            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
                 NOMBRE_INVITAR_USUARIO,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
 
-            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetModelFromEntity<Dato, YDato>(entityRsp.Datos));
         }
 
         public Respuesta<Dato> ResponderInvitacion(int idGrupo, RespuestaInvitacion respuestaInvitacion)
@@ -292,13 +293,13 @@ namespace Risk.API.Services
             prms.Add("id_grupo", idGrupo);
             prms.Add("respuesta", respuestaInvitacion.ToString());
 
-            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
                 NOMBRE_RESPONDER_INVITACION,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
 
-            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetModelFromEntity<Dato, YDato>(entityRsp.Datos));
         }
 
         public Respuesta<Dato> SolicitarAmistad(string usuarioSolicitado)
@@ -306,13 +307,13 @@ namespace Risk.API.Services
             JObject prms = new JObject();
             prms.Add("usuario_solicitado", usuarioSolicitado);
 
-            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
                 NOMBRE_SOLICITAR_AMISTAD,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
 
-            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetModelFromEntity<Dato, YDato>(entityRsp.Datos));
         }
 
         public Respuesta<Dato> ResponderSolicitudAmistad(string usuarioSolicitante, RespuestaInvitacion respuestaSolicitud)
@@ -321,13 +322,13 @@ namespace Risk.API.Services
             prms.Add("usuario_solicitante", usuarioSolicitante);
             prms.Add("respuesta", respuestaSolicitud.ToString());
 
-            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
                 NOMBRE_RESPONDER_SOLICITUD_AMISTAD,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
 
-            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetModelFromEntity<Dato, YDato>(entityRsp.Datos));
         }
 
         public Respuesta<Pagina<Amigo>> ListarAmigos(string usuario)
@@ -336,7 +337,7 @@ namespace Risk.API.Services
             prms.Add("usuario", usuario);
             prms.Add("aceptado", "S");
 
-            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
                 NOMBRE_LISTAR_AMIGOS,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
@@ -358,7 +359,7 @@ namespace Risk.API.Services
             prms.Add("tipo", ModelsMapper.GetTipoAmigoFromTipoSolicitudAmistadEnum(tipo).ToString());
             prms.Add("aceptado", "N");
 
-            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
                 NOMBRE_LISTAR_AMIGOS,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
@@ -382,13 +383,13 @@ namespace Risk.API.Services
             prms.Add("contenido", contenido);
             prms.Add("ref_comentario", referenciaComentario);
 
-            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
                 NOMBRE_REALIZAR_COMENTARIO,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
 
-            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetModelFromEntity<Dato, YDato>(entityRsp.Datos));
         }
 
         public Respuesta<Pagina<ComentarioPartido>> ListarComentariosPartido(int idPartido, long referenciaComentario, PaginaParametros paginaParametros = null)
@@ -398,10 +399,10 @@ namespace Risk.API.Services
             prms.Add("referencia", idPartido);
             if (paginaParametros != null)
             {
-                prms.Add("pagina_parametros", JToken.FromObject(ModelsMapper.GetYPaginaParametrosFromModel(paginaParametros)));
+                prms.Add("pagina_parametros", JToken.FromObject(ModelsMapper.GetEntityFromModel<PaginaParametros, YPaginaParametros>(paginaParametros)));
             }
 
-            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
                 NOMBRE_LISTAR_COMENTARIOS,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
@@ -424,13 +425,13 @@ namespace Risk.API.Services
             prms.Add("reaccion", ModelsMapper.GetValueFromReaccionEnum(reaccion));
             prms.Add("ref_comentario", referenciaComentario);
 
-            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
                 NOMBRE_REACCIONAR,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
 
-            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetModelFromEntity<Dato, YDato>(entityRsp.Datos));
         }
 
         public Respuesta<Pagina<ReaccionPartido>> ListarReaccionesPartido(int idPartido, long referenciaComentario, PaginaParametros paginaParametros = null)
@@ -440,10 +441,10 @@ namespace Risk.API.Services
             prms.Add("referencia", idPartido);
             if (paginaParametros != null)
             {
-                prms.Add("pagina_parametros", JToken.FromObject(ModelsMapper.GetYPaginaParametrosFromModel(paginaParametros)));
+                prms.Add("pagina_parametros", JToken.FromObject(ModelsMapper.GetEntityFromModel<PaginaParametros, YPaginaParametros>(paginaParametros)));
             }
 
-            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
                 NOMBRE_LISTAR_REACCIONES,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
@@ -466,13 +467,13 @@ namespace Risk.API.Services
             prms.Add("contenido", contenido);
             prms.Add("ref_mensaje", referenciaMensaje);
 
-            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
                 NOMBRE_ENVIAR_MENSAJE_GRUPO,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
 
-            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetDatoFromEntity(entityRsp.Datos));
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetModelFromEntity<Dato, YDato>(entityRsp.Datos));
         }
 
         public Respuesta<Pagina<GrupoMensaje>> ListarMensajesGrupo(int idGrupo, long referenciaMensaje, PaginaParametros paginaParametros = null)
@@ -481,10 +482,10 @@ namespace Risk.API.Services
             prms.Add("id_grupo", idGrupo);
             if (paginaParametros != null)
             {
-                prms.Add("pagina_parametros", JToken.FromObject(ModelsMapper.GetYPaginaParametrosFromModel(paginaParametros)));
+                prms.Add("pagina_parametros", JToken.FromObject(ModelsMapper.GetEntityFromModel<PaginaParametros, YPaginaParametros>(paginaParametros)));
             }
 
-            string rsp = base.ProcesarOperacion(ModelsMapper.GetValueFromTipoOperacionEnum(TipoOperacion.Servicio),
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
                 NOMBRE_LISTAR_MENSAJES_GRUPO,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
