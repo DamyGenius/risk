@@ -42,5 +42,7 @@ namespace Risk.API.Entities
         public string Contenido { get; set; }
         [JsonProperty("ref_mensaje")]
         public long? ReferenciaMensaje { get; set; }
+        [JsonProperty("fecha")]
+        public DateTime? Fecha { get; set; }
     }
 }

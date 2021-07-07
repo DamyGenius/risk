@@ -423,7 +423,8 @@ namespace Risk.API.Mappers
                         AliasUsuario = entity.AliasUsuario,
                         VersionAvatar = entity.VersionAvatar,
                         Contenido = entity.Contenido,
-                        ReferenciaComentario = entity.ReferenciaComentario
+                        ReferenciaComentario = entity.ReferenciaComentario,
+                        Fecha = entity.Fecha
                     };
                 }
             }
@@ -497,7 +498,8 @@ namespace Risk.API.Mappers
                     AliasUsuario = entity.AliasUsuario,
                     VersionAvatar = entity.VersionAvatar,
                     Contenido = entity.Contenido,
-                    ReferenciaMensaje = entity.ReferenciaMensaje
+                    ReferenciaMensaje = entity.ReferenciaMensaje,
+                    Fecha = entity.Fecha
                 };
             }
             return model;

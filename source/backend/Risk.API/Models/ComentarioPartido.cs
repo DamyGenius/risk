@@ -33,5 +33,6 @@ namespace Risk.API.Models
         public int? VersionAvatar { get; set; }
         public string Contenido { get; set; }
         public long? ReferenciaComentario { get; set; }
+        public DateTime? Fecha { get; set; }
     }
 }
