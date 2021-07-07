@@ -24,6 +24,7 @@ SOFTWARE.
 
 using System;
 using System.Collections.Generic;
+using Risk.API.Attributes;
 using Risk.API.Entities;
 using Risk.API.Models;
 
@@ -398,7 +399,7 @@ namespace Risk.API.Mappers
             else
             {
                 Enum.TryParse(entity.Tipo, out TipoAmigo tipoAmigo);
-                var tipoSolicitud = tipoAmigo==TipoAmigo.SOLICITANTE?TipoSolicitudAmistad.Enviada:TipoSolicitudAmistad.Recibida;
+                var tipoSolicitud = tipoAmigo == TipoAmigo.SOLICITANTE ? TipoSolicitudAmistad.Enviada : TipoSolicitudAmistad.Recibida;
                 model = new SolicitudAmistad
                 {
                     IdUsuario = entity.IdUsuario,
@@ -432,7 +433,7 @@ namespace Risk.API.Mappers
             }
             else
             {
-                if (!entity.Tipo.Equals(ModelsMapper.GetValueFromTipoComentarioEnum(TipoComentario.Partido)))
+                if (!entity.Tipo.Equals(TipoComentario.Partido.GetStringValue()))
                 {
                     model = null;
                 }
@@ -472,7 +473,7 @@ namespace Risk.API.Mappers
             }
             else
             {
-                if (!entity.Tipo.Equals(ModelsMapper.GetValueFromTipoReaccionEnum(TipoReaccion.Partido)))
+                if (!entity.Tipo.Equals(TipoReaccion.Partido.GetStringValue()))
                 {
                     model = null;
                 }

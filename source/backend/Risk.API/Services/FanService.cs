@@ -377,7 +377,7 @@ namespace Risk.API.Services
         public Respuesta<Dato> RealizarComentario(TipoComentario tipo, long referencia, string usuario, string contenido, long? referenciaComentario)
         {
             JObject prms = new JObject();
-            prms.Add("tipo", ModelsMapper.GetValueFromTipoComentarioEnum(tipo));
+            prms.Add("tipo", tipo.GetStringValue());
             prms.Add("referencia", referencia);
             //prms.Add("usuario", usuario);
             prms.Add("contenido", contenido);
@@ -395,7 +395,7 @@ namespace Risk.API.Services
         public Respuesta<Pagina<ComentarioPartido>> ListarComentariosPartido(int idPartido, long referenciaComentario, PaginaParametros paginaParametros = null)
         {
             JObject prms = new JObject();
-            prms.Add("tipo", ModelsMapper.GetValueFromTipoComentarioEnum(TipoComentario.Partido));
+            prms.Add("tipo", TipoComentario.Partido.GetStringValue());
             prms.Add("referencia", idPartido);
             if (paginaParametros != null)
             {
@@ -420,9 +420,9 @@ namespace Risk.API.Services
         public Respuesta<Dato> Reaccionar(TipoReaccion tipo, long referencia, Reaccion reaccion, long? referenciaComentario)
         {
             JObject prms = new JObject();
-            prms.Add("tipo", ModelsMapper.GetValueFromTipoReaccionEnum(tipo));
+            prms.Add("tipo", tipo.GetStringValue());
             prms.Add("referencia", referencia);
-            prms.Add("reaccion", ModelsMapper.GetValueFromReaccionEnum(reaccion));
+            prms.Add("reaccion", reaccion.GetStringValue());
             prms.Add("ref_comentario", referenciaComentario);
 
             string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
@@ -437,7 +437,7 @@ namespace Risk.API.Services
         public Respuesta<Pagina<ReaccionPartido>> ListarReaccionesPartido(int idPartido, long referenciaComentario, PaginaParametros paginaParametros = null)
         {
             JObject prms = new JObject();
-            prms.Add("tipo", ModelsMapper.GetValueFromTipoReaccionEnum(TipoReaccion.Partido));
+            prms.Add("tipo", TipoReaccion.Partido.GetStringValue());
             prms.Add("referencia", idPartido);
             if (paginaParametros != null)
             {

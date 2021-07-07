@@ -22,15 +22,23 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
+using Risk.API.Attributes;
+
 namespace Risk.API.Models
 {
     public enum Reaccion
     {
+        [StringValue("L")]
         Like,
+        [StringValue("V")]
         Love,
+        [StringValue("H")]
         Haha,
+        [StringValue("W")]
         Wow,
+        [StringValue("S")]
         Sad,
+        [StringValue("A")]
         Angry
     }
 }

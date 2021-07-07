@@ -22,12 +22,17 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
+using Risk.API.Attributes;
+
 namespace Risk.API.Models
 {
     public enum TipoReaccion
     {
+        [StringValue("P")]
         Post,
+        [StringValue("A")]
         Album,
+        [StringValue("T")]
         Partido
     }
 }

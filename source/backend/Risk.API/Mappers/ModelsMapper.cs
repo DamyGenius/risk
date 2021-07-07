@@ -72,7 +72,7 @@ namespace Risk.API.Mappers
                 return "N";
             }
         }
- 
+
         public static TipoAmigo? GetTipoAmigoFromTipoSolicitudAmistadEnum(TipoSolicitudAmistad? enumeration)
         {
             switch (enumeration)
@@ -83,57 +83,6 @@ namespace Risk.API.Mappers
                     return TipoAmigo.SOLICITADO;
                 default:
                     return null;
-            }
-        }
-
-        public static string GetValueFromTipoComentarioEnum(TipoComentario enumeration)
-        {
-            switch (enumeration)
-            {
-                case TipoComentario.Album:
-                    return "A";
-                case TipoComentario.Post:
-                    return "P";
-                case TipoComentario.Partido:
-                    return "T";
-                default:
-                    return string.Empty;
-            }
-        }
-
-        public static string GetValueFromTipoReaccionEnum(TipoReaccion enumeration)
-        {
-            switch (enumeration)
-            {
-                case TipoReaccion.Album:
-                    return "A";
-                case TipoReaccion.Post:
-                    return "P";
-                case TipoReaccion.Partido:
-                    return "T";
-                default:
-                    return string.Empty;
-            }
-        }
-
-        public static string GetValueFromReaccionEnum(Reaccion enumeration)
-        {
-            switch (enumeration)
-            {
-                case Reaccion.Like:
-                    return "L";
-                case Reaccion.Love:
-                    return "V";
-                case Reaccion.Haha:
-                    return "H";
-                case Reaccion.Wow:
-                    return "W";
-                case Reaccion.Sad:
-                    return "S";
-                case Reaccion.Angry:
-                    return "A";
-                default:
-                    return string.Empty;
             }
         }
     }
