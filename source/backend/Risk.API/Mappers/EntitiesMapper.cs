@@ -62,36 +62,6 @@ namespace Risk.API.Mappers
             return modelList;
         }
 
-        public static Dato GetDatoFromEntity(YDato entity)
-        {
-            Dato model;
-            if (entity == null)
-            {
-                model = null;
-            }
-            else
-            {
-                model = new Dato
-                {
-                    Contenido = entity.Contenido
-                };
-            }
-            return model;
-        }
-
-        public static List<Dato> GetDatoListFromEntity(List<YDato> entityList)
-        {
-            List<Dato> modelList = new List<Dato>();
-            if (entityList != null)
-            {
-                foreach (var item in entityList)
-                {
-                    modelList.Add(GetDatoFromEntity(item));
-                }
-            }
-            return modelList;
-        }
-
         public static Respuesta<TModel> GetRespuestaFromEntity<TModel, TEntity>(YRespuesta<TEntity> entity, TModel datos)
         {
             return new Respuesta<TModel>
@@ -348,41 +318,6 @@ namespace Risk.API.Mappers
                 }
             }
             return modelList;
-        }
-
-        public static TipoDispositivo GetTipoDispositivoEnumFromValue(string value)
-        {
-            switch (value.ToUpper())
-            {
-                case "M":
-                    return TipoDispositivo.Mobile;
-                case "T":
-                    return TipoDispositivo.Tablet;
-                case "D":
-                    return TipoDispositivo.Desktop;
-                case "V":
-                    return TipoDispositivo.Tv;
-                case "W":
-                    return TipoDispositivo.Watch;
-                default:
-                    return TipoDispositivo.Mobile;
-            }
-        }
-
-        public static OrigenSesion GetOrigenSesionEnumFromValue(string value)
-        {
-            if (value == null)
-                return OrigenSesion.Risk;
-
-            switch (value.ToUpper())
-            {
-                case "G":
-                    return OrigenSesion.Google;
-                case "F":
-                    return OrigenSesion.Facebook;
-                default:
-                    return OrigenSesion.Risk;
-            }
         }
 
         public static Reaccion? GetReaccionEnumFromValue(string value)

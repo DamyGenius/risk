@@ -24,6 +24,7 @@ SOFTWARE.
 
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Risk.API.Attributes;
 using Risk.API.Mappers;
 using Risk.API.Models;
 
@@ -71,7 +72,7 @@ namespace Risk.API.Entities
                 DireccionCorreo = this.DireccionCorreo,
                 NumeroTelefono = this.NumeroTelefono,
                 VersionAvatar = this.VersionAvatar,
-                Origen = EntitiesMapper.GetOrigenSesionEnumFromValue(this.Origen),
+                Origen = string.IsNullOrEmpty(this.Origen) ? OrigenSesion.Risk : this.Origen.GetEnumValue<OrigenSesion>(),
                 Puntos = this.Puntos,
                 Ranking = this.Ranking,
                 Roles = EntitiesMapper.GetModelListFromEntity<Rol, YRol>(this.Roles)

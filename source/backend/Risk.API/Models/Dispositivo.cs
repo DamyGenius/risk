@@ -23,6 +23,7 @@ SOFTWARE.
 */
 
 using System.Collections.Generic;
+using Risk.API.Attributes;
 using Risk.API.Entities;
 using Risk.API.Mappers;
 
@@ -50,13 +51,13 @@ namespace Risk.API.Models
                 TokenDispositivo = this.TokenDispositivo,
                 NombreSistemaOperativo = this.NombreSistemaOperativo,
                 VersionSistemaOperativo = this.VersionSistemaOperativo,
-                Tipo = ModelsMapper.GetValueFromTipoDispositivoEnum(this.Tipo),
+                Tipo = this.Tipo.GetStringValue(),
                 NombreNavegador = this.NombreNavegador,
                 VersionNavegador = this.VersionNavegador,
                 TokenNotificacion = this.TokenNotificacion,
                 PlataformaNotificacion = this.PlataformaNotificacion,
                 Plantillas = ModelsMapper.GetEntityListFromModel<Plantilla, YPlantilla>(this.Plantillas),
-                Suscripciones = ModelsMapper.GetYDatoListFromModel(this.Suscripciones)
+                Suscripciones = ModelsMapper.GetEntityListFromModel<Dato, YDato>(this.Suscripciones)
             };
         }
     }
