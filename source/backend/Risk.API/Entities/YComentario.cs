@@ -22,6 +22,7 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
+using System;
 using Newtonsoft.Json;
 
 namespace Risk.API.Entities

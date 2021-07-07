@@ -22,6 +22,8 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
+using System;
+
 namespace Risk.API.Models
 {
     public class ComentarioPartido
