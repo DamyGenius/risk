@@ -147,7 +147,7 @@ namespace Risk.API.Mappers
                     Estado = entity.Estado,
                     CantidadComentarios = entity.CantidadComentarios,
                     CantidadReacciones = entity.CantidadReacciones,
-                    MiReaccion = entity.MiReaccion.GetEnumValue<Reaccion>()
+                    MiReaccion = string.IsNullOrEmpty(entity.MiReaccion) ? (Reaccion?)null : entity.MiReaccion.GetEnumValue<Reaccion>()
                 };
             }
             return model;
@@ -187,7 +187,7 @@ namespace Risk.API.Mappers
                     Estado = entity.Estado,
                     CantidadComentarios = entity.CantidadComentarios,
                     CantidadReacciones = entity.CantidadReacciones,
-                    MiReaccion = entity.MiReaccion.GetEnumValue<Reaccion>(),
+                    MiReaccion = string.IsNullOrEmpty(entity.MiReaccion) ? (Reaccion?)null : entity.MiReaccion.GetEnumValue<Reaccion>(),
                     PrediccionGolesLocal = entity.PredicGolesLocal,
                     PrediccionGolesVisitante = entity.PredicGolesVisitante,
                     Puntos = entity.Puntos,
@@ -463,7 +463,7 @@ namespace Risk.API.Mappers
                         IdUsuario = entity.IdUsuario,
                         AliasUsuario = entity.AliasUsuario,
                         VersionAvatar = entity.VersionAvatar,
-                        Reaccion = entity.Reaccion.GetEnumValue<Reaccion>(),
+                        Reaccion = string.IsNullOrEmpty(entity.Reaccion) ? (Reaccion?)null : entity.Reaccion.GetEnumValue<Reaccion>(),
                         ReferenciaComentario = entity.ReferenciaComentario
                     };
                 }
