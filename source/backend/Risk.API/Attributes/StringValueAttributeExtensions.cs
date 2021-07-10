@@ -70,7 +70,7 @@ namespace Risk.API.Attributes
                     enumStringValue = attribs[0].StringValue;
 
                 if (string.Compare(enumStringValue, value, ignoreCase) == 0)
-                    result = (TEnum)Enum.Parse(enumType, fieldInfo.Name);
+                    result = (TEnum)Enum.Parse(enumType, fieldInfo.Name, ignoreCase);
             }
 
             return result;
