@@ -24,10 +24,11 @@ SOFTWARE.
 
 using System;
 using System.Collections.Generic;
+using Risk.API.Entities;
 
 namespace Risk.API.Models
 {
-    public class Grupo
+    public class Grupo : IModel
     {
         public int IdGrupo { get; set; }
         public string IdTorneo { get; set; }
@@ -46,5 +47,10 @@ namespace Risk.API.Models
         public string TodosInvitan { get; set; }
         public int? VersionLogo { get; set; }
         public List<GrupoUsuario> Usuarios { get; set; }
+
+        public IEntity ConvertToEntity()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

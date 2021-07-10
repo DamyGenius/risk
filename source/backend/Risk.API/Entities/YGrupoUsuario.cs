@@ -23,10 +23,11 @@ SOFTWARE.
 */
 
 using Newtonsoft.Json;
+using Risk.API.Models;
 
 namespace Risk.API.Entities
 {
-    public class YGrupoUsuario
+    public class YGrupoUsuario : IEntity
     {
         [JsonProperty("id_usuario")]
         public int IdUsuario { get; set; }
@@ -44,5 +45,20 @@ namespace Risk.API.Entities
         public string TokenActivacion { get; set; }
         [JsonProperty("aceptado")]
         public string Aceptado { get; set; }
+
+        public IModel ConvertToModel()
+        {
+            return new GrupoUsuario
+            {
+                IdUsuario = this.IdUsuario,
+                AliasUsuario = this.AliasUsuario,
+                VersionAvatar = this.VersionAvatar,
+                Puntos = this.Puntos,
+                Ranking = this.Ranking,
+                Estado = this.Estado,
+                TokenActivacion = this.TokenActivacion,
+                Aceptado = this.Aceptado
+            };
+        }
     }
 }

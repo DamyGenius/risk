@@ -25,10 +25,12 @@ SOFTWARE.
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Risk.API.Mappers;
+using Risk.API.Models;
 
 namespace Risk.API.Entities
 {
-    public class YGrupo
+    public class YGrupo : IEntity
     {
         [JsonProperty("id_grupo")]
         public int IdGrupo { get; set; }
@@ -64,5 +66,29 @@ namespace Risk.API.Entities
         public int? VersionLogo { get; set; }
         [JsonProperty("usuarios")]
         public List<YGrupoUsuario> Usuarios { get; set; }
+
+        public IModel ConvertToModel()
+        {
+            return new Grupo
+            {
+                IdGrupo = this.IdGrupo,
+                IdTorneo = this.IdTorneo,
+                TituloTorneo = this.TituloTorneo,
+                Descripcion = this.Descripcion,
+                Tipo = this.Tipo,
+                DescripcionTipo = this.DescripcionTipo,
+                IdUsuarioAdministrador = this.IdUsuarioAdministrador,
+                AliasUsuarioAdministrador = this.AliasUsuarioAdministrador,
+                FechaCreacion = this.FechaCreacion,
+                IdJornadaInicio = this.IdJornadaInicio,
+                Estado = this.Estado,
+                Situacion = this.Situacion,
+                IdClub = this.IdClub,
+                NombreOficialClub = this.NombreOficialClub,
+                TodosInvitan = this.TodosInvitan,
+                VersionLogo = this.VersionLogo,
+                Usuarios = EntitiesMapper.GetModelListFromEntity<GrupoUsuario, YGrupoUsuario>(this.Usuarios)
+            };
+        }
     }
 }

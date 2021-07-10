@@ -194,7 +194,7 @@ namespace Risk.API.Services
                 prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YGrupo>>(rsp);
 
-            return EntitiesMapper.GetRespuestaFromEntity<Grupo, YGrupo>(entityRsp, EntitiesMapper.GetGrupoFromEntity(entityRsp.Datos));
+            return EntitiesMapper.GetRespuestaFromEntity<Grupo, YGrupo>(entityRsp, EntitiesMapper.GetModelFromEntity<Grupo, YGrupo>(entityRsp.Datos));
         }
 
         public Respuesta<Dato> EditarGrupo(int idGrupo, string descripcion, string tipo, int idJornadaInicio, string todosInvitan, string idClub)
@@ -227,7 +227,7 @@ namespace Risk.API.Services
                 prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YGrupo>>(rsp);
 
-            return EntitiesMapper.GetRespuestaFromEntity<Grupo, YGrupo>(entityRsp, EntitiesMapper.GetGrupoFromEntity(entityRsp.Datos));
+            return EntitiesMapper.GetRespuestaFromEntity<Grupo, YGrupo>(entityRsp, EntitiesMapper.GetModelFromEntity<Grupo, YGrupo>(entityRsp.Datos));
         }
 
         public Respuesta<Pagina<Grupo>> ListarGrupos(string misGrupos, string tipoGrupo = null, string aceptado = null, string incluirUsuarios = null, PaginaParametros paginaParametros = null)
@@ -252,7 +252,7 @@ namespace Risk.API.Services
             Pagina<Grupo> datos = null;
             if (entityRsp.Datos != null)
             {
-                datos = EntitiesMapper.GetPaginaFromEntity<Grupo, YGrupo>(entityRsp.Datos, EntitiesMapper.GetGrupoListFromEntity(entityRsp.Datos.Elementos));
+                datos = EntitiesMapper.GetPaginaFromEntity<Grupo, YGrupo>(entityRsp.Datos, EntitiesMapper.GetModelListFromEntity<Grupo, YGrupo>(entityRsp.Datos.Elementos));
             }
 
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<Grupo>, YPagina<YGrupo>>(entityRsp, datos);

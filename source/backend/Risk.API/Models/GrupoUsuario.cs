@@ -22,9 +22,11 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
+using Risk.API.Entities;
+
 namespace Risk.API.Models
 {
-    public class GrupoUsuario
+    public class GrupoUsuario : IModel
     {
         public int IdUsuario { get; set; }
         public string AliasUsuario { get; set; }
@@ -34,5 +36,10 @@ namespace Risk.API.Models
         public string Estado { get; set; }
         public string TokenActivacion { get; set; }
         public string Aceptado { get; set; }
+
+        public IEntity ConvertToEntity()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
