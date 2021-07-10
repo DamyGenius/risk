@@ -131,37 +131,6 @@ namespace Risk.API.Mappers
             }
         }
 
-        public static Amigo GetAmigoFromEntity(YAmigo entity)
-        {
-            Amigo model;
-            if (entity == null)
-            {
-                model = null;
-            }
-            else
-            {
-                model = new Amigo
-                {
-                    IdUsuario = entity.IdUsuario,
-                    AliasUsuario = entity.AliasUsuario,
-                    VersionAvatar = entity.VersionAvatar,
-                    Puntos = entity.Puntos,
-                    Ranking = entity.Ranking,
-                };
-            }
-            return model;
-        }
-
-        public static List<Amigo> GetAmigoListFromEntity(List<YAmigo> entityList)
-        {
-            List<Amigo> modelList = new List<Amigo>();
-            foreach (var item in entityList)
-            {
-                modelList.Add(GetAmigoFromEntity(item));
-            }
-            return modelList;
-        }
-
         public static SolicitudAmistad GetSolicitudAmistadFromEntity(YAmigo entity)
         {
             SolicitudAmistad model;
@@ -193,87 +162,6 @@ namespace Risk.API.Mappers
             foreach (var item in entityList)
             {
                 modelList.Add(GetSolicitudAmistadFromEntity(item));
-            }
-            return modelList;
-        }
-
-        public static ComentarioPartido GetComentarioPartidoFromEntity(YComentario entity)
-        {
-            ComentarioPartido model;
-            if (entity == null)
-            {
-                model = null;
-            }
-            else
-            {
-                if (!entity.Tipo.Equals(TipoComentario.Partido.GetStringValue()))
-                {
-                    model = null;
-                }
-                else
-                {
-                    model = new ComentarioPartido
-                    {
-                        IdComentario = entity.IdComentario,
-                        IdPartido = entity.Referencia,
-                        IdUsuario = entity.IdUsuario,
-                        AliasUsuario = entity.AliasUsuario,
-                        VersionAvatar = entity.VersionAvatar,
-                        Contenido = entity.Contenido,
-                        ReferenciaComentario = entity.ReferenciaComentario,
-                        Fecha = entity.Fecha
-                    };
-                }
-            }
-            return model;
-        }
-
-        public static List<ComentarioPartido> GetComentarioPartidoListFromEntity(List<YComentario> entityList)
-        {
-            List<ComentarioPartido> modelList = new List<ComentarioPartido>();
-            foreach (var item in entityList)
-            {
-                modelList.Add(GetComentarioPartidoFromEntity(item));
-            }
-            return modelList;
-        }
-
-        public static ReaccionPartido GetReaccionPartidoFromEntity(YReaccion entity)
-        {
-            ReaccionPartido model;
-            if (entity == null)
-            {
-                model = null;
-            }
-            else
-            {
-                if (!entity.Tipo.Equals(TipoReaccion.Partido.GetStringValue()))
-                {
-                    model = null;
-                }
-                else
-                {
-                    model = new ReaccionPartido
-                    {
-                        IdReaccion = entity.IdReaccion,
-                        IdPartido = entity.Referencia,
-                        IdUsuario = entity.IdUsuario,
-                        AliasUsuario = entity.AliasUsuario,
-                        VersionAvatar = entity.VersionAvatar,
-                        Reaccion = string.IsNullOrEmpty(entity.Reaccion) ? (Reaccion?)null : entity.Reaccion.GetEnumValue<Reaccion>(),
-                        ReferenciaComentario = entity.ReferenciaComentario
-                    };
-                }
-            }
-            return model;
-        }
-
-        public static List<ReaccionPartido> GetReaccionPartidoListFromEntity(List<YReaccion> entityList)
-        {
-            List<ReaccionPartido> modelList = new List<ReaccionPartido>();
-            foreach (var item in entityList)
-            {
-                modelList.Add(GetReaccionPartidoFromEntity(item));
             }
             return modelList;
         }

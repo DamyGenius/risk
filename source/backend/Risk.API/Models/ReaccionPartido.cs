@@ -22,9 +22,11 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
+using Risk.API.Entities;
+
 namespace Risk.API.Models
 {
-    public class ReaccionPartido
+    public class ReaccionPartido : IModel
     {
         public long IdReaccion { get; set; }
         public int IdPartido { get; set; }
@@ -33,5 +35,10 @@ namespace Risk.API.Models
         public int? VersionAvatar { get; set; }
         public Reaccion? Reaccion { get; set; }
         public long? ReferenciaComentario { get; set; }
+
+        public IEntity ConvertToEntity()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

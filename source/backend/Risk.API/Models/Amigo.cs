@@ -22,14 +22,21 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
+using Risk.API.Entities;
+
 namespace Risk.API.Models
 {
-    public class Amigo
+    public class Amigo : IModel
     {
         public int IdUsuario { get; set; }
         public string AliasUsuario { get; set; }
         public int? VersionAvatar { get; set; }
         public int? Puntos { get; set; }
         public int? Ranking { get; set; }
+
+        public IEntity ConvertToEntity()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

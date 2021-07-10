@@ -346,7 +346,7 @@ namespace Risk.API.Services
             Pagina<Amigo> datos = null;
             if (entityRsp.Datos != null)
             {
-                datos = EntitiesMapper.GetPaginaFromEntity<Amigo, YAmigo>(entityRsp.Datos, EntitiesMapper.GetAmigoListFromEntity(entityRsp.Datos.Elementos));
+                datos = EntitiesMapper.GetPaginaFromEntity<Amigo, YAmigo>(entityRsp.Datos, EntitiesMapper.GetModelListFromEntity<Amigo, YAmigo>(entityRsp.Datos.Elementos));
             }
 
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<Amigo>, YPagina<YAmigo>>(entityRsp, datos);
@@ -411,7 +411,7 @@ namespace Risk.API.Services
             Pagina<ComentarioPartido> datos = null;
             if (entityRsp.Datos != null)
             {
-                datos = EntitiesMapper.GetPaginaFromEntity<ComentarioPartido, YComentario>(entityRsp.Datos, EntitiesMapper.GetComentarioPartidoListFromEntity(entityRsp.Datos.Elementos));
+                datos = EntitiesMapper.GetPaginaFromEntity<ComentarioPartido, YComentario>(entityRsp.Datos, EntitiesMapper.GetModelListFromEntity<ComentarioPartido, YComentario>(entityRsp.Datos.Elementos));
             }
 
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<ComentarioPartido>, YPagina<YComentario>>(entityRsp, datos);
@@ -453,7 +453,7 @@ namespace Risk.API.Services
             Pagina<ReaccionPartido> datos = null;
             if (entityRsp.Datos != null)
             {
-                datos = EntitiesMapper.GetPaginaFromEntity<ReaccionPartido, YReaccion>(entityRsp.Datos, EntitiesMapper.GetReaccionPartidoListFromEntity(entityRsp.Datos.Elementos));
+                datos = EntitiesMapper.GetPaginaFromEntity<ReaccionPartido, YReaccion>(entityRsp.Datos, EntitiesMapper.GetModelListFromEntity<ReaccionPartido, YReaccion>(entityRsp.Datos.Elementos));
             }
 
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<ReaccionPartido>, YPagina<YReaccion>>(entityRsp, datos);

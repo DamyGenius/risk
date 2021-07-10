@@ -24,10 +24,12 @@ SOFTWARE.
 
 using System;
 using Newtonsoft.Json;
+using Risk.API.Attributes;
+using Risk.API.Models;
 
 namespace Risk.API.Entities
 {
-    public class YComentario
+    public class YComentario : IEntity
     {
         [JsonProperty("id_comentario")]
         public long IdComentario { get; set; }
@@ -47,5 +49,29 @@ namespace Risk.API.Entities
         public long? ReferenciaComentario { get; set; }
         [JsonProperty("fecha")]
         public DateTime? Fecha { get; set; }
+
+        public IModel ConvertToModel()
+        {
+            IModel model;
+            if (!this.Tipo.Equals(TipoComentario.Partido.GetStringValue()))
+            {
+                model = null;
+            }
+            else
+            {
+                model = new ComentarioPartido
+                {
+                    IdComentario = this.IdComentario,
+                    IdPartido = this.Referencia,
+                    IdUsuario = this.IdUsuario,
+                    AliasUsuario = this.AliasUsuario,
+                    VersionAvatar = this.VersionAvatar,
+                    Contenido = this.Contenido,
+                    ReferenciaComentario = this.ReferenciaComentario,
+                    Fecha = this.Fecha
+                };
+            }
+            return model;
+        }
     }
 }

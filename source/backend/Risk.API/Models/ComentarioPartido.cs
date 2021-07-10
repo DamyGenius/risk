@@ -23,10 +23,11 @@ SOFTWARE.
 */
 
 using System;
+using Risk.API.Entities;
 
 namespace Risk.API.Models
 {
-    public class ComentarioPartido
+    public class ComentarioPartido : IModel
     {
         public long IdComentario { get; set; }
         public int IdPartido { get; set; }
@@ -36,5 +37,10 @@ namespace Risk.API.Models
         public string Contenido { get; set; }
         public long? ReferenciaComentario { get; set; }
         public DateTime? Fecha { get; set; }
+
+        public IEntity ConvertToEntity()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
