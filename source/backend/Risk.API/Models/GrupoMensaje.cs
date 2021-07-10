@@ -23,10 +23,11 @@ SOFTWARE.
 */
 
 using System;
+using Risk.API.Entities;
 
 namespace Risk.API.Models
 {
-    public class GrupoMensaje
+    public class GrupoMensaje : IModel
     {
         public long IdGrupoMensaje { get; set; }
         public int IdGrupo { get; set; }
@@ -36,5 +37,10 @@ namespace Risk.API.Models
         public string Contenido { get; set; }
         public long? ReferenciaMensaje { get; set; }
         public DateTime? Fecha { get; set; }
+
+        public IEntity ConvertToEntity()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

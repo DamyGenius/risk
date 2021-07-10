@@ -494,7 +494,7 @@ namespace Risk.API.Services
             Pagina<GrupoMensaje> datos = null;
             if (entityRsp.Datos != null)
             {
-                datos = EntitiesMapper.GetPaginaFromEntity<GrupoMensaje, YGrupoMensaje>(entityRsp.Datos, EntitiesMapper.GetGrupoMensajeListFromEntity(entityRsp.Datos.Elementos));
+                datos = EntitiesMapper.GetPaginaFromEntity<GrupoMensaje, YGrupoMensaje>(entityRsp.Datos, EntitiesMapper.GetModelListFromEntity<GrupoMensaje, YGrupoMensaje>(entityRsp.Datos.Elementos));
             }
 
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<GrupoMensaje>, YPagina<YGrupoMensaje>>(entityRsp, datos);

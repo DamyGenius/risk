@@ -24,10 +24,11 @@ SOFTWARE.
 
 using System;
 using Newtonsoft.Json;
+using Risk.API.Models;
 
 namespace Risk.API.Entities
 {
-    public class YGrupoMensaje
+    public class YGrupoMensaje : IEntity
     {
         [JsonProperty("id_grupo_mensaje")]
         public long IdGrupoMensaje { get; set; }
@@ -45,5 +46,20 @@ namespace Risk.API.Entities
         public long? ReferenciaMensaje { get; set; }
         [JsonProperty("fecha")]
         public DateTime? Fecha { get; set; }
+
+        public IModel ConvertToModel()
+        {
+            return new GrupoMensaje
+            {
+                IdGrupoMensaje = this.IdGrupoMensaje,
+                IdGrupo = this.IdGrupo,
+                IdUsuario = this.IdUsuario,
+                AliasUsuario = this.AliasUsuario,
+                VersionAvatar = this.VersionAvatar,
+                Contenido = this.Contenido,
+                ReferenciaMensaje = this.ReferenciaMensaje,
+                Fecha = this.Fecha
+            };
+        }
     }
 }
