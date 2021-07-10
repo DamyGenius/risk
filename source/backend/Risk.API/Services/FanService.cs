@@ -137,7 +137,7 @@ namespace Risk.API.Services
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<Prediccion>, YPagina<YPrediccion>>(entityRsp, datos);
         }
 
-        public Respuesta<Pagina<Jornada<Prediccion>>> ListarJornadas(string torneo, int? jornada = null, string usuario = null, string estado = null, string incluirPartidos = null)
+        public Respuesta<Pagina<Jornada>> ListarJornadas(string torneo, int? jornada = null, string usuario = null, string estado = null, string incluirPartidos = null)
         {
             JObject prms = new JObject();
             prms.Add("torneo", torneo);
@@ -150,15 +150,15 @@ namespace Risk.API.Services
                 NOMBRE_LISTAR_JORNADAS,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
-            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YPagina<YJornada<YPrediccion>>>>(rsp);
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YPagina<YJornada>>>(rsp);
 
-            Pagina<Jornada<Prediccion>> datos = null;
+            Pagina<Jornada> datos = null;
             if (entityRsp.Datos != null)
             {
-                datos = EntitiesMapper.GetPaginaFromEntity<Jornada<Prediccion>, YJornada<YPrediccion>>(entityRsp.Datos, EntitiesMapper.GetJornadaListFromEntity(entityRsp.Datos.Elementos));
+                datos = EntitiesMapper.GetPaginaFromEntity<Jornada, YJornada>(entityRsp.Datos, EntitiesMapper.GetModelListFromEntity<Jornada, YJornada>(entityRsp.Datos.Elementos));
             }
 
-            return EntitiesMapper.GetRespuestaFromEntity<Pagina<Jornada<Prediccion>>, YPagina<YJornada<YPrediccion>>>(entityRsp, datos);
+            return EntitiesMapper.GetRespuestaFromEntity<Pagina<Jornada>, YPagina<YJornada>>(entityRsp, datos);
         }
 
         public Respuesta<Dato> RealizarPrediccion(int partido, string usuario, int? golesClubLocal, int? golesClubVisitante, int idSincronizacion)

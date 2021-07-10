@@ -115,7 +115,7 @@ namespace Risk.API.Controllers
         [HttpGet("ListarJornadas")]
         [SwaggerOperation(OperationId = "ListarJornadas", Summary = "ListarJornadas", Description = "Obtiene una lista de jornadas")]
         [Produces(MediaTypeNames.Application.Json)]
-        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Jornada<Prediccion>>>))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Jornada>>))]
         public IActionResult ListarJornadas([FromQuery, SwaggerParameter(Description = "Identificador del torneo", Required = true)] string idTorneo,
                                             [FromQuery, SwaggerParameter(Description = "Identificador de la jornada", Required = false)] int? jornada,
                                             [FromQuery, SwaggerParameter(Description = "Estado de la jornada", Required = false)] string estado,

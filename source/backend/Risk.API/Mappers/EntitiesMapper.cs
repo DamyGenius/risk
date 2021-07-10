@@ -87,37 +87,6 @@ namespace Risk.API.Mappers
             };
         }
 
-        public static Jornada<Prediccion> GetJornadaFromEntity(YJornada<YPrediccion> entity)
-        {
-            Jornada<Prediccion> model;
-            if (entity == null)
-            {
-                model = null;
-            }
-            else
-            {
-                model = new Jornada<Prediccion>
-                {
-                    IdTorneo = entity.IdTorneo,
-                    IdJornada = entity.IdJornada,
-                    Titulo = entity.Titulo,
-                    Estado = entity.Estado,
-                    Partidos = GetModelListFromEntity<Prediccion, YPrediccion>(entity.Partidos)
-                };
-            }
-            return model;
-        }
-
-        public static List<Jornada<Prediccion>> GetJornadaListFromEntity(List<YJornada<YPrediccion>> entityList)
-        {
-            List<Jornada<Prediccion>> modelList = new List<Jornada<Prediccion>>();
-            foreach (var item in entityList)
-            {
-                modelList.Add(GetJornadaFromEntity(item));
-            }
-            return modelList;
-        }
-
         public static bool GetBoolFromValue(string value)
         {
             switch (value.ToUpper())

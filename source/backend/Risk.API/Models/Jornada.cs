@@ -23,15 +23,21 @@ SOFTWARE.
 */
 
 using System.Collections.Generic;
+using Risk.API.Entities;
 
 namespace Risk.API.Models
 {
-    public class Jornada<Prediccion>
+    public class Jornada : IModel
     {
         public string IdTorneo { get; set; }
         public int? IdJornada { get; set; }
         public string Titulo { get; set; }
         public string Estado { get; set; }
         public List<Prediccion> Partidos { get; set; }
+
+        public IEntity ConvertToEntity()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

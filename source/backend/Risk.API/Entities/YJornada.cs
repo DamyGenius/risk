@@ -24,10 +24,12 @@ SOFTWARE.
 
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Risk.API.Mappers;
+using Risk.API.Models;
 
 namespace Risk.API.Entities
 {
-    public class YJornada<Prediccion>
+    public class YJornada : IEntity
     {
         [JsonProperty("id_torneo")]
         public string IdTorneo { get; set; }
@@ -38,6 +40,18 @@ namespace Risk.API.Entities
         [JsonProperty("estado")]
         public string Estado { get; set; }
         [JsonProperty("partidos")]
-        public List<Prediccion> Partidos { get; set; }
+        public List<YPrediccion> Partidos { get; set; }
+
+        public IModel ConvertToModel()
+        {
+            return new Jornada
+            {
+                IdTorneo = this.IdTorneo,
+                IdJornada = this.IdJornada,
+                Titulo = this.Titulo,
+                Estado = this.Estado,
+                Partidos = EntitiesMapper.GetModelListFromEntity<Prediccion, YPrediccion>(this.Partidos)
+            };
+        }
     }
 }
