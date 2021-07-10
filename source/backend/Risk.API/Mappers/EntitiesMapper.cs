@@ -87,126 +87,6 @@ namespace Risk.API.Mappers
             };
         }
 
-        public static Club GetClubFromEntity(YClub entity)
-        {
-            Club model;
-            if (entity == null)
-            {
-                model = null;
-            }
-            else
-            {
-                model = new Club
-                {
-                    IdClub = entity.IdClub,
-                    NombreOficial = entity.NombreOficial,
-                    NombreCorto = entity.NombreCorto,
-                    OtrosNombres = entity.OtrosNombres,
-                    Fundacion = entity.Fundacion,
-                    PaginaWeb = entity.PaginaWeb,
-                    Twitter = entity.Twitter,
-                    Facebook = entity.Facebook,
-                    IdDivision = entity.IdDivision,
-                    VersionEscudo = entity.VersionEscudo
-                };
-            }
-            return model;
-        }
-
-        public static List<Club> GetClubListFromEntity(List<YClub> entityList)
-        {
-            List<Club> modelList = new List<Club>();
-            foreach (var item in entityList)
-            {
-                modelList.Add(GetClubFromEntity(item));
-            }
-            return modelList;
-        }
-
-        public static Partido GetPartidoFromEntity(YPartido entity)
-        {
-            Partido model;
-            if (entity == null)
-            {
-                model = null;
-            }
-            else
-            {
-                model = new Partido
-                {
-                    IdPartido = entity.IdPartido,
-                    IdTorneo = entity.IdTorneo,
-                    IdClubLocal = entity.IdClubLocal,
-                    IdClubVisitante = entity.IdClubVisitante,
-                    Fecha = entity.Fecha,
-                    Hora = entity.Hora,
-                    IdJornada = entity.IdJornada,
-                    IdEstadio = entity.IdEstadio,
-                    GolesLocal = entity.GolesLocal,
-                    GolesVisitante = entity.GolesVisitante,
-                    Estado = entity.Estado,
-                    CantidadComentarios = entity.CantidadComentarios,
-                    CantidadReacciones = entity.CantidadReacciones,
-                    MiReaccion = string.IsNullOrEmpty(entity.MiReaccion) ? (Reaccion?)null : entity.MiReaccion.GetEnumValue<Reaccion>()
-                };
-            }
-            return model;
-        }
-
-        public static List<Partido> GetPartidoListFromEntity(List<YPartido> entityList)
-        {
-            List<Partido> modelList = new List<Partido>();
-            foreach (var item in entityList)
-            {
-                modelList.Add(GetPartidoFromEntity(item));
-            }
-            return modelList;
-        }
-
-        public static Prediccion GetPrediccionFromEntity(YPrediccion entity)
-        {
-            Prediccion model;
-            if (entity == null)
-            {
-                model = null;
-            }
-            else
-            {
-                model = new Prediccion
-                {
-                    IdPartido = entity.IdPartido,
-                    IdTorneo = entity.IdTorneo,
-                    IdClubLocal = entity.IdClubLocal,
-                    IdClubVisitante = entity.IdClubVisitante,
-                    Fecha = entity.Fecha,
-                    Hora = entity.Hora,
-                    IdJornada = entity.IdJornada,
-                    IdEstadio = entity.IdEstadio,
-                    GolesLocal = entity.GolesLocal,
-                    GolesVisitante = entity.GolesVisitante,
-                    Estado = entity.Estado,
-                    CantidadComentarios = entity.CantidadComentarios,
-                    CantidadReacciones = entity.CantidadReacciones,
-                    MiReaccion = string.IsNullOrEmpty(entity.MiReaccion) ? (Reaccion?)null : entity.MiReaccion.GetEnumValue<Reaccion>(),
-                    PrediccionGolesLocal = entity.PredicGolesLocal,
-                    PrediccionGolesVisitante = entity.PredicGolesVisitante,
-                    Puntos = entity.Puntos,
-                    Sincronizacion = entity.Sincronizacion
-                };
-            }
-            return model;
-        }
-
-        public static List<Prediccion> GetPrediccionListFromEntity(List<YPrediccion> entityList)
-        {
-            List<Prediccion> modelList = new List<Prediccion>();
-            foreach (var item in entityList)
-            {
-                modelList.Add(GetPrediccionFromEntity(item));
-            }
-            return modelList;
-        }
-
         public static Jornada<Prediccion> GetJornadaFromEntity(YJornada<YPrediccion> entity)
         {
             Jornada<Prediccion> model;
@@ -222,7 +102,7 @@ namespace Risk.API.Mappers
                     IdJornada = entity.IdJornada,
                     Titulo = entity.Titulo,
                     Estado = entity.Estado,
-                    Partidos = GetPrediccionListFromEntity(entity.Partidos)
+                    Partidos = GetModelListFromEntity<Prediccion, YPrediccion>(entity.Partidos)
                 };
             }
             return model;

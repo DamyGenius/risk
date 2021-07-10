@@ -23,10 +23,11 @@ SOFTWARE.
 */
 
 using System;
+using Risk.API.Entities;
 
 namespace Risk.API.Models
 {
-    public class Partido
+    public class Partido : IModel
     {
         public int IdPartido { get; set; }
         public string IdTorneo { get; set; }
@@ -42,5 +43,10 @@ namespace Risk.API.Models
         public string CantidadComentarios { get; set; }
         public string CantidadReacciones { get; set; }
         public Reaccion? MiReaccion { get; set; }
+
+        public IEntity ConvertToEntity()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

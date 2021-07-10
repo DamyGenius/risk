@@ -24,10 +24,12 @@ SOFTWARE.
 
 using System;
 using Newtonsoft.Json;
+using Risk.API.Attributes;
+using Risk.API.Models;
 
 namespace Risk.API.Entities
 {
-    public class YPartido
+    public class YPartido : IEntity
     {
         [JsonProperty("id_partido")]
         public int IdPartido { get; set; }
@@ -57,5 +59,26 @@ namespace Risk.API.Entities
         public string CantidadReacciones { get; set; }
         [JsonProperty("mi_reaccion")]
         public string MiReaccion { get; set; }
+
+        public IModel ConvertToModel()
+        {
+            return new Partido
+            {
+                IdPartido = this.IdPartido,
+                IdTorneo = this.IdTorneo,
+                IdClubLocal = this.IdClubLocal,
+                IdClubVisitante = this.IdClubVisitante,
+                Fecha = this.Fecha,
+                Hora = this.Hora,
+                IdJornada = this.IdJornada,
+                IdEstadio = this.IdEstadio,
+                GolesLocal = this.GolesLocal,
+                GolesVisitante = this.GolesVisitante,
+                Estado = this.Estado,
+                CantidadComentarios = this.CantidadComentarios,
+                CantidadReacciones = this.CantidadReacciones,
+                MiReaccion = string.IsNullOrEmpty(this.MiReaccion) ? (Reaccion?)null : this.MiReaccion.GetEnumValue<Reaccion>()
+            };
+        }
     }
 }

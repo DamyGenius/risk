@@ -24,10 +24,12 @@ SOFTWARE.
 
 using System;
 using Newtonsoft.Json;
+using Risk.API.Attributes;
+using Risk.API.Models;
 
 namespace Risk.API.Entities
 {
-    public class YPrediccion
+    public class YPrediccion : IEntity
     {
         [JsonProperty("id_partido")]
         public int IdPartido { get; set; }
@@ -65,5 +67,30 @@ namespace Risk.API.Entities
         public int? Puntos { get; set; }
         [JsonProperty("sincronizacion")]
         public int? Sincronizacion { get; set; }
+
+        public IModel ConvertToModel()
+        {
+            return new Prediccion
+            {
+                IdPartido = this.IdPartido,
+                IdTorneo = this.IdTorneo,
+                IdClubLocal = this.IdClubLocal,
+                IdClubVisitante = this.IdClubVisitante,
+                Fecha = this.Fecha,
+                Hora = this.Hora,
+                IdJornada = this.IdJornada,
+                IdEstadio = this.IdEstadio,
+                GolesLocal = this.GolesLocal,
+                GolesVisitante = this.GolesVisitante,
+                Estado = this.Estado,
+                CantidadComentarios = this.CantidadComentarios,
+                CantidadReacciones = this.CantidadReacciones,
+                MiReaccion = string.IsNullOrEmpty(this.MiReaccion) ? (Reaccion?)null : this.MiReaccion.GetEnumValue<Reaccion>(),
+                PrediccionGolesLocal = this.PredicGolesLocal,
+                PrediccionGolesVisitante = this.PredicGolesVisitante,
+                Puntos = this.Puntos,
+                Sincronizacion = this.Sincronizacion
+            };
+        }
     }
 }

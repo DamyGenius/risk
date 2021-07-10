@@ -24,10 +24,11 @@ SOFTWARE.
 
 using System;
 using Newtonsoft.Json;
+using Risk.API.Models;
 
 namespace Risk.API.Entities
 {
-    public class YClub
+    public class YClub : IEntity
     {
         [JsonProperty("id_club")]
         public string IdClub { get; set; }
@@ -49,5 +50,22 @@ namespace Risk.API.Entities
         public string IdDivision { get; set; }
         [JsonProperty("version_escudo")]
         public int? VersionEscudo { get; set; }
+
+        public IModel ConvertToModel()
+        {
+            return new Club
+            {
+                IdClub = this.IdClub,
+                NombreOficial = this.NombreOficial,
+                NombreCorto = this.NombreCorto,
+                OtrosNombres = this.OtrosNombres,
+                Fundacion = this.Fundacion,
+                PaginaWeb = this.PaginaWeb,
+                Twitter = this.Twitter,
+                Facebook = this.Facebook,
+                IdDivision = this.IdDivision,
+                VersionEscudo = this.VersionEscudo
+            };
+        }
     }
 }

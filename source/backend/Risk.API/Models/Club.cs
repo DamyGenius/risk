@@ -23,10 +23,11 @@ SOFTWARE.
 */
 
 using System;
+using Risk.API.Entities;
 
 namespace Risk.API.Models
 {
-    public class Club
+    public class Club : IModel
     {
         public string IdClub { get; set; }
         public string NombreOficial { get; set; }
@@ -38,5 +39,10 @@ namespace Risk.API.Models
         public string Facebook { get; set; }
         public string IdDivision { get; set; }
         public int? VersionEscudo { get; set; }
+
+        public IEntity ConvertToEntity()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
