@@ -22,9 +22,11 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
+using Risk.API.Entities;
+
 namespace Risk.API.Models
 {
-    public class SolicitudAmistad
+    public class SolicitudAmistad : IModel
     {
         public int IdUsuario { get; set; }
         public string AliasUsuario { get; set; }
@@ -33,5 +35,10 @@ namespace Risk.API.Models
         public int? Ranking { get; set; }
         public string TokenAceptacion { get; set; }
         public TipoSolicitudAmistad TipoSolicitud { get; set; }
+
+        public IEntity ConvertToEntity()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
