@@ -31,7 +31,7 @@ CREATE OR REPLACE PACKAGE k_datos_fan IS
   */
 
   -- Url base de webservices de Datos de Fantasy
-  c_url_base CONSTANT VARCHAR2(300) := 'https://www.rama.com.py/proyecto-ne-wsdatos';
+  c_url_base CONSTANT VARCHAR2(300) := k_util.f_valor_parametro('URL_DATOS_SERVICIOS');
 
   -- Posibles respuestas en variable de salida o_ok
   c_success    CONSTANT VARCHAR2(1) := 'S'; --éxito
