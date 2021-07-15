@@ -152,50 +152,56 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
         l_golesvisitante := NULL;
       END IF;
     
-      rw_partido := lf_buscar_partido(l_id);
-      IF rw_partido.id_partido IS NOT NULL THEN
-        UPDATE t_partidos p
-           SET id_torneo            = l_id_torneo,
-               id_club_local        = l_id_club_local,
-               id_club_visitante    = l_id_club_visitante,
-               fecha                = l_fecha_partido,
-               hora                 = to_char(l_fecha_partido, 'HH24:MI'),
-               id_jornada           = l_numerofecha,
-               id_estadio           = NULL,
-               goles_club_local     = l_goleslocal,
-               goles_club_visitante = l_golesvisitante,
-               estado               = l_estado,
-               id_importacion       = l_id
-         WHERE p.id_partido = rw_partido.id_partido;
-      ELSE
-        INSERT INTO t_partidos
-          (id_torneo,
-           id_club_local,
-           id_club_visitante,
-           fecha,
-           hora,
-           id_jornada,
-           id_estadio,
-           goles_club_local,
-           goles_club_visitante,
-           estado,
-           estado_predicciones,
-           id_importacion)
-        VALUES
-          (l_id_torneo,
-           l_id_club_local,
-           l_id_club_visitante,
-           l_fecha_partido,
-           to_char(l_fecha_partido, 'HH24:MI'),
-           l_numerofecha,
-           NULL,
-           l_goleslocal,
-           l_golesvisitante,
-           l_estado,
-           l_estado_predicciones,
-           l_id)
-        RETURNING id_partido INTO rw_partido.id_partido;
-      END IF;
+      BEGIN
+        rw_partido := lf_buscar_partido(l_id);
+        IF rw_partido.id_partido IS NOT NULL THEN
+          UPDATE t_partidos p
+             SET id_torneo            = l_id_torneo,
+                 id_club_local        = l_id_club_local,
+                 id_club_visitante    = l_id_club_visitante,
+                 fecha                = l_fecha_partido,
+                 hora                 = to_char(l_fecha_partido, 'HH24:MI'),
+                 id_jornada           = l_numerofecha,
+                 id_estadio           = NULL,
+                 goles_club_local     = l_goleslocal,
+                 goles_club_visitante = l_golesvisitante,
+                 estado               = l_estado,
+                 id_importacion       = l_id
+           WHERE p.id_partido = rw_partido.id_partido;
+        ELSE
+          INSERT INTO t_partidos
+            (id_torneo,
+             id_club_local,
+             id_club_visitante,
+             fecha,
+             hora,
+             id_jornada,
+             id_estadio,
+             goles_club_local,
+             goles_club_visitante,
+             estado,
+             estado_predicciones,
+             id_importacion)
+          VALUES
+            (l_id_torneo,
+             l_id_club_local,
+             l_id_club_visitante,
+             l_fecha_partido,
+             to_char(l_fecha_partido, 'HH24:MI'),
+             l_numerofecha,
+             NULL,
+             l_goleslocal,
+             l_golesvisitante,
+             l_estado,
+             l_estado_predicciones,
+             l_id)
+          RETURNING id_partido INTO rw_partido.id_partido;
+        END IF;
+      EXCEPTION
+        WHEN OTHERS THEN
+          dbms_output.put_line(l_id || ':' || SQLERRM);
+          raise_application_error(-20000, l_id || ':' || SQLERRM);
+      END;
     
     END LOOP;
   END;
