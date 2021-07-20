@@ -1,0 +1,29 @@
+create table T_INVITACIONES
+(
+  id_invitacion          NUMBER not null,
+  id_usuario_solicitante NUMBER(10) not null,
+  direccion_correo       VARCHAR2(320) not null,
+  tipo                   VARCHAR2(1) not null,
+  id_grupo               NUMBER,
+  fecha_creacion         DATE,
+  fecha_expiracion       DATE,
+  estado                 VARCHAR2(1) default 'P' not null,
+  fecha_aceptacion       DATE
+)
+;
+comment on table T_INVITACIONES
+  is 'Invitaciones';
+comment on column T_INVITACIONES.id_usuario_solicitante
+  is 'Usuario solicitante';
+comment on column T_INVITACIONES.direccion_correo
+  is 'Direccion de correo electrónico del usuario a invitar';
+alter table T_INVITACIONES
+  add constraint PK_INVITACIONES primary key (ID_INVITACION);
+alter table T_INVITACIONES
+  add constraint UK_INV_SOLICITANTE_SOLICITADO unique (ID_USUARIO_SOLICITANTE, DIRECCION_CORREO);
+alter table T_INVITACIONES
+  add constraint FK_INVITACIONES_USUARIOS foreign key (ID_USUARIO_SOLICITANTE)
+  references T_USUARIOS (ID_USUARIO);
+alter table T_INVITACIONES
+  add constraint FK_INVITACIONES_GRUPO foreign key (ID_GRUPO)
+  references T_GRUPOS (ID_GRUPO);
