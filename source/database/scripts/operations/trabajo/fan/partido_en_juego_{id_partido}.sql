@@ -156,7 +156,7 @@ begin
   l_varchar2(1) :=q'!56!';
   l_clob(2) :=q'!PLSQL_BLOCK!';
   l_clob(3) :=q'!BEGIN
-  k_importacion_fan.p_importar_partidos;
+  k_importacion_fan.p_importar_partido(&ID_PARTIDO);
   LOOP
     EXIT WHEN nvl(k_importacion_fan.f_estado_importacion_partidos, 'D') <> 'E';
     sys.dbms_session.sleep(1);
@@ -164,8 +164,8 @@ begin
   k_puntajes_fan.p_iniciar_cierre_partido_en_juego(&ID_PARTIDO);
 END;!';
   l_varchar2(4) :=q'!!';
-  l_varchar2(5) :=q'!900!';
-  l_clob(6) :=q'!FREQ=MINUTELY; INTERVAL=15;!';
+  l_varchar2(5) :=q'!60!';
+  l_clob(6) :=q'!FREQ=MINUTELY; INTERVAL=1;!';
   l_varchar2(7) :=q'!!';
   l_clob(8) :=q'!Trabajo de actualización de partido en juego!';
   l_varchar2(9) :=q'!!';
