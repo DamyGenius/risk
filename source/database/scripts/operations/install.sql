@@ -63,3 +63,4 @@ prompt
 @@scripts/operations/trabajo/fan/cierre_predicciones_{id_partido}.sql
 @@scripts/operations/trabajo/fan/fin_partido_{id_partido}.sql
 @@scripts/operations/trabajo/fan/partido_en_juego_{id_partido}.sql
+@@scripts/operations/trabajo/fan/pre_cierre_predicciones_{id_partido}.sql
