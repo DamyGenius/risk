@@ -49,8 +49,8 @@ prompt
 prompt Ejecutando migracion...
 prompt -----------------------------------
 prompt
+@@alter_t_partidos.sql
 @@k_importacion_fan.pck
-@@upd_t_notificacion_plantillas.sql
 
 prompt
 prompt Registrando migracion...
