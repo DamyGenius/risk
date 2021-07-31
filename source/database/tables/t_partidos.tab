@@ -13,7 +13,8 @@ create table T_PARTIDOS
   estado                VARCHAR2(1) default 'R' not null,
   estado_predicciones   VARCHAR2(1) default 'P' not null,
   id_importacion        NUMBER(15),
-  situacion_importacion VARCHAR2(1) default 'N' not null
+  situacion_importacion VARCHAR2(1) default 'N' not null,
+  estado_juego          VARCHAR2(2)
 )
 ;
 comment on table T_PARTIDOS
@@ -23,7 +24,9 @@ comment on column T_PARTIDOS.estado
 comment on column T_PARTIDOS.estado_predicciones
   is 'P - Pendiente, C - Confirmado, L - Liquidado';
 comment on column T_PARTIDOS.situacion_importacion
-  is 'N - Sin datos, T - Datos temporales, V - En verificaciÃ³n, D - Datos definitivos, A - Puntajes actualizados';
+  is 'N - Sin datos, T - Datos temporales, V - En verificación, D - Datos definitivos, A - Puntajes actualizados';
+comment on column T_PARTIDOS.estado_juego
+  is 'PT - Primer Tiempo, ET - Entretiempo, ST - Segundo Tiempo';
 alter table T_PARTIDOS
   add constraint PK_PARTIDOS primary key (ID_PARTIDO);
 alter table T_PARTIDOS
