@@ -258,7 +258,8 @@ namespace Risk.API.Helpers
                     string nombre = jsonRes["first_name"].ToString();
                     string apellido = jsonRes["last_name"].ToString();
 
-                    string direccionCorreo, username, domain;
+                    string direccionCorreo = "";
+                    string username, domain;
                     if (jsonRes["email"] != null) {
                         direccionCorreo = jsonRes["email"].ToString();
                         MailAddress addr = new MailAddress(direccionCorreo);
