@@ -257,10 +257,16 @@ namespace Risk.API.Helpers
                     string nombre = jsonRes["first_name"].ToString();
                     string apellido = jsonRes["last_name"].ToString();
                     string direccionCorreo = jsonRes["email"].ToString();
+                    string nombreCompleto = jsonRes["name"].ToString();
 
-                    MailAddress addr = new MailAddress(direccionCorreo);
-                    string username = addr.User;
-                    string domain = addr.Host;
+                    string username, domain;
+                    if (direccionCorreo == null || direccionCorreo.Equals(string.Empty)) {
+                        username = nombreCompleto.Replace(' ', '_').ToLower();
+                    } else {
+                        MailAddress addr = new MailAddress(direccionCorreo);
+                        username = addr.User;
+                        domain = addr.Host;
+                    }
 
                     usuario = new UsuarioExterno
                     {
