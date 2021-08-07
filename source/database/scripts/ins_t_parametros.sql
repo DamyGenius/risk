@@ -54,7 +54,7 @@ insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR, ID_DOMINIO)
 values ('REPORTE_FORMATO_SALIDA_DEFECTO', 'Formato de salida por defecto para reportes', 'PDF', null);
 
 insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR, ID_DOMINIO)
-values ('REGEXP_VALIDAR_ALIAS_USUARIO', 'Expresión Regular para validación de alias de usuario', '^[A-Za-z0-9_.]{1,50}$', null);
+values ('REGEXP_VALIDAR_ALIAS_USUARIO', 'Expresión Regular para validación de alias de usuario', '^[A-Za-z0-9-_.]{1,50}$', null);
 
 insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR, ID_DOMINIO)
 values ('TIEMPO_TOLERANCIA_VALIDAR_OTP', 'Tiempo de tolerancia para validación de OTP en segundos', '120', null);
