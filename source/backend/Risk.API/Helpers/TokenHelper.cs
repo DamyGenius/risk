@@ -266,7 +266,7 @@ namespace Risk.API.Helpers
                         username = addr.User;
                         domain = addr.Host;
                     } else {
-                        username = nombreCompleto.Replace(' ', '_').ToLower();
+                        username = $"{nombre}_{apellido}".Replace(' ', '_').ToLower();
                     }
 
                     usuario = new UsuarioExterno
