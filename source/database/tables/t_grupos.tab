@@ -7,6 +7,7 @@ create table T_GRUPOS
   id_usuario_administrador NUMBER(10),
   fecha_creacion           DATE,
   id_jornada_inicio        NUMBER(3),
+  id_jornada_fin           NUMBER(3),
   estado                   VARCHAR2(1),
   situacion                VARCHAR2(1),
   id_club                  VARCHAR2(5),
