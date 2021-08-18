@@ -35,6 +35,8 @@ namespace Risk.API.Entities
         public string AliasUsuario { get; set; }
         [JsonProperty("version_avatar")]
         public int? VersionAvatar { get; set; }
+        [JsonProperty("id_club")]
+        public string IdClub { get; set; }
         [JsonProperty("puntos")]
         public int? Puntos { get; set; }
         [JsonProperty("ranking")]
@@ -53,6 +55,7 @@ namespace Risk.API.Entities
                 IdUsuario = this.IdUsuario,
                 AliasUsuario = this.AliasUsuario,
                 VersionAvatar = this.VersionAvatar,
+                IdClub = IdClub,
                 Puntos = this.Puntos,
                 Ranking = this.Ranking,
                 Estado = this.Estado,
