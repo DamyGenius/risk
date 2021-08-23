@@ -288,5 +288,57 @@ begin
   -- start generation of records
   -----------------------------------
 
+  l_varchar2(1) :=q'!2!';
+  l_clob(2) :=q'!SERVICIO:AUT:EDITAR_DATO_USUARIO!';
+  l_clob(3) :=q'!N!';
+  l_clob(4) :=q'!N!';
+  l_clob(5) :=q'!N!';
+  l_clob(6) :=q'!N!';
+
+  insert into t_rol_permisos
+  (
+     "ID_ROL"
+    ,"ID_PERMISO"
+    ,"CONSULTAR"
+    ,"INSERTAR"
+    ,"ACTUALIZAR"
+    ,"ELIMINAR"
+  )
+  values
+  (
+     to_number(l_varchar2(1))
+    ,to_char(l_clob(2))
+    ,to_char(l_clob(3))
+    ,to_char(l_clob(4))
+    ,to_char(l_clob(5))
+    ,to_char(l_clob(6))
+  );
+
+  l_varchar2(1) :=q'!4!';
+  l_clob(2) :=q'!SERVICIO:AUT:EDITAR_DATO_USUARIO!';
+  l_clob(3) :=q'!N!';
+  l_clob(4) :=q'!N!';
+  l_clob(5) :=q'!N!';
+  l_clob(6) :=q'!N!';
+
+  insert into t_rol_permisos
+  (
+     "ID_ROL"
+    ,"ID_PERMISO"
+    ,"CONSULTAR"
+    ,"INSERTAR"
+    ,"ACTUALIZAR"
+    ,"ELIMINAR"
+  )
+  values
+  (
+     to_number(l_varchar2(1))
+    ,to_char(l_clob(2))
+    ,to_char(l_clob(3))
+    ,to_char(l_clob(4))
+    ,to_char(l_clob(5))
+    ,to_char(l_clob(6))
+  );
+
 end;
 /
