@@ -439,5 +439,39 @@ namespace Risk.API.Controllers
             var respuesta = _fanService.ListarMensajesGrupo(idGrupo, referenciaMensaje, paginaParametros);
             return ProcesarRespuesta(respuesta);
         }
+
+        [HttpPost("EnviarMensajeAmigo")]
+        [SwaggerOperation(OperationId = "EnviarMensajeAmigo", Summary = "EnviarMensajeAmigo", Description = "Permite enviar mensajes a un amigo")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
+        public IActionResult EnviarMensajeAmigo([FromQuery, SwaggerParameter(Description = "Identificador de la amistad", Required = true)] int idAmistad,
+            [FromQuery, SwaggerParameter(Description = "Referencia al mensaje superior, si es una respuesta a otro mensaje", Required = false)] long referenciaMensaje,
+            [FromBody] EnviarMensajeRequestBody requestBody)
+        {
+            var respuesta = _fanService.EnviarMensajeAmigo(idAmistad, requestBody.Usuario, requestBody.Contenido, referenciaMensaje);
+            _hubContext.Clients.Group($"amigo-{idAmistad}").SendAsync("mensajechatindividual", requestBody.Usuario, requestBody.Contenido);
+            return ProcesarRespuesta(respuesta);
+        }
+
+        [HttpGet("ListarMensajesAmigo")]
+        [SwaggerOperation(OperationId = "ListarMensajesAmigo", Summary = "ListarMensajesAmigo", Description = "Obtiene lista de mensajes de un amigo en orden descendente")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<AmigoMensaje>>))]
+        public IActionResult ListarMensajesAmigo([FromQuery, SwaggerParameter(Description = "Identificador de la amistad", Required = true)] int idAmistad,
+            [FromQuery, SwaggerParameter(Description = "Referencia al mensaje superior", Required = false)] long referenciaMensaje,
+            [FromQuery, SwaggerParameter(Description = "Número de la página", Required = false)] int pagina,
+            [FromQuery, SwaggerParameter(Description = "Cantidad de elementos por página", Required = false)] int porPagina,
+            [FromQuery, SwaggerParameter(Description = "No paginar?", Required = false)] bool noPaginar)
+        {
+            PaginaParametros paginaParametros = new PaginaParametros
+            {
+                Pagina = pagina,
+                PorPagina = porPagina,
+                NoPaginar = noPaginar
+            };
+            var respuesta = _fanService.ListarMensajesAmigo(idAmistad, referenciaMensaje, paginaParametros);
+            return ProcesarRespuesta(respuesta);
+        }
     }
 }

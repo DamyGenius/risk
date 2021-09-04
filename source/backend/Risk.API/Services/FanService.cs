@@ -59,6 +59,8 @@ namespace Risk.API.Services
         private const string NOMBRE_LISTAR_REACCIONES = "LISTAR_REACCIONES";
         private const string NOMBRE_ENVIAR_MENSAJE_GRUPO = "ENVIAR_MENSAJE_GRUPO";
         private const string NOMBRE_LISTAR_MENSAJES_GRUPO = "LISTAR_MENSAJES_GRUPO";
+        private const string NOMBRE_ENVIAR_MENSAJE_AMIGO = "ENVIAR_MENSAJE_AMIGO";
+        private const string NOMBRE_LISTAR_MENSAJES_AMIGO = "LISTAR_MENSAJES_AMIGO";
 
         public FanService(ILogger<FanService> logger, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDbConnectionFactory dbConnectionFactory)
             : base(logger, configuration, httpContextAccessor, dbConnectionFactory)
@@ -498,6 +500,47 @@ namespace Risk.API.Services
             }
 
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<GrupoMensaje>, YPagina<YGrupoMensaje>>(entityRsp, datos);
+        }
+
+        public Respuesta<Dato> EnviarMensajeAmigo(int idAmistad, string usuario, string contenido, long? referenciaMensaje)
+        {
+            JObject prms = new JObject();
+            prms.Add("id_amistad", idAmistad);
+            //prms.Add("usuario", usuario);
+            prms.Add("contenido", contenido);
+            prms.Add("ref_mensaje", referenciaMensaje);
+
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
+                NOMBRE_ENVIAR_MENSAJE_AMIGO,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
+
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetModelFromEntity<Dato, YDato>(entityRsp.Datos));
+        }
+
+        public Respuesta<Pagina<AmigoMensaje>> ListarMensajesAmigo(int idAmistad, long referenciaMensaje, PaginaParametros paginaParametros = null)
+        {
+            JObject prms = new JObject();
+            prms.Add("id_amistad", idAmistad);
+            if (paginaParametros != null)
+            {
+                prms.Add("pagina_parametros", JToken.FromObject(ModelsMapper.GetEntityFromModel<PaginaParametros, YPaginaParametros>(paginaParametros)));
+            }
+
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
+                NOMBRE_LISTAR_MENSAJES_AMIGO,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YPagina<YAmigoMensaje>>>(rsp);
+
+            Pagina<AmigoMensaje> datos = null;
+            if (entityRsp.Datos != null)
+            {
+                datos = EntitiesMapper.GetPaginaFromEntity<AmigoMensaje, YAmigoMensaje>(entityRsp.Datos, EntitiesMapper.GetModelListFromEntity<AmigoMensaje, YAmigoMensaje>(entityRsp.Datos.Elementos));
+            }
+
+            return EntitiesMapper.GetRespuestaFromEntity<Pagina<AmigoMensaje>, YPagina<YAmigoMensaje>>(entityRsp, datos);
         }
     }
 }
