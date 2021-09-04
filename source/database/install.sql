@@ -70,6 +70,7 @@ prompt
 @@sequences/s_id_grupo.seq
 @@sequences/s_id_grupo_mensaje.seq
 @@sequences/s_id_amistad.seq
+@@sequences/s_id_amistad_mensaje.seq
 @@sequences/s_id_invitacion.seq
 @@sequences/s_id_comentario.seq
 @@sequences/s_id_reaccion.seq
@@ -124,6 +125,7 @@ prompt
 @@tables/t_grupo_usuarios.tab
 @@tables/t_grupo_mensajes.tab
 @@tables/t_amigos.tab
+@@tables/t_amigo_mensajes.tab
 @@tables/t_invitaciones.tab
 @@tables/t_comentarios.tab
 @@tables/t_reacciones.tab
@@ -238,6 +240,7 @@ prompt
 @@triggers/gs_grupos.trg
 @@triggers/gs_grupo_mensajes.trg
 @@triggers/gs_amigos.trg
+@@triggers/gs_amigo_mensajes.trg
 @@triggers/gs_invitaciones.trg
 @@triggers/gs_comentarios.trg
 @@triggers/gs_reacciones.trg

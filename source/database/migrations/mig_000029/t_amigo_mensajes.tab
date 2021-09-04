@@ -1,0 +1,32 @@
+create table T_AMIGO_MENSAJES
+(
+  id_amistad_mensaje NUMBER not null,
+  id_amistad         NUMBER not null,
+  id_usuario         NUMBER(10) not null,
+  contenido          VARCHAR2(2000),
+  ref_mensaje        NUMBER,
+  fecha              TIMESTAMP(2) WITH TIME ZONE default CURRENT_TIMESTAMP not null
+)
+;
+comment on table T_AMIGO_MENSAJES
+  is 'Mensajes de Amigo';
+comment on column T_AMIGO_MENSAJES.id_amistad_mensaje
+  is 'Identificador de mensaje';
+comment on column T_AMIGO_MENSAJES.id_amistad
+  is 'Identificador de la amistad';
+comment on column T_AMIGO_MENSAJES.id_usuario
+  is 'Identificador del usuario';
+comment on column T_AMIGO_MENSAJES.contenido
+  is 'Contenido del mensaje';
+comment on column T_AMIGO_MENSAJES.ref_mensaje
+  is 'Identificador del mensaje superior, en caso de ser respuesta de otro mensaje';
+comment on column T_AMIGO_MENSAJES.fecha
+  is 'Fecha del mensaje';
+alter table T_AMIGO_MENSAJES
+  add constraint PK_AMIGO_MENSAJES primary key (ID_AMISTAD_MENSAJE);
+alter table T_AMIGO_MENSAJES
+  add constraint FK_AMIGO_MENSAJES_AMIGOS foreign key (ID_AMISTAD)
+  references T_AMIGOS (ID_AMISTAD);
+alter table T_AMIGO_MENSAJES
+  add constraint FK_AMIGO_MENSAJES_USUARIOS foreign key (ID_USUARIO)
+  references T_USUARIOS (ID_USUARIO);

@@ -11,6 +11,7 @@ prompt
 @@scripts/operations/servicio/aut/cambiar_estado_usuario.sql
 @@scripts/operations/servicio/aut/datos_dispositivo.sql
 @@scripts/operations/servicio/aut/datos_usuario.sql
+@@scripts/operations/servicio/aut/editar_dato_usuario.sql
 @@scripts/operations/servicio/aut/editar_usuario.sql
 @@scripts/operations/servicio/aut/generar_otp.sql
 @@scripts/operations/servicio/aut/iniciar_sesion.sql
@@ -27,6 +28,7 @@ prompt
 @@scripts/operations/servicio/fan/abandonar_grupo.sql
 @@scripts/operations/servicio/fan/datos_grupo.sql
 @@scripts/operations/servicio/fan/editar_grupo.sql
+@@scripts/operations/servicio/fan/enviar_mensaje_amigo.sql
 @@scripts/operations/servicio/fan/enviar_mensaje_grupo.sql
 @@scripts/operations/servicio/fan/invitar_usuario.sql
 @@scripts/operations/servicio/fan/listar_amigos.sql
@@ -34,6 +36,7 @@ prompt
 @@scripts/operations/servicio/fan/listar_comentarios.sql
 @@scripts/operations/servicio/fan/listar_grupos.sql
 @@scripts/operations/servicio/fan/listar_jornadas.sql
+@@scripts/operations/servicio/fan/listar_mensajes_amigo.sql
 @@scripts/operations/servicio/fan/listar_mensajes_grupo.sql
 @@scripts/operations/servicio/fan/listar_partidos.sql
 @@scripts/operations/servicio/fan/listar_predicciones_partidos.sql
