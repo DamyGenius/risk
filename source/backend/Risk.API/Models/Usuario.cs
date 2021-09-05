@@ -49,6 +49,8 @@ namespace Risk.API.Models
         public string NumeroTelefono { get; set; }
         [SwaggerSchema("Version del avatar del usuario")]
         public int? VersionAvatar { get; set; }
+        [SwaggerSchema("Usuario verificado")]
+        public bool Verificado { get; set; }
         [SwaggerSchema("Club del usuario")]
         public string IdClub { get; set; }
         [SwaggerSchema("Origen del usuario")]

@@ -35,6 +35,8 @@ namespace Risk.API.Entities
         public string AliasUsuario { get; set; }
         [JsonProperty("version_avatar")]
         public int? VersionAvatar { get; set; }
+        [JsonProperty("verificado")]
+        public string Verificado { get; set; }
         [JsonProperty("id_club")]
         public string IdClub { get; set; }
         [JsonProperty("puntos")]
@@ -55,6 +57,7 @@ namespace Risk.API.Entities
                 IdUsuario = this.IdUsuario,
                 AliasUsuario = this.AliasUsuario,
                 VersionAvatar = this.VersionAvatar,
+                Verificado = (this.Verificado == "S" ? true : false),
                 IdClub = IdClub,
                 Puntos = this.Puntos,
                 Ranking = this.Ranking,

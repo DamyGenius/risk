@@ -50,6 +50,8 @@ namespace Risk.API.Entities
         public string NumeroTelefono { get; set; }
         [JsonProperty("version_avatar")]
         public int? VersionAvatar { get; set; }
+        [JsonProperty("verificado")]
+        public string Verificado { get; set; }
         [JsonProperty("id_club")]
         public string IdClub { get; set; }
         [JsonProperty("origen")]
@@ -74,6 +76,7 @@ namespace Risk.API.Entities
                 DireccionCorreo = this.DireccionCorreo,
                 NumeroTelefono = this.NumeroTelefono,
                 VersionAvatar = this.VersionAvatar,
+                Verificado = (this.Verificado == "S" ? true : false),
                 IdClub = IdClub,
                 Origen = this.Origen.GetEnumValue<OrigenSesion>(),
                 Puntos = this.Puntos,
