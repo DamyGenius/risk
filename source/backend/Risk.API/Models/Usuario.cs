@@ -59,6 +59,10 @@ namespace Risk.API.Models
         public int? Puntos { get; set; }
         [SwaggerSchema("Ranking del usuario")]
         public int? Ranking { get; set; }
+        [SwaggerSchema("Tipo de amigo")]
+        public TipoAmigo? TipoAmigo { get; set; }
+        [SwaggerSchema("Identificador de la amistad")]
+        public long? IdAmistad { get; set; }
         [SwaggerSchema("Roles del usuario")]
         public List<Rol> Roles { get; set; }
 

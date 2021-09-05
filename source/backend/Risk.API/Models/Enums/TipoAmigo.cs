@@ -27,6 +27,7 @@ namespace Risk.API.Models
     public enum TipoAmigo
     {
         SOLICITANTE,
-        SOLICITADO
+        SOLICITADO,
+        AMIGO
     }
 }

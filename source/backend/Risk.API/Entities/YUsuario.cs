@@ -60,6 +60,10 @@ namespace Risk.API.Entities
         public int? Puntos { get; set; }
         [JsonProperty("ranking")]
         public int? Ranking { get; set; }
+        [JsonProperty("tipo_amigo")]
+        public string TipoAmigo { get; set; }
+        [JsonProperty("id_amistad")]
+        public long? IdAmistad { get; set; }
         [JsonProperty("roles")]
         public List<YRol> Roles { get; set; }
 
@@ -81,6 +85,8 @@ namespace Risk.API.Entities
                 Origen = this.Origen.GetEnumValue<OrigenSesion>(),
                 Puntos = this.Puntos,
                 Ranking = this.Ranking,
+                TipoAmigo = this.TipoAmigo.GetEnumValue<TipoAmigo>(),
+                IdAmistad = this.IdAmistad,
                 Roles = EntitiesMapper.GetModelListFromEntity<Rol, YRol>(this.Roles)
             };
         }
