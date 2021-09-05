@@ -6,6 +6,9 @@ insert into t_dato_definiciones (TABLA, CAMPO, DESCRIPCION, ORDEN, NOMBRE_REFERE
 values ('T_USUARIOS', 'ID_CLUB', 'Club favorito del usuario', 1, 'ALIAS', 'S');
 
 insert into t_dato_definiciones (TABLA, CAMPO, DESCRIPCION, ORDEN, NOMBRE_REFERENCIA, TIPO_DATO)
-values ('T_USUARIOS', 'CALIFICA_AND', 'Usuario califica aplicaciÃ³n de Android', 2, 'ALIAS', 'S');
+values ('T_USUARIOS', 'CALIFICA_AND', 'Usuario califica aplicación de Android', 2, 'ALIAS', 'S');
+
+insert into t_dato_definiciones (TABLA, CAMPO, DESCRIPCION, ORDEN, NOMBRE_REFERENCIA, TIPO_DATO)
+values ('T_USUARIOS', 'VERIFICADO', 'Usuario verificado?', 3, 'ALIAS', 'S');
 
 prompt Done.
