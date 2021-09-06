@@ -120,6 +120,8 @@ namespace Risk.API.Mappers
                     IdUsuario = entity.IdUsuario,
                     AliasUsuario = entity.AliasUsuario,
                     VersionAvatar = entity.VersionAvatar,
+                    Verificado = (entity.Verificado == "S" ? true : false),
+                    IdClub = entity.IdClub,
                     Puntos = entity.Puntos,
                     Ranking = entity.Ranking,
                     TokenAceptacion = entity.TokenAceptacion,

@@ -22,12 +22,18 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
+using Risk.API.Attributes;
+using Swashbuckle.AspNetCore.Annotations;
+
 namespace Risk.API.Models
 {
     public enum TipoAmigo
     {
+        [StringValue("SOLICITANTE")]
         SOLICITANTE,
+        [StringValue("SOLICITADO")]
         SOLICITADO,
+        [StringValue("AMIGO")]
         AMIGO
     }
 }
