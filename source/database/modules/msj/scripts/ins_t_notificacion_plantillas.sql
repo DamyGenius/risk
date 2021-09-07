@@ -11,6 +11,9 @@ insert into t_notificacion_plantillas (ID_APLICACION, ID_PLANTILLA, NOMBRE, ACTI
 values ('AND', 'MSJ', 'MENSAJERIA', 'S', 'Notificaciones de mensajería para la plataforma Android', '{"data":{"type":"$(tipo)","group_id":"$(id_grupo)","group_name":"$(nombre_grupo)","sender":"$(usuario)","message":"$(mensaje)"}}');
 
 insert into t_notificacion_plantillas (ID_APLICACION, ID_PLANTILLA, NOMBRE, ACTIVO, DETALLE, PLANTILLA)
+values ('AND', 'MSA', 'MENSAJERIA_AMIGO', 'S', 'Notificaciones de mensajería individual para la plataforma Android', '{"data":{"type":"$(tipo)","friend_id":"$(id_amistad)","sender":"$(usuario)","message":"$(mensaje)"}}');
+
+insert into t_notificacion_plantillas (ID_APLICACION, ID_PLANTILLA, NOMBRE, ACTIVO, DETALLE, PLANTILLA)
 values ('IOS', 'GEN', 'GENERAL', 'S', 'Notificaciones generales para la plataforma iOS', '{"aps":{"alert":"$(contenido)"}}');
 
 prompt Done.
