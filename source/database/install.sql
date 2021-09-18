@@ -205,7 +205,6 @@ prompt
 prompt Creando vistas...
 prompt -----------------------------------
 prompt
-
 @@views/v_ranking_usuarios.sql
 
 prompt
@@ -244,6 +243,12 @@ prompt
 @@triggers/gs_invitaciones.trg
 @@triggers/gs_comentarios.trg
 @@triggers/gs_reacciones.trg
+
+prompt
+prompt Creando procedimientos...
+prompt -----------------------------------
+prompt
+@@procedures/p_procesar_grupo_jornada.prc
 
 prompt
 prompt Ejecutando scripts...

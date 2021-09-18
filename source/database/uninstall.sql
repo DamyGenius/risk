@@ -46,6 +46,12 @@ prompt ===================================
 prompt
 
 prompt
+prompt Borrando procedimientos...
+prompt -----------------------------------
+prompt
+drop procedure p_procesar_grupo_jornada;
+
+prompt
 prompt Borrando vistas...
 prompt -----------------------------------
 prompt
