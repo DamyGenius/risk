@@ -10,7 +10,8 @@ create table T_CLUBES
   facebook       VARCHAR2(100),
   id_division    VARCHAR2(3),
   nombre_corto   VARCHAR2(100),
-  id_importacion NUMBER(10)
+  id_importacion NUMBER(10),
+  id_pais        NUMBER(3)
 )
 ;
 comment on table T_CLUBES
