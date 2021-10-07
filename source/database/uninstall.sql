@@ -146,6 +146,7 @@ drop table t_torneos cascade constraints;
 drop table t_estadios cascade constraints;
 drop table t_clubes cascade constraints;
 drop table t_divisiones cascade constraints;
+drop table t_importador_urls cascade constraints;
 
 drop table t_migraciones cascade constraints;
 drop table t_archivos cascade constraints;

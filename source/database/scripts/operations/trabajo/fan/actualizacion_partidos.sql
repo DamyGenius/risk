@@ -108,9 +108,14 @@ begin
 
   l_varchar2(1) :=q'!54!';
   l_clob(2) :=q'!PLSQL_BLOCK!';
-  l_clob(3) :=q'!BEGIN
-  k_importacion_fan.p_importar_partidos;
-  k_puntajes_fan.p_planificar_partidos;
+  l_clob(3) :=q'!DECLARE
+  CURSOR c_torneos IS
+    SELECT id_torneo FROM t_torneos WHERE actual = 'S';
+BEGIN
+  FOR tor IN c_torneos LOOP
+    k_importacion_fan.p_importar_partidos(tor.id_torneo);
+    k_puntajes_fan.p_planificar_partidos(tor.id_torneo);
+  END LOOP;
 END;!';
   l_varchar2(4) :=q'!!';
   l_varchar2(5) :=q'!!';

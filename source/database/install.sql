@@ -113,6 +113,7 @@ prompt
 @@tables/t_archivos.tab
 @@tables/t_migraciones.tab
 
+@@tables/t_importador_urls.tab
 @@tables/t_divisiones.tab
 @@tables/t_clubes.tab
 @@tables/t_estadios.tab

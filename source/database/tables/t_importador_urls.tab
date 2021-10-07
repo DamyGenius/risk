@@ -1,0 +1,20 @@
+create table T_IMPORTADOR_URLS
+(
+  id_url      VARCHAR2(3) not null,
+  descripcion VARCHAR2(300) not null,
+  activo      VARCHAR2(1) default 'N' not null
+)
+;
+comment on table T_IMPORTADOR_URLS
+  is 'URLs de consumo de webservices de Datos de Fantasy';
+comment on column T_IMPORTADOR_URLS.id_url
+  is 'Identificador de la URL';
+comment on column T_IMPORTADOR_URLS.descripcion
+  is 'Descripción de la URL';
+comment on column T_IMPORTADOR_URLS.activo
+  is 'La URL está activa? (S/N)';
+alter table T_IMPORTADOR_URLS
+  add constraint PK_IMPORTADOR_URLS primary key (ID_URL);
+alter table T_IMPORTADOR_URLS
+  add constraint CK_IMPORTADOR_URLS_ACTIVO
+  check (ACTIVO IN ('S', 'N'));

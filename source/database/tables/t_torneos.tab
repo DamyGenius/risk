@@ -6,7 +6,9 @@ create table T_TORNEOS
   titulo               VARCHAR2(50),
   denominacion_oficial VARCHAR2(100),
   saldo_inicial        NUMBER(18,3),
-  actual               VARCHAR2(1) default 'N' not null
+  actual               VARCHAR2(1) default 'N' not null,
+  id_url               VARCHAR2(3),
+  id_importacion       VARCHAR2(50)
 )
 ;
 comment on table T_TORNEOS
@@ -16,4 +18,6 @@ alter table T_TORNEOS
 alter table T_TORNEOS
   add constraint FK_TORNEOS_DIVISIONES foreign key (ID_DIVISION)
   references T_DIVISIONES (ID_DIVISION);
-
+alter table T_TORNEOS
+  add constraint FK_TORNEOS_URLS foreign key (ID_URL)
+  references T_IMPORTADOR_URLS (ID_URL);
