@@ -8,7 +8,8 @@ create table T_TORNEOS
   saldo_inicial        NUMBER(18,3),
   actual               VARCHAR2(1) default 'N' not null,
   id_url               VARCHAR2(3),
-  id_importacion       VARCHAR2(50)
+  id_importacion       VARCHAR2(50),
+  titulo_alternativo   VARCHAR2(50)
 )
 ;
 comment on table T_TORNEOS

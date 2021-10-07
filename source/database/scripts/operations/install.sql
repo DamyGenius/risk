@@ -34,6 +34,7 @@ prompt
 @@scripts/operations/servicio/fan/listar_amigos.sql
 @@scripts/operations/servicio/fan/listar_clubes.sql
 @@scripts/operations/servicio/fan/listar_comentarios.sql
+@@scripts/operations/servicio/fan/listar_divisiones.sql
 @@scripts/operations/servicio/fan/listar_grupos.sql
 @@scripts/operations/servicio/fan/listar_jornadas.sql
 @@scripts/operations/servicio/fan/listar_mensajes_amigo.sql
@@ -41,6 +42,7 @@ prompt
 @@scripts/operations/servicio/fan/listar_partidos.sql
 @@scripts/operations/servicio/fan/listar_predicciones_partidos.sql
 @@scripts/operations/servicio/fan/listar_reacciones.sql
+@@scripts/operations/servicio/fan/listar_torneos.sql
 @@scripts/operations/servicio/fan/reaccionar.sql
 @@scripts/operations/servicio/fan/realizar_comentario.sql
 @@scripts/operations/servicio/fan/realizar_prediccion.sql
