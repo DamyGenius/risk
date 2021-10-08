@@ -61,6 +61,8 @@ namespace Risk.API.Services
         private const string NOMBRE_LISTAR_MENSAJES_GRUPO = "LISTAR_MENSAJES_GRUPO";
         private const string NOMBRE_ENVIAR_MENSAJE_AMIGO = "ENVIAR_MENSAJE_AMIGO";
         private const string NOMBRE_LISTAR_MENSAJES_AMIGO = "LISTAR_MENSAJES_AMIGO";
+        private const string NOMBRE_LISTAR_DIVISIONES = "LISTAR_DIVISIONES";
+        private const string NOMBRE_LISTAR_TORNEOS = "LISTAR_TORNEOS";
 
         public FanService(ILogger<FanService> logger, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDbConnectionFactory dbConnectionFactory)
             : base(logger, configuration, httpContextAccessor, dbConnectionFactory)
@@ -541,6 +543,53 @@ namespace Risk.API.Services
             }
 
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<AmigoMensaje>, YPagina<YAmigoMensaje>>(entityRsp, datos);
+        }
+
+        public Respuesta<Pagina<Division>> ListarDivisiones(PaginaParametros paginaParametros = null)
+        {
+            JObject prms = new JObject();
+            if (paginaParametros != null)
+            {
+                prms.Add("pagina_parametros", JToken.FromObject(ModelsMapper.GetEntityFromModel<PaginaParametros, YPaginaParametros>(paginaParametros)));
+            }
+
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
+                NOMBRE_LISTAR_DIVISIONES,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YPagina<YDivision>>>(rsp);
+
+            Pagina<Division> datos = null;
+            if (entityRsp.Datos != null)
+            {
+                datos = EntitiesMapper.GetPaginaFromEntity<Division, YDivision>(entityRsp.Datos, EntitiesMapper.GetModelListFromEntity<Division, YDivision>(entityRsp.Datos.Elementos));
+            }
+
+            return EntitiesMapper.GetRespuestaFromEntity<Pagina<Division>, YPagina<YDivision>>(entityRsp, datos);
+        }
+
+        public Respuesta<Pagina<Torneo>> ListarTorneos(string idDivision, PaginaParametros paginaParametros = null)
+        {
+            JObject prms = new JObject();
+            prms.Add("id_division", idDivision);
+            if (paginaParametros != null)
+            {
+                prms.Add("pagina_parametros", JToken.FromObject(ModelsMapper.GetEntityFromModel<PaginaParametros, YPaginaParametros>(paginaParametros)));
+            }
+
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
+                NOMBRE_LISTAR_TORNEOS,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YPagina<YTorneo>>>(rsp);
+
+            Pagina<Torneo> datos = null;
+            if (entityRsp.Datos != null)
+            {
+                datos = EntitiesMapper.GetPaginaFromEntity<Torneo, YTorneo>(entityRsp.Datos, EntitiesMapper.GetModelListFromEntity<Torneo, YTorneo>(entityRsp.Datos.Elementos));
+            }
+
+            return EntitiesMapper.GetRespuestaFromEntity<Pagina<Torneo>, YPagina<YTorneo>>(entityRsp, datos);
         }
     }
 }

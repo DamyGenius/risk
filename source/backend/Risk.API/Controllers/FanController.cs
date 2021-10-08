@@ -473,5 +473,44 @@ namespace Risk.API.Controllers
             var respuesta = _fanService.ListarMensajesAmigo(idAmistad, referenciaMensaje, paginaParametros);
             return ProcesarRespuesta(respuesta);
         }
+
+        [AllowAnonymous]
+        [HttpGet("ListarDivisiones")]
+        [SwaggerOperation(OperationId = "ListarDivisiones", Summary = "ListarDivisiones", Description = "Obtiene lista de divisiones")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<AmigoMensaje>>))]
+        public IActionResult ListarDivisiones([FromQuery, SwaggerParameter(Description = "Número de la página", Required = false)] int pagina,
+            [FromQuery, SwaggerParameter(Description = "Cantidad de elementos por página", Required = false)] int porPagina,
+            [FromQuery, SwaggerParameter(Description = "No paginar?", Required = false)] bool noPaginar)
+        {
+            PaginaParametros paginaParametros = new PaginaParametros
+            {
+                Pagina = pagina,
+                PorPagina = porPagina,
+                NoPaginar = noPaginar
+            };
+            var respuesta = _fanService.ListarDivisiones(paginaParametros);
+            return ProcesarRespuesta(respuesta);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("ListarTorneos")]
+        [SwaggerOperation(OperationId = "ListarTorneos", Summary = "ListarTorneos", Description = "Obtiene lista de torneos activos")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<AmigoMensaje>>))]
+        public IActionResult ListarTorneos([FromQuery, SwaggerParameter(Description = "Referencia al mensaje superior", Required = false)] string idDivision,
+            [FromQuery, SwaggerParameter(Description = "Número de la página", Required = false)] int pagina,
+            [FromQuery, SwaggerParameter(Description = "Cantidad de elementos por página", Required = false)] int porPagina,
+            [FromQuery, SwaggerParameter(Description = "No paginar?", Required = false)] bool noPaginar)
+        {
+            PaginaParametros paginaParametros = new PaginaParametros
+            {
+                Pagina = pagina,
+                PorPagina = porPagina,
+                NoPaginar = noPaginar
+            };
+            var respuesta = _fanService.ListarTorneos(idDivision, paginaParametros);
+            return ProcesarRespuesta(respuesta);
+        }
     }
 }
