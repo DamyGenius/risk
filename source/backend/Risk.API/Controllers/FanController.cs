@@ -55,17 +55,20 @@ namespace Risk.API.Controllers
             _hubContext = hubContext;
         }
 
+        [Obsolete("Usar servicio ListarEquipos del dominio FANTASY")]
         [AllowAnonymous]
         [HttpGet("ListarClubes")]
         [SwaggerOperation(OperationId = "ListarClubes", Summary = "ListarClubes", Description = "Obtiene una lista de clubes")]
         [Produces(MediaTypeNames.Application.Json)]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Club>>))]
-        public IActionResult ListarClubes([FromQuery, SwaggerParameter(Description = "Identificador de la división", Required = false)] string idDivision)
+        public IActionResult ListarClubes([FromQuery, SwaggerParameter(Description = "Identificador del país", Required = false)] int? idPais,
+            [FromQuery, SwaggerParameter(Description = "Identificador de la división", Required = false)] string idDivision)
         {
-            var respuesta = _fanService.ListarClubes(null, idDivision);
+            var respuesta = _fanService.ListarClubes(null, idPais, idDivision);
             return ProcesarRespuesta(respuesta);
         }
 
+        [Obsolete("Usar servicio ListarEquipos del dominio FANTASY")]
         [AllowAnonymous]
         [HttpGet("ListarClubes/{idClub}")]
         [SwaggerOperation(OperationId = "ListarClub", Summary = "ListarClub", Description = "Obtiene los datos de un club")]
@@ -73,7 +76,31 @@ namespace Risk.API.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Club>>))]
         public IActionResult ListarClub([FromRoute, SwaggerParameter(Description = "Identificador del club", Required = true)] string idClub)
         {
-            var respuesta = _fanService.ListarClubes(idClub, null);
+            var respuesta = _fanService.ListarClubes(idClub, null, null);
+            return ProcesarRespuesta(respuesta);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("ListarEquipos")]
+        [SwaggerOperation(OperationId = "ListarEquipos", Summary = "ListarEquipos", Description = "Obtiene una lista de equipos")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Equipo>>))]
+        public IActionResult ListarEquipos([FromQuery, SwaggerParameter(Description = "Tipo (Club/Selección)", Required = false)] TipoEquipo? tipo,
+            [FromQuery, SwaggerParameter(Description = "Identificador del país", Required = false)] int? idPais,
+            [FromQuery, SwaggerParameter(Description = "Identificador de la división", Required = false)] string idDivision)
+        {
+            var respuesta = _fanService.ListarEquipos(null, tipo, idPais, idDivision);
+            return ProcesarRespuesta(respuesta);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("ListarEquipos/{idEquipo}")]
+        [SwaggerOperation(OperationId = "ListarEquipo", Summary = "ListarEquipo", Description = "Obtiene los datos de un equipo")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Equipo>>))]
+        public IActionResult ListarEquipo([FromRoute, SwaggerParameter(Description = "Identificador del equipo", Required = true)] string idEquipo)
+        {
+            var respuesta = _fanService.ListarEquipos(idEquipo, null, null, null);
             return ProcesarRespuesta(respuesta);
         }
 

@@ -22,28 +22,17 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-using System;
-using Risk.API.Entities;
+using Risk.API.Attributes;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Risk.API.Models
 {
-    public class Club : IModel
+    [SwaggerSchema("Tipos de Equipo")]
+    public enum TipoEquipo
     {
-        public string IdClub { get; set; }
-        public string NombreOficial { get; set; }
-        public string NombreCorto { get; set; }
-        public string OtrosNombres { get; set; }
-        public DateTime? Fundacion { get; set; }
-        public string PaginaWeb { get; set; }
-        public string Twitter { get; set; }
-        public string Facebook { get; set; }
-        public int IdPais { get; set; }
-        public string IdDivision { get; set; }
-        public int? VersionEscudo { get; set; }
-
-        public IEntity ConvertToEntity()
-        {
-            throw new NotImplementedException();
-        }
+        [StringValue("C")]
+        Club,
+        [StringValue("S")]
+        Seleccion
     }
 }

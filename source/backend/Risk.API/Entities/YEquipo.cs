@@ -29,7 +29,7 @@ using Risk.API.Models;
 
 namespace Risk.API.Entities
 {
-    public class YClub : IEntity
+    public class YEquipo : IEntity
     {
         [JsonProperty("id_club")]
         public string IdClub { get; set; }
@@ -47,6 +47,8 @@ namespace Risk.API.Entities
         public string Twitter { get; set; }
         [JsonProperty("facebook")]
         public string Facebook { get; set; }
+        [JsonProperty("tipo")]
+        public string Tipo { get; set; }
         [JsonProperty("id_pais")]
         public int IdPais { get; set; }
         [JsonProperty("id_division")]
@@ -56,9 +58,9 @@ namespace Risk.API.Entities
 
         public IModel ConvertToModel()
         {
-            return new Club
+            return new Equipo
             {
-                IdClub = this.IdClub,
+                IdEquipo = this.IdClub,
                 NombreOficial = this.NombreOficial,
                 NombreCorto = this.NombreCorto,
                 OtrosNombres = this.OtrosNombres,
@@ -66,6 +68,7 @@ namespace Risk.API.Entities
                 PaginaWeb = this.PaginaWeb,
                 Twitter = this.Twitter,
                 Facebook = this.Facebook,
+                Tipo = this.Tipo.GetEnumValue<TipoEquipo>(),
                 IdPais = this.IdPais,
                 IdDivision = this.IdDivision,
                 VersionEscudo = this.VersionEscudo

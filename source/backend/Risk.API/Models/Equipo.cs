@@ -23,53 +23,28 @@ SOFTWARE.
 */
 
 using System;
-using Newtonsoft.Json;
-using Risk.API.Attributes;
-using Risk.API.Models;
+using Risk.API.Entities;
 
-namespace Risk.API.Entities
+namespace Risk.API.Models
 {
-    public class YClub : IEntity
+    public class Equipo : IModel
     {
-        [JsonProperty("id_club")]
-        public string IdClub { get; set; }
-        [JsonProperty("nombre_oficial")]
+        public string IdEquipo { get; set; }
         public string NombreOficial { get; set; }
-        [JsonProperty("nombre_corto")]
         public string NombreCorto { get; set; }
-        [JsonProperty("otros_nombres")]
         public string OtrosNombres { get; set; }
-        [JsonProperty("fundacion")]
         public DateTime? Fundacion { get; set; }
-        [JsonProperty("pagina_web")]
         public string PaginaWeb { get; set; }
-        [JsonProperty("twitter")]
         public string Twitter { get; set; }
-        [JsonProperty("facebook")]
         public string Facebook { get; set; }
-        [JsonProperty("id_pais")]
+        public TipoEquipo Tipo { get; set; }
         public int IdPais { get; set; }
-        [JsonProperty("id_division")]
         public string IdDivision { get; set; }
-        [JsonProperty("version_escudo")]
         public int? VersionEscudo { get; set; }
 
-        public IModel ConvertToModel()
+        public IEntity ConvertToEntity()
         {
-            return new Club
-            {
-                IdClub = this.IdClub,
-                NombreOficial = this.NombreOficial,
-                NombreCorto = this.NombreCorto,
-                OtrosNombres = this.OtrosNombres,
-                Fundacion = this.Fundacion,
-                PaginaWeb = this.PaginaWeb,
-                Twitter = this.Twitter,
-                Facebook = this.Facebook,
-                IdPais = this.IdPais,
-                IdDivision = this.IdDivision,
-                VersionEscudo = this.VersionEscudo
-            };
+            throw new NotImplementedException();
         }
     }
 }

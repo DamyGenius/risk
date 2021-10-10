@@ -38,7 +38,7 @@ namespace Risk.API.Services
     public class FanService : RiskServiceBase, IFanService
     {
         private const string DOMINIO_OPERACION = "FAN";
-        private const string NOMBRE_LISTAR_CLUBES = "LISTAR_CLUBES";
+        private const string NOMBRE_LISTAR_EQUIPOS = "LISTAR_CLUBES";
         private const string NOMBRE_REGISTRAR_GRUPO = "REGISTRAR_GRUPO";
         private const string NOMBRE_REALIZAR_PREDICCION = "REALIZAR_PREDICCION";
         private const string NOMBRE_LISTAR_PARTIDOS = "LISTAR_PARTIDOS";
@@ -69,14 +69,16 @@ namespace Risk.API.Services
         {
         }
 
-        public Respuesta<Pagina<Club>> ListarClubes(string idClub = null, string idDivision = null)
+        public Respuesta<Pagina<Club>> ListarClubes(string idClub = null, int? idPais = null, string idDivision = null)
         {
             JObject prms = new JObject();
             prms.Add("id_club", idClub);
             prms.Add("id_division", idDivision);
+            prms.Add("tipo",  TipoEquipo.Club.GetStringValue());
+            prms.Add("id_pais", idPais);
 
             string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
-                NOMBRE_LISTAR_CLUBES,
+                NOMBRE_LISTAR_EQUIPOS,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YPagina<YClub>>>(rsp);
@@ -88,6 +90,29 @@ namespace Risk.API.Services
             }
 
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<Club>, YPagina<YClub>>(entityRsp, datos);
+        }
+
+        public Respuesta<Pagina<Equipo>> ListarEquipos(string idEquipo = null, TipoEquipo? tipo = null, int? idPais = null, string idDivision = null)
+        {
+            JObject prms = new JObject();
+            prms.Add("id_club", idEquipo);
+            prms.Add("id_division", idDivision);
+            prms.Add("tipo",  tipo.GetStringValue());
+            prms.Add("id_pais", idPais);
+
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
+                NOMBRE_LISTAR_EQUIPOS,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YPagina<YEquipo>>>(rsp);
+
+            Pagina<Equipo> datos = null;
+            if (entityRsp.Datos != null)
+            {
+                datos = EntitiesMapper.GetPaginaFromEntity<Equipo, YEquipo>(entityRsp.Datos, EntitiesMapper.GetModelListFromEntity<Equipo, YEquipo>(entityRsp.Datos.Elementos));
+            }
+
+            return EntitiesMapper.GetRespuestaFromEntity<Pagina<Equipo>, YPagina<YEquipo>>(entityRsp, datos);
         }
 
         public Respuesta<Pagina<Partido>> ListarPartidos(int? partido = null, string torneo = null, string estado = null)

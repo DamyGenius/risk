@@ -55,6 +55,8 @@ namespace Risk.API.Models
         public string IdClub { get; set; }
         [SwaggerSchema("Origen del usuario")]
         public OrigenSesion Origen { get; set; }
+        [SwaggerSchema("Torneo actual del usuario")]
+        public string IdTorneo { get; set; }
         [SwaggerSchema("Puntos generales del usuario")]
         public int? Puntos { get; set; }
         [SwaggerSchema("Ranking del usuario")]

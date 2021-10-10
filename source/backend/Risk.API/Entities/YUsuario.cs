@@ -56,6 +56,8 @@ namespace Risk.API.Entities
         public string IdClub { get; set; }
         [JsonProperty("origen")]
         public string Origen { get; set; }
+        [JsonProperty("id_torneo")]
+        public string IdTorneo { get; set; }
         [JsonProperty("puntos")]
         public int? Puntos { get; set; }
         [JsonProperty("ranking")]
@@ -83,6 +85,7 @@ namespace Risk.API.Entities
                 Verificado = (this.Verificado == "S" ? true : false),
                 IdClub = IdClub,
                 Origen = this.Origen.GetEnumValue<OrigenSesion>(),
+                IdTorneo = this.IdTorneo,
                 Puntos = this.Puntos,
                 Ranking = this.Ranking,
                 TipoAmigo = this.TipoAmigo.GetEnumValue<TipoAmigo>(),
