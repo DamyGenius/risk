@@ -410,4 +410,10 @@ values ('EXTENSION_FUENTE', 'WOFF', 'FUENTE WEB OPEN FONT FORMAT', 'font/woff', 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('EXTENSION_FUENTE', 'WOFF2', 'FUENTE WEB OPEN FONT FORMAT 2', 'font/woff2', 'S');
 
+insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
+values ('TIPO_EQUIPO', 'S', 'SELECCIÓN', null, 'S');
+
+insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
+values ('TIPO_EQUIPO', 'C', 'CLUB', null, 'S');
+
 prompt Done.

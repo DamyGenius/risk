@@ -11,11 +11,14 @@ create table T_CLUBES
   id_division    VARCHAR2(3),
   nombre_corto   VARCHAR2(100),
   id_importacion NUMBER(10),
-  id_pais        NUMBER(3)
+  id_pais        NUMBER(3),
+  tipo           VARCHAR2(1) default 'C' not null
 )
 ;
 comment on table T_CLUBES
   is 'Clubes';
+comment on column T_CLUBES.tipo
+  is 'Tipo de equipo (C-Club, S-Selección)';
 alter table T_CLUBES
   add constraint PK_CLUBES primary key (ID_CLUB);
 alter table T_CLUBES
@@ -24,4 +27,6 @@ alter table T_CLUBES
 alter table T_CLUBES
   add constraint FK_CLUBES_PERSONAS foreign key (ID_PERSONA)
   references T_PERSONAS (ID_PERSONA);
-
+alter table T_CLUBES
+  add constraint CK_CLUBES_TIPO
+  check (TIPO IN ('C', 'S'));
