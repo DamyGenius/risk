@@ -52,7 +52,15 @@ prompt
 @@k_importacion_fan.pck
 @@k_puntajes_fan.pck
 @@k_servicio_fan.pck
-
+@@ins_t_divisiones.sql
+@@ins_t_torneos.sql
+@@ins_t_torneo_jornadas.sql
+@@ins_t_clubes.sql
+@@ins_t_planteles.sql
+@@upd_t_parametros.sql
+@@upd_t_operaciones.sql
+@@upd_t_operacion_parametros.sql
+@@script_importar_partidos.sql
 
 prompt
 prompt Registrando migracion...
