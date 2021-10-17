@@ -49,9 +49,10 @@ prompt
 prompt Ejecutando migracion...
 prompt -----------------------------------
 prompt
-@@k_mensajeria.pck
-@@k_puntajes_fan.pck
-@@k_servicio_fan.pck
+@@upd_t_notificaciones.sql
+@@alter_t_usuario.sql
+@@k_autenticacion.pck
+@@listar_mensajes_usuario.sql
 
 prompt
 prompt Registrando migracion...
