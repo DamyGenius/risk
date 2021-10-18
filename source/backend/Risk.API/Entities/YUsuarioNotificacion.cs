@@ -41,10 +41,10 @@ namespace Risk.API.Entities
 
         public IModel ConvertToModel()
         {
-            return new AmigoMensaje
+            return new UsuarioNotificacion
             {
-                IdAmistadMensaje = this.IdNotificacion,
-                AliasUsuario = this.Titulo,
+                IdNotificacion = this.IdNotificacion,
+                Titulo = this.Titulo,
                 Contenido = this.Contenido,
                 Fecha = this.Fecha
             };
