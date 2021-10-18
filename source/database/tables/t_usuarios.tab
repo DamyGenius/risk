@@ -8,7 +8,8 @@ create table T_USUARIOS
   numero_telefono  VARCHAR2(160),
   origen           VARCHAR2(1),
   id_externo       VARCHAR2(160),
-  fecha_creacion   DATE
+  fecha_creacion   DATE,
+  prueba           VARCHAR2(1) default 'N'
 )
 ;
 comment on table T_USUARIOS
@@ -31,6 +32,8 @@ comment on column T_USUARIOS.id_externo
   is 'Identificador externo del usuario';
 comment on column T_USUARIOS.fecha_creacion
   is 'Fecha de creacion del usuario';
+comment on column T_USUARIOS.prueba
+  is '¿Es usuario de prueba?';
 alter table T_USUARIOS
   add constraint PK_USUARIOS primary key (ID_USUARIO);
 alter table T_USUARIOS

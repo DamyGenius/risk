@@ -9,11 +9,14 @@ create table T_TORNEOS
   actual               VARCHAR2(1) default 'N' not null,
   id_url               VARCHAR2(3),
   id_importacion       VARCHAR2(50),
-  titulo_alternativo   VARCHAR2(50)
+  titulo_alternativo   VARCHAR2(50),
+  prueba               VARCHAR2(1) default 'N'
 )
 ;
 comment on table T_TORNEOS
   is 'Torneos';
+comment on column T_TORNEOS.prueba
+  is '¿Es torneo de prueba?';
 alter table T_TORNEOS
   add constraint PK_TORNEOS primary key (ID_TORNEO);
 alter table T_TORNEOS
