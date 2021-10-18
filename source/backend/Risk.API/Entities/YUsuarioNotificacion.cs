@@ -36,7 +36,7 @@ namespace Risk.API.Entities
         public string Titulo { get; set; }
         [JsonProperty("contenido")]
         public string Contenido { get; set; }
-        [JsonProperty("fecha_envio")]
+        [JsonProperty("fecha")]
         public DateTime? Fecha { get; set; }
 
         public IModel ConvertToModel()
