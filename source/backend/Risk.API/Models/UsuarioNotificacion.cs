@@ -22,17 +22,21 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-using Risk.API.Models;
+using System;
+using Risk.API.Entities;
 
-namespace Risk.API.Services
+namespace Risk.API.Models
 {
-    public interface IMsjService
+    public class UsuarioNotificacion : IModel
     {
-        Respuesta<Pagina<Mensaje>> ListarMensajesPendientes(PaginaParametros paginaParametros = null);
-        Respuesta<Pagina<Correo>> ListarCorreosPendientes(PaginaParametros paginaParametros = null);
-        Respuesta<Pagina<Notificacion>> ListarNotificacionesPendientes(PaginaParametros paginaParametros = null);
-        Respuesta<Dato> CambiarEstadoMensajeria(TipoMensajeria tipoMensajeria, int idMensajeria, EstadoMensajeria estado, string respuestaEnvio);
-        Respuesta<Dato> ActivarDesactivarMensajeria(TipoMensajeria tipoMensajeria, bool estado);
-        Respuesta<Pagina<UsuarioNotificacion>> ListarNotificacionesUsuario(PaginaParametros paginaParametros = null);
+        public long IdNotificacion { get; set; }
+        public string Titulo { get; set; }
+        public string Contenido { get; set; }
+        public DateTime? Fecha { get; set; }
+
+        public IEntity ConvertToEntity()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

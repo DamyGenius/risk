@@ -142,5 +142,23 @@ namespace Risk.API.Controllers
             var respuesta = _msjService.CambiarEstadoMensajeria(requestBody.TipoMensajeria, requestBody.IdMensajeria, requestBody.Estado, requestBody.RespuestaEnvio);
             return ProcesarRespuesta(respuesta);
         }
+
+        [HttpGet("ListarNotificacionesUsuario")]
+        [SwaggerOperation(OperationId = "ListarNotificacionesUsuario", Summary = "ListarNotificacionesUsuario", Description = "Obtiene lista de notificaciones de un usuario en orden descendente")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<UsuarioNotificacion>>))]
+        public IActionResult ListarNotificacionesUsuario([FromQuery, SwaggerParameter(Description = "Número de la página", Required = false)] int pagina,
+            [FromQuery, SwaggerParameter(Description = "Cantidad de elementos por página", Required = false)] int porPagina,
+            [FromQuery, SwaggerParameter(Description = "No paginar?", Required = false)] bool noPaginar)
+        {
+            PaginaParametros paginaParametros = new PaginaParametros
+            {
+                Pagina = pagina,
+                PorPagina = porPagina,
+                NoPaginar = noPaginar
+            };
+            var respuesta = _msjService.ListarNotificacionesUsuario(paginaParametros);
+            return ProcesarRespuesta(respuesta);
+        }
     }
 }

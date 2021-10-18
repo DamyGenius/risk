@@ -22,17 +22,32 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
+using System;
+using Newtonsoft.Json;
 using Risk.API.Models;
 
-namespace Risk.API.Services
+namespace Risk.API.Entities
 {
-    public interface IMsjService
+    public class YUsuarioNotificacion : IEntity
     {
-        Respuesta<Pagina<Mensaje>> ListarMensajesPendientes(PaginaParametros paginaParametros = null);
-        Respuesta<Pagina<Correo>> ListarCorreosPendientes(PaginaParametros paginaParametros = null);
-        Respuesta<Pagina<Notificacion>> ListarNotificacionesPendientes(PaginaParametros paginaParametros = null);
-        Respuesta<Dato> CambiarEstadoMensajeria(TipoMensajeria tipoMensajeria, int idMensajeria, EstadoMensajeria estado, string respuestaEnvio);
-        Respuesta<Dato> ActivarDesactivarMensajeria(TipoMensajeria tipoMensajeria, bool estado);
-        Respuesta<Pagina<UsuarioNotificacion>> ListarNotificacionesUsuario(PaginaParametros paginaParametros = null);
+        [JsonProperty("id_notificacion")]
+        public long IdNotificacion { get; set; }
+        [JsonProperty("titulo")]
+        public string Titulo { get; set; }
+        [JsonProperty("contenido")]
+        public string Contenido { get; set; }
+        [JsonProperty("fecha_envio")]
+        public DateTime? Fecha { get; set; }
+
+        public IModel ConvertToModel()
+        {
+            return new AmigoMensaje
+            {
+                IdAmistadMensaje = this.IdNotificacion,
+                AliasUsuario = this.Titulo,
+                Contenido = this.Contenido,
+                Fecha = this.Fecha
+            };
+        }
     }
 }

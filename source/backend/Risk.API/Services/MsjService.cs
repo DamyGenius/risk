@@ -43,6 +43,7 @@ namespace Risk.API.Services
         private const string NOMBRE_LISTAR_NOTIFICACIONES_PENDIENTES = "LISTAR_NOTIFICACIONES_PENDIENTES";
         private const string NOMBRE_CAMBIAR_ESTADO_MENSAJERIA = "CAMBIAR_ESTADO_MENSAJERIA";
         private const string NOMBRE_ACTIVAR_DESACTIVAR_MENSAJERIA = "ACTIVAR_DESACTIVAR_MENSAJERIA";
+        private const string NOMBRE_LISTAR_NOTIFICACIONES_USUARIO = "LISTAR_NOTIFICACIONES_USUARIO";
 
         public MsjService(ILogger<MsjService> logger, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDbConnectionFactory dbConnectionFactory)
             : base(logger, configuration, httpContextAccessor, dbConnectionFactory)
@@ -148,6 +149,29 @@ namespace Risk.API.Services
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
 
             return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetModelFromEntity<Dato, YDato>(entityRsp.Datos));
+        }
+
+        public Respuesta<Pagina<UsuarioNotificacion>> ListarNotificacionesUsuario(PaginaParametros paginaParametros = null)
+        {
+            JObject prms = new JObject();
+            if (paginaParametros != null)
+            {
+                prms.Add("pagina_parametros", JToken.FromObject(ModelsMapper.GetEntityFromModel<PaginaParametros, YPaginaParametros>(paginaParametros)));
+            }
+
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
+                NOMBRE_LISTAR_NOTIFICACIONES_USUARIO,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YPagina<YUsuarioNotificacion>>>(rsp);
+
+            Pagina<UsuarioNotificacion> datos = null;
+            if (entityRsp.Datos != null)
+            {
+                datos = EntitiesMapper.GetPaginaFromEntity<UsuarioNotificacion, YUsuarioNotificacion>(entityRsp.Datos, EntitiesMapper.GetModelListFromEntity<UsuarioNotificacion, YUsuarioNotificacion>(entityRsp.Datos.Elementos));
+            }
+
+            return EntitiesMapper.GetRespuestaFromEntity<Pagina<UsuarioNotificacion>, YPagina<YUsuarioNotificacion>>(entityRsp, datos);
         }
     }
 }
