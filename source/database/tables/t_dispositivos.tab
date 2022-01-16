@@ -11,7 +11,8 @@ create table T_DISPOSITIVOS
   version_navegador         VARCHAR2(100),
   token_notificacion        VARCHAR2(500),
   version_aplicacion        VARCHAR2(100),
-  id_pais                   NUMBER(3)
+  id_pais                   NUMBER(3),
+  zona_horaria              VARCHAR2(8)
 )
 ;
 comment on table T_DISPOSITIVOS
@@ -40,6 +41,8 @@ comment on column T_DISPOSITIVOS.version_aplicacion
   is 'Version de la aplicacion';
 comment on column T_DISPOSITIVOS.id_pais
   is 'Pais del dispositivo';
+comment on column T_DISPOSITIVOS.zona_horaria
+  is 'Zona horaria del dispositivo (en horas)';
 alter table T_DISPOSITIVOS
   add constraint PK_DISPOSITIVOS primary key (ID_DISPOSITIVO);
 alter table T_DISPOSITIVOS
