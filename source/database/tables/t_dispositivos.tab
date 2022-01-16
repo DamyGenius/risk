@@ -10,7 +10,8 @@ create table T_DISPOSITIVOS
   nombre_navegador          VARCHAR2(100),
   version_navegador         VARCHAR2(100),
   token_notificacion        VARCHAR2(500),
-  version_aplicacion        VARCHAR2(100)
+  version_aplicacion        VARCHAR2(100),
+  id_pais                   NUMBER(3)
 )
 ;
 comment on table T_DISPOSITIVOS
@@ -37,6 +38,8 @@ comment on column T_DISPOSITIVOS.token_notificacion
   is 'Token de notificacion del dispositivo';
 comment on column T_DISPOSITIVOS.version_aplicacion
   is 'Version de la aplicacion';
+comment on column T_DISPOSITIVOS.id_pais
+  is 'Pais del dispositivo';
 alter table T_DISPOSITIVOS
   add constraint PK_DISPOSITIVOS primary key (ID_DISPOSITIVO);
 alter table T_DISPOSITIVOS
@@ -44,4 +47,6 @@ alter table T_DISPOSITIVOS
 alter table T_DISPOSITIVOS
   add constraint FK_DISPOSITIVOS_APLICACIONES foreign key (ID_APLICACION)
   references T_APLICACIONES (ID_APLICACION);
-
+alter table T_DISPOSITIVOS
+  add constraint FK_DISPOSITIVOS_PAISES foreign key (ID_PAIS)
+  references T_PAISES (ID_PAIS);
