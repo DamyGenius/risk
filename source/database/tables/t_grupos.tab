@@ -5,7 +5,7 @@ create table T_GRUPOS
   descripcion              VARCHAR2(150),
   tipo                     VARCHAR2(3) default 'GLO' not null,
   id_usuario_administrador NUMBER(10),
-  fecha_creacion           DATE,
+  fecha_creacion           TIMESTAMP(0) WITH TIME ZONE,
   id_jornada_inicio        NUMBER(3),
   id_jornada_fin           NUMBER(3),
   estado                   VARCHAR2(1),
