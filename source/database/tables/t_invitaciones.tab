@@ -5,10 +5,10 @@ create table T_INVITACIONES
   direccion_correo       VARCHAR2(320) not null,
   tipo                   VARCHAR2(1) not null,
   id_grupo               NUMBER,
-  fecha_creacion         DATE,
-  fecha_expiracion       DATE,
+  fecha_creacion         TIMESTAMP(0) WITH TIME ZONE,
+  fecha_expiracion       TIMESTAMP(0) WITH TIME ZONE,
   estado                 VARCHAR2(1) default 'P' not null,
-  fecha_aceptacion       DATE
+  fecha_aceptacion       TIMESTAMP(0) WITH TIME ZONE
 )
 ;
 comment on table T_INVITACIONES
