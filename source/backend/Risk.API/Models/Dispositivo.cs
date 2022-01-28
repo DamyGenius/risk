@@ -43,6 +43,7 @@ namespace Risk.API.Models
         public string VersionAplicacion { get; set; }
         public string IdPaisIso2 { get; set; }
         public string ZonaHoraria { get; set; }
+        public string IdiomaIso { get; set; }
         public List<Plantilla> Plantillas { get; set; }
         public List<Dato> Suscripciones { get; set; }
 
@@ -62,6 +63,7 @@ namespace Risk.API.Models
                 VersionAplicacion = this.VersionAplicacion,
                 IdPaisIso2 = this.IdPaisIso2,
                 ZonaHoraria = this.ZonaHoraria,
+                IdiomaIso = this.IdiomaIso,
                 Plantillas = ModelsMapper.GetEntityListFromModel<Plantilla, YPlantilla>(this.Plantillas),
                 Suscripciones = ModelsMapper.GetEntityListFromModel<Dato, YDato>(this.Suscripciones)
             };

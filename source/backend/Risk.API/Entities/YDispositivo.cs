@@ -56,6 +56,8 @@ namespace Risk.API.Entities
         public string IdPaisIso2 { get; set; }
         [JsonProperty("zona_horaria")]
         public string ZonaHoraria { get; set; }
+        [JsonProperty("id_idioma_iso369_1")]
+        public string IdiomaIso { get; set; }
         [JsonProperty("plantillas")]
         public List<YPlantilla> Plantillas { get; set; }
         [JsonProperty("suscripciones")]
@@ -77,6 +79,7 @@ namespace Risk.API.Entities
                 VersionAplicacion = this.VersionAplicacion,
                 IdPaisIso2 = this.IdPaisIso2,
                 ZonaHoraria = this.ZonaHoraria,
+                IdiomaIso = this.IdiomaIso,
                 Plantillas = EntitiesMapper.GetModelListFromEntity<Plantilla, YPlantilla>(this.Plantillas),
                 Suscripciones = EntitiesMapper.GetModelListFromEntity<Dato, YDato>(this.Suscripciones)
             };
