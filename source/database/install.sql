@@ -59,6 +59,7 @@ prompt
 @@sequences/s_id_departamento.seq
 @@sequences/s_id_ciudad.seq
 @@sequences/s_id_barrio.seq
+@@sequences/s_id_idioma.seq
 @@sequences/s_id_persona.seq
 @@sequences/s_id_rol.seq
 @@sequences/s_id_operacion_log.seq
@@ -88,6 +89,7 @@ prompt
 @@tables/t_departamentos.tab
 @@tables/t_ciudades.tab
 @@tables/t_barrios.tab
+@@tables/t_idiomas.tab
 @@tables/t_personas.tab
 @@tables/t_usuarios.tab
 @@tables/t_roles.tab
@@ -216,6 +218,7 @@ prompt
 @@triggers/gs_departamentos.trg
 @@triggers/gs_ciudades.trg
 @@triggers/gs_barrios.trg
+@@triggers/gs_idiomas.trg
 @@triggers/gs_personas.trg
 @@triggers/gs_roles.trg
 @@triggers/gs_operaciones.trg
@@ -265,6 +268,7 @@ prompt
 @@scripts/ins_t_roles.sql
 @@scripts/ins_t_paises.sql
 @@scripts/ins_t_departamentos.sql
+@@scripts/ins_t_idiomas.sql
 @@scripts/ins_t_archivo_definiciones.sql
 @@scripts/ins_t_personas.sql
 @@scripts/ins_t_usuarios.sql
