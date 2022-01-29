@@ -53,6 +53,7 @@ prompt
 @@k_error.pck
 @@k_operacion.pck
 @@k_servicio_fan.pck
+@@ins_t_errores.sql
 
 prompt
 prompt Registrando migracion...
