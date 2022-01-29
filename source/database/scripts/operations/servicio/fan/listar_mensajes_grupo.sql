@@ -181,12 +181,11 @@ begin
        k_usuario.f_version_avatar(b.alias) version_avatar,
        a.contenido,
        a.ref_mensaje,
-       CAST(a.fecha at TIME ZONE
-            k_util.f_valor_parametro('ZONA_HORARIA_PRODUCCION') AS DATE) fecha
+       CAST(a.fecha at TIME ZONE k_sistema.f_zona_horaria AS DATE) fecha
   FROM t_grupo_mensajes a, t_usuarios b, t_grupo_usuarios c
  WHERE a.id_usuario = b.id_usuario
    AND a.id_grupo = c.id_grupo
-   AND c.id_usuario = k_sistema.f_valor_parametro_number('ID_USUARIO')
+   AND c.id_usuario = k_sistema.f_id_usuario
    AND (c.fecha_aceptacion <= a.fecha)
    AND c.estado = 'A'
    AND c.aceptado = 'S'

@@ -229,8 +229,7 @@ begin
        k_usuario.f_version_avatar(b.alias) version_avatar,
        a.contenido,
        a.ref_comentario,
-       CAST(a.fecha at TIME ZONE
-            k_util.f_valor_parametro('ZONA_HORARIA_PRODUCCION') AS DATE) fecha
+       CAST(a.fecha at TIME ZONE k_sistema.f_zona_horaria AS DATE) fecha
   FROM t_comentarios a, t_usuarios b
  WHERE a.id_usuario = b.id_usuario
  ORDER BY id_comentario DESC!';

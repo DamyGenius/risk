@@ -181,15 +181,12 @@ begin
        k_usuario.f_version_avatar(b.alias) version_avatar,
        a.contenido,
        a.ref_mensaje,
-       CAST(a.fecha at TIME ZONE
-            k_util.f_valor_parametro('ZONA_HORARIA_PRODUCCION') AS DATE) fecha
+       CAST(a.fecha at TIME ZONE k_sistema.f_zona_horaria AS DATE) fecha
   FROM t_amigo_mensajes a, t_usuarios b, t_amigos c
  WHERE a.id_usuario = b.id_usuario
    AND a.id_amistad = c.id_amistad
-   AND (c.id_usuario_solicitante =
-       k_sistema.f_valor_parametro_number('ID_USUARIO') OR
-       c.id_usuario_solicitado =
-       k_sistema.f_valor_parametro_number('ID_USUARIO'))
+   AND (c.id_usuario_solicitante = k_sistema.f_id_usuario OR
+       c.id_usuario_solicitado = k_sistema.f_id_usuario)
    AND (c.fecha_aceptacion <= a.fecha)
    AND c.aceptado = 'S'
  ORDER BY id_amistad_mensaje DESC!';
