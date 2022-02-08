@@ -121,6 +121,8 @@ prompt
 @@tables/t_estadios.tab
 @@tables/t_torneos.tab
 @@tables/t_planteles.tab
+@@tables/t_torneo_fases.tab
+@@tables/t_torneo_grupos.tab
 @@tables/t_torneo_jornadas.tab
 @@tables/t_partidos.tab
 @@tables/t_predicciones.tab
@@ -283,6 +285,7 @@ prompt
 @@scripts/ins_t_estadios.sql
 @@scripts/ins_t_torneos.sql
 @@scripts/ins_t_planteles.sql
+@@scripts/ins_t_torneo_fases.sql
 @@scripts/ins_t_torneo_jornadas.sql
 @@scripts/ins_t_partidos.sql
 @@scripts/ins_t_predicciones.sql

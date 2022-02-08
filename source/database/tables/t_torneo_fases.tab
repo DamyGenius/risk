@@ -1,0 +1,20 @@
+create table T_TORNEO_FASES
+(
+  id_torneo   VARCHAR2(12) not null,
+  id_fase     NUMBER(3) not null,
+  descripcion VARCHAR2(50)
+)
+;
+comment on table T_TORNEO_FASES
+  is 'Fases por Torneo';
+comment on column T_TORNEO_FASES.id_torneo
+  is 'Identificador del Torneo';
+comment on column T_TORNEO_FASES.id_fase
+  is 'Identificador de la Fase';
+comment on column T_TORNEO_FASES.descripcion
+  is 'Descripción de la Fase';
+alter table T_TORNEO_FASES
+  add constraint PK_TORNEO_FASES primary key (ID_TORNEO, ID_FASE);
+alter table T_TORNEO_FASES
+  add constraint FK_TORNEO_FASES_TORNEOS foreign key (ID_TORNEO)
+  references T_TORNEOS (ID_TORNEO);

@@ -141,6 +141,8 @@ drop table t_grupos cascade constraints;
 drop table t_predicciones cascade constraints;
 drop table t_partidos cascade constraints;
 drop table t_torneo_jornadas cascade constraints;
+drop table t_torneo_grupos cascade constraints;
+drop table t_torneo_fases cascade constraints;
 drop table t_planteles cascade constraints;
 drop table t_torneos cascade constraints;
 drop table t_estadios cascade constraints;

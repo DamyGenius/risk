@@ -1,0 +1,23 @@
+create table T_TORNEO_GRUPOS
+(
+  id_torneo   VARCHAR2(12) not null,
+  id_fase     NUMBER(3) not null,
+  id_grupo    NUMBER(3) not null,
+  descripcion VARCHAR2(50)
+)
+;
+comment on table T_TORNEO_GRUPOS
+  is 'Grupos por Torneo';
+comment on column T_TORNEO_GRUPOS.id_torneo
+  is 'Identificador del Torneo';
+comment on column T_TORNEO_GRUPOS.id_fase
+  is 'Identificador de la Fase';
+comment on column T_TORNEO_GRUPOS.id_grupo
+  is 'Identificador del Grupo';
+comment on column T_TORNEO_GRUPOS.descripcion
+  is 'Descripción del Grupo';
+alter table T_TORNEO_GRUPOS
+  add constraint PK_TORNEO_GRUPOS primary key (ID_TORNEO, ID_FASE, ID_GRUPO);
+alter table T_TORNEO_GRUPOS
+  add constraint FK_TORNEO_GRUPOS_FASES_TORNEOS foreign key (ID_TORNEO, ID_FASE)
+  references T_TORNEO_FASES (ID_TORNEO, ID_FASE);
