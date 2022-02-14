@@ -3,6 +3,9 @@ set feedback off
 set define off
 
 insert into t_divisiones (ID_DIVISION, DESCRIPCION, ID_PAIS)
+values ('DEM', 'DIVISIÓN DEMO', 177);
+
+insert into t_divisiones (ID_DIVISION, DESCRIPCION, ID_PAIS)
 values ('PRI', 'PRIMERA DIVISIÓN', 177);
 
 insert into t_divisiones (ID_DIVISION, DESCRIPCION, ID_PAIS)

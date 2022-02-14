@@ -137,6 +137,7 @@ drop table t_amigo_mensajes cascade constraints;
 drop table t_amigos cascade constraints;
 drop table t_grupo_mensajes cascade constraints;
 drop table t_grupo_usuarios cascade constraints;
+drop table t_grupo_torneos cascade constraints;
 drop table t_grupos cascade constraints;
 drop table t_predicciones cascade constraints;
 drop table t_partidos cascade constraints;

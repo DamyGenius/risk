@@ -6,8 +6,6 @@ create table T_GRUPOS
   tipo                     VARCHAR2(3) default 'GLO' not null,
   id_usuario_administrador NUMBER(10),
   fecha_creacion           TIMESTAMP(0) WITH TIME ZONE,
-  id_jornada_inicio        NUMBER(3),
-  id_jornada_fin           NUMBER(3),
   estado                   VARCHAR2(1),
   situacion                VARCHAR2(1),
   id_club                  VARCHAR2(5),
@@ -23,9 +21,6 @@ alter table T_GRUPOS
 alter table T_GRUPOS
   add constraint FK_GRUPOS_CLUBES foreign key (ID_CLUB)
   references T_CLUBES (ID_CLUB);
-alter table T_GRUPOS
-  add constraint FK_GRUPOS_TORNEO_JORNADAS foreign key (ID_TORNEO, ID_JORNADA_INICIO)
-  references T_TORNEO_JORNADAS (ID_TORNEO, ID_JORNADA);
 alter table T_GRUPOS
   add constraint FK_GRUPOS_TORNEOS foreign key (ID_TORNEO)
   references T_TORNEOS (ID_TORNEO);

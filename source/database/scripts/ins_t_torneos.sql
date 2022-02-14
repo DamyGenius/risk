@@ -3,7 +3,10 @@ set feedback off
 set define off
 
 insert into t_torneos (ID_TORNEO, ID_DIVISION, TEMPORADA, TITULO, DENOMINACION_OFICIAL, SALDO_INICIAL, ACTUAL, ID_URL, PRUEBA)
-values ('PRI-DEMO', null, null, 'TORNEO MOCKUP FANTASY', null, null, 'S', 'TIG', 'S');
+values ('PRI-DEMO', 'DEM', null, 'TORNEO MOCKUP FANTASY', null, null, 'S', 'TIG', 'S');
+
+insert into t_torneos (ID_TORNEO, ID_DIVISION, TEMPORADA, TITULO, DENOMINACION_OFICIAL, SALDO_INICIAL, ACTUAL, ID_URL, PRUEBA)
+values ('PRI-DEM2', 'DEM', null, 'TORNEO MOCKUP 2 FANTASY', null, null, 'N', null, 'S');
 
 insert into t_torneos (ID_TORNEO, ID_DIVISION, TEMPORADA, TITULO, DENOMINACION_OFICIAL, SALDO_INICIAL, ACTUAL, ID_URL, PRUEBA)
 values ('PRI-APE17', 'PRI', 2017, 'TORNEO APERTURA 2017', 'DON MARIO A. SAPRIZA', null, 'N', 'TIG', null);

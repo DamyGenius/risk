@@ -127,6 +127,7 @@ prompt
 @@tables/t_partidos.tab
 @@tables/t_predicciones.tab
 @@tables/t_grupos.tab
+@@tables/t_grupo_torneos.tab
 @@tables/t_grupo_usuarios.tab
 @@tables/t_grupo_mensajes.tab
 @@tables/t_amigos.tab
@@ -290,6 +291,7 @@ prompt
 @@scripts/ins_t_partidos.sql
 @@scripts/ins_t_predicciones.sql
 @@scripts/ins_t_grupos.sql
+@@scripts/ins_t_grupo_torneos.sql
 @@scripts/ins_t_dato_definiciones.sql
 commit;
 /
