@@ -168,6 +168,9 @@ insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('ESTADO_USUARIO', 'B', 'BLOQUEADO', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
+values ('ESTADO_USUARIO', 'P', 'PENDIENTE', null, 'S');
+
+insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('ORIGEN_USUARIO', 'R', 'RISK', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
@@ -415,5 +418,14 @@ values ('TIPO_EQUIPO', 'S', 'SELECCIÓN', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('TIPO_EQUIPO', 'C', 'CLUB', null, 'S');
+
+insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
+values ('ESTADO_GRUPO_USUARIO', 'A', 'ACTIVO', null, 'S');
+
+insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
+values ('ESTADO_GRUPO_USUARIO', 'I', 'INACTIVO', null, 'S');
+
+insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
+values ('ESTADO_GRUPO_USUARIO', 'P', 'PENDIENTE', null, 'S');
 
 prompt Done.

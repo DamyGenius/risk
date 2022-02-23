@@ -1,0 +1,19 @@
+create table T_GRUPO_TORNEO_USUARIOS
+(
+  id_grupo   NUMBER not null,
+  id_torneo  VARCHAR2(12) not null,
+  id_usuario NUMBER(10) not null,
+  puntos     NUMBER(15),
+  ranking    NUMBER(6)
+)
+;
+comment on table T_GRUPO_TORNEO_USUARIOS
+  is 'Usuarios por Torneo por Grupo de Predicciones';
+alter table T_GRUPO_TORNEO_USUARIOS
+  add constraint PK_GRUPO_TORNEO_USUARIOS primary key (ID_GRUPO, ID_TORNEO, ID_USUARIO);
+alter table T_GRUPO_TORNEO_USUARIOS
+  add constraint FK_GRU_TOR_USU_GRUPO_TORNEOS foreign key (ID_GRUPO, ID_TORNEO)
+  references T_GRUPO_TORNEOS (ID_GRUPO, ID_TORNEO);
+alter table T_GRUPO_TORNEO_USUARIOS
+  add constraint FK_GRU_TOR_USU_GRUPO_USUARIOS foreign key (ID_GRUPO, ID_USUARIO)
+  references T_GRUPO_USUARIOS (ID_GRUPO, ID_USUARIO);

@@ -129,6 +129,7 @@ prompt
 @@tables/t_grupos.tab
 @@tables/t_grupo_torneos.tab
 @@tables/t_grupo_usuarios.tab
+@@tables/t_grupo_torneo_usuarios.tab
 @@tables/t_grupo_mensajes.tab
 @@tables/t_amigos.tab
 @@tables/t_amigo_mensajes.tab
