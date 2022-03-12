@@ -56,11 +56,11 @@ namespace Risk.API.Helpers
             List<Claim> claims = new List<Claim>();
 
             claims.Add(new Claim(ClaimTypes.Name, datosUsuario.Alias));
-            claims.Add(new Claim(ClaimTypes.GivenName, datosUsuario.Nombre ?? ""));
-            claims.Add(new Claim(ClaimTypes.Surname, datosUsuario.Apellido ?? ""));
-            claims.Add(new Claim(ClaimTypes.Email, datosUsuario.DireccionCorreo ?? ""));
-            //claimsList.Add(new Claim(ClaimTypes.HomePhone, usuario.NumeroTelefono ?? ""));
-            claims.Add(new Claim(ClaimTypes.GroupSid, datosUsuario.Origen.ToString() ?? ""));
+            claims.Add(new Claim(ClaimTypes.GivenName, datosUsuario.Nombre ?? String.Empty));
+            claims.Add(new Claim(ClaimTypes.Surname, datosUsuario.Apellido ?? String.Empty));
+            claims.Add(new Claim(ClaimTypes.Email, datosUsuario.DireccionCorreo ?? String.Empty));
+            //claimsList.Add(new Claim(ClaimTypes.HomePhone, datosUsuario.NumeroTelefono ?? String.Empty));
+            claims.Add(new Claim(ClaimTypes.GroupSid, datosUsuario.Origen.ToString() ?? String.Empty));
 
             // Agrega los roles del usuario a la lista de claims
             foreach (var rol in datosUsuario.Roles)
@@ -260,12 +260,15 @@ namespace Risk.API.Helpers
 
                     string direccionCorreo = "";
                     string username, domain;
-                    if (jsonRes["email"] != null) {
+                    if (jsonRes["email"] != null)
+                    {
                         direccionCorreo = jsonRes["email"].ToString();
                         MailAddress addr = new MailAddress(direccionCorreo);
                         username = addr.User;
                         domain = addr.Host;
-                    } else {
+                    }
+                    else
+                    {
                         username = $"{nombre}_{apellido}".Replace(' ', '_').ToLower();
                     }
 
