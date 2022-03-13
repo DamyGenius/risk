@@ -61,6 +61,8 @@ namespace Risk.API.Entities
         public string CantidadReacciones { get; set; }
         [JsonProperty("mi_reaccion")]
         public string MiReaccion { get; set; }
+        [JsonProperty("estado_juego")]
+        public string EstadoJuego { get; set; }
 
         public IModel ConvertToModel()
         {
@@ -80,7 +82,8 @@ namespace Risk.API.Entities
                 CantidadComentarios = this.CantidadComentarios,
                 CantidadPredicciones = this.CantidadPredicciones,
                 CantidadReacciones = this.CantidadReacciones,
-                MiReaccion = string.IsNullOrEmpty(this.MiReaccion) ? (Reaccion?)null : this.MiReaccion.GetEnumValue<Reaccion>()
+                MiReaccion = string.IsNullOrEmpty(this.MiReaccion) ? (Reaccion?)null : this.MiReaccion.GetEnumValue<Reaccion>(),
+                EstadoJuego = this.EstadoJuego
             };
         }
     }

@@ -44,6 +44,7 @@ namespace Risk.API.Models
         public string CantidadPredicciones { get; set; }
         public string CantidadReacciones { get; set; }
         public Reaccion? MiReaccion { get; set; }
+        public string EstadoJuego { get; set; }
 
         public IEntity ConvertToEntity()
         {
