@@ -524,7 +524,7 @@ namespace Risk.API.Controllers
         [HttpGet("ListarDivisiones/{idDivision}")]
         [SwaggerOperation(OperationId = "ListarDivision", Summary = "ListarDivision", Description = "Obtiene los datos de una division")]
         [Produces(MediaTypeNames.Application.Json)]
-        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Equipo>>))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Division>>))]
         public IActionResult ListarDivision([FromRoute, SwaggerParameter(Description = "Identificador de la división", Required = true)] string idDivision)
         {
             var respuesta = _fanService.ListarDivisiones(idDivision, null);
