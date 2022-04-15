@@ -49,6 +49,7 @@ prompt
 @@scripts/operations/servicio/fan/registrar_grupo.sql
 @@scripts/operations/servicio/fan/responder_invitacion.sql
 @@scripts/operations/servicio/fan/responder_solicitud_amistad.sql
+@@scripts/operations/servicio/fan/seguir.sql
 @@scripts/operations/servicio/fan/solicitar_amistad.sql
 @@scripts/operations/servicio/gen/guardar_archivo.sql
 @@scripts/operations/servicio/gen/listar_aplicaciones.sql

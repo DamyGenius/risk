@@ -152,4 +152,10 @@ values ('fan0000020', 'Error al enviar mensaje', 'API', null, null);
 insert into t_errores (ID_ERROR, MENSAJE, ID_DOMINIO, ID_IDIOMA, ID_PAIS)
 values ('fan0000020', 'Failed to send message', 'API', 38, null);
 
+insert into t_errores (ID_ERROR, MENSAJE, ID_DOMINIO, ID_IDIOMA, ID_PAIS)
+values ('fan0000021', 'Error al seguir', 'API', null, null);
+
+insert into t_errores (ID_ERROR, MENSAJE, ID_DOMINIO, ID_IDIOMA, ID_PAIS)
+values ('fan0000021', 'Failed to follow', 'API', 38, null);
+
 prompt Done.
