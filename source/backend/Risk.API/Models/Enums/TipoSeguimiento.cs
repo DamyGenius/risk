@@ -22,37 +22,13 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-using Newtonsoft.Json;
-using Risk.API.Models;
+using Risk.API.Attributes;
 
-namespace Risk.API.Entities
+namespace Risk.API.Models
 {
-    public class YDivision : IEntity
+    public enum TipoSeguimiento
     {
-        [JsonProperty("id_division")]
-        public string IdDivision { get; set; }
-        [JsonProperty("descripcion")]
-        public string Descripcion { get; set; }
-        [JsonProperty("id_pais")]
-        public int? IdPais { get; set; }
-        [JsonProperty("detalle")]
-        public string Detalle { get; set; }
-        [JsonProperty("version_logo")]
-        public int? VersionLogo { get; set; }
-        [JsonProperty("suscripto")]
-        public string Suscripto { get; set; }
-
-        public IModel ConvertToModel()
-        {
-            return new Division
-            {
-                IdDivision = this.IdDivision,
-                Descripcion = this.Descripcion,
-                IdPais = this.IdPais,
-                Detalle = this.Detalle,
-                VersionLogo = this.VersionLogo,
-                Suscripto = this.Suscripto
-            };
-        }
+        [StringValue("D")]
+        Division
     }
 }

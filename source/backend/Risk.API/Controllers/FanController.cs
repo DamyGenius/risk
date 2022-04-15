@@ -516,7 +516,18 @@ namespace Risk.API.Controllers
                 PorPagina = porPagina,
                 NoPaginar = noPaginar
             };
-            var respuesta = _fanService.ListarDivisiones(paginaParametros);
+            var respuesta = _fanService.ListarDivisiones(null, paginaParametros);
+            return ProcesarRespuesta(respuesta);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("ListarDivisiones/{idDivision}")]
+        [SwaggerOperation(OperationId = "ListarDivision", Summary = "ListarDivision", Description = "Obtiene los datos de una division")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Equipo>>))]
+        public IActionResult ListarDivision([FromRoute, SwaggerParameter(Description = "Identificador de la división", Required = true)] string idDivision)
+        {
+            var respuesta = _fanService.ListarDivisiones(idDivision, null);
             return ProcesarRespuesta(respuesta);
         }
 
@@ -525,7 +536,7 @@ namespace Risk.API.Controllers
         [SwaggerOperation(OperationId = "ListarTorneos", Summary = "ListarTorneos", Description = "Obtiene lista de torneos activos")]
         [Produces(MediaTypeNames.Application.Json)]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Torneo>>))]
-        public IActionResult ListarTorneos([FromQuery, SwaggerParameter(Description = "Referencia al mensaje superior", Required = false)] string idDivision,
+        public IActionResult ListarTorneos([FromQuery, SwaggerParameter(Description = "Division del torneo", Required = false)] string idDivision,
             [FromQuery, SwaggerParameter(Description = "Número de la página", Required = false)] int pagina,
             [FromQuery, SwaggerParameter(Description = "Cantidad de elementos por página", Required = false)] int porPagina,
             [FromQuery, SwaggerParameter(Description = "No paginar?", Required = false)] bool noPaginar)
@@ -537,6 +548,17 @@ namespace Risk.API.Controllers
                 NoPaginar = noPaginar
             };
             var respuesta = _fanService.ListarTorneos(idDivision, paginaParametros);
+            return ProcesarRespuesta(respuesta);
+        }
+
+        [HttpPost("SeguirDivision")]
+        [SwaggerOperation(OperationId = "SeguirDivision", Summary = "SeguirDivision", Description = "Permite seguir una división")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
+        public IActionResult SeguirDivision([FromQuery, SwaggerParameter(Description = "Identificador de la división", Required = true)] string idDivision)
+        {
+            var respuesta = _fanService.Seguir(TipoSeguimiento.Division, idDivision);
             return ProcesarRespuesta(respuesta);
         }
     }

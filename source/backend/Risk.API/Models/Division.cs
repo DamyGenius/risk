@@ -33,6 +33,8 @@ namespace Risk.API.Models
         public string Descripcion { get; set; }
         public int? IdPais { get; set; }
         public string Detalle { get; set; }
+        public int? VersionLogo { get; set; }
+        public string Suscripto { get; set; }
 
         public IEntity ConvertToEntity()
         {

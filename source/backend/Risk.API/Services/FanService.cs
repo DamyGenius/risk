@@ -63,6 +63,7 @@ namespace Risk.API.Services
         private const string NOMBRE_LISTAR_MENSAJES_AMIGO = "LISTAR_MENSAJES_AMIGO";
         private const string NOMBRE_LISTAR_DIVISIONES = "LISTAR_DIVISIONES";
         private const string NOMBRE_LISTAR_TORNEOS = "LISTAR_TORNEOS";
+        private const string NOMBRE_SEGUIR = "SEGUIR";
 
         public FanService(ILogger<FanService> logger, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDbConnectionFactory dbConnectionFactory)
             : base(logger, configuration, httpContextAccessor, dbConnectionFactory)
@@ -570,9 +571,10 @@ namespace Risk.API.Services
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<AmigoMensaje>, YPagina<YAmigoMensaje>>(entityRsp, datos);
         }
 
-        public Respuesta<Pagina<Division>> ListarDivisiones(PaginaParametros paginaParametros = null)
+        public Respuesta<Pagina<Division>> ListarDivisiones(string idDivision = null, PaginaParametros paginaParametros = null)
         {
             JObject prms = new JObject();
+            prms.Add("id_division", idDivision);
             if (paginaParametros != null)
             {
                 prms.Add("pagina_parametros", JToken.FromObject(ModelsMapper.GetEntityFromModel<PaginaParametros, YPaginaParametros>(paginaParametros)));
@@ -615,6 +617,21 @@ namespace Risk.API.Services
             }
 
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<Torneo>, YPagina<YTorneo>>(entityRsp, datos);
+        }
+
+        public Respuesta<Dato> Seguir(TipoSeguimiento tipo, string referencia)
+        {
+            JObject prms = new JObject();
+            prms.Add("tipo", tipo.GetStringValue());
+            prms.Add("referencia", referencia);
+
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
+                NOMBRE_SEGUIR,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
+
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetModelFromEntity<Dato, YDato>(entityRsp.Datos));
         }
     }
 }
