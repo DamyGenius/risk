@@ -268,12 +268,12 @@ prompt
 @@scripts/ins_t_dominios.sql
 @@scripts/ins_t_aplicaciones.sql
 @@scripts/ins_t_significados.sql
-@@scripts/ins_t_errores.sql
 @@scripts/ins_t_parametros.sql
 @@scripts/ins_t_roles.sql
 @@scripts/ins_t_paises.sql
 @@scripts/ins_t_departamentos.sql
 @@scripts/ins_t_idiomas.sql
+@@scripts/ins_t_errores.sql
 @@scripts/ins_t_archivo_definiciones.sql
 @@scripts/ins_t_personas.sql
 @@scripts/ins_t_usuarios.sql
@@ -286,6 +286,7 @@ prompt
 @@scripts/ins_t_divisiones.sql
 @@scripts/ins_t_clubes.sql
 @@scripts/ins_t_estadios.sql
+@@scripts/ins_t_importador_urls.sql
 @@scripts/ins_t_torneos.sql
 @@scripts/ins_t_planteles.sql
 @@scripts/ins_t_torneo_fases.sql
