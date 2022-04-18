@@ -36,6 +36,10 @@ CREATE OR REPLACE PACKAGE k_importacion_fan IS
   -- E-En Ejecución/D-Detenido
   FUNCTION f_estado_importacion_partidos RETURN VARCHAR2;
 
+  -- Procedimiento de importación de fases/grupos
+  PROCEDURE p_importar_fases(i_id_torneo IN t_torneos.id_torneo%TYPE,
+                             i_fases     IN CLOB);
+
   -- Procedimiento de importación de partidos
   PROCEDURE p_importar_partidos(i_id_torneo IN t_torneo_jornadas.id_torneo%TYPE,
                                 i_partidos  IN CLOB);
@@ -138,85 +142,233 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
     RETURN k_util.f_valor_parametro('ESTADO_IMPORTACION_PARTIDOS');
   END;
 
-  PROCEDURE p_importar_partidos(i_id_torneo IN t_torneo_jornadas.id_torneo%TYPE,
-                                i_partidos  IN CLOB) IS
-    l_partidos json_array_t;
-    l_partido  json_object_t;
+  PROCEDURE p_importar_fases(i_id_torneo IN t_torneos.id_torneo%TYPE,
+                             i_fases     IN CLOB) IS
+    l_fases json_array_t;
+    l_fase  json_object_t;
+    rw_fase t_torneo_fases%ROWTYPE;
   
-    l_id                  t_partidos.id_importacion%TYPE;
-    l_id_torneo           t_torneos.id_torneo%TYPE;
-    l_numerofecha         t_partidos.id_jornada%TYPE;
-    l_id_club_local       t_partidos.id_club_local%TYPE;
-    l_id_club_visitante   t_partidos.id_club_visitante%TYPE;
-    l_dia                 VARCHAR2(30);
-    l_hora                VARCHAR2(30);
-    l_fecha_partido       DATE;
-    l_goleslocal          t_partidos.goles_club_local%TYPE;
-    l_golesvisitante      t_partidos.goles_club_visitante%TYPE;
-    l_estado              t_partidos.estado%TYPE;
-    l_estado_predicciones t_partidos.estado_predicciones%TYPE;
-    --
-    rw_partido t_partidos%ROWTYPE;
+    l_grupos json_array_t;
+    l_grupo  json_object_t;
+    rw_grupo t_torneo_grupos%ROWTYPE;
+  
+    l_partidos json_array_t;
+  
+    l_id_torneo t_torneos.id_torneo%TYPE;
   BEGIN
     l_id_torneo := i_id_torneo;
+  
+    l_fases := json_array_t(i_fases);
+  
+    FOR i IN 0 .. l_fases.get_size - 1 LOOP
+      l_fase              := treat(l_fases.get(i) AS json_object_t);
+      rw_fase.id_torneo   := l_id_torneo;
+      rw_fase.id_fase     := l_fase.get_number('id');
+      rw_fase.descripcion := l_fase.get_string('nombreFase');
+    
+      -- Importa la fase
+      BEGIN
+        INSERT INTO t_torneo_fases
+          (id_torneo, id_fase, descripcion)
+        VALUES
+          (rw_fase.id_torneo, rw_fase.id_fase, rw_fase.descripcion);
+      EXCEPTION
+        WHEN dup_val_on_index THEN
+          UPDATE t_torneo_fases
+             SET descripcion = rw_fase.descripcion
+           WHERE id_torneo = rw_fase.id_torneo
+             AND id_fase = rw_fase.id_fase
+             AND descripcion <> rw_fase.descripcion; -- Sólo si cambia la descripción
+      END;
+    
+      IF l_fase.has('grupos') THEN
+        l_grupos := l_fase.get_array('grupos');
+      
+        FOR j IN 0 .. l_grupos.get_size - 1 LOOP
+          l_grupo              := treat(l_grupos.get(j) AS json_object_t);
+          rw_grupo.id_torneo   := l_id_torneo;
+          rw_grupo.id_fase     := rw_fase.id_fase;
+          rw_grupo.id_grupo    := l_grupo.get_number('id');
+          rw_grupo.descripcion := l_grupo.get_string('nombreGrupo');
+        
+          -- Importa el grupo
+          BEGIN
+            INSERT INTO t_torneo_grupos
+              (id_torneo, id_fase, id_grupo, descripcion)
+            VALUES
+              (rw_grupo.id_torneo,
+               rw_grupo.id_fase,
+               rw_grupo.id_grupo,
+               rw_grupo.descripcion);
+          EXCEPTION
+            WHEN dup_val_on_index THEN
+              UPDATE t_torneo_grupos
+                 SET descripcion = rw_grupo.descripcion
+               WHERE id_torneo = rw_grupo.id_torneo
+                 AND id_fase = rw_grupo.id_fase
+                 AND id_grupo = rw_grupo.id_grupo
+                 AND descripcion <> rw_grupo.descripcion; -- Sólo si cambia la descripción
+          END;
+        
+          IF l_grupo.has('partidos') THEN
+            l_partidos := l_grupo.get_array('partidos');
+          
+            -- Procesa la lista de partidos
+            k_sistema.p_definir_parametro_number('ID_FASE',
+                                                 rw_fase.id_fase);
+            k_sistema.p_definir_parametro_number('ID_GRUPO',
+                                                 rw_grupo.id_grupo);
+          
+            p_importar_partidos(i_id_torneo => l_id_torneo,
+                                i_partidos  => l_partidos.to_clob);
+          END IF;
+        
+        END LOOP;
+      
+      ELSIF l_fase.has('partidos') THEN
+        l_partidos := l_fase.get_array('partidos');
+      
+        -- Procesa la lista de partidos
+        k_sistema.p_definir_parametro_number('ID_FASE', rw_fase.id_fase);
+        k_sistema.p_definir_parametro_number('ID_GRUPO', NULL);
+      
+        p_importar_partidos(i_id_torneo => l_id_torneo,
+                            i_partidos  => l_partidos.to_clob);
+      
+      END IF;
+    
+    END LOOP;
+  END;
+
+  PROCEDURE p_importar_partidos(i_id_torneo IN t_torneo_jornadas.id_torneo%TYPE,
+                                i_partidos  IN CLOB) IS
+    l_partidos  json_array_t;
+    l_partido   json_object_t;
+    rw_partido  t_partidos%ROWTYPE;
+    rw_partido2 t_partidos%ROWTYPE;
+  
+    l_id_torneo t_torneos.id_torneo%TYPE;
+  
+    l_dia  VARCHAR2(30);
+    l_hora VARCHAR2(30);
+  
+    l_id_fase  t_partidos.id_fase%TYPE;
+    l_id_grupo t_partidos.id_grupo%TYPE;
+  BEGIN
+    l_id_torneo := i_id_torneo;
+    l_id_fase   := k_sistema.f_valor_parametro_number('ID_FASE');
+    l_id_grupo  := k_sistema.f_valor_parametro_number('ID_GRUPO');
   
     l_partidos := json_array_t(i_partidos);
   
     FOR i IN 0 .. l_partidos.get_size - 1 LOOP
       l_partido := treat(l_partidos.get(i) AS json_object_t);
     
-      l_id := l_partido.get_number('id');
-      dbms_output.put_line('index : ' || i || ' ' || 'id:' || l_id);
-      l_numerofecha       := l_partido.get_number('numeroFecha');
-      l_id_club_local     := lf_buscar_club(treat(l_partido.get('local') AS json_object_t)
-                                            .get_number('id'));
-      l_id_club_visitante := lf_buscar_club(treat(l_partido.get('visitante') AS json_object_t)
-                                            .get_number('id'));
+      rw_partido.id_importacion := l_partido.get_number('id');
+      dbms_output.put_line('index: ' || i || ' ' || 'id: ' ||
+                           rw_partido.id_importacion);
+      rw_partido.id_jornada := l_partido.get_number('numeroFecha');
+      IF rw_partido.id_jornada = 0 THEN
+        rw_partido.id_jornada := NULL;
+      END IF;
+    
+      rw_partido.id_club_local     := lf_buscar_club(treat(l_partido.get('local') AS json_object_t).get_number('id'));
+      rw_partido.id_club_visitante := lf_buscar_club(treat(l_partido.get('visitante') AS json_object_t).get_number('id'));
     
       l_dia  := l_partido.get_string('dia');
       l_hora := l_partido.get_string('hora');
       IF l_dia IS NOT NULL AND l_hora IS NOT NULL THEN
-        l_fecha_partido := to_date(l_dia || ' ' || l_hora,
-                                   'DD-MM-YYYY HH24:MI');
+        rw_partido.fecha := to_date(l_dia || ' ' || l_hora,
+                                    'DD-MM-YYYY HH24:MI');
       ELSE
-        l_fecha_partido := NULL;
+        rw_partido.fecha := NULL;
       END IF;
     
-      l_goleslocal          := l_partido.get_number('golesLocal');
-      l_golesvisitante      := l_partido.get_number('golesVisitante');
-      l_estado              := l_partido.get_string('estado');
-      l_estado_predicciones := CASE l_estado
-                                 WHEN 'F' THEN
-                                  'L' --Liquidado
-                                 ELSE
-                                  'P' --Pendiente
-                               END;
+      rw_partido.goles_club_local     := l_partido.get_number('golesLocal');
+      rw_partido.goles_club_visitante := l_partido.get_number('golesVisitante');
+      rw_partido.estado               := l_partido.get_string('estado');
+      rw_partido.estado_predicciones  := CASE rw_partido.estado
+                                           WHEN 'F' THEN
+                                            'L' --Liquidado
+                                           ELSE
+                                            'P' --Pendiente
+                                         END;
     
-      IF l_estado NOT IN ('F', 'S', 'J') THEN
+      IF rw_partido.estado NOT IN ('F', 'S', 'J') THEN
         -- FINALIZADO O SUSPENDIDO
-        l_goleslocal     := NULL;
-        l_golesvisitante := NULL;
+        rw_partido.goles_club_local     := NULL;
+        rw_partido.goles_club_visitante := NULL;
       END IF;
+    
+      rw_partido.descripcion           := l_partido.get_string('etiqueta');
+      rw_partido.nombre_club_local     := treat(l_partido.get('local') AS json_object_t).get_string('nombre');
+      rw_partido.nombre_club_visitante := treat(l_partido.get('visitante') AS json_object_t).get_string('nombre');
     
       BEGIN
-        rw_partido := lf_buscar_partido(l_id);
-        IF rw_partido.id_partido IS NOT NULL THEN
+        IF rw_partido.id_jornada IS NOT NULL THEN
+          --Inserta la jornada si no existe
+          BEGIN
+            INSERT INTO t_torneo_jornadas
+              (id_torneo, id_jornada)
+            VALUES
+              (l_id_torneo, rw_partido.id_jornada);
+          EXCEPTION
+            WHEN dup_val_on_index THEN
+              NULL;
+          END;
+        END IF;
+      
+        IF rw_partido.id_club_local IS NOT NULL THEN
+          --Inserta el plantel local si no existe
+          BEGIN
+            INSERT INTO t_planteles
+              (id_torneo, id_club)
+            VALUES
+              (l_id_torneo, rw_partido.id_club_local);
+          EXCEPTION
+            WHEN dup_val_on_index THEN
+              NULL;
+          END;
+        END IF;
+      
+        IF rw_partido.id_club_visitante IS NOT NULL THEN
+          --Inserta el plantel visitante si no existe
+          BEGIN
+            INSERT INTO t_planteles
+              (id_torneo, id_club)
+            VALUES
+              (l_id_torneo, rw_partido.id_club_visitante);
+          EXCEPTION
+            WHEN dup_val_on_index THEN
+              NULL;
+          END;
+        END IF;
+      
+        rw_partido2 := lf_buscar_partido(rw_partido.id_importacion);
+        IF rw_partido2.id_partido IS NOT NULL THEN
           --Acutualiza si no fue Programado Manualmente y no fue Finalizado
-          IF NOT (rw_partido.estado = 'M' AND l_estado = 'R') AND
-             NOT (rw_partido.estado = 'F') THEN
+          IF NOT (rw_partido2.estado = 'M' AND rw_partido.estado = 'R') AND
+             NOT (rw_partido2.estado = 'F') THEN
             UPDATE t_partidos p
-               SET id_torneo            = l_id_torneo,
-                   id_club_local        = l_id_club_local,
-                   id_club_visitante    = l_id_club_visitante,
-                   fecha                = l_fecha_partido,
-                   hora                 = to_char(l_fecha_partido, 'HH24:MI'),
-                   id_jornada           = l_numerofecha,
-                   id_estadio           = NULL,
-                   goles_club_local     = l_goleslocal,
-                   goles_club_visitante = l_golesvisitante,
-                   estado               = l_estado,
-                   id_importacion       = l_id
-             WHERE p.id_partido = rw_partido.id_partido;
+               SET id_torneo             = l_id_torneo,
+                   id_club_local         = rw_partido.id_club_local,
+                   id_club_visitante     = rw_partido.id_club_visitante,
+                   fecha                 = rw_partido.fecha,
+                   hora                  = to_char(rw_partido.fecha,
+                                                   'HH24:MI'),
+                   id_jornada            = rw_partido.id_jornada,
+                   id_estadio            = rw_partido.id_estadio,
+                   goles_club_local      = rw_partido.goles_club_local,
+                   goles_club_visitante  = rw_partido.goles_club_visitante,
+                   estado                = rw_partido.estado,
+                   estado_predicciones   = rw_partido.estado_predicciones,
+                   id_importacion        = rw_partido.id_importacion,
+                   id_fase               = l_id_fase,
+                   id_grupo              = l_id_grupo,
+                   descripcion           = rw_partido.descripcion,
+                   nombre_club_local     = rw_partido.nombre_club_local,
+                   nombre_club_visitante = rw_partido.nombre_club_visitante
+             WHERE p.id_partido = rw_partido2.id_partido;
           END IF;
         ELSE
           INSERT INTO t_partidos
@@ -231,26 +383,39 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
              goles_club_visitante,
              estado,
              estado_predicciones,
-             id_importacion)
+             id_importacion,
+             id_fase,
+             id_grupo,
+             descripcion,
+             nombre_club_local,
+             nombre_club_visitante)
           VALUES
             (l_id_torneo,
-             l_id_club_local,
-             l_id_club_visitante,
-             l_fecha_partido,
-             to_char(l_fecha_partido, 'HH24:MI'),
-             l_numerofecha,
-             NULL,
-             l_goleslocal,
-             l_golesvisitante,
-             l_estado,
-             l_estado_predicciones,
-             l_id)
-          RETURNING id_partido INTO rw_partido.id_partido;
+             rw_partido.id_club_local,
+             rw_partido.id_club_visitante,
+             rw_partido.fecha,
+             to_char(rw_partido.fecha, 'HH24:MI'),
+             rw_partido.id_jornada,
+             rw_partido.id_estadio,
+             rw_partido.goles_club_local,
+             rw_partido.goles_club_visitante,
+             rw_partido.estado,
+             rw_partido.estado_predicciones,
+             rw_partido.id_importacion,
+             l_id_fase,
+             l_id_grupo,
+             rw_partido.descripcion,
+             rw_partido.nombre_club_local,
+             rw_partido.nombre_club_visitante)
+          RETURNING id_partido INTO rw_partido2.id_partido;
         END IF;
       EXCEPTION
         WHEN OTHERS THEN
-          dbms_output.put_line(l_id || ':' || SQLERRM);
-          raise_application_error(-20000, l_id || ':' || SQLERRM);
+          dbms_output.put_line(rw_partido.id_importacion || ': ' ||
+                               SQLERRM);
+          raise_application_error(-20000,
+                                  rw_partido.id_importacion || ': ' ||
+                                  SQLERRM);
       END;
     
     END LOOP;

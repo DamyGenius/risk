@@ -14,7 +14,12 @@ create table T_PARTIDOS
   estado_predicciones   VARCHAR2(1) default 'P' not null,
   id_importacion        NUMBER(15),
   situacion_importacion VARCHAR2(1) default 'N' not null,
-  estado_juego          VARCHAR2(2)
+  estado_juego          VARCHAR2(2),
+  id_fase               NUMBER(3),
+  id_grupo              NUMBER(3),
+  descripcion           VARCHAR2(50),
+  nombre_club_local     VARCHAR2(100),
+  nombre_club_visitante VARCHAR2(100)
 )
 ;
 comment on table T_PARTIDOS
@@ -27,6 +32,16 @@ comment on column T_PARTIDOS.situacion_importacion
   is 'N - Sin datos, T - Datos temporales, V - En verificación, D - Datos definitivos, A - Puntajes actualizados';
 comment on column T_PARTIDOS.estado_juego
   is 'PT - Primer Tiempo, ET - Entretiempo, ST - Segundo Tiempo';
+comment on column T_PARTIDOS.id_fase
+  is 'Identificador de la Fase';
+comment on column T_PARTIDOS.id_grupo
+  is 'Identificador del Grupo';
+comment on column T_PARTIDOS.descripcion
+  is 'Descripción del Partido';
+comment on column T_PARTIDOS.nombre_club_local
+  is 'Nombre del club local';
+comment on column T_PARTIDOS.nombre_club_visitante
+  is 'Nombre del club visitante';
 alter table T_PARTIDOS
   add constraint PK_PARTIDOS primary key (ID_PARTIDO);
 alter table T_PARTIDOS
@@ -39,5 +54,12 @@ alter table T_PARTIDOS
   add constraint FK_PARTIDOS_PLANTEL_VISITANTE foreign key (ID_TORNEO, ID_CLUB_VISITANTE)
   references T_PLANTELES (ID_TORNEO, ID_CLUB);
 alter table T_PARTIDOS
+  add constraint FK_PARTIDOS_TORNEO_FASES foreign key (ID_TORNEO, ID_FASE)
+  references T_TORNEO_FASES (ID_TORNEO, ID_FASE);
+alter table T_PARTIDOS
+  add constraint FK_PARTIDOS_TORNEO_GRUPOS foreign key (ID_TORNEO, ID_FASE, ID_GRUPO)
+  references T_TORNEO_GRUPOS (ID_TORNEO, ID_FASE, ID_GRUPO);
+alter table T_PARTIDOS
   add constraint FK_PARTIDOS_TORNEO_JORNADAS foreign key (ID_TORNEO, ID_JORNADA)
   references T_TORNEO_JORNADAS (ID_TORNEO, ID_JORNADA);
+
