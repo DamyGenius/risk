@@ -1,0 +1,7 @@
+prompt Importing table t_migraciones...
+set feedback off
+set define off
+insert into t_migraciones (ID_MIGRACION, DESCRIPCION)
+values ('mig_000090', 'Datos de la división en servicio de lsitar torneos.');
+
+prompt Done.

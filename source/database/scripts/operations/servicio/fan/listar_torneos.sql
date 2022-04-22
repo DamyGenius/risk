@@ -109,6 +109,53 @@ begin
   );
 
   l_varchar2(1) :=q'!74!';
+  l_clob(2) :=q'!SIGUIENDO!';
+  l_clob(3) :=q'!0.1.0!';
+  l_varchar2(4) :=q'!2!';
+  l_clob(5) :=q'!S!';
+  l_clob(6) :=q'!S!';
+  l_clob(7) :=q'!!';
+  l_varchar2(8) :=q'!1!';
+  l_clob(9) :=q'!N!';
+  l_clob(10) :=q'!!';
+  l_clob(11) :=q'!!';
+  l_clob(12) :=q'!!';
+  l_clob(13) :=q'!!';
+
+  insert into t_operacion_parametros
+  (
+     "ID_OPERACION"
+    ,"NOMBRE"
+    ,"VERSION"
+    ,"ORDEN"
+    ,"ACTIVO"
+    ,"TIPO_DATO"
+    ,"FORMATO"
+    ,"LONGITUD_MAXIMA"
+    ,"OBLIGATORIO"
+    ,"VALOR_DEFECTO"
+    ,"ETIQUETA"
+    ,"DETALLE"
+    ,"VALORES_POSIBLES"
+  )
+  values
+  (
+     to_number(l_varchar2(1))
+    ,to_char(l_clob(2))
+    ,to_char(l_clob(3))
+    ,to_number(l_varchar2(4))
+    ,to_char(l_clob(5))
+    ,to_char(l_clob(6))
+    ,to_char(l_clob(7))
+    ,to_number(l_varchar2(8))
+    ,to_char(l_clob(9))
+    ,to_char(l_clob(10))
+    ,to_char(l_clob(11))
+    ,to_char(l_clob(12))
+    ,to_char(l_clob(13))
+  );
+
+  l_varchar2(1) :=q'!74!';
   l_clob(2) :=q'!PAGINA_PARAMETROS!';
   l_clob(3) :=q'!0.1.0!';
   l_varchar2(4) :=q'!10!';
@@ -179,9 +226,18 @@ begin
        a.temporada,
        a.titulo,
        a.denominacion_oficial,
-       a.titulo_alternativo
-  FROM t_torneos a
- WHERE a.actual = 'S'!';
+       a.titulo_alternativo,
+       b.descripcion desc_division,
+       b.descripcion_corta desc_corta_division,
+       (SELECT decode(nvl(COUNT(1), 0), 0, 'N', 'S')
+          FROM t_usuario_divisiones x
+         WHERE x.id_usuario = k_sistema.f_id_usuario
+           AND x.id_division = a.id_division) siguiendo,
+       k_usuario.f_suscripto_notificacion(k_sistema.f_id_usuario,
+                                          k_dispositivo.f_suscripcion_division(a.id_division)) suscripto
+  FROM t_torneos a, t_divisiones b
+ WHERE a.actual = 'S'
+   AND a.id_division = b.id_division!';
   l_clob(6) :=q'!!';
 
   insert into t_servicios
