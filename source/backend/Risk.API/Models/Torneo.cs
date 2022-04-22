@@ -35,6 +35,10 @@ namespace Risk.API.Models
         public string Titulo { get; set; }
         public string DenominacionOficial { get; set; }
         public string TituloAlternativo { get; set; }
+        public string DescDivision { get; set; }
+        public string DescCortaDivision { get; set; }
+        public string Siguiendo { get; set; }
+        public string Suscripto { get; set; }
 
         public IEntity ConvertToEntity()
         {

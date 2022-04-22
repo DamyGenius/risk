@@ -42,6 +42,14 @@ namespace Risk.API.Entities
         public string DenominacionOficial { get; set; }
         [JsonProperty("titulo_alternativo")]
         public string TituloAlternativo { get; set; }
+        [JsonProperty("desc_division")]
+        public string DescDivision { get; set; }
+        [JsonProperty("desc_corta_division")]
+        public string DescCortaDivision { get; set; }
+        [JsonProperty("siguiendo")]
+        public string Siguiendo { get; set; }
+        [JsonProperty("suscripto")]
+        public string Suscripto { get; set; }
 
         public IModel ConvertToModel()
         {
@@ -52,7 +60,11 @@ namespace Risk.API.Entities
                 Temporada = this.Temporada,
                 Titulo = this.Titulo,
                 DenominacionOficial = this.DenominacionOficial,
-                TituloAlternativo = this.TituloAlternativo
+                TituloAlternativo = this.TituloAlternativo,
+                DescDivision = this.DescDivision,
+                DescCortaDivision = this.DescCortaDivision,
+                Siguiendo = this.Siguiendo,
+                Suscripto = this.Suscripto
             };
         }
     }
