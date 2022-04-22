@@ -1,0 +1,20 @@
+create table T_USUARIO_DIVISIONES
+(
+  id_usuario  NUMBER(10) not null,
+  id_division VARCHAR2(3) not null
+)
+;
+comment on table T_USUARIO_DIVISIONES
+  is 'Divisiones seguidas por los Usuarios';
+comment on column T_USUARIO_DIVISIONES.id_usuario
+  is 'Identificador del usuario';
+comment on column T_USUARIO_DIVISIONES.id_division
+  is 'Identificador de la división';
+alter table T_USUARIO_DIVISIONES
+  add constraint PK_USUARIO_DIVISIONES primary key (ID_USUARIO, ID_DIVISION);
+alter table T_USUARIO_DIVISIONES
+  add constraint FK_USU_DIV_USUARIOS foreign key (ID_USUARIO)
+  references T_USUARIOS (ID_USUARIO);
+alter table T_USUARIO_DIVISIONES
+  add constraint FK_USU_DIV_DIVISIONES foreign key (ID_DIVISION)
+  references T_DIVISIONES (ID_DIVISION);

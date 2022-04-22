@@ -136,6 +136,7 @@ prompt
 @@tables/t_invitaciones.tab
 @@tables/t_comentarios.tab
 @@tables/t_reacciones.tab
+@@tables/t_usuario_divisiones.tab
 
 prompt
 prompt Creando types...

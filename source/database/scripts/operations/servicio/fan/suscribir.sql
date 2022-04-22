@@ -13,7 +13,7 @@ begin
 
   l_varchar2(1) :=q'!76!';
   l_clob(2) :=q'!S!';
-  l_clob(3) :=q'!SEGUIR!';
+  l_clob(3) :=q'!SUSCRIBIR!';
   l_clob(4) :=q'!FAN!';
   l_clob(5) :=q'!S!';
   l_clob(6) :=q'!!';
@@ -246,7 +246,7 @@ begin
   -----------------------------------
 
   l_varchar2(1) :=q'!2!';
-  l_clob(2) :=q'!SERVICIO:FAN:SEGUIR!';
+  l_clob(2) :=q'!SERVICIO:FAN:SUSCRIBIR!';
   l_clob(3) :=q'!N!';
   l_clob(4) :=q'!N!';
   l_clob(5) :=q'!N!';
@@ -273,7 +273,7 @@ begin
   );
 
   l_varchar2(1) :=q'!4!';
-  l_clob(2) :=q'!SERVICIO:FAN:SEGUIR!';
+  l_clob(2) :=q'!SERVICIO:FAN:SUSCRIBIR!';
   l_clob(3) :=q'!N!';
   l_clob(4) :=q'!N!';
   l_clob(5) :=q'!N!';

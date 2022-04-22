@@ -1,9 +1,10 @@
 create table T_DIVISIONES
 (
-  id_division VARCHAR2(3) not null,
-  descripcion VARCHAR2(50) not null,
-  id_pais     NUMBER(3),
-  detalle     VARCHAR2(200)
+  id_division       VARCHAR2(3) not null,
+  descripcion       VARCHAR2(50) not null,
+  id_pais           NUMBER(3),
+  detalle           VARCHAR2(200),
+  descripcion_corta VARCHAR2(50)
 )
 ;
 comment on table T_DIVISIONES

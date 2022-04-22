@@ -11,9 +11,9 @@ begin
   -- start generation of records
   -----------------------------------
 
-  l_varchar2(1) :=q'!73!';
+  l_varchar2(1) :=q'!77!';
   l_clob(2) :=q'!S!';
-  l_clob(3) :=q'!LISTAR_DIVISIONES!';
+  l_clob(3) :=q'!SEGUIR_DIVISION!';
   l_clob(4) :=q'!FAN!';
   l_clob(5) :=q'!S!';
   l_clob(6) :=q'!!';
@@ -61,62 +61,15 @@ begin
   -- start generation of records
   -----------------------------------
 
-  l_varchar2(1) :=q'!73!';
+  l_varchar2(1) :=q'!77!';
   l_clob(2) :=q'!ID_DIVISION!';
   l_clob(3) :=q'!0.1.0!';
   l_varchar2(4) :=q'!1!';
   l_clob(5) :=q'!S!';
   l_clob(6) :=q'!S!';
   l_clob(7) :=q'!!';
-  l_varchar2(8) :=q'!3!';
-  l_clob(9) :=q'!N!';
-  l_clob(10) :=q'!!';
-  l_clob(11) :=q'!!';
-  l_clob(12) :=q'!!';
-  l_clob(13) :=q'!!';
-
-  insert into t_operacion_parametros
-  (
-     "ID_OPERACION"
-    ,"NOMBRE"
-    ,"VERSION"
-    ,"ORDEN"
-    ,"ACTIVO"
-    ,"TIPO_DATO"
-    ,"FORMATO"
-    ,"LONGITUD_MAXIMA"
-    ,"OBLIGATORIO"
-    ,"VALOR_DEFECTO"
-    ,"ETIQUETA"
-    ,"DETALLE"
-    ,"VALORES_POSIBLES"
-  )
-  values
-  (
-     to_number(l_varchar2(1))
-    ,to_char(l_clob(2))
-    ,to_char(l_clob(3))
-    ,to_number(l_varchar2(4))
-    ,to_char(l_clob(5))
-    ,to_char(l_clob(6))
-    ,to_char(l_clob(7))
-    ,to_number(l_varchar2(8))
-    ,to_char(l_clob(9))
-    ,to_char(l_clob(10))
-    ,to_char(l_clob(11))
-    ,to_char(l_clob(12))
-    ,to_char(l_clob(13))
-  );
-
-  l_varchar2(1) :=q'!73!';
-  l_clob(2) :=q'!PAGINA_PARAMETROS!';
-  l_clob(3) :=q'!0.1.0!';
-  l_varchar2(4) :=q'!10!';
-  l_clob(5) :=q'!S!';
-  l_clob(6) :=q'!O!';
-  l_clob(7) :=q'!Y_PAGINA_PARAMETROS!';
   l_varchar2(8) :=q'!!';
-  l_clob(9) :=q'!N!';
+  l_clob(9) :=q'!S!';
   l_clob(10) :=q'!!';
   l_clob(11) :=q'!!';
   l_clob(12) :=q'!!';
@@ -170,23 +123,11 @@ begin
   -- start generation of records
   -----------------------------------
 
-  l_varchar2(1) :=q'!73!';
-  l_clob(2) :=q'!C!';
-  l_varchar2(3) :=q'!!';
-  l_varchar2(4) :=q'!!';
-  l_clob(5) :=q'!SELECT a.id_division,
-       a.descripcion,
-       a.id_pais,
-       a.detalle,
-       a.descripcion_corta,
-       k_archivo.f_version_archivo('T_DIVISIONES', 'LOGO', a.id_division) version_logo,
-       (SELECT decode(nvl(COUNT(1), 0), 0, 'N', 'S')
-          FROM t_usuario_divisiones x
-         WHERE x.id_usuario = k_sistema.f_id_usuario
-           AND x.id_division = a.id_division) siguiendo,
-       k_usuario.f_suscripto_notificacion(k_sistema.f_id_usuario,
-                                          k_dispositivo.f_suscripcion_division(a.id_division)) suscripto
-  FROM t_divisiones a!';
+  l_varchar2(1) :=q'!77!';
+  l_clob(2) :=q'!T!';
+  l_varchar2(3) :=q'!2!';
+  l_varchar2(4) :=q'!22.04.2022 01:23:23!';
+  l_clob(5) :=q'!!';
   l_clob(6) :=q'!!';
 
   insert into t_servicios
@@ -254,7 +195,7 @@ begin
   -----------------------------------
 
   l_varchar2(1) :=q'!2!';
-  l_clob(2) :=q'!SERVICIO:FAN:LISTAR_DIVISIONES!';
+  l_clob(2) :=q'!SERVICIO:FAN:SEGUIR_DIVISION!';
   l_clob(3) :=q'!N!';
   l_clob(4) :=q'!N!';
   l_clob(5) :=q'!N!';
@@ -280,7 +221,7 @@ begin
   );
 
   l_varchar2(1) :=q'!4!';
-  l_clob(2) :=q'!SERVICIO:FAN:LISTAR_DIVISIONES!';
+  l_clob(2) :=q'!SERVICIO:FAN:SEGUIR_DIVISION!';
   l_clob(3) :=q'!N!';
   l_clob(4) :=q'!N!';
   l_clob(5) :=q'!N!';
