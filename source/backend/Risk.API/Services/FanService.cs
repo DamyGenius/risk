@@ -63,7 +63,8 @@ namespace Risk.API.Services
         private const string NOMBRE_LISTAR_MENSAJES_AMIGO = "LISTAR_MENSAJES_AMIGO";
         private const string NOMBRE_LISTAR_DIVISIONES = "LISTAR_DIVISIONES";
         private const string NOMBRE_LISTAR_TORNEOS = "LISTAR_TORNEOS";
-        private const string NOMBRE_SEGUIR = "SEGUIR";
+        private const string NOMBRE_SUSCRIBIR = "SUSCRIBIR";
+        private const string NOMBRE_SEGUIR_DIVISION = "SEGUIR_DIVISION";
 
         public FanService(ILogger<FanService> logger, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDbConnectionFactory dbConnectionFactory)
             : base(logger, configuration, httpContextAccessor, dbConnectionFactory)
@@ -619,14 +620,28 @@ namespace Risk.API.Services
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<Torneo>, YPagina<YTorneo>>(entityRsp, datos);
         }
 
-        public Respuesta<Dato> Seguir(TipoSeguimiento tipo, string referencia)
+        public Respuesta<Dato> Suscribir(TipoSuscripcion tipo, string referencia)
         {
             JObject prms = new JObject();
             prms.Add("tipo", tipo.GetStringValue());
             prms.Add("referencia", referencia);
 
             string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
-                NOMBRE_SEGUIR,
+                NOMBRE_SUSCRIBIR,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
+
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetModelFromEntity<Dato, YDato>(entityRsp.Datos));
+        }
+
+        public Respuesta<Dato> SeguirDivision(string idDivision)
+        {
+            JObject prms = new JObject();
+            prms.Add("id_division", idDivision);
+
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
+                NOMBRE_SEGUIR_DIVISION,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);

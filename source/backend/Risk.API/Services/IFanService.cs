@@ -55,6 +55,7 @@ namespace Risk.API.Services
         Respuesta<Pagina<AmigoMensaje>> ListarMensajesAmigo(int idAmistad, long referenciaMensaje, PaginaParametros paginaParametros = null);
         Respuesta<Pagina<Division>> ListarDivisiones(string idDivision = null, PaginaParametros paginaParametros = null);
         Respuesta<Pagina<Torneo>> ListarTorneos(string idDivision, PaginaParametros paginaParametros = null);
-        Respuesta<Dato> Seguir(TipoSeguimiento tipo, string referencia);
+        Respuesta<Dato> Suscribir(TipoSuscripcion tipo, string referencia);
+        Respuesta<Dato> SeguirDivision(string idDivision);
     }
 }

@@ -551,6 +551,17 @@ namespace Risk.API.Controllers
             return ProcesarRespuesta(respuesta);
         }
 
+        [HttpPost("SuscribirDivision")]
+        [SwaggerOperation(OperationId = "SuscribirDivision", Summary = "SuscribirDivision", Description = "Permite suscribirse a una división")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
+        public IActionResult SuscribirDivision([FromQuery, SwaggerParameter(Description = "Identificador de la división", Required = true)] string idDivision)
+        {
+            var respuesta = _fanService.Suscribir(TipoSuscripcion.Division, idDivision);
+            return ProcesarRespuesta(respuesta);
+        }
+
         [HttpPost("SeguirDivision")]
         [SwaggerOperation(OperationId = "SeguirDivision", Summary = "SeguirDivision", Description = "Permite seguir una división")]
         [Consumes(MediaTypeNames.Application.Json)]
@@ -558,7 +569,7 @@ namespace Risk.API.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
         public IActionResult SeguirDivision([FromQuery, SwaggerParameter(Description = "Identificador de la división", Required = true)] string idDivision)
         {
-            var respuesta = _fanService.Seguir(TipoSeguimiento.Division, idDivision);
+            var respuesta = _fanService.SeguirDivision(idDivision);
             return ProcesarRespuesta(respuesta);
         }
     }

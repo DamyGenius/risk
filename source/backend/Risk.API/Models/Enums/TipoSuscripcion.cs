@@ -26,7 +26,7 @@ using Risk.API.Attributes;
 
 namespace Risk.API.Models
 {
-    public enum TipoSeguimiento
+    public enum TipoSuscripcion
     {
         [StringValue("D")]
         Division

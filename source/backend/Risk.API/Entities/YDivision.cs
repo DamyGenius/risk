@@ -37,8 +37,12 @@ namespace Risk.API.Entities
         public int? IdPais { get; set; }
         [JsonProperty("detalle")]
         public string Detalle { get; set; }
+        [JsonProperty("descripcion_corta")]
+        public string DescripcionCorta { get; set; }
         [JsonProperty("version_logo")]
         public int? VersionLogo { get; set; }
+        [JsonProperty("siguiendo")]
+        public string Siguiendo { get; set; }
         [JsonProperty("suscripto")]
         public string Suscripto { get; set; }
 
@@ -50,7 +54,9 @@ namespace Risk.API.Entities
                 Descripcion = this.Descripcion,
                 IdPais = this.IdPais,
                 Detalle = this.Detalle,
+                DescripcionCorta = this.DescripcionCorta,
                 VersionLogo = this.VersionLogo,
+                Siguiendo = this.Siguiendo,
                 Suscripto = this.Suscripto
             };
         }
