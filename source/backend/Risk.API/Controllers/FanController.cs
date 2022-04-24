@@ -537,6 +537,7 @@ namespace Risk.API.Controllers
         [Produces(MediaTypeNames.Application.Json)]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Torneo>>))]
         public IActionResult ListarTorneos([FromQuery, SwaggerParameter(Description = "Division del torneo", Required = false)] string idDivision,
+            [FromQuery, SwaggerParameter(Description = "Siguiendo?", Required = false)] bool siguiendo,
             [FromQuery, SwaggerParameter(Description = "Número de la página", Required = false)] int pagina,
             [FromQuery, SwaggerParameter(Description = "Cantidad de elementos por página", Required = false)] int porPagina,
             [FromQuery, SwaggerParameter(Description = "No paginar?", Required = false)] bool noPaginar)
@@ -547,7 +548,8 @@ namespace Risk.API.Controllers
                 PorPagina = porPagina,
                 NoPaginar = noPaginar
             };
-            var respuesta = _fanService.ListarTorneos(idDivision, paginaParametros);
+            String _siguiendo = siguiendo?"S":"N";
+            var respuesta = _fanService.ListarTorneos(idDivision, _siguiendo, paginaParametros);
             return ProcesarRespuesta(respuesta);
         }
 
