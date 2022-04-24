@@ -234,7 +234,13 @@ begin
          WHERE x.id_usuario = k_sistema.f_id_usuario
            AND x.id_division = a.id_division) siguiendo,
        k_usuario.f_suscripto_notificacion(k_sistema.f_id_usuario,
-                                          k_dispositivo.f_suscripcion_division(a.id_division)) suscripto
+                                          k_dispositivo.f_suscripcion_division(a.id_division)) suscripto,
+       (SELECT y.ranking
+          FROM t_grupo_torneo_usuarios y
+         WHERE y.id_grupo =
+               k_puntajes_fan.f_grupo_general_torneo(a.id_torneo)
+           AND y.id_torneo = a.id_torneo
+           AND y.id_usuario = k_sistema.f_id_usuario) ranking
   FROM t_torneos a, t_divisiones b
  WHERE a.actual = 'S'
    AND a.id_division = b.id_division!';
