@@ -50,6 +50,8 @@ namespace Risk.API.Entities
         public string Siguiendo { get; set; }
         [JsonProperty("suscripto")]
         public string Suscripto { get; set; }
+        [JsonProperty("ranking")]
+        public int? Ranking { get; set; }
 
         public IModel ConvertToModel()
         {
@@ -64,7 +66,8 @@ namespace Risk.API.Entities
                 DescDivision = this.DescDivision,
                 DescCortaDivision = this.DescCortaDivision,
                 Siguiendo = this.Siguiendo,
-                Suscripto = this.Suscripto
+                Suscripto = this.Suscripto,
+                Ranking = this.Ranking
             };
         }
     }
