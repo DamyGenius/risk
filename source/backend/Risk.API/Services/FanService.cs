@@ -600,7 +600,10 @@ namespace Risk.API.Services
         {
             JObject prms = new JObject();
             prms.Add("id_division", idDivision);
-            prms.Add("siguiendo", siguiendo);
+            if (siguiendo != null)
+            {
+                prms.Add("siguiendo", siguiendo);
+            }
             if (paginaParametros != null)
             {
                 prms.Add("pagina_parametros", JToken.FromObject(ModelsMapper.GetEntityFromModel<PaginaParametros, YPaginaParametros>(paginaParametros)));
