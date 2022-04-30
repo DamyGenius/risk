@@ -596,10 +596,11 @@ namespace Risk.API.Services
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<Division>, YPagina<YDivision>>(entityRsp, datos);
         }
 
-        public Respuesta<Pagina<Torneo>> ListarTorneos(string idDivision, string siguiendo = null, PaginaParametros paginaParametros = null)
+        public Respuesta<Pagina<Torneo>> ListarTorneos(string idDivision = null, string idTorneo = null, string siguiendo = null, PaginaParametros paginaParametros = null)
         {
             JObject prms = new JObject();
             prms.Add("id_division", idDivision);
+            prms.Add("id_torneo", idTorneo);
             if (siguiendo != null)
             {
                 prms.Add("siguiendo", siguiendo);
