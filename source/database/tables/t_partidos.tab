@@ -4,7 +4,7 @@ create table T_PARTIDOS
   id_torneo             VARCHAR2(12),
   id_club_local         VARCHAR2(5),
   id_club_visitante     VARCHAR2(5),
-  fecha                 DATE,
+  fecha                 TIMESTAMP(0) WITH TIME ZONE,
   hora                  VARCHAR2(5),
   id_jornada            NUMBER(3),
   id_estadio            NUMBER(6),
