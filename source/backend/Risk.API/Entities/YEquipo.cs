@@ -50,7 +50,7 @@ namespace Risk.API.Entities
         [JsonProperty("tipo")]
         public string Tipo { get; set; }
         [JsonProperty("id_pais")]
-        public int IdPais { get; set; }
+        public int? IdPais { get; set; }
         [JsonProperty("id_division")]
         public string IdDivision { get; set; }
         [JsonProperty("version_escudo")]
