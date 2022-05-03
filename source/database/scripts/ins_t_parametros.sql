@@ -66,7 +66,7 @@ insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR, ID_DOMINIO)
 values ('ESTADO_IMPORTACION_PARTIDOS', 'Indica el estado de la importación de Partidos de Fantasy (E-En Ejecución/D-Detenido)', 'D', null);
 
 insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR, ID_DOMINIO)
-values ('ZONA_HORARIA', 'Zona horaria  del entorno de Producción', '-4:0', null);
+values ('ZONA_HORARIA', 'Zona horaria  del entorno de Producción', 'America/Asuncion', null);
 
 insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR, ID_DOMINIO)
 values ('ID_IDIOMA_ISO', 'Código del Idioma por defecto segun estandar ISO 639-1', 'es', null);
