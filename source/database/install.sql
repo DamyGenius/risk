@@ -175,6 +175,11 @@ prompt
 @@types/y_partido_prediccion.typ
 @@types/y_partidos.typ
 @@types/y_jornada.typ
+@@types/y_jornadas.typ
+@@types/y_torneo_grupo.typ
+@@types/y_torneo_grupos.typ
+@@types/y_fase.typ
+@@types/y_torneo.typ
 @@types/y_grupo_usuario.typ
 @@types/y_grupo.typ
 @@types/y_amigo.typ

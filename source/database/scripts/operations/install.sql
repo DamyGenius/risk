@@ -35,6 +35,7 @@ prompt
 @@scripts/operations/servicio/fan/listar_clubes.sql
 @@scripts/operations/servicio/fan/listar_comentarios.sql
 @@scripts/operations/servicio/fan/listar_divisiones.sql
+@@scripts/operations/servicio/fan/listar_fases.sql
 @@scripts/operations/servicio/fan/listar_grupos.sql
 @@scripts/operations/servicio/fan/listar_jornadas.sql
 @@scripts/operations/servicio/fan/listar_mensajes_amigo.sql

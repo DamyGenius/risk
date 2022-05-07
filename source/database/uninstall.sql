@@ -97,6 +97,11 @@ prompt
 drop type y_amigo force;
 drop type y_grupo force;
 drop type y_grupo_usuario force;
+drop type y_torneo force;
+drop type y_fase force;
+drop type y_torneo_grupos force;
+drop type y_torneo_grupo force;
+drop type y_jornadas force;
 drop type y_jornada force;
 drop type y_partidos force;
 drop type y_partido_prediccion force;
