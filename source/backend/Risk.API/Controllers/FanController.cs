@@ -153,6 +153,21 @@ namespace Risk.API.Controllers
             return ProcesarRespuesta(respuesta);
         }
 
+        [HttpGet("ListarFases")]
+        [SwaggerOperation(OperationId = "ListarFases", Summary = "ListarFases", Description = "Obtiene una lista de fases")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<TorneoDetalle>))]
+        public IActionResult ListarFases([FromQuery, SwaggerParameter(Description = "Identificador del torneo", Required = true)] string idTorneo,
+                                            [FromQuery, SwaggerParameter(Description = "Identificador de la fase", Required = false)] int? fase,
+                                            [FromQuery, SwaggerParameter(Description = "Identificador del grupo", Required = false)] int? grupo,
+                                            [FromQuery, SwaggerParameter(Description = "Identificador de la jornada", Required = false)] int? jornada,
+                                            [FromQuery, SwaggerParameter(Description = "Usuario", Required = false)] string usuario,
+                                            [FromQuery, SwaggerParameter(Description = "Incluir partidos (S/N)", Required = false)] string incluirPartidos)
+        {
+            var respuesta = _fanService.ListarFases(idTorneo, fase, grupo, jornada, usuario, incluirPartidos);
+            return ProcesarRespuesta(respuesta);
+        }
+
         [HttpPost("RealizarPrediccion")]
         [SwaggerOperation(OperationId = "RealizarPrediccion", Summary = "RealizarPrediccion", Description = "Permite realizar una predicción")]
         [Consumes(MediaTypeNames.Application.Json)]

@@ -45,6 +45,7 @@ namespace Risk.API.Services
         private const string NOMBRE_LISTAR_PREDICCIONES_PARTIDOS = "LISTAR_PREDICCIONES_PARTIDOS";
         private const string NOMBRE_EDITAR_GRUPO = "EDITAR_GRUPO";
         private const string NOMBRE_LISTAR_JORNADAS = "LISTAR_JORNADAS";
+        private const string NOMBRE_LISTAR_FASES = "LISTAR_FASES";
         private const string NOMBRE_DATOS_GRUPO = "DATOS_GRUPO";
         private const string NOMBRE_LISTAR_GRUPOS = "LISTAR_GRUPOS";
         private const string NOMBRE_ABANDONAR_GRUPO = "ABANDONAR_GRUPO";
@@ -190,6 +191,25 @@ namespace Risk.API.Services
             }
 
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<Jornada>, YPagina<YJornada>>(entityRsp, datos);
+        }
+
+        public Respuesta<TorneoDetalle> ListarFases(string torneo, int? fase = null, int? grupo = null, int? jornada = null, string usuario = null, string incluirPartidos = null)
+        {
+            JObject prms = new JObject();
+            prms.Add("torneo", torneo);
+            prms.Add("fase", fase);
+            prms.Add("grupo", grupo);
+            prms.Add("jornada", jornada);
+            prms.Add("usuario", usuario);
+            prms.Add("incluir_partidos", incluirPartidos);
+
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
+                NOMBRE_LISTAR_FASES,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YTorneoDetalle>>(rsp);
+
+            return EntitiesMapper.GetRespuestaFromEntity<TorneoDetalle, YTorneoDetalle>(entityRsp, EntitiesMapper.GetModelFromEntity<TorneoDetalle, YTorneoDetalle>(entityRsp.Datos));
         }
 
         public Respuesta<Dato> RealizarPrediccion(int partido, string usuario, int? golesClubLocal, int? golesClubVisitante, int idSincronizacion)
