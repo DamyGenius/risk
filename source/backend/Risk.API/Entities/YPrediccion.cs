@@ -39,12 +39,22 @@ namespace Risk.API.Entities
         public string IdClubLocal { get; set; }
         [JsonProperty("id_club_visitante")]
         public string IdClubVisitante { get; set; }
+        [JsonProperty("nombre_club_local")]
+        public string NombreClubLocal { get; set; }
+        [JsonProperty("nombre_club_visitante")]
+        public string NombreClubVisitante { get; set; }
         [JsonProperty("fecha")]
         public DateTime? Fecha { get; set; }
         [JsonProperty("hora")]
         public string Hora { get; set; }
+        [JsonProperty("id_fase")]
+        public int? IdFase { get; set; }
+        [JsonProperty("id_grupo")]
+        public int? IdGrupo { get; set; }
         [JsonProperty("id_jornada")]
         public int? IdJornada { get; set; }
+        [JsonProperty("etiqueta")]
+        public string Etiqueta { get; set; }
         [JsonProperty("id_estadio")]
         public int? IdEstadio { get; set; }
         [JsonProperty("goles_local")]
@@ -80,9 +90,14 @@ namespace Risk.API.Entities
                 IdTorneo = this.IdTorneo,
                 IdClubLocal = this.IdClubLocal,
                 IdClubVisitante = this.IdClubVisitante,
+                NombreClubLocal = this.NombreClubLocal,
+                NombreClubVisitante = this.NombreClubVisitante,
                 Fecha = this.Fecha,
                 Hora = this.Hora,
+                IdFase = this.IdFase,
+                IdGrupo = this.IdGrupo,
                 IdJornada = this.IdJornada,
+                Etiqueta = this.Etiqueta,
                 IdEstadio = this.IdEstadio,
                 GolesLocal = this.GolesLocal,
                 GolesVisitante = this.GolesVisitante,

@@ -33,9 +33,14 @@ namespace Risk.API.Models
         public string IdTorneo { get; set; }
         public string IdClubLocal { get; set; }
         public string IdClubVisitante { get; set; }
+        public string NombreClubLocal { get; set; }
+        public string NombreClubVisitante { get; set; }
         public DateTime? Fecha { get; set; }
         public string Hora { get; set; }
+        public int? IdFase { get; set; }
+        public int? IdGrupo { get; set; }
         public int? IdJornada { get; set; }
+        public string Etiqueta { get; set; }
         public int? IdEstadio { get; set; }
         public int? GolesLocal { get; set; }
         public int? GolesVisitante { get; set; }
