@@ -37,6 +37,7 @@ namespace Risk.API.Models
         public string TituloAlternativo { get; set; }
         public string DescDivision { get; set; }
         public string DescCortaDivision { get; set; }
+        public string PorFases { get; set; }
         public string Siguiendo { get; set; }
         public string Suscripto { get; set; }
         public int? Ranking { get; set; }

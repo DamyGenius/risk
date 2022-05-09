@@ -46,6 +46,8 @@ namespace Risk.API.Entities
         public string DescDivision { get; set; }
         [JsonProperty("desc_corta_division")]
         public string DescCortaDivision { get; set; }
+        [JsonProperty("por_fases")]
+        public string PorFases { get; set; }
         [JsonProperty("siguiendo")]
         public string Siguiendo { get; set; }
         [JsonProperty("suscripto")]
@@ -65,6 +67,7 @@ namespace Risk.API.Entities
                 TituloAlternativo = this.TituloAlternativo,
                 DescDivision = this.DescDivision,
                 DescCortaDivision = this.DescCortaDivision,
+                PorFases = this.PorFases,
                 Siguiendo = this.Siguiendo,
                 Suscripto = this.Suscripto,
                 Ranking = this.Ranking
