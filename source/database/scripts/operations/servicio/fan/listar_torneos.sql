@@ -276,6 +276,7 @@ begin
        a.titulo_alternativo,
        b.descripcion desc_division,
        b.descripcion_corta desc_corta_division,
+       a.por_fases,
        (SELECT decode(nvl(COUNT(1), 0), 0, 'N', 'S')
           FROM t_usuario_divisiones x
          WHERE x.id_usuario = k_sistema.f_id_usuario

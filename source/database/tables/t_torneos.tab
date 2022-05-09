@@ -10,13 +10,21 @@ create table T_TORNEOS
   id_url               VARCHAR2(3),
   id_importacion       VARCHAR2(50),
   titulo_alternativo   VARCHAR2(50),
-  prueba               VARCHAR2(1) default 'N'
+  prueba               VARCHAR2(1) default 'N',
+  por_fases            VARCHAR2(1) default 'N',
+  importado            VARCHAR2(1) default 'N'
 )
 ;
 comment on table T_TORNEOS
   is 'Torneos';
+comment on column T_TORNEOS.actual
+  is '¿Es torneo actual?';
 comment on column T_TORNEOS.prueba
   is '¿Es torneo de prueba?';
+comment on column T_TORNEOS.por_fases
+  is '¿El torneo es por fases?';
+comment on column T_TORNEOS.importado
+  is '¿El torneo ingresa al proceso de importación?';
 alter table T_TORNEOS
   add constraint PK_TORNEOS primary key (ID_TORNEO);
 alter table T_TORNEOS
