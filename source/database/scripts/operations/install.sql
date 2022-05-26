@@ -2,6 +2,7 @@ prompt
 prompt Instalando operaciones...
 prompt -----------------------------------
 prompt
+@@scripts/operations/monitoreo/fan/puntajes_pendientes_partidos.sql
 @@scripts/operations/parametros/_/contexto.sql
 @@scripts/operations/parametros/_/parametros_automaticos.sql
 @@scripts/operations/reporte/gen/listar_significados.sql
@@ -72,3 +73,4 @@ prompt
 @@scripts/operations/trabajo/fan/fin_partido_{id_partido}.sql
 @@scripts/operations/trabajo/fan/partido_en_juego_{id_partido}.sql
 @@scripts/operations/trabajo/fan/pre_cierre_predicciones_{id_partido}.sql
+@@scripts/operations/trabajo/gen/monitoreo_conflictos.sql

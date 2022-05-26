@@ -11,12 +11,12 @@ begin
   -- start generation of records
   -----------------------------------
 
-  l_varchar2(1) :=q'!55!';
+  l_varchar2(1) :=q'!79!';
   l_clob(2) :=q'!T!';
-  l_clob(3) :=q'!CIERRE_PREDICCIONES_{ID_PARTIDO}!';
-  l_clob(4) :=q'!FAN!';
+  l_clob(3) :=q'!MONITOREO_CONFLICTOS!';
+  l_clob(4) :=q'!GEN!';
   l_clob(5) :=q'!S!';
-  l_clob(6) :=q'!Trabajo de cierre de predicciones de partido programado!';
+  l_clob(6) :=q'!Trabajo de monitoreo de conflictos!';
   l_clob(7) :=q'!0.1.0!';
   l_varchar2(8) :=q'!0!';
   l_clob(9) :=q'!!';
@@ -60,53 +60,6 @@ begin
   null;
   -- start generation of records
   -----------------------------------
-
-  l_varchar2(1) :=q'!55!';
-  l_clob(2) :=q'!ID_PARTIDO!';
-  l_clob(3) :=q'!0.1.0!';
-  l_varchar2(4) :=q'!1!';
-  l_clob(5) :=q'!S!';
-  l_clob(6) :=q'!S!';
-  l_clob(7) :=q'!!';
-  l_varchar2(8) :=q'!!';
-  l_clob(9) :=q'!S!';
-  l_clob(10) :=q'!!';
-  l_clob(11) :=q'!!';
-  l_clob(12) :=q'!!';
-  l_clob(13) :=q'!!';
-
-  insert into t_operacion_parametros
-  (
-     "ID_OPERACION"
-    ,"NOMBRE"
-    ,"VERSION"
-    ,"ORDEN"
-    ,"ACTIVO"
-    ,"TIPO_DATO"
-    ,"FORMATO"
-    ,"LONGITUD_MAXIMA"
-    ,"OBLIGATORIO"
-    ,"VALOR_DEFECTO"
-    ,"ETIQUETA"
-    ,"DETALLE"
-    ,"VALORES_POSIBLES"
-  )
-  values
-  (
-     to_number(l_varchar2(1))
-    ,to_char(l_clob(2))
-    ,to_char(l_clob(3))
-    ,to_number(l_varchar2(4))
-    ,to_char(l_clob(5))
-    ,to_char(l_clob(6))
-    ,to_char(l_clob(7))
-    ,to_number(l_varchar2(8))
-    ,to_char(l_clob(9))
-    ,to_char(l_clob(10))
-    ,to_char(l_clob(11))
-    ,to_char(l_clob(12))
-    ,to_char(l_clob(13))
-  );
 
 end;
 /
@@ -153,17 +106,14 @@ begin
   -- start generation of records
   -----------------------------------
 
-  l_varchar2(1) :=q'!55!';
-  l_clob(2) :=q'!PLSQL_BLOCK!';
-  l_clob(3) :=q'!BEGIN
-  k_puntajes_fan.p_cerrar_predicciones(&ID_PARTIDO);
-  k_puntajes_fan.p_abrir_partido_en_juego(&ID_PARTIDO);
-END;!';
+  l_varchar2(1) :=q'!79!';
+  l_clob(2) :=q'!STORED_PROCEDURE!';
+  l_clob(3) :=q'!K_MONITOREO.P_PROCESAR_MONITOREOS!';
   l_varchar2(4) :=q'!!';
-  l_varchar2(5) :=q'!-60!';
-  l_clob(6) :=q'!!';
+  l_varchar2(5) :=q'!!';
+  l_clob(6) :=q'!FREQ=HOURLY; BYMINUTE=10;BYSECOND=0;!';
   l_varchar2(7) :=q'!!';
-  l_clob(8) :=q'!Trabajo de cierre de predicciones de partido programado!';
+  l_clob(8) :=q'!Trabajo de monitoreo de conflictos!';
   l_varchar2(9) :=q'!!';
   l_varchar2(10) :=q'!!';
 

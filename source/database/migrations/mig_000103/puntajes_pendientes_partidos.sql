@@ -11,14 +11,14 @@ begin
   -- start generation of records
   -----------------------------------
 
-  l_varchar2(1) :=q'!55!';
-  l_clob(2) :=q'!T!';
-  l_clob(3) :=q'!CIERRE_PREDICCIONES_{ID_PARTIDO}!';
+  l_varchar2(1) :=q'!501!';
+  l_clob(2) :=q'!M!';
+  l_clob(3) :=q'!PUNTAJES_PENDIENTES_PARTIDOS!';
   l_clob(4) :=q'!FAN!';
   l_clob(5) :=q'!S!';
-  l_clob(6) :=q'!Trabajo de cierre de predicciones de partido programado!';
+  l_clob(6) :=q'!Partidos pendientes de contabilización de puntajes!';
   l_clob(7) :=q'!0.1.0!';
-  l_varchar2(8) :=q'!0!';
+  l_varchar2(8) :=q'!1!';
   l_clob(9) :=q'!!';
 
   insert into t_operaciones
@@ -61,12 +61,12 @@ begin
   -- start generation of records
   -----------------------------------
 
-  l_varchar2(1) :=q'!55!';
+  l_varchar2(1) :=q'!501!';
   l_clob(2) :=q'!ID_PARTIDO!';
   l_clob(3) :=q'!0.1.0!';
   l_varchar2(4) :=q'!1!';
   l_clob(5) :=q'!S!';
-  l_clob(6) :=q'!S!';
+  l_clob(6) :=q'!N!';
   l_clob(7) :=q'!!';
   l_varchar2(8) :=q'!!';
   l_clob(9) :=q'!S!';
@@ -153,47 +153,6 @@ begin
   -- start generation of records
   -----------------------------------
 
-  l_varchar2(1) :=q'!55!';
-  l_clob(2) :=q'!PLSQL_BLOCK!';
-  l_clob(3) :=q'!BEGIN
-  k_puntajes_fan.p_cerrar_predicciones(&ID_PARTIDO);
-  k_puntajes_fan.p_abrir_partido_en_juego(&ID_PARTIDO);
-END;!';
-  l_varchar2(4) :=q'!!';
-  l_varchar2(5) :=q'!-60!';
-  l_clob(6) :=q'!!';
-  l_varchar2(7) :=q'!!';
-  l_clob(8) :=q'!Trabajo de cierre de predicciones de partido programado!';
-  l_varchar2(9) :=q'!!';
-  l_varchar2(10) :=q'!!';
-
-  insert into t_trabajos
-  (
-     "ID_TRABAJO"
-    ,"TIPO"
-    ,"ACCION"
-    ,"FECHA_INICIO"
-    ,"TIEMPO_INICIO"
-    ,"INTERVALO_REPETICION"
-    ,"FECHA_FIN"
-    ,"COMENTARIOS"
-    ,"CANTIDAD_EJECUCIONES"
-    ,"FECHA_ULTIMA_EJECUCION"
-  )
-  values
-  (
-     to_number(l_varchar2(1))
-    ,to_char(l_clob(2))
-    ,to_char(l_clob(3))
-    ,to_timestamp_tz(l_varchar2(4),'DD.MM.YYYY HH24:MI:SSXFF TZR')
-    ,to_number(l_varchar2(5))
-    ,to_char(l_clob(6))
-    ,to_timestamp_tz(l_varchar2(7),'DD.MM.YYYY HH24:MI:SSXFF TZR')
-    ,to_char(l_clob(8))
-    ,to_number(l_varchar2(9))
-    ,to_date(l_varchar2(10),'DD.MM.YYYY HH24:MI:SS')
-  );
-
 end;
 /
 /* ==================== T_MONITOREOS ==================== */
@@ -208,6 +167,70 @@ begin
   null;
   -- start generation of records
   -----------------------------------
+
+  l_varchar2(1) :=q'!501!';
+  l_clob(2) :=q'!La importación de datos del partido puntual no finalizó exitosamente, y luego se actualizó el resultado manualmente o por el proceso diario del torneo.
+
+Posibles causas:
+-El partido fue suspendido o postergado.
+-Problemas con el proveedor de datos.!';
+  l_clob(3) :=q'!SELECT p.id_partido,
+       p.id_torneo,
+       k_util.f_formatear_titulo(l.nombre_corto) || ' ' ||
+       p.goles_club_local || '-' || p.goles_club_visitante || ' ' ||
+       k_util.f_formatear_titulo(v.nombre_corto) partido,
+       p.fecha
+  FROM t_partidos p, t_clubes l, t_clubes v, t_torneos t
+ WHERE p.id_club_local = l.id_club
+   AND p.id_club_visitante = v.id_club
+   AND p.id_torneo = t.id_torneo
+      --
+   AND p.estado = 'F'
+   AND EXISTS (SELECT 1
+          FROM t_predicciones x
+         WHERE x.id_partido = p.id_partido
+           AND x.estado = 'C')
+ ORDER BY p.fecha DESC!';
+  l_clob(4) :=q'!En el caso de partido suspendido o postergado, se debe volver a correr el trabajo de importación del partido puntual una vez que éste se reanude.!';
+  l_varchar2(5) :=q'!1!';
+  l_varchar2(6) :=q'!!';
+  l_varchar2(7) :=q'!!';
+  l_varchar2(8) :=q'!!';
+  l_varchar2(9) :=q'!!';
+  l_varchar2(10) :=q'!1!';
+  l_varchar2(11) :=q'!1!';
+  l_clob(12) :=q'!!';
+
+  insert into t_monitoreos
+  (
+     "ID_MONITOREO"
+    ,"CAUSA"
+    ,"CONSULTA_SQL"
+    ,"PLAN_ACCION"
+    ,"PRIORIDAD"
+    ,"CANTIDAD_EJECUCIONES"
+    ,"FECHA_ULTIMA_EJECUCION"
+    ,"CANTIDAD_EJECUCIONES_CONFLICTO"
+    ,"FECHA_ULTIMA_EJECUCION_CONFLICTO"
+    ,"ID_ROL_RESPONSABLE"
+    ,"NIVEL_AVISO"
+    ,"COMENTARIOS"
+  )
+  values
+  (
+     to_number(l_varchar2(1))
+    ,to_char(l_clob(2))
+    ,l_clob(3)
+    ,to_char(l_clob(4))
+    ,to_number(l_varchar2(5))
+    ,to_number(l_varchar2(6))
+    ,to_timestamp_tz(l_varchar2(7),'DD.MM.YYYY HH24:MI:SSXFF TZR')
+    ,to_number(l_varchar2(8))
+    ,to_timestamp_tz(l_varchar2(9),'DD.MM.YYYY HH24:MI:SSXFF TZR')
+    ,to_number(l_varchar2(10))
+    ,to_number(l_varchar2(11))
+    ,to_char(l_clob(12))
+  );
 
 end;
 /

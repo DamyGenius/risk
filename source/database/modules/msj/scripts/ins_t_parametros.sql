@@ -32,4 +32,7 @@ values ('REGEXP_VALIDAR_NUMERO_TELEFONO', 'Expresión Regular para validación de 
 insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR, ID_DOMINIO)
 values ('SUSCRIPCION_PRUEBAS', 'Tag o expresión destino para pruebas de notificaciones push', 'test', 'MSJ');
 
+insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR, ID_DOMINIO)
+values ('DIRECCION_CORREO_MONITOREOS', 'Dirección de correo electrónico principal para monitoreos de conflictos', 'damian.meza.py@gmail.com, javier.meza.py@gmail.com', null);
+
 prompt Done.
