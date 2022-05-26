@@ -212,6 +212,7 @@ prompt
 @@packages/k_servicio_aut.pck
 @@packages/k_servicio_gen.pck
 @@packages/k_reporte_gen.pck
+@@packages/k_monitoreo_aut.pck
 
 @@packages/k_servicio_fan.pck
 @@packages/k_datos_fan.pck

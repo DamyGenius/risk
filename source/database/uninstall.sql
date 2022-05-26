@@ -69,6 +69,7 @@ drop package k_imagenes_fan;
 drop package k_datos_fan;
 drop package k_servicio_fan;
 
+drop package k_monitoreo_aut;
 drop package k_reporte_gen;
 drop package k_servicio_gen;
 drop package k_servicio_aut;

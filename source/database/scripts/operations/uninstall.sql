@@ -2,6 +2,15 @@ prompt
 prompt Desinstalando operaciones...
 prompt -----------------------------------
 prompt
+/* ==================== ID_OPERACION = 502 ==================== */
+DELETE t_rol_permisos WHERE id_permiso = k_operacion.f_id_permiso(502);
+DELETE t_monitoreos WHERE id_monitoreo = 502;
+DELETE t_trabajos WHERE id_trabajo = 502;
+DELETE t_reportes WHERE id_reporte = 502;
+DELETE t_servicios WHERE id_servicio = 502;
+DELETE t_operacion_parametros WHERE id_operacion = 502;
+DELETE t_operaciones WHERE id_operacion = 502;
+
 /* ==================== ID_OPERACION = 501 ==================== */
 DELETE t_rol_permisos WHERE id_permiso = k_operacion.f_id_permiso(501);
 DELETE t_monitoreos WHERE id_monitoreo = 501;
