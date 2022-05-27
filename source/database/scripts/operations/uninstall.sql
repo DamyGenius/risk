@@ -20,6 +20,15 @@ DELETE t_servicios WHERE id_servicio = 501;
 DELETE t_operacion_parametros WHERE id_operacion = 501;
 DELETE t_operaciones WHERE id_operacion = 501;
 
+/* ==================== ID_OPERACION = 503 ==================== */
+DELETE t_rol_permisos WHERE id_permiso = k_operacion.f_id_permiso(503);
+DELETE t_monitoreos WHERE id_monitoreo = 503;
+DELETE t_trabajos WHERE id_trabajo = 503;
+DELETE t_reportes WHERE id_reporte = 503;
+DELETE t_servicios WHERE id_servicio = 503;
+DELETE t_operacion_parametros WHERE id_operacion = 503;
+DELETE t_operaciones WHERE id_operacion = 503;
+
 /* ==================== ID_OPERACION = 1001 ==================== */
 DELETE t_rol_permisos WHERE id_permiso = k_operacion.f_id_permiso(1001);
 DELETE t_monitoreos WHERE id_monitoreo = 1001;
