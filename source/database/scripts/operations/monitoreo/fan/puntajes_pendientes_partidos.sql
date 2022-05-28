@@ -191,8 +191,8 @@ Posibles causas:
          WHERE x.id_partido = p.id_partido
            AND x.estado = 'C')
  ORDER BY p.fecha DESC!';
-  l_clob(4) :=q'!En el caso de partido suspendido o postergado, se debe volver a correr el trabajo de importación del partido puntual una vez que éste se reanude.!';
-  l_varchar2(5) :=q'!1!';
+  l_clob(4) :=q'!Para una solución definitiva, en el caso de partido en estado Suspendido o Postergado, se debe crear el trabajo de importación del partido para la fecha de reanudación del mismo. Hoy en día solo se genera el trabajo para el partido en estado Programado.!';
+  l_varchar2(5) :=q'!2!';
   l_varchar2(6) :=q'!!';
   l_varchar2(7) :=q'!!';
   l_varchar2(8) :=q'!!';
