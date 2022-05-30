@@ -75,4 +75,10 @@ prompt
 @@scripts/operations/trabajo/fan/fin_partido_{id_partido}.sql
 @@scripts/operations/trabajo/fan/partido_en_juego_{id_partido}.sql
 @@scripts/operations/trabajo/fan/pre_cierre_predicciones_{id_partido}.sql
-@@scripts/operations/trabajo/gen/monitoreo_conflictos.sql
+@@scripts/operations/trabajo/gen/monitoreo_conflictos_diario.sql
+@@scripts/operations/trabajo/gen/monitoreo_conflictos_hora.sql
+@@scripts/operations/trabajo/gen/monitoreo_conflictos_mensual.sql
+@@scripts/operations/trabajo/gen/monitoreo_conflictos_semanal.sql
+@@scripts/operations/trabajo/gen/monitoreo_conflictos_12_horas.sql
+@@scripts/operations/trabajo/gen/monitoreo_conflictos_2_horas.sql
+@@scripts/operations/trabajo/gen/monitoreo_conflictos_6_horas.sql

@@ -1,16 +1,17 @@
 create table T_MONITOREOS
 (
-  id_monitoreo                     NUMBER not null,
+  id_monitoreo                     NUMBER NOT NULL,
   causa                            VARCHAR2(4000),
   consulta_sql                     CLOB,
   plan_accion                      VARCHAR2(4000),
-  prioridad                        NUMBER(1) default 3 not null,
+  prioridad                        NUMBER(1) DEFAULT 3 NOT NULL,
   cantidad_ejecuciones             NUMBER,
   fecha_ultima_ejecucion           TIMESTAMP(2) WITH TIME ZONE,
   cantidad_ejecuciones_conflicto   NUMBER,
   fecha_ultima_ejecucion_conflicto TIMESTAMP(2) WITH TIME ZONE,
   id_rol_responsable               NUMBER(3),
-  nivel_aviso                      NUMBER(1) default 1 not null,
+  nivel_aviso                      NUMBER(1) DEFAULT 1 NOT NULL,
+  frecuencia                       VARCHAR2(3) DEFAULT 'D' NOT NULL,
   comentarios                      VARCHAR2(1000)
 )
 ;
@@ -38,6 +39,8 @@ comment on column T_MONITOREOS.id_rol_responsable
   is 'Identificador del rol responsable';
 comment on column T_MONITOREOS.nivel_aviso
   is 'Nivel de aviso del monitoreo (0-Off, 1-Resumido, 2-Detallado)';
+comment on column T_MONITOREOS.frecuencia
+  is 'Frecuencia de ejecución del monitoreo';
 comment on column T_MONITOREOS.comentarios
   is 'Comentarios del monitoreo';
 alter table T_MONITOREOS
@@ -51,3 +54,6 @@ alter table T_MONITOREOS
 alter table T_MONITOREOS
   add constraint CK_MONITOREOS_NIVEL_AVISO
   check (NIVEL_AVISO IN (0, 1, 2));
+alter table T_MONITOREOS
+  add constraint CK_MONITOREOS_FRECUENCIA
+  check (FRECUENCIA IN ('H', '2H', '6H', '12H', 'D', 'S', 'M'));

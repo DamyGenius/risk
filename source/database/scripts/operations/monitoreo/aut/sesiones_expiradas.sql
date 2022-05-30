@@ -185,7 +185,8 @@ begin
   l_varchar2(9) :=q'!!';
   l_varchar2(10) :=q'!1!';
   l_varchar2(11) :=q'!0!';
-  l_clob(12) :=q'!!';
+  l_clob(12) :=q'!D!';
+  l_clob(13) :=q'!!';
 
   insert into t_monitoreos
   (
@@ -200,6 +201,7 @@ begin
     ,"FECHA_ULTIMA_EJECUCION_CONFLICTO"
     ,"ID_ROL_RESPONSABLE"
     ,"NIVEL_AVISO"
+    ,"FRECUENCIA"
     ,"COMENTARIOS"
   )
   values
@@ -216,6 +218,7 @@ begin
     ,to_number(l_varchar2(10))
     ,to_number(l_varchar2(11))
     ,to_char(l_clob(12))
+    ,to_char(l_clob(13))
   );
 
 end;
