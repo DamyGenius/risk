@@ -63,6 +63,7 @@ prompt
 @@sequences/s_id_persona.seq
 @@sequences/s_id_rol.seq
 @@sequences/s_id_operacion_log.seq
+@@sequences/s_id_monitoreo_ejecucion.seq
 @@sequences/s_id_sesion.seq
 @@sequences/s_id_usuario.seq
 @@sequences/s_id_dispositivo.seq
@@ -103,6 +104,8 @@ prompt
 @@tables/t_reportes.tab
 @@tables/t_servicios.tab
 @@tables/t_trabajos.tab
+@@tables/t_monitoreos.tab
+@@tables/t_monitoreo_ejecuciones.tab
 @@tables/t_dispositivos.tab
 @@tables/t_dispositivo_suscripciones.tab
 @@tables/t_dispositivo_ubicaciones.tab
@@ -205,20 +208,24 @@ prompt
 @@packages/k_servicio.pck
 @@packages/k_reporte.pck
 @@packages/k_trabajo.pck
+@@packages/k_monitoreo.pck
 @@packages/k_servicio_aut.pck
 @@packages/k_servicio_gen.pck
 @@packages/k_reporte_gen.pck
+@@packages/k_monitoreo_aut.pck
 
 @@packages/k_servicio_fan.pck
 @@packages/k_datos_fan.pck
 @@packages/k_imagenes_fan.pck
 @@packages/k_importacion_fan.pck
 @@packages/k_puntajes_fan.pck
+@@packages/k_monitoreo_fan.pck
 
 prompt
 prompt Creando vistas...
 prompt -----------------------------------
 prompt
+@@views/v_monitoreo_datos.sql
 @@views/v_ranking_usuarios.sql
 
 prompt
@@ -234,6 +241,7 @@ prompt
 @@triggers/gs_roles.trg
 @@triggers/gs_operaciones.trg
 @@triggers/gs_operacion_logs.trg
+@@triggers/gs_monitoreo_ejecuciones.trg
 @@triggers/gs_sesiones.trg
 @@triggers/gs_usuarios.trg
 @@triggers/gs_dispositivos.trg
@@ -309,7 +317,7 @@ prompt
 prompt Creando jobs...
 prompt -----------------------------------
 prompt
-
+@@jobs/create_monitoreo_conflictos.sql
 @@jobs/create_actualizacion_partidos.sql
 
 prompt

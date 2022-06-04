@@ -2,6 +2,9 @@ prompt
 prompt Instalando operaciones...
 prompt -----------------------------------
 prompt
+@@scripts/operations/monitoreo/aut/sesiones_expiradas.sql
+@@scripts/operations/monitoreo/fan/puntajes_pendientes_partidos.sql
+@@scripts/operations/monitoreo/fan/servicio_datos_version_driver.sql
 @@scripts/operations/parametros/_/contexto.sql
 @@scripts/operations/parametros/_/parametros_automaticos.sql
 @@scripts/operations/reporte/gen/listar_significados.sql
@@ -72,3 +75,10 @@ prompt
 @@scripts/operations/trabajo/fan/fin_partido_{id_partido}.sql
 @@scripts/operations/trabajo/fan/partido_en_juego_{id_partido}.sql
 @@scripts/operations/trabajo/fan/pre_cierre_predicciones_{id_partido}.sql
+@@scripts/operations/trabajo/gen/monitoreo_conflictos_diario.sql
+@@scripts/operations/trabajo/gen/monitoreo_conflictos_hora.sql
+@@scripts/operations/trabajo/gen/monitoreo_conflictos_mensual.sql
+@@scripts/operations/trabajo/gen/monitoreo_conflictos_semanal.sql
+@@scripts/operations/trabajo/gen/monitoreo_conflictos_12_horas.sql
+@@scripts/operations/trabajo/gen/monitoreo_conflictos_2_horas.sql
+@@scripts/operations/trabajo/gen/monitoreo_conflictos_6_horas.sql

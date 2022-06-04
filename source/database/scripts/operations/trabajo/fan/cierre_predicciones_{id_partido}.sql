@@ -196,6 +196,21 @@ END;!';
 
 end;
 /
+/* ==================== T_MONITOREOS ==================== */
+set define off
+declare
+  type   t_clob is table of clob index by binary_integer;
+  l_clob t_clob;
+  type   t_varchar2 is table of varchar2(64) index by binary_integer;
+  l_varchar2 t_varchar2;
+begin
+
+  null;
+  -- start generation of records
+  -----------------------------------
+
+end;
+/
 /* ==================== T_ROL_PERMISOS ==================== */
 set define off
 declare
