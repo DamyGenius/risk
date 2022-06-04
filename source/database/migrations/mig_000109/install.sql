@@ -22,16 +22,55 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-set serveroutput on size unlimited
+spool install.log
 
-BEGIN
-  EXECUTE IMMEDIATE 'ALTER SESSION SET TIME_ZONE = ''' ||
-                    k_util.f_valor_parametro('ZONA_HORARIA') || '''';
-  -- Crear el trabajo diario de actualización de partidos
-  k_trabajo.p_crear_o_editar_trabajo(i_id_trabajo   => k_trabajo.c_actualizacion_partidos,
-                                     i_fecha_inicio => trunc(current_timestamp) + 0.5 --hoy a las 12hs
-                                     );
-END;
+set feedback off
+set define off
+
+prompt ###################################
+prompt #   _____   _____   _____  _  __  #
+prompt #  |  __ \ |_   _| / ____|| |/ /  #
+prompt #  | |__) |  | |  | (___  | ' /   #
+prompt #  |  _  /   | |   \___ \ |  <    #
+prompt #  | | \ \  _| |_  ____) || . \   #
+prompt #  |_|  \_\|_____||_____/ |_|\_\  #
+prompt #                                 #
+prompt #          Proyecto RISK          #
+prompt #            jtsoya539            #
+prompt ###################################
+
+prompt
+prompt ===================================
+prompt Migracion iniciada
+prompt ===================================
+prompt
+
+prompt
+prompt Ejecutando migracion...
+prompt -----------------------------------
+prompt
+@@alt_t_torneos.sql
+@@k_importacion_fan.pck
+@@k_puntajes_fan.pck
+@@k_trabajo.sql
+@@upd_t_torneos.sql
+@@del_t_trabajos.sql
+@@del_t_operaciones.sql
+@@actualizacion_partidos.sql
+@@create_actualizacion_partidos.sql
+
+prompt
+prompt Registrando migracion...
+prompt -----------------------------------
+prompt
+@@ins_t_migraciones.sql
+commit;
 /
 
-set serveroutput off
+prompt
+prompt ===================================
+prompt Migracion finalizada
+prompt ===================================
+prompt
+
+spool off

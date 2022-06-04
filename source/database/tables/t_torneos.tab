@@ -1,18 +1,19 @@
 create table T_TORNEOS
 (
-  id_torneo            VARCHAR2(12) not null,
-  id_division          VARCHAR2(3),
-  temporada            NUMBER(4),
-  titulo               VARCHAR2(50),
-  denominacion_oficial VARCHAR2(100),
-  saldo_inicial        NUMBER(18,3),
-  actual               VARCHAR2(1) default 'N' not null,
-  id_url               VARCHAR2(3),
-  id_importacion       VARCHAR2(50),
-  titulo_alternativo   VARCHAR2(50),
-  prueba               VARCHAR2(1) default 'N',
-  por_fases            VARCHAR2(1) default 'N',
-  importado            VARCHAR2(1) default 'N'
+  id_torneo                VARCHAR2(12) not null,
+  id_division              VARCHAR2(3),
+  temporada                NUMBER(4),
+  titulo                   VARCHAR2(50),
+  denominacion_oficial     VARCHAR2(100),
+  saldo_inicial            NUMBER(18,3),
+  actual                   VARCHAR2(1) default 'N' not null,
+  id_url                   VARCHAR2(3),
+  id_importacion           VARCHAR2(50),
+  titulo_alternativo       VARCHAR2(50),
+  prueba                   VARCHAR2(1) default 'N',
+  por_fases                VARCHAR2(1) default 'N',
+  importado                VARCHAR2(1) default 'N',
+  fecha_ultima_importacion TIMESTAMP(0) WITH TIME ZONE
 )
 ;
 comment on table T_TORNEOS
@@ -25,6 +26,8 @@ comment on column T_TORNEOS.por_fases
   is '¿El torneo es por fases?';
 comment on column T_TORNEOS.importado
   is '¿El torneo ingresa al proceso de importación?';
+comment on column T_TORNEOS.fecha_ultima_importacion
+  is 'Fecha de la última importación.';
 alter table T_TORNEOS
   add constraint PK_TORNEOS primary key (ID_TORNEO);
 alter table T_TORNEOS
