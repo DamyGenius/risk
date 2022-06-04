@@ -10,6 +10,7 @@ create table T_MONITOREOS
   cantidad_ejecuciones_conflicto   NUMBER,
   fecha_ultima_ejecucion_conflicto TIMESTAMP(2) WITH TIME ZONE,
   id_rol_responsable               NUMBER(3),
+  id_usuario_responsable           NUMBER(10),
   nivel_aviso                      NUMBER(1) DEFAULT 1 NOT NULL,
   frecuencia                       VARCHAR2(3) DEFAULT 'D' NOT NULL,
   comentarios                      VARCHAR2(1000)
@@ -37,6 +38,8 @@ comment on column T_MONITOREOS.fecha_ultima_ejecucion_conflicto
   is 'Fecha de la ultima ejecucion del monitoreo con conflicto';
 comment on column T_MONITOREOS.id_rol_responsable
   is 'Identificador del rol responsable';
+comment on column T_MONITOREOS.id_usuario_responsable
+  is 'Identificador del usuario responsable';
 comment on column T_MONITOREOS.nivel_aviso
   is 'Nivel de aviso del monitoreo (0-Off, 1-Resumido, 2-Detallado)';
 comment on column T_MONITOREOS.frecuencia
