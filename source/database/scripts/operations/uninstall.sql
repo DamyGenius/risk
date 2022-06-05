@@ -146,6 +146,15 @@ DELETE t_servicios WHERE id_servicio = 2;
 DELETE t_operacion_parametros WHERE id_operacion = 2;
 DELETE t_operaciones WHERE id_operacion = 2;
 
+/* ==================== ID_OPERACION = 54 ==================== */
+DELETE t_rol_permisos WHERE id_permiso = k_operacion.f_id_permiso(54);
+DELETE t_monitoreos WHERE id_monitoreo = 54;
+DELETE t_trabajos WHERE id_trabajo = 54;
+DELETE t_reportes WHERE id_reporte = 54;
+DELETE t_servicios WHERE id_servicio = 54;
+DELETE t_operacion_parametros WHERE id_operacion = 54;
+DELETE t_operaciones WHERE id_operacion = 54;
+
 /* ==================== ID_OPERACION = 11 ==================== */
 DELETE t_rol_permisos WHERE id_permiso = k_operacion.f_id_permiso(11);
 DELETE t_monitoreos WHERE id_monitoreo = 11;
@@ -614,14 +623,14 @@ DELETE t_servicios WHERE id_servicio = 13;
 DELETE t_operacion_parametros WHERE id_operacion = 13;
 DELETE t_operaciones WHERE id_operacion = 13;
 
-/* ==================== ID_OPERACION = 54 ==================== */
-DELETE t_rol_permisos WHERE id_permiso = k_operacion.f_id_permiso(54);
-DELETE t_monitoreos WHERE id_monitoreo = 54;
-DELETE t_trabajos WHERE id_trabajo = 54;
-DELETE t_reportes WHERE id_reporte = 54;
-DELETE t_servicios WHERE id_servicio = 54;
-DELETE t_operacion_parametros WHERE id_operacion = 54;
-DELETE t_operaciones WHERE id_operacion = 54;
+/* ==================== ID_OPERACION = 2007 ==================== */
+DELETE t_rol_permisos WHERE id_permiso = k_operacion.f_id_permiso(2007);
+DELETE t_monitoreos WHERE id_monitoreo = 2007;
+DELETE t_trabajos WHERE id_trabajo = 2007;
+DELETE t_reportes WHERE id_reporte = 2007;
+DELETE t_servicios WHERE id_servicio = 2007;
+DELETE t_operacion_parametros WHERE id_operacion = 2007;
+DELETE t_operaciones WHERE id_operacion = 2007;
 
 /* ==================== ID_OPERACION = 55 ==================== */
 DELETE t_rol_permisos WHERE id_permiso = k_operacion.f_id_permiso(55);
