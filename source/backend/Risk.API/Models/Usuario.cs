@@ -51,6 +51,8 @@ namespace Risk.API.Models
         public int? VersionAvatar { get; set; }
         [SwaggerSchema("Usuario verificado")]
         public bool Verificado { get; set; }
+        [SwaggerSchema("Usuario acepta términos y condiciones")]
+        public bool AceptaTyC { get; set; }
         [SwaggerSchema("Club del usuario")]
         public string IdClub { get; set; }
         [SwaggerSchema("Origen del usuario")]
