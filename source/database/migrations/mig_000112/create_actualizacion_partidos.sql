@@ -1,0 +1,40 @@
+/*
+--------------------------------- MIT License ---------------------------------
+Copyright (c) 2019 jtsoya539
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-------------------------------------------------------------------------------
+*/
+
+set serveroutput on size unlimited
+
+BEGIN
+  EXECUTE IMMEDIATE 'ALTER SESSION SET TIME_ZONE = ''' ||
+                    k_util.f_valor_parametro('ZONA_HORARIA') || '''';
+  -- Eliminar el trabajo actual de actualización de partidos
+  k_trabajo.p_eliminar_trabajo(i_id_trabajo => k_trabajo.c_actualizacion_partidos);
+
+  -- Crear el nuevo trabajo diario de actualización de partidos
+  k_trabajo.p_crear_o_editar_trabajo(i_id_trabajo   => k_trabajo.c_actualizacion_partidos,
+                                     i_fecha_inicio => trunc(current_timestamp+1) + 0.5 --hoy a las 12hs
+                                     );
+END;
+/
+
+set serveroutput off

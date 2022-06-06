@@ -155,7 +155,7 @@ begin
 
   l_varchar2(1) :=q'!2007!';
   l_clob(2) :=q'!STORED_PROCEDURE!';
-  l_clob(3) :=q'!K_PUNTAJES_FAN.P_ACTUALIZAR_PUNTAJES!';
+  l_clob(3) :=q'!K_PUNTAJES_FAN.P_ACTUALIZAR_PARTIDOS!';
   l_varchar2(4) :=q'!!';
   l_varchar2(5) :=q'!!';
   l_clob(6) :=q'!FREQ=DAILY;BYHOUR=12;!';
