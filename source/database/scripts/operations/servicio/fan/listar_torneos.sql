@@ -276,7 +276,7 @@ begin
        a.titulo_alternativo,
        b.descripcion desc_division,
        b.descripcion_corta desc_corta_division,
-       a.por_fases,
+       decode(nvl(a.tipo, 'L'), 'C', 'S', 'N') por_fases,
        (SELECT decode(nvl(COUNT(1), 0), 0, 'N', 'S')
           FROM t_usuario_divisiones x
          WHERE x.id_usuario = k_sistema.f_id_usuario
@@ -331,6 +331,21 @@ begin
 end;
 /
 /* ==================== T_TRABAJOS ==================== */
+set define off
+declare
+  type   t_clob is table of clob index by binary_integer;
+  l_clob t_clob;
+  type   t_varchar2 is table of varchar2(64) index by binary_integer;
+  l_varchar2 t_varchar2;
+begin
+
+  null;
+  -- start generation of records
+  -----------------------------------
+
+end;
+/
+/* ==================== T_MONITOREOS ==================== */
 set define off
 declare
   type   t_clob is table of clob index by binary_integer;

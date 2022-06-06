@@ -11,7 +11,7 @@ create table T_TORNEOS
   id_importacion           VARCHAR2(50),
   titulo_alternativo       VARCHAR2(50),
   prueba                   VARCHAR2(1) default 'N',
-  por_fases                VARCHAR2(1) default 'N',
+  tipo                     VARCHAR2(1) default 'L',
   importado                VARCHAR2(1) default 'N',
   fecha_ultima_importacion TIMESTAMP(0) WITH TIME ZONE
 )
@@ -22,8 +22,8 @@ comment on column T_TORNEOS.actual
   is '¿Es torneo actual?';
 comment on column T_TORNEOS.prueba
   is '¿Es torneo de prueba?';
-comment on column T_TORNEOS.por_fases
-  is '¿El torneo es por fases?';
+comment on column T_TORNEOS.tipo
+  is 'Tipo de torneo. (L-Liga, C-Copa)';
 comment on column T_TORNEOS.importado
   is '¿El torneo ingresa al proceso de importación?';
 comment on column T_TORNEOS.fecha_ultima_importacion
