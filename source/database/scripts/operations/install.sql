@@ -3,6 +3,8 @@ prompt Instalando operaciones...
 prompt -----------------------------------
 prompt
 @@scripts/operations/monitoreo/aut/sesiones_expiradas.sql
+@@scripts/operations/monitoreo/fan/clubes_nulos_torneos.sql
+@@scripts/operations/monitoreo/fan/escudos_pendientes_clubes.sql
 @@scripts/operations/monitoreo/fan/puntajes_pendientes_partidos.sql
 @@scripts/operations/monitoreo/fan/servicio_datos_version_driver.sql
 @@scripts/operations/parametros/_/contexto.sql
