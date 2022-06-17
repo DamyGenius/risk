@@ -1,19 +1,10 @@
-create table T_DIVISIONES
-(
-  id_division             VARCHAR2(3) not null,
-  descripcion             VARCHAR2(50) not null,
-  id_pais                 NUMBER(3),
-  detalle                 VARCHAR2(200),
-  descripcion_corta       VARCHAR2(50),
-  id_url                  VARCHAR2(3),
-  canal_importacion       VARCHAR2(50),
-  importado               VARCHAR2(1) default 'N',
-  id_importacion_torneo   NUMBER(15),
-  desc_importacion_torneo VARCHAR2(200)
-)
-;
-comment on table T_DIVISIONES
-  is 'Divisiones';
+-- Add/modify columns 
+alter table T_DIVISIONES add id_url VARCHAR2(3);
+alter table T_DIVISIONES add canal_importacion VARCHAR2(50);
+alter table T_DIVISIONES add importado VARCHAR2(1) default 'N';
+alter table T_DIVISIONES add id_importacion_torneo number(15);
+alter table T_DIVISIONES add desc_importacion_torneo VARCHAR2(200);
+-- Add comments to the columns 
 comment on column T_DIVISIONES.id_division
   is 'Identificador de la división.';
 comment on column T_DIVISIONES.descripcion
@@ -34,11 +25,7 @@ comment on column T_DIVISIONES.id_importacion_torneo
   is 'Identificador del torneo actual importado.';
 comment on column T_DIVISIONES.desc_importacion_torneo
   is 'Descripción del torneo actual importado.';
-alter table T_DIVISIONES
-  add constraint PK_DIVISIONES primary key (ID_DIVISION);
-alter table T_DIVISIONES
-  add constraint FK_DIVISIONES_PAISES foreign key (ID_PAIS)
-  references T_PAISES (ID_PAIS);
+-- Create/Recreate primary, unique and foreign key constraints 
 alter table T_DIVISIONES
   add constraint FK_DIVISIONES_URLS foreign key (ID_URL)
-  references T_IMPORTADOR_URLS (ID_URL);
+  references t_importador_urls (ID_URL);

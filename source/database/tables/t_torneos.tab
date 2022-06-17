@@ -7,13 +7,13 @@ create table T_TORNEOS
   denominacion_oficial     VARCHAR2(100),
   saldo_inicial            NUMBER(18,3),
   actual                   VARCHAR2(1) default 'N' not null,
-  id_url                   VARCHAR2(3),
-  id_importacion           VARCHAR2(50),
   titulo_alternativo       VARCHAR2(50),
   prueba                   VARCHAR2(1) default 'N',
   tipo                     VARCHAR2(1) default 'L',
   importado                VARCHAR2(1) default 'N',
-  fecha_ultima_importacion TIMESTAMP(0) WITH TIME ZONE
+  fecha_ultima_importacion TIMESTAMP(0) WITH TIME ZONE,
+  id_importacion           NUMBER(15),
+  desc_importacion         VARCHAR2(200)
 )
 ;
 comment on table T_TORNEOS
@@ -25,14 +25,15 @@ comment on column T_TORNEOS.prueba
 comment on column T_TORNEOS.tipo
   is 'Tipo de torneo. (L-Liga, C-Copa)';
 comment on column T_TORNEOS.importado
-  is '¿El torneo ingresa al proceso de importación?';
+  is '¿El torneo ingresa al proceso de importación? (S/N)';
 comment on column T_TORNEOS.fecha_ultima_importacion
   is 'Fecha de la última importación.';
+comment on column T_TORNEOS.id_importacion
+  is 'Identificador del torneo importado.';
+comment on column T_TORNEOS.desc_importacion
+  is 'Descripción del torneo importado.';
 alter table T_TORNEOS
   add constraint PK_TORNEOS primary key (ID_TORNEO);
 alter table T_TORNEOS
   add constraint FK_TORNEOS_DIVISIONES foreign key (ID_DIVISION)
   references T_DIVISIONES (ID_DIVISION);
-alter table T_TORNEOS
-  add constraint FK_TORNEOS_URLS foreign key (ID_URL)
-  references T_IMPORTADOR_URLS (ID_URL);
