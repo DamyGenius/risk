@@ -140,7 +140,7 @@ begin
   l_varchar2(8) :=q'!!';
   l_varchar2(9) :=q'!!';
   l_varchar2(10) :=q'!1!';
-  l_varchar2(11) :=q'!1!';
+  l_varchar2(11) :=q'!2!';
   l_clob(12) :=q'!D!';
   l_clob(13) :=q'!!';
   l_varchar2(14) :=q'!!';
