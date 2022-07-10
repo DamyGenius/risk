@@ -9,4 +9,5 @@ SELECT l.id_monitoreo_ejecucion id_ejecucion,
    AND l.id_monitoreo_ejecucion =
        nvl(to_number('&id_ejecucion'), l.id_monitoreo_ejecucion)
    AND l.id_monitoreo = nvl('&id_monitoreo', l.id_monitoreo)
+   AND l.datos NOT LIKE '%"cantidad_elementos":0%'
  ORDER BY l.id_monitoreo_ejecucion DESC, l.id_monitoreo ASC;

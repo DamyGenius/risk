@@ -156,11 +156,11 @@ begin
   l_varchar2(1) :=q'!56!';
   l_clob(2) :=q'!PLSQL_BLOCK!';
   l_clob(3) :=q'!BEGIN
-  k_importacion_fan.p_importar_partido(&ID_PARTIDO);
   LOOP
-    EXIT WHEN nvl(k_importacion_fan.f_estado_importacion_partidos, 'D') <> 'E';
+    EXIT WHEN nvl(k_importacion_fan.f_llavear_importacion_partido, 'N') = 'S';
     sys.dbms_session.sleep(1);
   END LOOP;
+  k_importacion_fan.p_importar_partido(&ID_PARTIDO);
   k_puntajes_fan.p_iniciar_cierre_partido_en_juego(&ID_PARTIDO);
 END;!';
   l_varchar2(4) :=q'!!';
@@ -170,6 +170,7 @@ END;!';
   l_clob(8) :=q'!Trabajo de actualización de partido en juego!';
   l_varchar2(9) :=q'!!';
   l_varchar2(10) :=q'!!';
+  l_clob(11) :=q'!!';
 
   insert into t_trabajos
   (
@@ -183,6 +184,7 @@ END;!';
     ,"COMENTARIOS"
     ,"CANTIDAD_EJECUCIONES"
     ,"FECHA_ULTIMA_EJECUCION"
+    ,"PROGRAMA"
   )
   values
   (
@@ -196,6 +198,7 @@ END;!';
     ,to_char(l_clob(8))
     ,to_number(l_varchar2(9))
     ,to_date(l_varchar2(10),'DD.MM.YYYY HH24:MI:SS')
+    ,to_char(l_clob(11))
   );
 
 end;
