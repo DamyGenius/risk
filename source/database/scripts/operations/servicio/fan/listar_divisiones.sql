@@ -182,11 +182,27 @@ begin
        k_archivo.f_version_archivo('T_DIVISIONES', 'LOGO', a.id_division) version_logo,
        (SELECT decode(nvl(COUNT(1), 0), 0, 'N', 'S')
           FROM t_usuario_divisiones x
-         WHERE x.id_usuario = k_sistema.f_id_usuario
+         WHERE x.id_usuario = 21
            AND x.id_division = a.id_division) siguiendo,
-       k_usuario.f_suscripto_notificacion(k_sistema.f_id_usuario,
-                                          k_dispositivo.f_suscripcion_division(a.id_division)) suscripto
-  FROM t_divisiones a!';
+       k_usuario.f_suscripto_notificacion(21,
+                                          k_dispositivo.f_suscripcion_division(a.id_division)) suscripto,
+       -- Torneo Actual
+       b.id_torneo,
+       b.temporada,
+       b.titulo,
+       b.denominacion_oficial,
+       b.titulo_alternativo,
+       b.tipo,
+       (SELECT y.ranking
+          FROM t_grupo_torneo_usuarios y
+         WHERE y.id_grupo =
+               k_puntajes_fan.f_grupo_general_torneo(b.id_torneo)
+           AND y.id_torneo = b.id_torneo
+           AND y.id_usuario = 21) ranking
+  FROM t_divisiones a, t_torneos b
+ WHERE a.id_division = b.id_division
+   AND b.actual = 'S'
+ ORDER BY a.descripcion!';
   l_clob(6) :=q'!!';
 
   insert into t_servicios
@@ -226,6 +242,21 @@ begin
 end;
 /
 /* ==================== T_TRABAJOS ==================== */
+set define off
+declare
+  type   t_clob is table of clob index by binary_integer;
+  l_clob t_clob;
+  type   t_varchar2 is table of varchar2(64) index by binary_integer;
+  l_varchar2 t_varchar2;
+begin
+
+  null;
+  -- start generation of records
+  -----------------------------------
+
+end;
+/
+/* ==================== T_MONITOREOS ==================== */
 set define off
 declare
   type   t_clob is table of clob index by binary_integer;
