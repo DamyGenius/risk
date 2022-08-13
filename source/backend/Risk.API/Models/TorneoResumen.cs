@@ -27,17 +27,15 @@ using Risk.API.Entities;
 
 namespace Risk.API.Models
 {
-    public class Division : IModel
+    public class TorneoResumen : IModel
     {
-        public string IdDivision { get; set; }
-        public string Descripcion { get; set; }
-        public int? IdPais { get; set; }
-        public string Detalle { get; set; }
-        public string DescripcionCorta { get; set; }
-        public int? VersionLogo { get; set; }
-        public string Siguiendo { get; set; }
-        public string Suscripto { get; set; }
-        public TorneoResumen TorneoActual { get; set; }
+        public string IdTorneo { get; set; }
+        public int? Temporada { get; set; }
+        public string Titulo { get; set; }
+        public string DenominacionOficial { get; set; }
+        public string TituloAlternativo { get; set; }
+        public TipoTorneo Tipo { get; set; }
+        public int? Ranking { get; set; }
 
         public IEntity ConvertToEntity()
         {

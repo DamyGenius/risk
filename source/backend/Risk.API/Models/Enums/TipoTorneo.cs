@@ -22,26 +22,17 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-using System;
-using Risk.API.Entities;
+using Risk.API.Attributes;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Risk.API.Models
 {
-    public class Division : IModel
+    [SwaggerSchema("Tipos de Torneo")]
+    public enum TipoTorneo
     {
-        public string IdDivision { get; set; }
-        public string Descripcion { get; set; }
-        public int? IdPais { get; set; }
-        public string Detalle { get; set; }
-        public string DescripcionCorta { get; set; }
-        public int? VersionLogo { get; set; }
-        public string Siguiendo { get; set; }
-        public string Suscripto { get; set; }
-        public TorneoResumen TorneoActual { get; set; }
-
-        public IEntity ConvertToEntity()
-        {
-            throw new NotImplementedException();
-        }
+        [StringValue("C")]
+        Copa,
+        [StringValue("L")]
+        Liga
     }
 }

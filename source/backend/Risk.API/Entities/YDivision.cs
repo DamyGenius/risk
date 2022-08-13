@@ -23,6 +23,7 @@ SOFTWARE.
 */
 
 using Newtonsoft.Json;
+using Risk.API.Attributes;
 using Risk.API.Models;
 
 namespace Risk.API.Entities
@@ -45,6 +46,20 @@ namespace Risk.API.Entities
         public string Siguiendo { get; set; }
         [JsonProperty("suscripto")]
         public string Suscripto { get; set; }
+        [JsonProperty("id_torneo")]
+        public string IdTorneo { get; set; }
+        [JsonProperty("temporada")]
+        public int? Temporada { get; set; }
+        [JsonProperty("titulo")]
+        public string Titulo { get; set; }
+        [JsonProperty("denominacion_oficial")]
+        public string DenominacionOficial { get; set; }
+        [JsonProperty("titulo_alternativo")]
+        public string TituloAlternativo { get; set; }
+        [JsonProperty("tipo")]
+        public string Tipo { get; set; }
+        [JsonProperty("ranking")]
+        public int? Ranking { get; set; }
 
         public IModel ConvertToModel()
         {
@@ -57,7 +72,17 @@ namespace Risk.API.Entities
                 DescripcionCorta = this.DescripcionCorta,
                 VersionLogo = this.VersionLogo,
                 Siguiendo = this.Siguiendo,
-                Suscripto = this.Suscripto
+                Suscripto = this.Suscripto,
+                TorneoActual =new TorneoResumen
+                {
+                    IdTorneo = this.IdTorneo,
+                    Temporada = this.Temporada,
+                    Titulo = this.Titulo,
+                    DenominacionOficial = this.DenominacionOficial,
+                    TituloAlternativo = this.TituloAlternativo,
+                    Tipo = this.Tipo.GetEnumValue<TipoTorneo>(),
+                    Ranking = this.Ranking
+                }
             };
         }
     }
