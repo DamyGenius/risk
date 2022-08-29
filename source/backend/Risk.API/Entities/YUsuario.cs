@@ -60,6 +60,12 @@ namespace Risk.API.Entities
         public string Origen { get; set; }
         [JsonProperty("id_torneo")]
         public string IdTorneo { get; set; }
+        [JsonProperty("descripcion_torneo")]
+        public string DescripcionTorneo { get; set; }
+        [JsonProperty("id_division")]
+        public string IdDivision { get; set; }
+        [JsonProperty("descripcion_division")]
+        public string DescripcionDivision { get; set; }
         [JsonProperty("puntos")]
         public int? Puntos { get; set; }
         [JsonProperty("ranking")]
@@ -89,6 +95,9 @@ namespace Risk.API.Entities
                 IdClub = IdClub,
                 Origen = this.Origen.GetEnumValue<OrigenSesion>(),
                 IdTorneo = this.IdTorneo,
+                DescripcionTorneo = this.DescripcionTorneo,
+                IdDivision = this.IdDivision,
+                DescripcionDivision = this.DescripcionDivision,
                 Puntos = this.Puntos,
                 Ranking = this.Ranking,
                 TipoAmigo = this.TipoAmigo.GetEnumValue<TipoAmigo>(),
