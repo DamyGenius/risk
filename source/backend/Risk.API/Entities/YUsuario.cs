@@ -56,6 +56,8 @@ namespace Risk.API.Entities
         public string AceptaTyC { get; set; }
         [JsonProperty("id_club")]
         public string IdClub { get; set; }
+        [JsonProperty("descripcion_club")]
+        public string DescripcionClub { get; set; }
         [JsonProperty("origen")]
         public string Origen { get; set; }
         [JsonProperty("id_torneo")]
@@ -92,7 +94,8 @@ namespace Risk.API.Entities
                 VersionAvatar = this.VersionAvatar,
                 Verificado = (this.Verificado == "S" ? true : false),
                 AceptaTyC = (this.AceptaTyC == "S" ? true : false),
-                IdClub = IdClub,
+                IdClub = this.IdClub,
+                DescripcionClub = this.DescripcionClub,
                 Origen = this.Origen.GetEnumValue<OrigenSesion>(),
                 IdTorneo = this.IdTorneo,
                 DescripcionTorneo = this.DescripcionTorneo,

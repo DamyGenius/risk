@@ -55,6 +55,8 @@ namespace Risk.API.Models
         public bool AceptaTyC { get; set; }
         [SwaggerSchema("Club del usuario")]
         public string IdClub { get; set; }
+        [SwaggerSchema("Descripción del club del usuario")]
+        public string DescripcionClub { get; set; }
         [SwaggerSchema("Origen del usuario")]
         public OrigenSesion Origen { get; set; }
         [SwaggerSchema("Torneo actual del usuario")]
