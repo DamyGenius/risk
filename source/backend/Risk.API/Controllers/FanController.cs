@@ -521,7 +521,8 @@ namespace Risk.API.Controllers
         [SwaggerOperation(OperationId = "ListarDivisiones", Summary = "ListarDivisiones", Description = "Obtiene lista de divisiones")]
         [Produces(MediaTypeNames.Application.Json)]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Division>>))]
-        public IActionResult ListarDivisiones([FromQuery, SwaggerParameter(Description = "Número de la página", Required = false)] int pagina,
+        public IActionResult ListarDivisiones([FromQuery, SwaggerParameter(Description = "Siguiendo?", Required = false)] bool? siguiendo,
+            [FromQuery, SwaggerParameter(Description = "Número de la página", Required = false)] int pagina,
             [FromQuery, SwaggerParameter(Description = "Cantidad de elementos por página", Required = false)] int porPagina,
             [FromQuery, SwaggerParameter(Description = "No paginar?", Required = false)] bool noPaginar)
         {
@@ -531,7 +532,16 @@ namespace Risk.API.Controllers
                 PorPagina = porPagina,
                 NoPaginar = noPaginar
             };
-            var respuesta = _fanService.ListarDivisiones(null, paginaParametros);
+            String _siguiendo = null;
+            if (siguiendo == true)
+            {
+                _siguiendo = "S";
+            }
+            else if (siguiendo == false)
+            {
+                _siguiendo = "N";
+            }
+            var respuesta = _fanService.ListarDivisiones(null, _siguiendo, paginaParametros);
             return ProcesarRespuesta(respuesta);
         }
 
@@ -542,7 +552,7 @@ namespace Risk.API.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Division>>))]
         public IActionResult ListarDivision([FromRoute, SwaggerParameter(Description = "Identificador de la división", Required = true)] string idDivision)
         {
-            var respuesta = _fanService.ListarDivisiones(idDivision, null);
+            var respuesta = _fanService.ListarDivisiones(idDivision, null, null);
             return ProcesarRespuesta(respuesta);
         }
 

@@ -592,10 +592,14 @@ namespace Risk.API.Services
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<AmigoMensaje>, YPagina<YAmigoMensaje>>(entityRsp, datos);
         }
 
-        public Respuesta<Pagina<Division>> ListarDivisiones(string idDivision = null, PaginaParametros paginaParametros = null)
+        public Respuesta<Pagina<Division>> ListarDivisiones(string idDivision = null, string siguiendo = null, PaginaParametros paginaParametros = null)
         {
             JObject prms = new JObject();
             prms.Add("id_division", idDivision);
+            if (siguiendo != null)
+            {
+                prms.Add("siguiendo", siguiendo);
+            }
             if (paginaParametros != null)
             {
                 prms.Add("pagina_parametros", JToken.FromObject(ModelsMapper.GetEntityFromModel<PaginaParametros, YPaginaParametros>(paginaParametros)));
