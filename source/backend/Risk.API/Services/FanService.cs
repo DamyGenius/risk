@@ -592,13 +592,17 @@ namespace Risk.API.Services
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<AmigoMensaje>, YPagina<YAmigoMensaje>>(entityRsp, datos);
         }
 
-        public Respuesta<Pagina<Division>> ListarDivisiones(string idDivision = null, string siguiendo = null, PaginaParametros paginaParametros = null)
+        public Respuesta<Pagina<Division>> ListarDivisiones(string idDivision = null, string siguiendo = null, string suscripto = null, PaginaParametros paginaParametros = null)
         {
             JObject prms = new JObject();
             prms.Add("id_division", idDivision);
             if (siguiendo != null)
             {
                 prms.Add("siguiendo", siguiendo);
+            }
+            if (suscripto != null)
+            {
+                prms.Add("suscripto", suscripto);
             }
             if (paginaParametros != null)
             {
@@ -620,7 +624,7 @@ namespace Risk.API.Services
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<Division>, YPagina<YDivision>>(entityRsp, datos);
         }
 
-        public Respuesta<Pagina<Torneo>> ListarTorneos(string idDivision = null, string idTorneo = null, string siguiendo = null, PaginaParametros paginaParametros = null)
+        public Respuesta<Pagina<Torneo>> ListarTorneos(string idDivision = null, string idTorneo = null, string siguiendo = null, string suscripto = null, PaginaParametros paginaParametros = null)
         {
             JObject prms = new JObject();
             prms.Add("id_division", idDivision);
@@ -628,6 +632,10 @@ namespace Risk.API.Services
             if (siguiendo != null)
             {
                 prms.Add("siguiendo", siguiendo);
+            }
+            if (suscripto != null)
+            {
+                prms.Add("suscripto", suscripto);
             }
             if (paginaParametros != null)
             {
