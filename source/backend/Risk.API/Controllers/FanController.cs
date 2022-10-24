@@ -522,6 +522,35 @@ namespace Risk.API.Controllers
         [Produces(MediaTypeNames.Application.Json)]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Division>>))]
         public IActionResult ListarDivisiones([FromQuery, SwaggerParameter(Description = "Siguiendo?", Required = false)] bool? siguiendo,
+            [FromQuery, SwaggerParameter(Description = "Número de la página", Required = false)] int pagina,
+            [FromQuery, SwaggerParameter(Description = "Cantidad de elementos por página", Required = false)] int porPagina,
+            [FromQuery, SwaggerParameter(Description = "No paginar?", Required = false)] bool noPaginar)
+        {
+            PaginaParametros paginaParametros = new PaginaParametros
+            {
+                Pagina = pagina,
+                PorPagina = porPagina,
+                NoPaginar = noPaginar
+            };
+            String _siguiendo = null;
+            if (siguiendo == true)
+            {
+                _siguiendo = "S";
+            }
+            else if (siguiendo == false)
+            {
+                _siguiendo = "N";
+            }
+            String _suscripto = null;
+            var respuesta = _fanService.ListarDivisiones(null, _siguiendo, _suscripto, paginaParametros);
+            return ProcesarRespuesta(respuesta);
+        }
+
+        [HttpGet("ListarDivisionesUsuario")]
+        [SwaggerOperation(OperationId = "ListarDivisionesUsuario", Summary = "ListarDivisionesUsuario", Description = "Obtiene lista de divisiones del usuario")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Division>>))]
+        public IActionResult ListarDivisionesUsuario([FromQuery, SwaggerParameter(Description = "Siguiendo?", Required = false)] bool? siguiendo,
             [FromQuery, SwaggerParameter(Description = "Suscripto?", Required = false)] bool? suscripto,
             [FromQuery, SwaggerParameter(Description = "Número de la página", Required = false)] int pagina,
             [FromQuery, SwaggerParameter(Description = "Cantidad de elementos por página", Required = false)] int porPagina,
@@ -574,6 +603,35 @@ namespace Risk.API.Controllers
         public IActionResult ListarTorneos([FromQuery, SwaggerParameter(Description = "Division del torneo", Required = false)] string idDivision,
             [FromQuery, SwaggerParameter(Description = "Identificador del torneo", Required = false)] string idTorneo,
             [FromQuery, SwaggerParameter(Description = "Siguiendo?", Required = false)] bool? siguiendo,
+            [FromQuery, SwaggerParameter(Description = "Número de la página", Required = false)] int pagina,
+            [FromQuery, SwaggerParameter(Description = "Cantidad de elementos por página", Required = false)] int porPagina,
+            [FromQuery, SwaggerParameter(Description = "No paginar?", Required = false)] bool noPaginar)
+        {
+            PaginaParametros paginaParametros = new PaginaParametros
+            {
+                Pagina = pagina,
+                PorPagina = porPagina,
+                NoPaginar = noPaginar
+            };
+            String _siguiendo = null;
+            if (siguiendo == true)
+            {
+                _siguiendo = "S";
+            }
+            else if (siguiendo == false)
+            {
+                _siguiendo = "N";
+            }
+            String _suscripto = null;
+            var respuesta = _fanService.ListarTorneos(idDivision, idTorneo, _siguiendo, _suscripto, paginaParametros);
+            return ProcesarRespuesta(respuesta);
+        }
+
+        [HttpGet("ListarTorneosUsuario")]
+        [SwaggerOperation(OperationId = "ListarTorneosUsuario", Summary = "ListarTorneosUsuario", Description = "Obtiene lista de torneos activos del usuario")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Torneo>>))]
+        public IActionResult ListarTorneosUsuario([FromQuery, SwaggerParameter(Description = "Siguiendo?", Required = false)] bool? siguiendo,
             [FromQuery, SwaggerParameter(Description = "Suscripto?", Required = false)] bool? suscripto,
             [FromQuery, SwaggerParameter(Description = "Número de la página", Required = false)] int pagina,
             [FromQuery, SwaggerParameter(Description = "Cantidad de elementos por página", Required = false)] int porPagina,
@@ -603,7 +661,7 @@ namespace Risk.API.Controllers
             {
                 _suscripto = "N";
             }
-            var respuesta = _fanService.ListarTorneos(idDivision, idTorneo, _siguiendo, _suscripto, paginaParametros);
+            var respuesta = _fanService.ListarTorneos(null, null, _siguiendo, _suscripto, paginaParametros);
             return ProcesarRespuesta(respuesta);
         }
 
