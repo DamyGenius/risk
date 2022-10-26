@@ -29,7 +29,7 @@ namespace Risk.API.Services
     public interface IFanService
     {
         Respuesta<Pagina<Club>> ListarClubes(string idClub = null, int? idPais = null, string idDivision = null);
-        Respuesta<Pagina<Equipo>> ListarEquipos(string idEquipo = null, TipoEquipo? tipo = null, int? idPais = null, string idDivision = null);
+        Respuesta<Pagina<Equipo>> ListarEquipos(string idEquipo = null, TipoEquipo? tipo = null, int? idPais = null, string idPaisIsoAlfa2 = null, string idDivision = null);
         Respuesta<Pagina<Partido>> ListarPartidos(int? partido = null, string torneo = null, string estado = null);
         Respuesta<Pagina<Prediccion>> ListarPrediccionesPartidos(string usuario, int? partido = null, string torneo = null, string estadosPartidos = null, string estadosPredicciones = null, PaginaParametros paginaParametros = null, OrdenLista orden = OrdenLista.ASC);
         Respuesta<Pagina<Jornada>> ListarJornadas(string torneo, int? jornada = null, string usuario = null, string estado = null, string incluirPartidos = null);

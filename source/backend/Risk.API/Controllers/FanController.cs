@@ -87,9 +87,10 @@ namespace Risk.API.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Equipo>>))]
         public IActionResult ListarEquipos([FromQuery, SwaggerParameter(Description = "Tipo (Club/Selección)", Required = false)] TipoEquipo? tipo,
             [FromQuery, SwaggerParameter(Description = "Identificador del país", Required = false)] int? idPais,
+            [FromQuery, SwaggerParameter(Description = "Identificador del país segun estandar ISO 3166-1 alfa-2", Required = false)] string idPaisIsoAlfa2,
             [FromQuery, SwaggerParameter(Description = "Identificador de la división", Required = false)] string idDivision)
         {
-            var respuesta = _fanService.ListarEquipos(null, tipo, idPais, idDivision);
+            var respuesta = _fanService.ListarEquipos(null, tipo, idPais,  idPaisIsoAlfa2, idDivision);
             return ProcesarRespuesta(respuesta);
         }
 

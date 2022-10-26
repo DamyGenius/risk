@@ -95,13 +95,14 @@ namespace Risk.API.Services
             return EntitiesMapper.GetRespuestaFromEntity<Pagina<Club>, YPagina<YClub>>(entityRsp, datos);
         }
 
-        public Respuesta<Pagina<Equipo>> ListarEquipos(string idEquipo = null, TipoEquipo? tipo = null, int? idPais = null, string idDivision = null)
+        public Respuesta<Pagina<Equipo>> ListarEquipos(string idEquipo = null, TipoEquipo? tipo = null, int? idPais = null, string idPaisIsoAlfa2 = null, string idDivision = null)
         {
             JObject prms = new JObject();
             prms.Add("id_club", idEquipo);
             prms.Add("id_division", idDivision);
             prms.Add("tipo",  tipo.GetStringValue());
             prms.Add("id_pais", idPais);
+            prms.Add("id_pais_iso2", idPaisIsoAlfa2);
 
             string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
                 NOMBRE_LISTAR_EQUIPOS,
