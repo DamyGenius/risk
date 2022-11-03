@@ -24,6 +24,7 @@ SOFTWARE.
 
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Risk.API.Attributes;
 using Risk.API.Mappers;
 using Risk.API.Models;
 
@@ -35,6 +36,8 @@ namespace Risk.API.Entities
         public string IdTorneo { get; set; }
         [JsonProperty("descripcion")]
         public string Descripcion { get; set; }
+        [JsonProperty("tipo")]
+        public string Tipo { get; set; }
         [JsonProperty("fases")]
         public List<YFase> Fases { get; set; }
 
@@ -44,6 +47,7 @@ namespace Risk.API.Entities
             {
                 IdTorneo = this.IdTorneo,
                 Descripcion = this.Descripcion,
+                Tipo = this.Tipo.GetEnumValue<TipoTorneo>(),
                 Fases = EntitiesMapper.GetModelListFromEntity<Fase, YFase>(this.Fases)
             };
         }

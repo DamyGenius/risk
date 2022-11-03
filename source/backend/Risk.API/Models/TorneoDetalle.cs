@@ -31,6 +31,7 @@ namespace Risk.API.Models
     {
         public string IdTorneo { get; set; }
         public string Descripcion { get; set; }
+        public TipoTorneo Tipo { get; set; }
         public List<Fase> Fases { get; set; }
 
         public IEntity ConvertToEntity()
