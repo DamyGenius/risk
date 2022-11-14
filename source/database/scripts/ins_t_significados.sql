@@ -432,7 +432,10 @@ insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('ESTADO_GRUPO_USUARIO', 'I', 'INACTIVO', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
-values ('ESTADO_GRUPO_USUARIO', 'P', 'PENDIENTE', null, 'S');
+values ('ESTADO_GRUPO_USUARIO', 'P', 'PENDIENTE - INVITADO', null, 'S');
+
+insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
+values ('ESTADO_GRUPO_USUARIO', 'S', 'PENDIENTE - SOLICITADO', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('TIPO_SEGUIMIENTO', 'D', 'DIVISION', null, 'S');
