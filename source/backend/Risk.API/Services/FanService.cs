@@ -51,6 +51,8 @@ namespace Risk.API.Services
         private const string NOMBRE_ABANDONAR_GRUPO = "ABANDONAR_GRUPO";
         private const string NOMBRE_INVITAR_USUARIO = "INVITAR_USUARIO";
         private const string NOMBRE_RESPONDER_INVITACION = "RESPONDER_INVITACION";
+        private const string NOMBRE_SOLICITAR_INGRESO_GRUPO = "SOLICITAR_INGRESO_GRUPO";
+        private const string NOMBRE_RESPONDER_INGRESO_GRUPO = "RESPONDER_INGRESO_GRUPO";
         private const string NOMBRE_SOLICITAR_AMISTAD = "SOLICITAR_AMISTAD";
         private const string NOMBRE_RESPONDER_SOLICITUD_AMISTAD = "RESPONDER_SOLICITUD_AMISTAD";
         private const string NOMBRE_LISTAR_AMIGOS = "LISTAR_AMIGOS";
@@ -347,6 +349,36 @@ namespace Risk.API.Services
 
             string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
                 NOMBRE_RESPONDER_INVITACION,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
+
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetModelFromEntity<Dato, YDato>(entityRsp.Datos));
+        }
+
+        public Respuesta<Dato> SolicitarIngresoGrupo(int idGrupo)
+        {
+            JObject prms = new JObject();
+            prms.Add("id_grupo", idGrupo);
+
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
+                NOMBRE_SOLICITAR_INGRESO_GRUPO,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
+
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetModelFromEntity<Dato, YDato>(entityRsp.Datos));
+        }
+
+        public Respuesta<Dato> ResponderIngresoGrupo(int idGrupo,string usuarioSolicitante,  RespuestaInvitacion respuestaSolicitud)
+        {
+            JObject prms = new JObject();
+            prms.Add("id_grupo", idGrupo);
+            prms.Add("usuario_solicitante", usuarioSolicitante);
+            prms.Add("respuesta", respuestaSolicitud.ToString());
+
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
+                NOMBRE_RESPONDER_INGRESO_GRUPO,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);

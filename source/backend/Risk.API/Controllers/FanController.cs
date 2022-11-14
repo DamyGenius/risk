@@ -340,6 +340,28 @@ namespace Risk.API.Controllers
             return ProcesarRespuesta(respuesta);
         }
 
+        [HttpGet("SolicitarIngresoGrupo")]
+        [SwaggerOperation(OperationId = "SolicitarIngresoGrupo", Summary = "SolicitarIngresoGrupo", Description = "Permite solicitar ingreso a un grupo")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
+        public IActionResult SolicitarIngresoGrupo([FromQuery, SwaggerParameter(Description = "Identificador del grupo", Required = true)] int idGrupo)
+        {
+            var respuesta = _fanService.SolicitarIngresoGrupo(idGrupo);
+            return ProcesarRespuesta(respuesta);
+        }
+
+        [HttpGet("ResponderIngresoGrupo")]
+        [SwaggerOperation(OperationId = "ResponderIngresoGrupo", Summary = "ResponderIngresoGrupo", Description = "Permite responder a una solicitud de ingreso a un grupo")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
+        public IActionResult ResponderIngresoGrupo([FromQuery, SwaggerParameter(Description = "Identificador del grupo", Required = true)] int idGrupo,
+            [FromQuery, SwaggerParameter(Description = "Usuario Solicitante", Required = true)] string usuarioSolicitante,
+            [FromQuery, SwaggerParameter(Description = "Respuesta a Solicitud (ACEPTAR/RECHAZAR)", Required = true)] RespuestaInvitacion respuestaSolicitud)
+        {
+            var respuesta = _fanService.ResponderIngresoGrupo(idGrupo, usuarioSolicitante, respuestaSolicitud);
+            return ProcesarRespuesta(respuesta);
+        }
+
         [HttpGet("SolicitarAmistad")]
         [SwaggerOperation(OperationId = "SolicitarAmistad", Summary = "SolicitarAmistad", Description = "Permite solicitar amistad a un usuario")]
         [Produces(MediaTypeNames.Application.Json)]

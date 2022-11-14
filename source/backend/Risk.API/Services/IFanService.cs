@@ -42,6 +42,8 @@ namespace Risk.API.Services
         Respuesta<Dato> AbandonarGrupo(int idGrupo);
         Respuesta<Dato> InvitarUsuario(int idGrupo, string usuario);
         Respuesta<Dato> ResponderInvitacion(int idGrupo, RespuestaInvitacion respuestaInvitacion);
+        Respuesta<Dato> SolicitarIngresoGrupo(int idGrupo);
+        Respuesta<Dato> ResponderIngresoGrupo(int idGrupo,string usuarioSolicitante,  RespuestaInvitacion respuestaSolicitud);
         Respuesta<Dato> SolicitarAmistad(string usuarioSolicitado);
         Respuesta<Dato> ResponderSolicitudAmistad(string usuarioSolicitante, RespuestaInvitacion respuestaSolicitud);
         Respuesta<Pagina<Amigo>> ListarAmigos(string usuario);
