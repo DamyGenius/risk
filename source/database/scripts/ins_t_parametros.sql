@@ -75,7 +75,10 @@ insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR, ID_DOMINIO)
 values ('ID_PAIS_ISO', 'Código del País por defecto segun estandar ISO 3166-1 alpha-2', 'PY', null);
 
 insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR, ID_DOMINIO)
-values ('ID_DIVISION', 'Identificador de la división por defecto', 'PRI', null);
+values ('ID_DIVISION', 'Identificador de la división por defecto', 'PRI', 'FAN');
+
+insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR, ID_DOMINIO)
+values ('ID_TORNEO_ESTRELLA', 'Identificador del torneo estrella del momento', '', 'FAN');
 
 insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR, ID_DOMINIO)
 values ('ID_USUARIO_OFICIAL', 'Identificador del usuario oficial', '5', null);
