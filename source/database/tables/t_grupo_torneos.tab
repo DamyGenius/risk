@@ -3,19 +3,48 @@ create table T_GRUPO_TORNEOS
   id_grupo          NUMBER not null,
   id_torneo         VARCHAR2(12) not null,
   id_jornada_inicio NUMBER(3),
-  id_jornada_fin    NUMBER(3)
+  id_jornada_fin    NUMBER(3),
+  id_fase_inicio    NUMBER(3),
+  id_fase_fin       NUMBER(3),
+  id_grupo_base     NUMBER
 )
 ;
 comment on table T_GRUPO_TORNEOS
   is 'Torneos por Grupo de Predicciones';
+comment on column T_GRUPO_TORNEOS.id_grupo
+  is 'Identificador del grupo';
+comment on column T_GRUPO_TORNEOS.id_torneo
+  is 'Identificador de torneo';
+comment on column T_GRUPO_TORNEOS.id_jornada_inicio
+  is 'Identificador de la jornada inicial';
+comment on column T_GRUPO_TORNEOS.id_jornada_fin
+  is 'Identificador de la jornada final';
+comment on column T_GRUPO_TORNEOS.id_fase_inicio
+  is 'Identificador de la fase inicial';
+comment on column T_GRUPO_TORNEOS.id_fase_fin
+  is 'Identificador de la fase final';
+comment on column T_GRUPO_TORNEOS.id_grupo_base
+  is 'Identificador del grupo base';
 alter table T_GRUPO_TORNEOS
   add constraint PK_GRUPO_TORNEOS primary key (ID_GRUPO, ID_TORNEO);
 alter table T_GRUPO_TORNEOS
   add constraint FK_GRU_TORNEOS_TORNEO_JORNADAS foreign key (ID_TORNEO, ID_JORNADA_INICIO)
   references T_TORNEO_JORNADAS (ID_TORNEO, ID_JORNADA);
 alter table T_GRUPO_TORNEOS
+  add constraint FK_GRU_TORNEOS_TORNEO_JORNADAS1 foreign key (ID_TORNEO, ID_JORNADA_FIN)
+  references T_TORNEO_JORNADAS (ID_TORNEO, ID_JORNADA);
+alter table T_GRUPO_TORNEOS
   add constraint FK_GRUPO_TORNEOS_TORNEOS foreign key (ID_TORNEO)
   references T_TORNEOS (ID_TORNEO);
 alter table T_GRUPO_TORNEOS
   add constraint FK_GRUPO_TORNEOS_GRUPOS foreign key (ID_GRUPO)
+  references T_GRUPOS (ID_GRUPO);
+alter table T_GRUPO_TORNEOS
+  add constraint FK_GRU_TORNEOS_TORNEO_FASES foreign key (ID_TORNEO, ID_FASE_INICIO)
+  references T_TORNEO_FASES (ID_TORNEO, ID_FASE);
+alter table T_GRUPO_TORNEOS
+  add constraint FK_GRU_TORNEOS_TORNEO_FASES1 foreign key (ID_TORNEO, ID_FASE_FIN)
+  references T_TORNEO_FASES (ID_TORNEO, ID_FASE);
+alter table T_GRUPO_TORNEOS
+  add constraint FK_GRUPO_TORNEOS_GRUPOS1 foreign key (ID_GRUPO_BASE)
   references T_GRUPOS (ID_GRUPO);
