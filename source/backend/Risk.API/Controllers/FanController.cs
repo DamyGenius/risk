@@ -257,7 +257,7 @@ namespace Risk.API.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Grupo>))]
         public IActionResult RegistrarGrupo([FromBody] RegistrarGrupoRequestBody requestBody)
         {
-            var respuesta = _fanService.RegistrarGrupo(requestBody.Descripcion, requestBody.Tipo, requestBody.IdJornadaInicio, requestBody.TodosInvitan, requestBody.IdClub);
+            var respuesta = _fanService.RegistrarGrupo(requestBody.Descripcion, requestBody.Tipo, requestBody.IdJornadaInicio, requestBody.TodosInvitan, requestBody.IdClub, requestBody.IdFaseInicio, requestBody.IdGrupoBase);
             return ProcesarRespuesta(respuesta);
         }
 

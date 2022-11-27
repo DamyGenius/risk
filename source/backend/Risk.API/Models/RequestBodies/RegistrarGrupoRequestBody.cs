@@ -31,5 +31,7 @@ namespace Risk.API.Models
         public int IdJornadaInicio { get; set; }
         public string TodosInvitan { get; set; }
         public string IdClub { get; set; }
+        public int IdFaseInicio { get; set; }
+        public int IdGrupoBase { get; set; }
     }
 }
