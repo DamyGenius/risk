@@ -287,9 +287,10 @@ namespace Risk.API.Controllers
         [Produces(MediaTypeNames.Application.Json)]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Pagina<Grupo>>))]
         public IActionResult ListarGrupos([FromQuery, SwaggerParameter(Description = "", Required = true)] string misGrupos,
-            [FromQuery, SwaggerParameter(Description = "", Required = false)] string tipoGrupo,
-            [FromQuery, SwaggerParameter(Description = "", Required = false)] string aceptado,
-            [FromQuery, SwaggerParameter(Description = "", Required = false)] string incluirUsuarios,
+            [FromQuery, SwaggerParameter(Description = "Tipo de grupo", Required = false)] string tipoGrupo,
+            [FromQuery, SwaggerParameter(Description = "Aceptado? (S/N)", Required = false)] string aceptado,
+            [FromQuery, SwaggerParameter(Description = "Incluir usuarios? (S/N)", Required = false)] string incluirUsuarios,
+            [FromQuery, SwaggerParameter(Description = "Grupo de todos los torneos? (S/N)", Required = false)] string torneosTodos,
             [FromQuery, SwaggerParameter(Description = "Número de la página", Required = false)] int pagina,
             [FromQuery, SwaggerParameter(Description = "Cantidad de elementos por página", Required = false)] int porPagina,
             [FromQuery, SwaggerParameter(Description = "No paginar?", Required = false)] bool noPaginar)
@@ -300,7 +301,7 @@ namespace Risk.API.Controllers
                 PorPagina = porPagina,
                 NoPaginar = noPaginar
             };
-            var respuesta = _fanService.ListarGrupos(misGrupos, tipoGrupo, aceptado, incluirUsuarios, paginaParametros);
+            var respuesta = _fanService.ListarGrupos(misGrupos, tipoGrupo, aceptado, incluirUsuarios, torneosTodos, paginaParametros);
 
             respuesta.Datos = ProcesarPagina(respuesta.Datos);
 

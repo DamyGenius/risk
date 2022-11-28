@@ -38,7 +38,7 @@ namespace Risk.API.Services
         Respuesta<Grupo> RegistrarGrupo(string descripcion, string tipo, int idJornadaInicio, string todosInvitan, string idClub, int idFaseInicio, int idGrupoBase);
         Respuesta<Dato> EditarGrupo(int idGrupo, string descripcion, string tipo, int idJornadaInicio, string todosInvitan, string idClub);
         Respuesta<Grupo> DatosGrupo(int idGrupo);
-        Respuesta<Pagina<Grupo>> ListarGrupos(string misGrupos, string tipoGrupo = null, string aceptado = null, string incluirUsuarios = null, PaginaParametros paginaParametros = null);
+        Respuesta<Pagina<Grupo>> ListarGrupos(string misGrupos, string tipoGrupo = null, string aceptado = null, string incluirUsuarios = null, string torneosTodos = null, PaginaParametros paginaParametros = null);
         Respuesta<Dato> AbandonarGrupo(int idGrupo);
         Respuesta<Dato> InvitarUsuario(int idGrupo, string usuario);
         Respuesta<Dato> ResponderInvitacion(int idGrupo, RespuestaInvitacion respuestaInvitacion);

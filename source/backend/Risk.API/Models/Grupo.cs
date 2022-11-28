@@ -33,6 +33,8 @@ namespace Risk.API.Models
         public int IdGrupo { get; set; }
         public string IdTorneo { get; set; }
         public string TituloTorneo { get; set; }
+        public string IdDivision { get; set; }
+        public string TituloDivision { get; set; }
         public string Descripcion { get; set; }
         public string Tipo { get; set; }
         public string DescripcionTipo { get; set; }
@@ -40,6 +42,7 @@ namespace Risk.API.Models
         public string AliasUsuarioAdministrador { get; set; }
         public DateTime? FechaCreacion { get; set; }
         public int? IdJornadaInicio { get; set; }
+        public int? IdFaseInicio { get; set; }
         public string Estado { get; set; }
         public string Situacion { get; set; }
         public string IdClub { get; set; }
