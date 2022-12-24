@@ -112,6 +112,7 @@ prompt
 @@tables/t_sesiones.tab
 @@tables/t_usuario_claves.tab
 @@tables/t_usuario_suscripciones.tab
+@@tables/t_usuario_calificaciones.tab
 @@tables/t_dato_definiciones.tab
 @@tables/t_datos.tab
 @@tables/t_archivo_definiciones.tab

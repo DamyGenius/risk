@@ -33,6 +33,7 @@ prompt
 @@scripts/operations/servicio/aut/validar_otp.sql
 @@scripts/operations/servicio/aut/validar_sesion.sql
 @@scripts/operations/servicio/fan/abandonar_grupo.sql
+@@scripts/operations/servicio/fan/calificar.sql
 @@scripts/operations/servicio/fan/datos_grupo.sql
 @@scripts/operations/servicio/fan/editar_grupo.sql
 @@scripts/operations/servicio/fan/enviar_mensaje_amigo.sql
@@ -55,10 +56,12 @@ prompt
 @@scripts/operations/servicio/fan/realizar_comentario.sql
 @@scripts/operations/servicio/fan/realizar_prediccion.sql
 @@scripts/operations/servicio/fan/registrar_grupo.sql
+@@scripts/operations/servicio/fan/responder_ingreso_grupo.sql
 @@scripts/operations/servicio/fan/responder_invitacion.sql
 @@scripts/operations/servicio/fan/responder_solicitud_amistad.sql
 @@scripts/operations/servicio/fan/seguir_division.sql
 @@scripts/operations/servicio/fan/solicitar_amistad.sql
+@@scripts/operations/servicio/fan/solicitar_ingreso_grupo.sql
 @@scripts/operations/servicio/fan/suscribir.sql
 @@scripts/operations/servicio/gen/guardar_archivo.sql
 @@scripts/operations/servicio/gen/listar_aplicaciones.sql

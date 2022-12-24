@@ -1,0 +1,23 @@
+create table T_USUARIO_CALIFICACIONES
+(
+  id_usuario         NUMBER(10) not null,
+  anio               NUMBER(5) not null,
+  calificacion       NUMBER(1) not null,
+  fecha_calificacion TIMESTAMP(0) WITH TIME ZONE
+)
+;
+comment on table T_USUARIO_CALIFICACIONES
+  is 'Calificaciones anuales de Usuarios';
+comment on column T_USUARIO_CALIFICACIONES.id_usuario
+  is 'Identificador del usuario';
+comment on column T_USUARIO_CALIFICACIONES.anio
+  is 'Año de la calificación';
+comment on column T_USUARIO_CALIFICACIONES.calificacion
+  is 'Calificación (1-Mala, 2-Regular, 3-Buena';
+comment on column T_USUARIO_CALIFICACIONES.fecha_calificacion
+  is 'Fecha de la calificación';
+alter table T_USUARIO_CALIFICACIONES
+  add constraint PK_USUARIO_CALIFICACIONES primary key (ID_USUARIO, ANIO);
+alter table T_USUARIO_CALIFICACIONES
+  add constraint FK_USU_CAL_USUARIOS foreign key (ID_USUARIO)
+  references T_USUARIOS (ID_USUARIO);
