@@ -83,4 +83,7 @@ values ('ID_TORNEO_ESTRELLA', 'Identificador del torneo estrella del momento', '
 insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR, ID_DOMINIO)
 values ('ID_USUARIO_OFICIAL', 'Identificador del usuario oficial', '5', null);
 
+insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR, ID_DOMINIO)
+values ('URL_ENCUESTA_2022', 'URL de la Encuesta 2022 de Reto Sports', 'https://forms.gle/XGPSQeRuEF2L14JF7', null);
+
 prompt Done.
