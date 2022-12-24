@@ -745,14 +745,14 @@ namespace Risk.API.Controllers
                     throw new Exception();
                 }
 
-                mensaje = "Gracias por tus comentarios. Ayúdanos a mejorar respondiendo estas breves preguntas.";
-
                 if (!string.IsNullOrEmpty(respuesta.Datos.Contenido))
                 {
+                    mensaje = "Gracias por tus comentarios. Ayúdanos a mejorar respondiendo estas breves preguntas.";
                     mensaje2 = "<a href=\"" + respuesta.Datos.Contenido + "\" target=\"_blank\">Respondé aquí</a>";
                 }
                 else
                 {
+                    mensaje = "Gracias por tus comentarios.";
                     mensaje2 = "Podés cerrar esta ventana.";
                 }
 
