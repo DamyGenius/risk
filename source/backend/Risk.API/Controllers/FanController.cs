@@ -25,11 +25,14 @@ SOFTWARE.
 using System;
 using System.IO;
 using System.Net.Mime;
+using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json.Linq;
+using Risk.API.Attributes;
 using Risk.API.Helpers;
 using Risk.API.Hubs;
 using Risk.API.Models;
@@ -709,6 +712,94 @@ namespace Risk.API.Controllers
         {
             var respuesta = _fanService.SeguirDivision(idDivision);
             return ProcesarRespuesta(respuesta);
+        }
+
+        [AllowAnyClient]
+        [AllowAnonymous]
+        [HttpGet("/[controller]/Calificar")]
+        [SwaggerOperation(OperationId = "Calificar", Summary = "Calificar", Description = "Permite enviar una calificación a un usuario")]
+        [Produces(MediaTypeNames.Text.Html)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
+        public IActionResult Calificar([FromQuery, SwaggerParameter(Description = "Clave para la calificación", Required = true)] string key)
+        {
+            string mensaje, mensaje2;
+
+            try
+            {
+                string json = Encoding.Default.GetString(Convert.FromBase64String(key));
+
+                var jObject = JObject.Parse(json);
+                string usuario = jObject.Value<string>("usuario");
+                string hash = jObject.Value<string>("hash");
+                string anio = jObject.Value<string>("anio");
+                string calificacion = jObject.Value<string>("calif");
+
+                if (!hash.Equals(HashHelper.SHA1(usuario)))
+                {
+                    throw new Exception();
+                }
+
+                var respuesta = _fanService.Calificar(usuario, anio, calificacion);
+                if (!respuesta.Codigo.Equals(RiskConstants.CODIGO_OK))
+                {
+                    throw new Exception();
+                }
+
+                mensaje = "Gracias por tus comentarios. Ayúdanos a mejorar respondiendo estas breves preguntas.";
+
+                if (!string.IsNullOrEmpty(respuesta.Datos.Contenido))
+                {
+                    mensaje2 = "<a href=\"" + respuesta.Datos.Contenido + "\" target=\"_blank\">Respondé aquí</a>";
+                }
+                else
+                {
+                    mensaje2 = "Podés cerrar esta ventana.";
+                }
+
+            }
+            catch (Exception)
+            {
+                mensaje = "Hubo un error al tratar de enviar tu calificación";
+                mensaje2 = "Podés cerrar esta ventana";
+            }
+
+            return Content("<!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<head>\n" +
+                "    <meta charset=\"utf-8\">\n" +
+                "    <title>Calificación enviada</title>\n" +
+                "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n" +
+                "    <link rel=\"stylesheet\" href=\"https://www.w3schools.com/w3css/4/w3.css\">\n" +
+                "    <link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css?family=Raleway\">\n" +
+                "    <style>\n" +
+                "        body,\n" +
+                "        h1 {\n" +
+                "            font-family: \"Raleway\", sans-serif\n" +
+                "        }\n" +
+                "        body,\n" +
+                "        html {\n" +
+                "            height: 100%\n" +
+                "        }\n" +
+                "        .bgimg {\n" +
+                "            min-height: 100%;\n" +
+                "            background-color: darkgreen;\n" +
+                "            background-position: center;\n" +
+                "            background-size: cover;\n" +
+                "        }\n" +
+                "    </style>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "    <div class=\"bgimg w3-display-container w3-animate-opacity w3-text-white\">\n" +
+                "        <div class=\"w3-display-topleft w3-padding-large w3-xlarge\"></div>\n" +
+                "        <div class=\"w3-display-middle\">\n" +
+                "            <h1 class=\"w3-xlarge w3-animate-top\">" + mensaje + "</h1>\n" +
+                "            <hr class=\"w3-border-grey\" style=\"margin:auto;width:40%\">\n" +
+                "            <p class=\"w3-large w3-center\">" + mensaje2 + "</p>\n" +
+                "        </div>\n" +
+                "        <div class=\"w3-display-bottomleft w3-padding-large\"></div>\n" +
+                "    </div>\n" +
+                "</body>\n" +
+                "</html>", MediaTypeNames.Text.Html);
         }
     }
 }

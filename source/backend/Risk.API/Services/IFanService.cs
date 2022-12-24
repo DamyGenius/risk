@@ -60,5 +60,6 @@ namespace Risk.API.Services
         Respuesta<Pagina<Torneo>> ListarTorneos(string idDivision = null, string idTorneo = null, string siguiendo = null, string suscripto = null, PaginaParametros paginaParametros = null);
         Respuesta<Dato> Suscribir(TipoSuscripcion tipo, string referencia);
         Respuesta<Dato> SeguirDivision(string idDivision);
+        Respuesta<Dato> Calificar(string usuario, string anio, string calificacion);
     }
 }

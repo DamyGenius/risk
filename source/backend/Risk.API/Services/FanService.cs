@@ -68,6 +68,7 @@ namespace Risk.API.Services
         private const string NOMBRE_LISTAR_TORNEOS = "LISTAR_TORNEOS";
         private const string NOMBRE_SUSCRIBIR = "SUSCRIBIR";
         private const string NOMBRE_SEGUIR_DIVISION = "SEGUIR_DIVISION";
+        private const string NOMBRE_CALIFICAR = "CALIFICAR";
 
         public FanService(ILogger<FanService> logger, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDbConnectionFactory dbConnectionFactory)
             : base(logger, configuration, httpContextAccessor, dbConnectionFactory)
@@ -715,6 +716,22 @@ namespace Risk.API.Services
 
             string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
                 NOMBRE_SEGUIR_DIVISION,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
+
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetModelFromEntity<Dato, YDato>(entityRsp.Datos));
+        }
+
+        public Respuesta<Dato> Calificar(string usuario, string anio, string calificacion)
+        {
+            JObject prms = new JObject();
+            prms.Add("usuario", usuario);
+            prms.Add("anio", anio);
+            prms.Add("calificacion", calificacion);
+
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
+                NOMBRE_CALIFICAR,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
