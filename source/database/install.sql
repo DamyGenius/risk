@@ -273,6 +273,7 @@ prompt Creando procedimientos...
 prompt -----------------------------------
 prompt
 @@procedures/p_procesar_grupo_jornada.prc
+@@procedures/p_enviar_resumen_anual.prc
 
 prompt
 prompt Ejecutando scripts...

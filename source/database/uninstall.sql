@@ -49,6 +49,7 @@ prompt
 prompt Borrando procedimientos...
 prompt -----------------------------------
 prompt
+drop procedure p_enviar_resumen_anual;
 drop procedure p_procesar_grupo_jornada;
 
 prompt
