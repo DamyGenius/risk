@@ -1,0 +1,23 @@
+create table T_EQUIPOS_TMP
+(
+  id_equipo      VARCHAR2(5),
+  nombre_oficial VARCHAR2(100),
+  id_division    VARCHAR2(3),
+  nombre_corto   VARCHAR2(100),
+  id_importacion NUMBER(10),
+  id_pais        NUMBER(3),
+  tipo           VARCHAR2(1)
+)
+;
+comment on table T_EQUIPOS_TMP
+  is 'Equipos pendientes de alta';
+comment on column T_EQUIPOS_TMP.tipo
+  is 'Tipo de equipo (C-Club, S-Selección)';
+alter table T_EQUIPOS_TMP
+  add constraint UK_EQUIPOS_TMP unique (ID_IMPORTACION);
+alter table T_EQUIPOS_TMP
+  add constraint FK_EQUIPOS_TMP_DIVISIONES foreign key (ID_DIVISION)
+  references T_DIVISIONES (ID_DIVISION);
+alter table T_EQUIPOS_TMP
+  add constraint CK_EQUIPOS_TMP_TIPO
+  check (TIPO IN ('C', 'S'));

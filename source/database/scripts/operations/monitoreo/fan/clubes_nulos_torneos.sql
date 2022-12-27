@@ -126,8 +126,16 @@ begin
   l_clob(3) :=q'!SELECT b.id_torneo, b.titulo, COUNT(1) cantidad_partidos
   FROM t_partidos a, t_torneos b
  WHERE a.id_torneo = b.id_torneo
-   AND ((a.id_club_local IS NULL AND a.nombre_club_local IS NULL) OR
-       (a.id_club_visitante IS NULL AND a.nombre_club_visitante IS NULL))
+   AND ((a.id_club_local IS NULL AND
+       (a.nombre_club_local IS NULL OR EXISTS
+        (SELECT 1
+             FROM t_equipos_tmp m
+            WHERE m.nombre_corto = a.nombre_club_local))) OR
+       (a.id_club_visitante IS NULL AND
+       (a.nombre_club_visitante IS NULL OR EXISTS
+        (SELECT 1
+             FROM t_equipos_tmp m
+            WHERE m.nombre_corto = a.nombre_club_visitante))))
  GROUP BY b.id_torneo, b.titulo!';
   l_clob(4) :=q'!Verificar y dar de alta manualmente los clubes pendientes con sus respectivos logos.!';
   l_varchar2(5) :=q'!1!';

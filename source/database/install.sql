@@ -122,6 +122,7 @@ prompt
 @@tables/t_importador_urls.tab
 @@tables/t_divisiones.tab
 @@tables/t_clubes.tab
+@@tables/t_equipos_tmp.tab
 @@tables/t_estadios.tab
 @@tables/t_torneos.tab
 @@tables/t_planteles.tab
