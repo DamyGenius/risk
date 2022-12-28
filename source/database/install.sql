@@ -268,6 +268,7 @@ prompt
 @@triggers/gs_invitaciones.trg
 @@triggers/gs_comentarios.trg
 @@triggers/gs_reacciones.trg
+@@triggers/gb_equipos_tmp.trg
 
 prompt
 prompt Creando procedimientos...

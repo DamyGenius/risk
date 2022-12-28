@@ -36,6 +36,8 @@ SELECT b.id_division,
    AND b.importado = 'S'
    AND a.importado = 'S'
 ;
+
+------------------------------------------------------------------------
 SELECT b.id_torneo, b.titulo, COUNT(1) cantidad_partidos
   FROM t_partidos a, t_torneos b
  WHERE a.id_torneo = b.id_torneo
@@ -66,6 +68,22 @@ select a.id_club,a.nombre_oficial,a.id_division,a.nombre_corto,a.id_importacion,
 where a.id_club='COR'
 --where a.tipo='S'
 ;
+/*
+insert into t_clubes
+  (id_club, nombre_oficial, id_division, nombre_corto, id_importacion, id_pais, tipo)
+select a.id_equipo, upper(a.nombre_oficial), a.id_division, upper(a.nombre_corto), a.id_importacion, a.id_pais, a.tipo
+  from t_equipos_tmp a
+where a.id_equipo is not null
+order by a.id_division, a.nombre_corto;
+
+delete from t_equipos_tmp a
+ where exists (select 1 from t_clubes b where b.id_club = a.id_equipo)
+*/
+select a.*, a.rowid from t_paises a
+where a.nombre like upper('%&DESC_PAIS%') or upper('&DESC_PAIS') is null
+order by a.nombre;
+
+------------------------------------------------------------------------
 select a.*, a.rowid from t_archivos a
 where a.campo='ESCUDO'
 and a.referencia='COR'

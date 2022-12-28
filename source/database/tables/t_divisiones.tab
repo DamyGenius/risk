@@ -9,7 +9,8 @@ create table T_DIVISIONES
   canal_importacion       VARCHAR2(50),
   importado               VARCHAR2(1) default 'N',
   id_importacion_torneo   NUMBER(15),
-  desc_importacion_torneo VARCHAR2(200)
+  desc_importacion_torneo VARCHAR2(200),
+  tipo_equipos            VARCHAR2(1)
 )
 ;
 comment on table T_DIVISIONES
@@ -34,6 +35,8 @@ comment on column T_DIVISIONES.id_importacion_torneo
   is 'Identificador del torneo actual importado.';
 comment on column T_DIVISIONES.desc_importacion_torneo
   is 'Descripción del torneo actual importado.';
+comment on column T_DIVISIONES.tipo_equipos
+  is 'Tipo de equipos (C-Club, S-Selección)';
 alter table T_DIVISIONES
   add constraint PK_DIVISIONES primary key (ID_DIVISION);
 alter table T_DIVISIONES
@@ -42,3 +45,6 @@ alter table T_DIVISIONES
 alter table T_DIVISIONES
   add constraint FK_DIVISIONES_URLS foreign key (ID_URL)
   references T_IMPORTADOR_URLS (ID_URL);
+alter table T_DIVISIONES
+  add constraint CK_DIVISIONES_TIPO_EQUIPOS
+  check (TIPO_EQUIPOS IN ('C', 'S'));
