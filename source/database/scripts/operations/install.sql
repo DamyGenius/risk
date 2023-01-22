@@ -21,6 +21,7 @@ prompt
 @@scripts/operations/servicio/aut/editar_usuario.sql
 @@scripts/operations/servicio/aut/generar_otp.sql
 @@scripts/operations/servicio/aut/iniciar_sesion.sql
+@@scripts/operations/servicio/aut/recuperar_clave.sql
 @@scripts/operations/servicio/aut/recuperar_dato_usuario.sql
 @@scripts/operations/servicio/aut/refrescar_sesion.sql
 @@scripts/operations/servicio/aut/registrar_clave.sql

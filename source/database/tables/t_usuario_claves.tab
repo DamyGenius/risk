@@ -8,7 +8,8 @@ create table T_USUARIO_CLAVES
   algoritmo                  VARCHAR2(30),
   cantidad_intentos_fallidos NUMBER(3),
   iteraciones                NUMBER(10),
-  fecha_ultima_autenticacion DATE
+  fecha_ultima_autenticacion DATE,
+  fecha_expiracion           TIMESTAMP(2) WITH TIME ZONE
 )
 ;
 comment on table T_USUARIO_CLAVES
@@ -31,6 +32,8 @@ comment on column T_USUARIO_CLAVES.iteraciones
   is 'Iteraciones (parametro para validacion)';
 comment on column T_USUARIO_CLAVES.fecha_ultima_autenticacion
   is 'Fecha de la ultima autenticacion exitosa';
+comment on column T_USUARIO_CLAVES.fecha_expiracion
+  is 'Fecha de expiracion de la clave';
 alter table T_USUARIO_CLAVES
   add constraint PK_USUARIO_CLAVES primary key (ID_USUARIO, TIPO);
 alter table T_USUARIO_CLAVES
