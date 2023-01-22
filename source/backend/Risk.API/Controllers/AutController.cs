@@ -156,6 +156,18 @@ namespace Risk.API.Controllers
             return ProcesarRespuesta(respuesta);
         }
 
+        [AllowAnonymous]
+        [HttpPost("RecuperarClaveAcceso")]
+        [SwaggerOperation(OperationId = "RecuperarClaveAcceso", Summary = "RecuperarClaveAcceso", Description = "Permite recuperar la clave de acceso para el usuario")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
+        public IActionResult RecuperarClaveAcceso([FromBody] RecuperarClaveAccesoRequestBody requestBody)
+        {
+            var respuesta = _autService.RecuperarClave(requestBody.Usuario, TipoClave.Acceso);
+            return ProcesarRespuesta(respuesta);
+        }
+
         [HttpGet("ValidarSesion")]
         [SwaggerOperation(OperationId = "ValidarSesion", Summary = "ValidarSesion", Description = "Permite validar si una sesión está activa o no")]
         [Produces(MediaTypeNames.Application.Json)]

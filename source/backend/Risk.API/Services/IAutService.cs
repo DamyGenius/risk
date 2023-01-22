@@ -35,6 +35,7 @@ namespace Risk.API.Services
         Respuesta<Dato> RegistrarUsuario(string usuario, string clave, string nombre, string apellido, string direccionCorreo, string numeroTelefono, string idClub, OrigenSesion? origen = null, string idExterno = null);
         Respuesta<Dato> RegistrarClave(string usuario, string clave, TipoClave tipoClave);
         Respuesta<Dato> CambiarClave(string usuario, string claveAntigua, string claveNueva, TipoClave tipoClave);
+        Respuesta<Dato> RecuperarClave(string usuario, TipoClave tipoClave);
         Respuesta<Dato> ValidarSesion(string accessToken);
         Respuesta<Usuario> DatosUsuario(string usuario);
         Respuesta<Dato> ValidarClaveAplicacion(string claveAplicacion);

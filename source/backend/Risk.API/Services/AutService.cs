@@ -44,6 +44,7 @@ namespace Risk.API.Services
         private const string NOMBRE_REGISTRAR_USUARIO = "REGISTRAR_USUARIO";
         private const string NOMBRE_REGISTRAR_CLAVE = "REGISTRAR_CLAVE";
         private const string NOMBRE_CAMBIAR_CLAVE = "CAMBIAR_CLAVE";
+        private const string NOMBRE_RECUPERAR_CLAVE = "RECUPERAR_CLAVE";
         private const string NOMBRE_VALIDAR_SESION = "VALIDAR_SESION";
         private const string NOMBRE_DATOS_USUARIO = "DATOS_USUARIO";
         private const string NOMBRE_REFRESCAR_SESION = "REFRESCAR_SESION";
@@ -73,6 +74,21 @@ namespace Risk.API.Services
 
             string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
                 NOMBRE_CAMBIAR_CLAVE,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
+
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetModelFromEntity<Dato, YDato>(entityRsp.Datos));
+        }
+
+        public Respuesta<Dato> RecuperarClave(string usuario, TipoClave tipoClave)
+        {
+            JObject prms = new JObject();
+            prms.Add("usuario", usuario);
+            prms.Add("tipo_clave", tipoClave.GetStringValue());
+
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
+                NOMBRE_RECUPERAR_CLAVE,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);

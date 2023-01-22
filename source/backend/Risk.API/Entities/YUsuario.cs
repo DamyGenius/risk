@@ -44,6 +44,8 @@ namespace Risk.API.Entities
         public string TipoPersona { get; set; }
         [JsonProperty("estado")]
         public string Estado { get; set; }
+        [JsonProperty("estado_clave")]
+        public string EstadoClave { get; set; }
         [JsonProperty("direccion_correo")]
         public string DireccionCorreo { get; set; }
         [JsonProperty("numero_telefono")]
@@ -89,6 +91,7 @@ namespace Risk.API.Entities
                 Apellido = this.Apellido,
                 TipoPersona = this.TipoPersona,
                 Estado = this.Estado,
+                EstadoClave = this.EstadoClave,
                 DireccionCorreo = this.DireccionCorreo,
                 NumeroTelefono = this.NumeroTelefono,
                 VersionAvatar = this.VersionAvatar,
