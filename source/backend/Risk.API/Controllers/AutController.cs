@@ -498,5 +498,25 @@ namespace Risk.API.Controllers
             var respuesta = _autService.RefrescarSesion(requestBody.AccessToken, null, accessTokenNuevo, null, usuario.Origen, requestBody.FbToken);
             return ProcesarRespuesta(respuesta);
         }
+
+        [HttpPost("BloquearUsuario")]
+        [SwaggerOperation(OperationId = "BloquearUsuario", Summary = "BloquearUsuario", Description = "Permite bloquear a un usuario")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
+        public IActionResult BloquearUsuario([FromBody] BloquearUsuarioRequestBody requestBody)
+        {
+            var respuesta = _autService.BloquearUsuario(requestBody.UsuarioBloqueado);
+            return ProcesarRespuesta(respuesta);
+        }
+
+        [HttpPost("DesbloquearUsuario")]
+        [SwaggerOperation(OperationId = "DesbloquearUsuario", Summary = "DesbloquearUsuario", Description = "Permite desbloquear a un usuario")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
+        public IActionResult DesbloquearUsuario([FromBody] DesbloquearUsuarioRequestBody requestBody)
+        {
+            var respuesta = _autService.DesbloquearUsuario(requestBody.UsuarioDesbloqueado);
+            return ProcesarRespuesta(respuesta);
+        }
     }
 }

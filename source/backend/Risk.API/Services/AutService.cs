@@ -58,6 +58,8 @@ namespace Risk.API.Services
         private const string NOMBRE_EDITAR_USUARIO = "EDITAR_USUARIO";
         private const string NOMBRE_EDITAR_DATO_USUARIO = "EDITAR_DATO_USUARIO";
         private const string NOMBRE_REGISTRAR_UBICACION = "REGISTRAR_UBICACION";
+        private const string NOMBRE_BLOQUEAR_USUARIO = "BLOQUEAR_USUARIO";
+        private const string NOMBRE_DESBLOQUEAR_USUARIO = "DESBLOQUEAR_USUARIO";
 
         public AutService(ILogger<AutService> logger, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDbConnectionFactory dbConnectionFactory)
             : base(logger, configuration, httpContextAccessor, dbConnectionFactory)
@@ -381,6 +383,34 @@ namespace Risk.API.Services
 
             string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
                 NOMBRE_VALIDAR_OTP,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
+
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetModelFromEntity<Dato, YDato>(entityRsp.Datos));
+        }
+
+        public Respuesta<Dato> BloquearUsuario(string usuarioBloqueado)
+        {
+            JObject prms = new JObject();
+            prms.Add("usuario_bloqueado", usuarioBloqueado);
+
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
+                NOMBRE_BLOQUEAR_USUARIO,
+                DOMINIO_OPERACION,
+                prms.ToString(Formatting.None));
+            var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);
+
+            return EntitiesMapper.GetRespuestaFromEntity<Dato, YDato>(entityRsp, EntitiesMapper.GetModelFromEntity<Dato, YDato>(entityRsp.Datos));
+        }
+
+        public Respuesta<Dato> DesbloquearUsuario(string usuarioDesbloqueado)
+        {
+            JObject prms = new JObject();
+            prms.Add("usuario_desbloqueado", usuarioDesbloqueado);
+
+            string rsp = base.ProcesarOperacion(TipoOperacion.Servicio.GetStringValue(),
+                NOMBRE_DESBLOQUEAR_USUARIO,
                 DOMINIO_OPERACION,
                 prms.ToString(Formatting.None));
             var entityRsp = JsonConvert.DeserializeObject<YRespuesta<YDato>>(rsp);

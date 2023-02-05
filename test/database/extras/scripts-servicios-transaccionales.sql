@@ -23,7 +23,7 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */'||chr(10)||chr(10);
   --
-  l_id_operacion t_operaciones.id_operacion%type := 83;
+  l_id_operacion t_operaciones.id_operacion%type := &id_operacion;--83;
   l_tipo_rest varchar2(5) := '&TIPO_REST'; --GET/POST
   l_permite_anonimo varchar2(5) := '&permite_anonimo'; --S/N
   --
@@ -129,17 +129,18 @@ namespace Risk.API.Models
       end loop;
 
       DBMS_OUTPUT.PUT_LINE('--'||initcap(se.dominio)||'Controller.cs');
-      DBMS_OUTPUT.PUT_LINE(case when l_permite_anonimo = 'S' then '          [AllowAnonymous]'||chr(10) end||
-                           '          [Http'||initcap(l_tipo_rest)||'("'||l_nombre_servicio_api||'")]
-          [SwaggerOperation(OperationId = "'||l_nombre_servicio_api||'", Summary = "'||l_nombre_servicio_api||'", Description = "'||se.detalle||'")]
-          [Produces(MediaTypeNames.Application.Json)]
-          [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
-          public IActionResult '||l_nombre_servicio_api||'('||l_query_params||case when l_tiene_cuerpo then ',
-              [FromBody] '||l_nombre_servicio_api||'RequestBody requestBody))' end||'
-          {
-              var respuesta = _'||lower(se.dominio)||'Service'||'.'||l_nombre_servicio_api||'('||l_params_service||');
-              return ProcesarRespuesta(respuesta);
-          }');
+      DBMS_OUTPUT.PUT_LINE(case when l_permite_anonimo = 'S' then '        [AllowAnonymous]'||chr(10) end||
+                           '        [Http'||initcap(l_tipo_rest)||'("'||l_nombre_servicio_api||'")]
+        [SwaggerOperation(OperationId = "'||l_nombre_servicio_api||'", Summary = "'||l_nombre_servicio_api||'", Description = "'||se.detalle||'")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Dato>))]
+        public IActionResult '||l_nombre_servicio_api||'('||l_query_params||case when l_tiene_cuerpo then
+          case when l_query_params is not null then ',
+            ' end ||'[FromBody] '||l_nombre_servicio_api||'RequestBody requestBody)' end||'
+        {
+            var respuesta = _'||lower(se.dominio)||'Service'||'.'||l_nombre_servicio_api||'('||l_params_service||');
+            return ProcesarRespuesta(respuesta);
+        }');
     end;
     DBMS_OUTPUT.PUT_LINE('');
     DBMS_OUTPUT.PUT_LINE('*********************************************************************************************');
