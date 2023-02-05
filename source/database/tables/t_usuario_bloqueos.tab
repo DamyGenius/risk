@@ -1,0 +1,24 @@
+create table T_USUARIO_BLOQUEOS
+(
+  id_bloqueo           NUMBER not null,
+  id_usuario           NUMBER(10) not null,
+  id_usuario_bloqueado NUMBER(10) not null,
+  fecha_bloqueo        TIMESTAMP(0) WITH TIME ZONE
+)
+;
+comment on table T_USUARIO_BLOQUEOS
+  is 'Bloqueos de Usuarios';
+comment on column T_USUARIO_BLOQUEOS.id_usuario
+  is 'Usuario';
+comment on column T_USUARIO_BLOQUEOS.id_usuario_bloqueado
+  is 'Usuario bloqueado';
+alter table T_USUARIO_BLOQUEOS
+  add constraint PK_USUARIO_BLOQUEOS primary key (ID_BLOQUEO);
+alter table T_USUARIO_BLOQUEOS
+  add constraint UK_USU_BLOQUEOS_USUARIO_USU_BLOQUEADO unique (ID_USUARIO, ID_USUARIO_BLOQUEADO);
+alter table T_USUARIO_BLOQUEOS
+  add constraint FK_USU_BLOQUEOS_USUARIOS1 foreign key (ID_USUARIO)
+  references T_USUARIOS (ID_USUARIO);
+alter table T_USUARIO_BLOQUEOS
+  add constraint FK_USU_BLOQUEOS_USUARIOS2 foreign key (ID_USUARIO_BLOQUEADO)
+  references T_USUARIOS (ID_USUARIO);

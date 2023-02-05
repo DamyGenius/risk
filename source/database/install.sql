@@ -74,6 +74,7 @@ prompt
 @@sequences/s_id_amistad.seq
 @@sequences/s_id_amistad_mensaje.seq
 @@sequences/s_id_invitacion.seq
+@@sequences/s_id_bloqueo.seq
 @@sequences/s_id_comentario.seq
 @@sequences/s_id_reaccion.seq
 
@@ -139,6 +140,7 @@ prompt
 @@tables/t_amigos.tab
 @@tables/t_amigo_mensajes.tab
 @@tables/t_invitaciones.tab
+@@tables/t_usuario_bloqueos.tab
 @@tables/t_comentarios.tab
 @@tables/t_reacciones.tab
 @@tables/t_usuario_divisiones.tab
@@ -266,6 +268,7 @@ prompt
 @@triggers/gs_amigos.trg
 @@triggers/gs_amigo_mensajes.trg
 @@triggers/gs_invitaciones.trg
+@@triggers/gs_usuario_bloqueos.trg
 @@triggers/gs_comentarios.trg
 @@triggers/gs_reacciones.trg
 @@triggers/gb_equipos_tmp.trg

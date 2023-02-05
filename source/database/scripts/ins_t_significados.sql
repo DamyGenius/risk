@@ -195,10 +195,10 @@ insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('ESTADO_CLAVE', 'P', 'PENDIENTE DE CAMBIO', null, 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
-values ('TIPO_DATO_PARAMETRO', 'S', 'STRING', null, 'S');
+values ('TIPO_DATO_PARAMETRO', 'S', 'STRING', 'string', 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
-values ('TIPO_DATO_PARAMETRO', 'N', 'NUMBER', null, 'S');
+values ('TIPO_DATO_PARAMETRO', 'N', 'NUMBER', 'int', 'S');
 
 insert into t_significados (DOMINIO, CODIGO, SIGNIFICADO, REFERENCIA, ACTIVO)
 values ('TIPO_DATO_PARAMETRO', 'B', 'BOOLEAN', null, 'S');

@@ -12,11 +12,13 @@ prompt
 @@scripts/operations/parametros/_/parametros_automaticos.sql
 @@scripts/operations/reporte/gen/listar_significados.sql
 @@scripts/operations/reporte/gen/version_sistema.sql
+@@scripts/operations/servicio/aut/bloquear_usuario.sql
 @@scripts/operations/servicio/aut/cambiar_clave.sql
 @@scripts/operations/servicio/aut/cambiar_estado_sesion.sql
 @@scripts/operations/servicio/aut/cambiar_estado_usuario.sql
 @@scripts/operations/servicio/aut/datos_dispositivo.sql
 @@scripts/operations/servicio/aut/datos_usuario.sql
+@@scripts/operations/servicio/aut/desbloquear_usuario.sql
 @@scripts/operations/servicio/aut/editar_dato_usuario.sql
 @@scripts/operations/servicio/aut/editar_usuario.sql
 @@scripts/operations/servicio/aut/generar_otp.sql

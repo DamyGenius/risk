@@ -144,6 +144,7 @@ prompt
 drop table t_usuario_divisiones cascade constraints;
 drop table t_reacciones cascade constraints;
 drop table t_comentarios cascade constraints;
+drop table t_usuario_bloqueos cascade constraints;
 drop table t_invitaciones cascade constraints;
 drop table t_amigo_mensajes cascade constraints;
 drop table t_amigos cascade constraints;
@@ -209,6 +210,7 @@ prompt -----------------------------------
 prompt
 drop sequence s_id_reaccion;
 drop sequence s_id_comentario;
+drop sequence s_id_bloqueo;
 drop sequence s_id_invitacion;
 drop sequence s_id_amistad_mensaje;
 drop sequence s_id_amistad;
