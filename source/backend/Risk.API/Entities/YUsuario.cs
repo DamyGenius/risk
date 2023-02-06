@@ -78,6 +78,10 @@ namespace Risk.API.Entities
         public string TipoAmigo { get; set; }
         [JsonProperty("id_amistad")]
         public long? IdAmistad { get; set; }
+        [JsonProperty("bloqueado")]
+        public string Bloqueado { get; set; }
+        [JsonProperty("bloqueante")]
+        public string Bloqueante { get; set; }
         [JsonProperty("roles")]
         public List<YRol> Roles { get; set; }
 
@@ -108,6 +112,8 @@ namespace Risk.API.Entities
                 Ranking = this.Ranking,
                 TipoAmigo = this.TipoAmigo.GetEnumValue<TipoAmigo>(),
                 IdAmistad = this.IdAmistad,
+                Bloqueado = (this.Bloqueado == "S" ? true : false),
+                Bloqueante = (this.Bloqueante == "S" ? true : false),
                 Roles = EntitiesMapper.GetModelListFromEntity<Rol, YRol>(this.Roles)
             };
         }

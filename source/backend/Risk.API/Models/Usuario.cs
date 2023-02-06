@@ -77,6 +77,10 @@ namespace Risk.API.Models
         public TipoAmigo? TipoAmigo { get; set; }
         [SwaggerSchema("Identificador de la amistad")]
         public long? IdAmistad { get; set; }
+        [SwaggerSchema("Usuario bloqueado")]
+        public bool Bloqueado { get; set; }
+        [SwaggerSchema("Usuario bloqueante")]
+        public bool Bloqueante { get; set; }
         [SwaggerSchema("Roles del usuario")]
         public List<Rol> Roles { get; set; }
 
