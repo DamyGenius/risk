@@ -45,7 +45,7 @@ namespace Risk.API.Helpers
                 properties.SetOutlineHandler(OutlineHandler.CreateStandardHandler());
 
                 PdfDocument pdfDocument = new PdfDocument(new PdfWriter(ms));
-                PageSize pageSize = PageSize.Default;
+                PageSize pageSize = PageSize.DEFAULT;
 
                 string metaPageSize = HtmlHelper.ObtenerMetaContent(html, RiskConstants.META_PAGE_SIZE);
                 switch (metaPageSize.ToUpper())
@@ -72,7 +72,7 @@ namespace Risk.API.Helpers
                         pageSize = PageSize.EXECUTIVE;
                         break;
                     default:
-                        pageSize = PageSize.Default;
+                        pageSize = PageSize.DEFAULT;
                         break;
                 }
 
