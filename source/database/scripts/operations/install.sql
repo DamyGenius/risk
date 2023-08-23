@@ -7,6 +7,7 @@ prompt
 @@scripts/operations/monitoreo/fan/clubes_nulos_torneos.sql
 @@scripts/operations/monitoreo/fan/escudos_pendientes_clubes.sql
 @@scripts/operations/monitoreo/fan/puntajes_pendientes_partidos.sql
+@@scripts/operations/monitoreo/fan/servicio_datos_error_desconocido.sql
 @@scripts/operations/monitoreo/fan/servicio_datos_version_driver.sql
 @@scripts/operations/parametros/_/contexto.sql
 @@scripts/operations/parametros/_/parametros_automaticos.sql
