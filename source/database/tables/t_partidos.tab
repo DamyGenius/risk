@@ -15,6 +15,7 @@ create table T_PARTIDOS
   id_importacion        NUMBER(15),
   situacion_importacion VARCHAR2(1) default 'N' not null,
   estado_juego          VARCHAR2(2),
+  tiempo_juego          VARCHAR2(10),
   id_fase               NUMBER(3),
   id_grupo              NUMBER(3),
   descripcion           VARCHAR2(50),
@@ -32,6 +33,8 @@ comment on column T_PARTIDOS.situacion_importacion
   is 'N - Sin datos, T - Datos temporales, V - En verificación, D - Datos definitivos, A - Puntajes actualizados';
 comment on column T_PARTIDOS.estado_juego
   is 'PT - Primer Tiempo, ET - Entretiempo, ST - Segundo Tiempo';
+comment on column T_PARTIDOS.tiempo_juego
+  is 'Tiempo de juego';
 comment on column T_PARTIDOS.id_fase
   is 'Identificador de la Fase';
 comment on column T_PARTIDOS.id_grupo
