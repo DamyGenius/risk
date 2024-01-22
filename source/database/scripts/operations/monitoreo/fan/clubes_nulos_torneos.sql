@@ -126,6 +126,7 @@ begin
   l_clob(3) :=q'!SELECT b.id_torneo, b.titulo, COUNT(1) cantidad_partidos
   FROM t_partidos a, t_torneos b
  WHERE a.id_torneo = b.id_torneo
+   AND b.actual = 'S'
    AND ((a.id_club_local IS NULL AND
        (a.nombre_club_local IS NULL OR EXISTS
         (SELECT 1
