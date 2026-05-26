@@ -25,6 +25,7 @@ SOFTWARE.
 using System;
 using System.Net.Mime;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -407,10 +408,10 @@ namespace Risk.API.Controllers
         [Consumes(MediaTypeNames.Application.Json)]
         [Produces(MediaTypeNames.Application.Json)]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Sesion>))]
-        public IActionResult IniciarSesionGoogle([FromBody] IniciarSesionGoogleRequestBody requestBody)
+        public async Task<IActionResult> IniciarSesionGoogle([FromBody] IniciarSesionGoogleRequestBody requestBody)
         {
             // Obtener datos del JWT
-            UsuarioExterno usuario = TokenHelper.ObtenerUsuarioDeTokenGoogle(requestBody.IdToken, _genService);
+            UsuarioExterno usuario = await TokenHelper.ObtenerUsuarioDeTokenGoogleAsync(requestBody.IdToken, _genService);
 
             // Registrar el usuario
             var respRegistrarUsuario = _autService.RegistrarUsuario(usuario.Alias, null, usuario.Nombre, usuario.Apellido, usuario.DireccionCorreo, null, null, usuario.Origen, usuario.IdExterno);
@@ -438,11 +439,11 @@ namespace Risk.API.Controllers
         [Consumes(MediaTypeNames.Application.Json)]
         [Produces(MediaTypeNames.Application.Json)]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Sesion>))]
-        public IActionResult RefrescarSesionGoogle([FromBody] RefrescarSesionGoogleRequestBody requestBody)
+        public async Task<IActionResult> RefrescarSesionGoogle([FromBody] RefrescarSesionGoogleRequestBody requestBody)
         {
             // Obtener datos del JWT
             string aliasUsuario = TokenHelper.ObtenerUsuarioDeAccessToken(requestBody.AccessToken);
-            UsuarioExterno usuario = TokenHelper.ObtenerUsuarioDeTokenGoogle(requestBody.IdToken, _genService);
+            UsuarioExterno usuario = await TokenHelper.ObtenerUsuarioDeTokenGoogleAsync(requestBody.IdToken, _genService);
 
             var accessTokenNuevo = TokenHelper.GenerarAccessToken(aliasUsuario, _autService, _genService);
 

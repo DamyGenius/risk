@@ -69,8 +69,10 @@ namespace Risk.API.Senders
                 foreach (var x in datos)
                 {
                     string name = x.Key;
-                    string value = (string)x.Value;
-                    properties.Add(name, value);
+                    string value = x.Value.Type == JTokenType.String
+                        ? (string)x.Value
+                        : x.Value.ToString(Newtonsoft.Json.Formatting.None);
+                    properties[name] = value;
                 }
             }
             await hubClient.SendTemplateNotificationAsync(properties, msj.Suscripcion);
