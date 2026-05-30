@@ -38,6 +38,7 @@ using Risk.API.Services;
 using Google.Apis.Auth;
 using System.Net.Http;
 using Newtonsoft.Json;
+using Risk.API.Exceptions;
 
 namespace Risk.API.Helpers
 {
@@ -192,7 +193,20 @@ namespace Risk.API.Helpers
                 Audience = audienciasValidas
             };
 
-            GoogleJsonWebSignature.Payload validPayload = await GoogleJsonWebSignature.ValidateAsync(idToken, validationSettings);
+            GoogleJsonWebSignature.Payload validPayload;
+            try
+            {
+                validPayload = await GoogleJsonWebSignature.ValidateAsync(idToken, validationSettings);
+            }
+            catch (InvalidJwtException e) when (e.Message.Contains("expired", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new RiskApiException("Sesión de Google expirada. Inicie sesión nuevamente.", e);
+            }
+            catch (InvalidJwtException e)
+            {
+                throw new RiskApiException("Token de Google no válido.", e);
+            }
+
             if (validPayload == null)
                 throw new SecurityTokenValidationException("Firma de token no válida.");
 
