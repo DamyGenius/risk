@@ -3,10 +3,10 @@ set feedback off
 set define off
 
 insert into t_importador_urls (ID_URL, DESCRIPCION, ACTIVO)
-values ('SPO', 'https://sportsdemo.co/html/v3/minapp/modules/futbol/page/page.html', 'S');
+values ('SPO', 'https://sportsdemo.co/html/v3/minapp/init/index.html', 'S');
 
 insert into t_importador_urls (ID_URL, DESCRIPCION, ACTIVO)
-values ('CNN', 'https://ix.cnn.io/data/sports/html/v3/minapp/modules/futbol/page/page.html', 'S');
+values ('CNN', 'https://ix.cnn.io/data/sports/html/v3/minapp/init/index.html', 'S');
 
 insert into t_importador_urls (ID_URL, DESCRIPCION, ACTIVO)
 values ('UHO', 'https://df.ultimahora.com/adjuntos/datafactory/html/v3/index.html', 'N');
@@ -21,7 +21,7 @@ insert into t_importador_urls (ID_URL, DESCRIPCION, ACTIVO)
 values ('CER', 'https://cerro.com.py/v3/html/v3/index.html', 'N');
 
 insert into t_importador_urls (ID_URL, DESCRIPCION, ACTIVO)
-values ('TYC', 'https://estadisticas-deportes.tycsports.com/html/v3/index.html', 'N');
+values ('TYC', 'https://estadisticas-deportes.tycsports.com/html/v3/minapp/init/index.html', 'S');
 
 insert into t_importador_urls (ID_URL, DESCRIPCION, ACTIVO)
 values ('FOX', 'https://foxsports-stats.tbxnet.com/html/v3/index.html', 'N');
