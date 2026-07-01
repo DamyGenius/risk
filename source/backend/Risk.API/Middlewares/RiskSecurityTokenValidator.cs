@@ -25,6 +25,7 @@ SOFTWARE.
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using Risk.API.Helpers;
 using Risk.API.Models;
@@ -34,15 +35,19 @@ namespace Risk.API.Middlewares
 {
     public class RiskSecurityTokenValidator : ISecurityTokenValidator
     {
+        internal const string SessionValidatedHttpContextItemKey = "Risk.SessionValidated";
+
         private int _maximumTokenSizeInBytes = TokenValidationParameters.DefaultMaximumTokenSizeInBytes;
         private readonly IAutService _autService;
         private readonly IGenService _genService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private JwtSecurityTokenHandler _tokenHandler;
 
-        public RiskSecurityTokenValidator(IAutService autService, IGenService genService)
+        public RiskSecurityTokenValidator(IAutService autService, IGenService genService, IHttpContextAccessor httpContextAccessor)
         {
             _autService = autService;
             _genService = genService;
+            _httpContextAccessor = httpContextAccessor;
             _tokenHandler = new JwtSecurityTokenHandler();
         }
 
@@ -104,6 +109,11 @@ namespace Risk.API.Middlewares
             if (!respuesta.Codigo.Equals(RiskConstants.CODIGO_OK))
             {
                 throw new SecurityTokenValidationException(respuesta.Mensaje);
+            }
+
+            if (_httpContextAccessor.HttpContext != null)
+            {
+                _httpContextAccessor.HttpContext.Items[SessionValidatedHttpContextItemKey] = true;
             }
 
             return claimsPrincipal;

@@ -24,6 +24,7 @@ SOFTWARE.
 
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -160,6 +161,35 @@ namespace Risk.API
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.FromSeconds(10)
                     //ClockSkew = TimeSpan.Zero
+                };
+                x.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = context =>
+                    {
+                        if (context.HttpContext.Items.ContainsKey(RiskSecurityTokenValidator.SessionValidatedHttpContextItemKey))
+                        {
+                            return Task.CompletedTask;
+                        }
+
+                        var accessToken = TokenHelper.ObtenerAccessTokenDeHeaders(context.HttpContext.Request.Headers);
+                        if (string.IsNullOrEmpty(accessToken))
+                        {
+                            context.Fail("Access Token no encontrado.");
+                            return Task.CompletedTask;
+                        }
+
+                        var autService = context.HttpContext.RequestServices.GetRequiredService<IAutService>();
+                        var respuesta = autService.ValidarSesion(accessToken);
+
+                        if (!respuesta.Codigo.Equals(RiskConstants.CODIGO_OK))
+                        {
+                            context.Fail(respuesta.Mensaje);
+                            return Task.CompletedTask;
+                        }
+
+                        context.HttpContext.Items[RiskSecurityTokenValidator.SessionValidatedHttpContextItemKey] = true;
+                        return Task.CompletedTask;
+                    }
                 };
             });
 
