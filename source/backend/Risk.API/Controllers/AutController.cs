@@ -422,8 +422,9 @@ namespace Risk.API.Controllers
             }
 
             var accessToken = TokenHelper.GenerarAccessToken(respRegistrarUsuario.Datos.Contenido, _autService, _genService);
+            var refreshToken = TokenHelper.GenerarRefreshToken();
 
-            var respIniciarSesion = _autService.IniciarSesion(respRegistrarUsuario.Datos.Contenido, accessToken, null, requestBody.TokenDispositivo, usuario.Origen, requestBody.IdToken);
+            var respIniciarSesion = _autService.IniciarSesion(respRegistrarUsuario.Datos.Contenido, accessToken, refreshToken, requestBody.TokenDispositivo, usuario.Origen, requestBody.IdToken);
 
             if (respIniciarSesion.Codigo.Equals(RiskConstants.CODIGO_OK))
             {
@@ -439,15 +440,14 @@ namespace Risk.API.Controllers
         [Consumes(MediaTypeNames.Application.Json)]
         [Produces(MediaTypeNames.Application.Json)]
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Sesion>))]
-        public async Task<IActionResult> RefrescarSesionGoogle([FromBody] RefrescarSesionGoogleRequestBody requestBody)
+        public IActionResult RefrescarSesionGoogle([FromBody] RefrescarSesionGoogleRequestBody requestBody)
         {
-            // Obtener datos del JWT
             string aliasUsuario = TokenHelper.ObtenerUsuarioDeAccessToken(requestBody.AccessToken);
-            UsuarioExterno usuario = await TokenHelper.ObtenerUsuarioDeTokenGoogleAsync(requestBody.IdToken, _genService);
 
             var accessTokenNuevo = TokenHelper.GenerarAccessToken(aliasUsuario, _autService, _genService);
+            var refreshTokenNuevo = TokenHelper.GenerarRefreshToken();
 
-            var respuesta = _autService.RefrescarSesion(requestBody.AccessToken, null, accessTokenNuevo, null, usuario.Origen, requestBody.IdToken);
+            var respuesta = _autService.RefrescarSesion(requestBody.AccessToken, requestBody.RefreshToken, accessTokenNuevo, refreshTokenNuevo, OrigenSesion.Google);
             return ProcesarRespuesta(respuesta);
         }
 
@@ -471,8 +471,9 @@ namespace Risk.API.Controllers
             }
 
             var accessToken = TokenHelper.GenerarAccessToken(respRegistrarUsuario.Datos.Contenido, _autService, _genService);
+            var refreshToken = TokenHelper.GenerarRefreshToken();
 
-            var respIniciarSesion = _autService.IniciarSesion(respRegistrarUsuario.Datos.Contenido, accessToken, null, requestBody.TokenDispositivo, usuario.Origen, requestBody.FbToken);
+            var respIniciarSesion = _autService.IniciarSesion(respRegistrarUsuario.Datos.Contenido, accessToken, refreshToken, requestBody.TokenDispositivo, usuario.Origen, requestBody.FbToken);
 
             if (respIniciarSesion.Codigo.Equals(RiskConstants.CODIGO_OK))
             {
@@ -490,13 +491,12 @@ namespace Risk.API.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Sesion>))]
         public IActionResult RefrescarSesionFacebook([FromBody] RefrescarSesionFacebookRequestBody requestBody)
         {
-            // Obtener datos del JWT
             string aliasUsuario = TokenHelper.ObtenerUsuarioDeAccessToken(requestBody.AccessToken);
-            UsuarioExterno usuario = TokenHelper.ObtenerUsuarioDeTokenFacebook(requestBody.FbToken, _genService);
 
             var accessTokenNuevo = TokenHelper.GenerarAccessToken(aliasUsuario, _autService, _genService);
+            var refreshTokenNuevo = TokenHelper.GenerarRefreshToken();
 
-            var respuesta = _autService.RefrescarSesion(requestBody.AccessToken, null, accessTokenNuevo, null, usuario.Origen, requestBody.FbToken);
+            var respuesta = _autService.RefrescarSesion(requestBody.AccessToken, requestBody.RefreshToken, accessTokenNuevo, refreshTokenNuevo, OrigenSesion.Facebook);
             return ProcesarRespuesta(respuesta);
         }
 

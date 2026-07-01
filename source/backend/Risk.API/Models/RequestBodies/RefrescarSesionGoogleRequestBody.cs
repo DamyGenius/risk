@@ -30,7 +30,7 @@ namespace Risk.API.Models
     {
         [SwaggerSchema("Token de acceso")]
         public string AccessToken { get; set; }
-        [SwaggerSchema("Token de la sesión en Google")]
-        public string IdToken { get; set; }
+        [SwaggerSchema("Token de refresco")]
+        public string RefreshToken { get; set; }
     }
 }
