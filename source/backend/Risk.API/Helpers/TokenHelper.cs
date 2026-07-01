@@ -30,6 +30,7 @@ using System.Net.Mail;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using Risk.API.Models;
@@ -37,11 +38,14 @@ using Risk.API.Services;
 using Google.Apis.Auth;
 using System.Net.Http;
 using Newtonsoft.Json;
+using Risk.API.Exceptions;
 
 namespace Risk.API.Helpers
 {
     public static class TokenHelper
     {
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         public static string GenerarAccessToken(string usuario, IAutService autService, IGenService genService)
         {
             var respDatosUsuario = autService.DatosUsuario(usuario);
@@ -162,53 +166,83 @@ namespace Risk.API.Helpers
             return usuario;
         }
 
-        public static UsuarioExterno ObtenerUsuarioDeTokenGoogle(string idToken, IGenService genService)
+        public static async Task<UsuarioExterno> ObtenerUsuarioDeTokenGoogleAsync(string idToken, IGenService genService)
         {
-            // Validamos firma del token
-            var validPayload = GoogleJsonWebSignature.ValidateAsync(idToken);
+            var respValorCliente = genService.ValorParametro("GOOGLE_IDENTIFICADOR_CLIENTE");
+            if (!respValorCliente.Codigo.Equals(RiskConstants.CODIGO_OK))
+                throw new SecurityTokenValidationException("Cliente de token no válido.");
+
+            var audienciasValidas = respValorCliente.Datos.Contenido
+                .Split(new[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(audiencia => audiencia.Trim())
+                .Where(audiencia => !string.IsNullOrEmpty(audiencia))
+                .ToList();
+
+            if (!audienciasValidas.Any())
+                throw new SecurityTokenValidationException("Cliente de token no válido.");
+
+            var audienciasRecibidas = ObtenerAudienciasTokenGoogle(idToken);
+            if (!audienciasRecibidas.Any(audienciasValidas.Contains))
+            {
+                Logger.Warn("Cliente de token Google no válido. Audiencias recibidas: {0}", string.Join(",", audienciasRecibidas));
+                throw new SecurityTokenValidationException("Cliente de token no válido.");
+            }
+
+            var validationSettings = new GoogleJsonWebSignature.ValidationSettings
+            {
+                Audience = audienciasValidas
+            };
+
+            GoogleJsonWebSignature.Payload validPayload;
+            try
+            {
+                validPayload = await GoogleJsonWebSignature.ValidateAsync(idToken, validationSettings);
+            }
+            catch (InvalidJwtException e) when (e.Message.Contains("expired", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new RiskApiException("Sesión de Google expirada. Inicie sesión nuevamente.", e);
+            }
+            catch (InvalidJwtException e)
+            {
+                throw new RiskApiException("Token de Google no válido.", e);
+            }
+
             if (validPayload == null)
                 throw new SecurityTokenValidationException("Firma de token no válida.");
 
-            UsuarioExterno usuario = null;
+            var respValorEmisor = genService.ValorParametro("GOOGLE_EMISOR_TOKEN");
+            if (!respValorEmisor.Codigo.Equals(RiskConstants.CODIGO_OK) || !validPayload.Issuer.Contains(respValorEmisor.Datos.Contenido, StringComparison.OrdinalIgnoreCase))
+                throw new SecurityTokenValidationException("Emisor de token no válido.");
 
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            if (tokenHandler.CanReadToken(idToken))
+            if (!audienciasValidas.Contains(validPayload.Audience))
+                throw new SecurityTokenValidationException("Cliente de token no válido.");
+
+            MailAddress addr = new MailAddress(validPayload.Email);
+            string username = addr.User;
+
+            return new UsuarioExterno
             {
-                // Obtenemos datos de claims del payload
-                JwtSecurityToken jwtToken = tokenHandler.ReadJwtToken(idToken);
-                string idExterno = jwtToken.Claims.First(claim => claim.Type == "sub").Value;
-                string nombre = jwtToken.Claims.First(claim => claim.Type == "given_name").Value;
-                string apellido = jwtToken.Claims.First(claim => claim.Type == "family_name").Value;
-                string direccionCorreo = jwtToken.Claims.First(claim => claim.Type == "email").Value;
-                string emisorToken = jwtToken.Claims.First(claim => claim.Type == "iss").Value;
-                string audiencia = jwtToken.Claims.First(claim => claim.Type == "aud").Value;
+                Alias = username,
+                Nombre = validPayload.GivenName,
+                Apellido = validPayload.FamilyName,
+                DireccionCorreo = validPayload.Email,
+                Origen = OrigenSesion.Google,
+                IdExterno = validPayload.Subject
+            };
+        }
 
-                // Validamos el emisor del token
-                var respValorEmisor = genService.ValorParametro("GOOGLE_EMISOR_TOKEN");
-                if (!respValorEmisor.Codigo.Equals(RiskConstants.CODIGO_OK) || !emisorToken.Contains(respValorEmisor.Datos.Contenido, StringComparison.OrdinalIgnoreCase))
-                    throw new SecurityTokenValidationException("Emisor de token no válido.");
-
-                // Validamos el cliente del token
-                var respValorCliente = genService.ValorParametro("GOOGLE_IDENTIFICADOR_CLIENTE");
-                if (!respValorCliente.Codigo.Equals(RiskConstants.CODIGO_OK) || respValorCliente.Datos.Contenido != audiencia)
-                    throw new SecurityTokenValidationException("Cliente de token no válido.");
-
-                MailAddress addr = new MailAddress(direccionCorreo);
-                string username = addr.User;
-                string domain = addr.Host;
-
-                usuario = new UsuarioExterno
-                {
-                    Alias = username,
-                    Nombre = nombre,
-                    Apellido = apellido,
-                    DireccionCorreo = direccionCorreo,
-                    Origen = OrigenSesion.Google,
-                    IdExterno = idExterno
-                };
+        private static IEnumerable<string> ObtenerAudienciasTokenGoogle(string idToken)
+        {
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            if (!tokenHandler.CanReadToken(idToken))
+            {
+                return Enumerable.Empty<string>();
             }
 
-            return usuario;
+            JwtSecurityToken jwtToken = tokenHandler.ReadJwtToken(idToken);
+            return jwtToken.Audiences
+                .Where(audiencia => !string.IsNullOrWhiteSpace(audiencia))
+                .ToList();
         }
 
         public static UsuarioExterno ObtenerUsuarioDeTokenFacebook(string accessToken, IGenService genService)

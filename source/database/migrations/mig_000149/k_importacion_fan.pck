@@ -156,17 +156,17 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
   PROCEDURE p_importar_fases(i_id_torneo IN t_torneos.id_torneo%TYPE,
                              i_fases     IN CLOB) IS
     l_torneo json_object_t;
-
+  
     l_fases json_array_t;
     l_fase  json_object_t;
     rw_fase t_torneo_fases%ROWTYPE;
-
+  
     l_grupos json_array_t;
     l_grupo  json_object_t;
     rw_grupo t_torneo_grupos%ROWTYPE;
-
+  
     l_partidos json_array_t;
-
+  
     l_id_torneo               t_torneos.id_torneo%TYPE;
     l_id_division             t_torneos.id_division%TYPE;
     l_id_importacion          t_torneos.id_importacion%TYPE;
@@ -182,7 +182,7 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
         FROM t_torneos t
        WHERE t.id_torneo = l_id_torneo;
     END;
-
+  
     l_torneo                  := json_object_t(i_fases);
     l_id_importacion_torneo   := l_torneo.get_string('idTorneo');
     l_desc_importacion_torneo := l_torneo.get_string('nombreTorneo');
@@ -190,30 +190,30 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
                                      k_util.f_valor_parametro('ZONA_HORARIA'));
     dbms_output.put_line('idTorneo: ' || l_id_torneo);
     dbms_output.put_line('zonaHoraria: ' || l_zona_horaria);
-
+  
     BEGIN
       UPDATE t_divisiones a
          SET a.id_importacion_torneo   = l_id_importacion_torneo,
              a.desc_importacion_torneo = l_desc_importacion_torneo
        WHERE a.id_division = l_id_division;
     END;
-
-    IF nvl(l_id_importacion_torneo, 0) != nvl(l_id_importacion, 0) OR
-       nvl(l_desc_importacion_torneo, 'X') != nvl(l_desc_importacion, 'X') THEN
+  
+    IF l_id_importacion_torneo != l_id_importacion OR
+       l_desc_importacion_torneo != l_desc_importacion THEN
       dbms_output.put_line(l_id_importacion || ' - ' || l_desc_importacion ||
                            ': Ya no es el torneo actual.');
       RETURN;
     END IF;
-
+  
     IF l_torneo.has('fases') THEN
       l_fases := l_torneo.get_array('fases');
-
+    
       FOR i IN 0 .. l_fases.get_size - 1 LOOP
         l_fase              := treat(l_fases.get(i) AS json_object_t);
         rw_fase.id_torneo   := l_id_torneo;
         rw_fase.id_fase     := l_fase.get_number('id');
         rw_fase.descripcion := l_fase.get_string('nombreFase');
-
+      
         -- Importa la fase
         BEGIN
           INSERT INTO t_torneo_fases
@@ -228,17 +228,17 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
                AND id_fase = rw_fase.id_fase
                AND descripcion <> rw_fase.descripcion; -- Sólo si cambia la descripción
         END;
-
+      
         IF l_fase.has('grupos') THEN
           l_grupos := l_fase.get_array('grupos');
-
+        
           FOR j IN 0 .. l_grupos.get_size - 1 LOOP
             l_grupo              := treat(l_grupos.get(j) AS json_object_t);
             rw_grupo.id_torneo   := l_id_torneo;
             rw_grupo.id_fase     := rw_fase.id_fase;
             rw_grupo.id_grupo    := l_grupo.get_number('id');
             rw_grupo.descripcion := l_grupo.get_string('nombreGrupo');
-
+          
             -- Importa el grupo
             BEGIN
               INSERT INTO t_torneo_grupos
@@ -257,40 +257,40 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
                    AND id_grupo = rw_grupo.id_grupo
                    AND descripcion <> rw_grupo.descripcion; -- Sólo si cambia la descripción
             END;
-
+          
             IF l_grupo.has('partidos') THEN
               l_partidos := l_grupo.get_array('partidos');
-
+            
               -- Procesa la lista de partidos
               k_sistema.p_definir_parametro_number('ID_FASE',
                                                    rw_fase.id_fase);
               k_sistema.p_definir_parametro_number('ID_GRUPO',
                                                    rw_grupo.id_grupo);
-
+            
               p_importar_partidos(i_id_torneo    => l_id_torneo,
                                   i_partidos     => l_partidos.to_clob,
                                   i_zona_horaria => l_zona_horaria);
             END IF;
-
+          
           END LOOP;
-
+        
         ELSIF l_fase.has('partidos') THEN
           l_partidos := l_fase.get_array('partidos');
-
+        
           -- Procesa la lista de partidos
           k_sistema.p_definir_parametro_number('ID_FASE', rw_fase.id_fase);
           k_sistema.p_definir_parametro_number('ID_GRUPO', NULL);
-
+        
           p_importar_partidos(i_id_torneo    => l_id_torneo,
                               i_partidos     => l_partidos.to_clob,
                               i_zona_horaria => l_zona_horaria);
-
+        
         END IF;
-
+      
       END LOOP;
-
+    
     END IF;
-
+  
     BEGIN
       UPDATE t_torneos a
          SET a.fecha_ultima_importacion = current_timestamp
@@ -305,25 +305,25 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
     l_partido   json_object_t;
     rw_partido  t_partidos%ROWTYPE;
     rw_partido2 t_partidos%ROWTYPE;
-
+  
     l_id_club_local_tmp     PLS_INTEGER;
     l_id_club_visitante_tmp PLS_INTEGER;
-
+  
     l_id_torneo    t_torneos.id_torneo%TYPE;
     l_id_division  t_divisiones.id_division%TYPE;
     l_id_pais      t_divisiones.id_pais%TYPE;
     l_tipo_equipos t_divisiones.tipo_equipos%TYPE;
     l_zona_horaria VARCHAR2(50);
-
+  
     l_dia  VARCHAR2(30);
     l_hora VARCHAR2(30);
-
+  
     l_id_fase  t_partidos.id_fase%TYPE;
     l_id_grupo t_partidos.id_grupo%TYPE;
   BEGIN
     l_zona_horaria := nvl(i_zona_horaria,
                           k_util.f_valor_parametro('ZONA_HORARIA'));
-
+  
     l_id_torneo := i_id_torneo;
     BEGIN
       SELECT x.id_division, y.id_pais, y.tipo_equipos
@@ -331,16 +331,16 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
         FROM t_torneos x, t_divisiones y
        WHERE x.id_division = y.id_division
          AND x.id_torneo = l_id_torneo;
-
+    
     END;
     l_id_fase  := k_sistema.f_valor_parametro_number('ID_FASE');
     l_id_grupo := k_sistema.f_valor_parametro_number('ID_GRUPO');
-
+  
     l_partidos := json_array_t(i_partidos);
-
+  
     FOR i IN 0 .. l_partidos.get_size - 1 LOOP
       l_partido := treat(l_partidos.get(i) AS json_object_t);
-
+    
       rw_partido.id_importacion := l_partido.get_number('id');
       dbms_output.put_line('index: ' || i || ' ' || 'id: ' ||
                            rw_partido.id_importacion);
@@ -348,13 +348,13 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
       IF rw_partido.id_jornada = 0 THEN
         rw_partido.id_jornada := NULL;
       END IF;
-
+    
       l_id_club_local_tmp     := treat(l_partido.get('local') AS json_object_t).get_number('id');
       l_id_club_visitante_tmp := treat(l_partido.get('visitante') AS json_object_t).get_number('id');
-
+    
       rw_partido.id_club_local     := lf_buscar_club(l_id_club_local_tmp);
       rw_partido.id_club_visitante := lf_buscar_club(l_id_club_visitante_tmp);
-
+    
       l_dia  := l_partido.get_string('dia');
       l_hora := l_partido.get_string('hora');
       IF l_dia IS NOT NULL AND l_hora IS NOT NULL THEN
@@ -364,7 +364,7 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
       ELSE
         rw_partido.fecha := NULL;
       END IF;
-
+    
       rw_partido.goles_club_local     := l_partido.get_number('golesLocal');
       rw_partido.goles_club_visitante := l_partido.get_number('golesVisitante');
       rw_partido.estado               := l_partido.get_string('estado');
@@ -374,15 +374,15 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
                                            ELSE
                                             'P' --Pendiente
                                          END;
-
+    
       IF rw_partido.estado NOT IN ('F', 'S', 'P', 'J') THEN
         -- FINALIZADO O SUSPENDIDO O POSTERGADO
         rw_partido.goles_club_local     := NULL;
         rw_partido.goles_club_visitante := NULL;
       END IF;
-
+    
       rw_partido.descripcion := l_partido.get_string('etiqueta');
-
+    
       BEGIN
         IF rw_partido.id_jornada IS NOT NULL THEN
           --Inserta la jornada si no existe
@@ -396,7 +396,7 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
               NULL;
           END;
         END IF;
-
+      
         IF rw_partido.id_club_local IS NOT NULL THEN
           rw_partido.nombre_club_local := NULL;
           --Inserta el plantel local si no existe
@@ -428,7 +428,7 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
             END;
           END IF;
         END IF;
-
+      
         IF rw_partido.id_club_visitante IS NOT NULL THEN
           rw_partido.nombre_club_visitante := NULL;
           --Inserta el plantel visitante si no existe
@@ -460,7 +460,7 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
             END;
           END IF;
         END IF;
-
+      
         rw_partido2 := lf_buscar_partido(rw_partido.id_importacion);
         IF rw_partido2.id_partido IS NOT NULL THEN
           --Acutualiza si no fue Programado Manualmente y no fue Finalizado
@@ -533,7 +533,7 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
                                   rw_partido.id_importacion || ': ' ||
                                   SQLERRM);
       END;
-
+    
     END LOOP;
   END;
 
@@ -549,19 +549,19 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
       RETURN;
     END IF;
     lp_actualizar_importacion_partido('E');
-
+  
     -- obtenemos datos de importacion del torneo
     lp_datos_importacion_torneo(i_id_torneo         => i_id_torneo,
                                 o_url_base          => l_url_base,
                                 o_canal_importacion => l_canal_importacion);
-
+  
     IF l_url_base IS NOT NULL AND l_canal_importacion IS NOT NULL THEN
       -- obtenemos los datos a través del WS
       k_datos_fan.p_fixture(i_url_base          => l_url_base,
                             i_canal_importacion => l_canal_importacion,
                             o_ok                => l_ok,
                             o_response          => l_datos);
-
+    
       -- actualizamos la cabecera de los partidos
       IF l_ok = 'S' THEN
         /*
@@ -587,7 +587,7 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
     END IF;
     lp_actualizar_importacion_partido('D');
     COMMIT;
-
+  
   EXCEPTION
     WHEN OTHERS THEN
       ROLLBACK;
@@ -597,7 +597,7 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
   PROCEDURE p_importar_partido(i_id_partido IN VARCHAR2,
                                i_partido    IN CLOB) IS
     l_partido json_object_t;
-
+  
     l_id                   t_partidos.id_importacion%TYPE;
     l_goleslocal           t_partidos.goles_club_local%TYPE;
     l_golesvisitante       t_partidos.goles_club_visitante%TYPE;
@@ -618,22 +618,22 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
     dbms_output.put_line(i_partido);
     l_partido := json_object_t(i_partido);
     l_partido := l_partido.get_object('partido');
-
+  
     l_id := l_partido.get_number('id');
     --dbms_output.put_line('id:' || l_id);
-
+  
     l_goleslocal     := l_partido.get_number('golesLocal');
     l_golesvisitante := l_partido.get_number('golesVisitante');
     l_estado         := l_partido.get_string('estado');
     l_estado_juego   := l_partido.get_string('estadoDeJuego'); -- PT, ET, ST
     l_tiempo_juego   := l_partido.get_string('tiempoDeJuego'); -- 49:28
-
+  
     IF l_estado NOT IN ('F', 'S', 'P', 'J') THEN
       -- FINALIZADO O SUSPENDIDO O POSTERGADO
       l_goleslocal     := NULL;
       l_golesvisitante := NULL;
     END IF;
-
+  
     BEGIN
       rw_partido := lf_buscar_partido(l_id);
       IF rw_partido.id_partido IS NOT NULL AND
@@ -669,7 +669,7 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
             l_club_local     := NULL;
             l_club_visitante := NULL;
         END;
-
+      
         --Acutualiza si no fue Finalizado        
         IF NOT (rw_partido.estado = 'F') THEN
           UPDATE t_partidos p
@@ -680,7 +680,7 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
                  tiempo_juego         = l_tiempo_juego
            WHERE p.id_partido = rw_partido.id_partido;
         END IF;
-
+      
         $if k_modulo.c_instalado_msj $then
         -- Notifica la actualización en el resultado del partido en juego de forma silenciosa
         IF l_estado = 'J' AND l_club_local IS NOT NULL AND
@@ -701,9 +701,9 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
               l_tiempo_juego := NULL;
               l_tiempo_5_min := FALSE;
           END;
-
+        
           IF (nvl(l_goleslocal_antes, -1) <> nvl(l_goleslocal, -1)) OR
-
+            
              (nvl(l_golesvisitante_antes, -1) <> nvl(l_golesvisitante, -1)) OR
              (nvl(l_estado_juego_antes, 'X') <> nvl(l_estado_juego, 'X')) OR
              (nvl(l_tiempo_juego_antes, 'X') <> nvl(l_tiempo_juego, 'X') AND
@@ -729,7 +729,7 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
                   l_mensaje := '2T en Juego';
                 END IF;
               END IF;
-
+            
               l_json_object := NEW json_object_t();
               l_json_object.put('tipo', 'PARTIDO'); --TODO: convertir a constante
               l_json_object.put('identificador', rw_partido.id_partido);
@@ -737,7 +737,7 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
               l_json_object.put('dato1', rw_partido.id_club_local);
               l_json_object.put('dato2', rw_partido.id_club_visitante);
               l_json_object.put('dato3', rw_partido.id_torneo);
-
+            
               l_result := k_mensajeria.f_enviar_notificacion(i_titulo      => l_club_local || ' ' ||
                                                                               l_goleslocal ||
                                                                               ' - ' ||
@@ -763,7 +763,7 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
         dbms_output.put_line(l_id || ':' || SQLERRM);
         raise_application_error(-20000, l_id || ':' || SQLERRM);
     END;
-
+  
   END;
 
   PROCEDURE p_importar_partido(i_id_partido IN VARCHAR2) IS
@@ -778,19 +778,19 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
       RETURN;
     END IF;
     lp_actualizar_importacion_partido('E');
-
+  
     -- obtenemos datos de importacion del torneo
     lp_datos_importacion_torneo(i_id_torneo         => lf_id_torneo_partido(i_id_partido),
                                 o_url_base          => l_url_base,
                                 o_canal_importacion => l_canal_importacion);
-
+  
     -- obtenemos los datos a través del WS
     k_datos_fan.p_partido(i_url_base          => l_url_base,
                           i_canal_importacion => l_canal_importacion,
                           i_partido           => lf_id_importacion_partido(i_id_partido),
                           o_ok                => l_ok,
                           o_response          => l_datos);
-
+  
     -- actualizamos la cabecera de los partidos
     IF l_ok = 'S' THEN
       p_importar_partido(i_id_partido => NULL, i_partido => l_datos);
@@ -814,15 +814,13 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
           WHEN OTHERS THEN
             NULL;
         END;
-
+      
         -- Registra mensaje en el grupo de monitoreo
         l_contenido := substr('Error en Importación de Partido ' || '#' ||
                               i_id_partido || ' ' || l_descripcion ||
                               chr(10) || l_datos,
                               1,
                               2000);
-        /*
-        -- Comentado temporalmente para no llenar de mensajes el grupo
         BEGIN
           INSERT INTO t_grupo_mensajes a
             (id_grupo, id_usuario, contenido, ref_mensaje)
@@ -833,8 +831,7 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
             dbms_output.put_line('Error al registrar mensaje de error en k_datos_fan.p_partido. ' || '#' ||
                                  i_id_partido);
         END;
-        */
-
+      
         -- Envía correo de error inesperado
         $if k_modulo.c_instalado_msj $then
         /*IF k_mensajeria.f_enviar_correo(i_subject         => 'Error en Importación de Partido ' || '#' ||
@@ -857,7 +854,7 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
           l_json_object.put('nombre_grupo', l_des_grupo);
           l_json_object.put('usuario', k_usuario.f_alias(l_id_usu_envio));
           l_json_object.put('mensaje', l_contenido);
-
+        
           l_result := k_mensajeria.f_enviar_notificacion(i_titulo          => NULL,
                                                          i_contenido       => NULL,
                                                          i_datos_extra     => l_json_object.to_clob,
@@ -880,7 +877,7 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
     END IF;
     lp_actualizar_importacion_partido('D');
     COMMIT;
-
+  
   EXCEPTION
     WHEN OTHERS THEN
       ROLLBACK;
@@ -889,13 +886,13 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
 
   PROCEDURE p_guardar_escudos_partido(i_id_partido IN VARCHAR2) IS
     PRAGMA AUTONOMOUS_TRANSACTION;
-
+  
     CURSOR c_clubes(i_id_partido IN VARCHAR2) IS
       SELECT p.id_club_local, p.id_club_visitante
         FROM t_partidos p
        WHERE p.id_partido = i_id_partido;
   BEGIN
-
+  
     FOR c IN c_clubes(i_id_partido) LOOP
       DECLARE
         l_archivo   y_archivo;
@@ -911,24 +908,24 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
                                                    'ESCUDO',
                                                    c.id_club_local,
                                                    NULL);
-
+      
         -- Codifica en formato Base64
         l_escudo_local := k_util.base64encode(l_archivo.contenido);
         -- Elimina caracteres de nueva línea
         l_escudo_local := REPLACE(l_escudo_local, utl_tcp.crlf);
-
+      
         -- ***** ESCUDO CLUB VISITANTE *****
         -- Recupera el archivo
         l_archivo := k_archivo.f_recuperar_archivo('T_CLUBES',
                                                    'ESCUDO',
                                                    c.id_club_visitante,
                                                    NULL);
-
+      
         -- Codifica en formato Base64
         l_escudo_visitante := k_util.base64encode(l_archivo.contenido);
         -- Elimina caracteres de nueva línea
         l_escudo_visitante := REPLACE(l_escudo_visitante, utl_tcp.crlf);
-
+      
         -- Combina las imagenes
         k_imagenes_fan.p_combinar_imagenes(i_imagen_base      => l_escudo_visitante,
                                            i_imagen_cobertura => l_escudo_local,
@@ -943,21 +940,21 @@ CREATE OR REPLACE PACKAGE BODY k_importacion_fan IS
             i_archivo.extension := 'png';
             i_archivo.url       := '';
             i_archivo.contenido := k_util.base64decode(l_resultado);
-
+          
             k_archivo.p_guardar_archivo(i_tabla      => 'T_PARTIDOS',
                                         i_campo      => 'ESCUDOS',
                                         i_referencia => to_char(i_id_partido),
                                         i_archivo    => i_archivo);
           END;
-
+        
         ELSE
           --TODO: Manejar error inesperado
           dbms_output.put_line('Error: ' || l_resultado);
         END IF;
-
+      
       END;
     END LOOP;
-
+  
     COMMIT;
   END;
 

@@ -22,8 +22,10 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
+using System;
 using System.Collections.Generic;
 using Microsoft.Azure.NotificationHubs;
+using Newtonsoft.Json.Linq;
 using Risk.API.Models;
 using Risk.API.Services;
 
@@ -51,31 +53,7 @@ namespace Risk.API.Helpers
                 return;
             }
 
-            NotificationPlatform platform;
-            switch (dispositivo.PlataformaNotificacion)
-            {
-                case "wns":
-                    platform = NotificationPlatform.Wns;
-                    break;
-                case "apns":
-                    platform = NotificationPlatform.Apns;
-                    break;
-                case "mpns":
-                    platform = NotificationPlatform.Mpns;
-                    break;
-                case "fcm":
-                    platform = NotificationPlatform.Fcm;
-                    break;
-                case "adm":
-                    platform = NotificationPlatform.Adm;
-                    break;
-                case "baidu":
-                    platform = NotificationPlatform.Baidu;
-                    break;
-                default:
-                    platform = NotificationPlatform.Fcm;
-                    break;
-            }
+            NotificationPlatform platform = ObtenerPlataformaNotificacion(dispositivo.PlataformaNotificacion);
 
             List<string> tags = new List<string>();
             if (dispositivo.Suscripciones != null)
@@ -91,7 +69,7 @@ namespace Risk.API.Helpers
             {
                 foreach (var item in dispositivo.Plantillas)
                 {
-                    templates.Add(item.Nombre, new InstallationTemplate { Body = item.Contenido });
+                    templates.Add(item.Nombre, new InstallationTemplate { Body = ObtenerPlantilla(item.Contenido, platform) });
                 }
             }
 
@@ -106,6 +84,95 @@ namespace Risk.API.Helpers
             };
 
             notificationHubClientConnection.Hub.CreateOrUpdateInstallation(installation);
+        }
+
+        private static NotificationPlatform ObtenerPlataformaNotificacion(string plataformaNotificacion)
+        {
+            switch (plataformaNotificacion?.Trim().ToLowerInvariant())
+            {
+                case "wns":
+                    return NotificationPlatform.Wns;
+                case "apns":
+                    return NotificationPlatform.Apns;
+                case "mpns":
+                    return NotificationPlatform.Mpns;
+                case "adm":
+                    return NotificationPlatform.Adm;
+                case "baidu":
+                    return NotificationPlatform.Baidu;
+                case "gcm":
+                case "fcm-legacy":
+                case "fcm_legacy":
+                    return NotificationPlatform.Fcm;
+                case "fcm":
+                case "fcmv1":
+                case "fcm-v1":
+                case "fcm_v1":
+                default:
+                    return NotificationPlatform.FcmV1;
+            }
+        }
+
+        private static string ObtenerPlantilla(string plantilla, NotificationPlatform platform)
+        {
+            if (platform != NotificationPlatform.FcmV1 || string.IsNullOrWhiteSpace(plantilla))
+            {
+                return plantilla;
+            }
+
+            try
+            {
+                JObject json = JObject.Parse(plantilla);
+                if (json["message"] != null)
+                {
+                    return plantilla;
+                }
+
+                JObject message = new JObject();
+                if (json["notification"] != null)
+                {
+                    message["notification"] = json["notification"];
+                }
+
+                if (json["data"] != null)
+                {
+                    message["data"] = NormalizarDataFcmV1(json["data"]);
+                }
+
+                if (json["android"] != null)
+                {
+                    message["android"] = json["android"];
+                }
+
+                if (!message.HasValues)
+                {
+                    return plantilla;
+                }
+
+                return new JObject { ["message"] = message }.ToString(Newtonsoft.Json.Formatting.None);
+            }
+            catch
+            {
+                return plantilla;
+            }
+        }
+
+        private static JObject NormalizarDataFcmV1(JToken data)
+        {
+            JObject dataNormalizada = new JObject();
+            if (data is not JObject dataObject)
+            {
+                return dataNormalizada;
+            }
+
+            foreach (var property in dataObject.Properties())
+            {
+                dataNormalizada[property.Name] = property.Value.Type == JTokenType.String
+                    ? property.Value
+                    : property.Value.ToString(Newtonsoft.Json.Formatting.None);
+            }
+
+            return dataNormalizada;
         }
     }
 }

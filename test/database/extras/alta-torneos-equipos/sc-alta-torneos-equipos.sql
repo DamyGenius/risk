@@ -1,6 +1,6 @@
 --https://sportsdemo.co/html/v3/index.html?channel=deportes.futbol.eliminatorias&lang=es_LA
 
-select a.*, a.rowid from t_divisiones a
+select a.id_importacion_torneo, a.desc_importacion_torneo, a.*, a.rowid from t_divisiones a
 where a.id_division = nvl('&id_division',a.id_division)
 ;
 select a.*, a.rowid from t_torneos a
@@ -9,11 +9,13 @@ order by a.temporada desc, a.titulo desc
 ;
 -- para aumentar version de servicios
 select a.*, a.rowid from t_operaciones a
-where a.id_operacion in (73,74)
+--where a.id_operacion in (73,74) --divisiones y torneos
+where a.id_operacion in (40) --clubes
 order by a.id_operacion
 ;
 select a.*, a.rowid from t_operacion_parametros a
-where a.id_operacion in (73,74)
+--where a.id_operacion in (73,74) --divisiones y torneos
+where a.id_operacion in (40) --clubes
 order by a.id_operacion,a.orden
 ;
 select a.*, a.rowid from t_partidos a
@@ -25,6 +27,7 @@ select a.*, a.rowid from t_importador_urls a
 select a.*, a.rowid from t_trabajos a
 ;
 --select a.*, a.rowid from t_monitoreos a
+--K_PUNTAJES_FAN.P_ACTUALIZAR_PARTIDOS;
 SELECT b.id_division,
        b.descripcion,
        upper(a.desc_importacion) torneo_baja,
@@ -41,6 +44,7 @@ SELECT b.id_division,
 SELECT b.id_torneo, b.titulo, COUNT(1) cantidad_partidos
   FROM t_partidos a, t_torneos b
  WHERE a.id_torneo = b.id_torneo
+   AND b.actual = 'S'
    AND ((a.id_club_local IS NULL AND
        (a.nombre_club_local IS NULL OR EXISTS
         (SELECT 1
@@ -65,6 +69,7 @@ select a.*, a.rowid from t_equipos_tmp a
 order by a.id_division, a.nombre_corto
 ;
 select a.id_club,a.nombre_oficial,a.id_division,a.nombre_corto,a.id_importacion,a.id_pais,a.tipo, a.rowid from t_clubes a
+--where upper( a.nombre_corto) like '%IND%'
 where a.id_club='COR'
 --where a.tipo='S'
 ;

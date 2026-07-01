@@ -22,15 +22,49 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-using Swashbuckle.AspNetCore.Annotations;
+spool install.log
 
-namespace Risk.API.Models
-{
-    public class RefrescarSesionFacebookRequestBody
-    {
-        [SwaggerSchema("Token de acceso")]
-        public string AccessToken { get; set; }
-        [SwaggerSchema("Token de refresco")]
-        public string RefreshToken { get; set; }
-    }
-}
+set feedback off
+set define off
+
+prompt ###################################
+prompt #   _____   _____   _____  _  __  #
+prompt #  |  __ \ |_   _| / ____|| |/ /  #
+prompt #  | |__) |  | |  | (___  | ' /   #
+prompt #  |  _  /   | |   \___ \ |  <    #
+prompt #  | | \ \  _| |_  ____) || . \   #
+prompt #  |_|  \_\|_____||_____/ |_|\_\  #
+prompt #                                 #
+prompt #          Proyecto RISK          #
+prompt #            jtsoya539            #
+prompt ###################################
+
+prompt
+prompt ===================================
+prompt Migracion iniciada
+prompt ===================================
+prompt
+
+prompt
+prompt Ejecutando migracion...
+prompt -----------------------------------
+prompt
+@@k_datos_fan.pck
+@@k_importacion_fan.pck
+@@upd_t_importador_urls.sql
+
+prompt
+prompt Registrando migracion...
+prompt -----------------------------------
+prompt
+@@ins_t_migraciones.sql
+commit;
+/
+
+prompt
+prompt ===================================
+prompt Migracion finalizada
+prompt ===================================
+prompt
+
+spool off
