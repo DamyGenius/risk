@@ -32,6 +32,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Risk.API.Models;
 using Risk.API.Services;
@@ -45,6 +46,9 @@ namespace Risk.API.Helpers
     public static class TokenHelper
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+        private static readonly HttpClient HttpClient = new HttpClient();
+        private const string AppleIssuer = "https://appleid.apple.com";
+        private const string AppleJwksUrl = "https://appleid.apple.com/auth/keys";
 
         public static string GenerarAccessToken(string usuario, IAutService autService, IGenService genService)
         {
@@ -297,6 +301,138 @@ namespace Risk.API.Helpers
             }
 
             return usuario;
+        }
+
+        public static async Task<UsuarioExterno> ObtenerUsuarioDeTokenAppleAsync(string identityToken, string nombre, string apellido, string direccionCorreo, IGenService genService, IConfiguration configuration)
+        {
+            var audienciasValidas = ObtenerValoresParametroApple(genService, "APPLE_IDENTIFICADOR_CLIENTE");
+            if (!audienciasValidas.Any())
+            {
+                audienciasValidas = ObtenerValoresConfiguracionApple(configuration, "AppleSignIn:Audiences", "APPLE_IDENTIFICADOR_CLIENTE");
+            }
+
+            if (!audienciasValidas.Any())
+                throw new RiskApiException("Cliente de Apple no configurado.");
+
+            var issuer = ObtenerValoresConfiguracionApple(configuration, "AppleSignIn:Issuer", "APPLE_EMISOR_TOKEN").FirstOrDefault() ?? AppleIssuer;
+            var jwksUrl = ObtenerValoresConfiguracionApple(configuration, "AppleSignIn:JwksUrl", "APPLE_JWKS_URL").FirstOrDefault() ?? AppleJwksUrl;
+            var validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidIssuer = issuer,
+                ValidateAudience = true,
+                ValidAudiences = audienciasValidas,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.FromMinutes(5),
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKeys = await ObtenerLlavesAppleAsync(jwksUrl),
+                ValidAlgorithms = new[] { SecurityAlgorithms.RsaSha256 }
+            };
+
+            JwtSecurityToken jwtToken;
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                tokenHandler.ValidateToken(identityToken, validationParameters, out SecurityToken validatedToken);
+                jwtToken = validatedToken as JwtSecurityToken;
+            }
+            catch (SecurityTokenExpiredException e)
+            {
+                throw new RiskApiException("Sesión de Apple expirada. Inicie sesión nuevamente.", e);
+            }
+            catch (SecurityTokenException e)
+            {
+                throw new RiskApiException("Token de Apple no válido.", e);
+            }
+            catch (Exception e)
+            {
+                throw new RiskApiException("No se pudo validar el token de Apple.", e);
+            }
+
+            if (jwtToken == null)
+                throw new RiskApiException("Token de Apple no válido.");
+
+            string idExterno = ObtenerClaimApple(jwtToken, JwtRegisteredClaimNames.Sub);
+            if (string.IsNullOrWhiteSpace(idExterno))
+                throw new RiskApiException("Token de Apple no válido.");
+
+            string emailToken = ObtenerClaimApple(jwtToken, JwtRegisteredClaimNames.Email);
+            string email = !string.IsNullOrWhiteSpace(emailToken) ? emailToken : direccionCorreo;
+
+            return new UsuarioExterno
+            {
+                Alias = ObtenerAliasUsuarioApple(email, idExterno),
+                Nombre = string.IsNullOrWhiteSpace(nombre) ? "Usuario" : nombre,
+                Apellido = string.IsNullOrWhiteSpace(apellido) ? "Apple" : apellido,
+                DireccionCorreo = email,
+                Origen = OrigenSesion.Apple,
+                IdExterno = idExterno
+            };
+        }
+
+        private static async Task<IEnumerable<SecurityKey>> ObtenerLlavesAppleAsync(string jwksUrl)
+        {
+            string jwks = await HttpClient.GetStringAsync(jwksUrl);
+            return new JsonWebKeySet(jwks).Keys;
+        }
+
+        private static IEnumerable<string> ObtenerValoresParametroApple(IGenService genService, string parametro)
+        {
+            var respValorCliente = genService.ValorParametro(parametro);
+            if (!respValorCliente.Codigo.Equals(RiskConstants.CODIGO_OK))
+            {
+                return Enumerable.Empty<string>();
+            }
+
+            return SepararValoresConfiguracion(respValorCliente.Datos.Contenido).ToList();
+        }
+
+        private static IEnumerable<string> ObtenerValoresConfiguracionApple(IConfiguration configuration, string configurationKey, string environmentKey)
+        {
+            string configurationValue = configuration?[configurationKey];
+            if (string.IsNullOrWhiteSpace(configurationValue))
+            {
+                configurationValue = Environment.GetEnvironmentVariable(environmentKey);
+            }
+
+            return SepararValoresConfiguracion(configurationValue);
+        }
+
+        private static IEnumerable<string> SepararValoresConfiguracion(string value)
+        {
+            return (value ?? string.Empty)
+                .Split(new[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(item => item.Trim())
+                .Where(item => !string.IsNullOrEmpty(item));
+        }
+
+        private static string ObtenerClaimApple(JwtSecurityToken jwtToken, string claim)
+        {
+            if (jwtToken.Payload.TryGetValue(claim, out object value))
+            {
+                return value?.ToString();
+            }
+
+            return null;
+        }
+
+        private static string ObtenerAliasUsuarioApple(string email, string idExterno)
+        {
+            if (!string.IsNullOrWhiteSpace(email))
+            {
+                try
+                {
+                    MailAddress addr = new MailAddress(email);
+                    return addr.User;
+                }
+                catch (FormatException)
+                {
+                    Logger.Warn("Correo de Apple no válido para generar alias.");
+                }
+            }
+
+            string idNormalizado = new string(idExterno.Where(char.IsLetterOrDigit).Take(24).ToArray()).ToLower();
+            return $"apple_{idNormalizado}";
         }
     }
 }

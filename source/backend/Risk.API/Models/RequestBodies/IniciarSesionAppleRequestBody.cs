@@ -22,21 +22,21 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-using Risk.API.Attributes;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Risk.API.Models
 {
-    [SwaggerSchema("Origen de Sesión")]
-    public enum OrigenSesion
+    public class IniciarSesionAppleRequestBody
     {
-        [StringValue("R")]
-        Risk,
-        [StringValue("G")]
-        Google,
-        [StringValue("F")]
-        Facebook,
-        [StringValue("A")]
-        Apple
+        [SwaggerSchema("Identity Token de Apple")]
+        public string IdentityToken { get; set; }
+        [SwaggerSchema("Nombre recibido desde Apple")]
+        public string Nombre { get; set; }
+        [SwaggerSchema("Apellido recibido desde Apple")]
+        public string Apellido { get; set; }
+        [SwaggerSchema("Correo recibido desde Apple")]
+        public string DireccionCorreo { get; set; }
+        [SwaggerSchema("Token del dispositivo")]
+        public string TokenDispositivo { get; set; }
     }
 }
