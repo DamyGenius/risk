@@ -22,21 +22,15 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-using Risk.API.Attributes;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Risk.API.Models
 {
-    [SwaggerSchema("Origen de Sesión")]
-    public enum OrigenSesion
+    public class RefrescarSesionAppleRequestBody
     {
-        [StringValue("R")]
-        Risk,
-        [StringValue("G")]
-        Google,
-        [StringValue("F")]
-        Facebook,
-        [StringValue("A")]
-        Apple
+        [SwaggerSchema("Token de acceso")]
+        public string AccessToken { get; set; }
+        [SwaggerSchema("Token de refresco")]
+        public string RefreshToken { get; set; }
     }
 }

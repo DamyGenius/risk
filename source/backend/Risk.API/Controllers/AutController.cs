@@ -500,6 +500,53 @@ namespace Risk.API.Controllers
             return ProcesarRespuesta(respuesta);
         }
 
+        [AllowAnonymous]
+        [HttpPost("IniciarSesionApple")]
+        [SwaggerOperation(OperationId = "IniciarSesionApple", Summary = "IniciarSesionApple", Description = "Permite iniciar la sesión de un usuario con su cuenta de Apple")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Sesion>))]
+        public async Task<IActionResult> IniciarSesionApple([FromBody] IniciarSesionAppleRequestBody requestBody)
+        {
+            UsuarioExterno usuario = await TokenHelper.ObtenerUsuarioDeTokenAppleAsync(requestBody.IdentityToken, requestBody.Nombre, requestBody.Apellido, requestBody.DireccionCorreo, _genService, _configuration);
+
+            var respRegistrarUsuario = _autService.RegistrarUsuario(usuario.Alias, null, usuario.Nombre, usuario.Apellido, usuario.DireccionCorreo, null, null, usuario.Origen, usuario.IdExterno);
+
+            if (!respRegistrarUsuario.Codigo.Equals(RiskConstants.CODIGO_OK) && !respRegistrarUsuario.Codigo.Equals(RiskConstants.CODIGO_ERROR_USUARIO_EXTERNO_EXISTENTE))
+            {
+                return ProcesarRespuesta(respRegistrarUsuario);
+            }
+
+            var accessToken = TokenHelper.GenerarAccessToken(respRegistrarUsuario.Datos.Contenido, _autService, _genService);
+            var refreshToken = TokenHelper.GenerarRefreshToken();
+
+            var respIniciarSesion = _autService.IniciarSesion(respRegistrarUsuario.Datos.Contenido, accessToken, refreshToken, requestBody.TokenDispositivo, usuario.Origen, requestBody.IdentityToken);
+
+            if (respIniciarSesion.Codigo.Equals(RiskConstants.CODIGO_OK))
+            {
+                NotificationHubHelper.RegistrarDispositivo(requestBody.TokenDispositivo, _autService, _notificationHubClientConnection);
+            }
+
+            return ProcesarRespuesta(respIniciarSesion);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("RefrescarSesionApple")]
+        [SwaggerOperation(OperationId = "RefrescarSesionApple", Summary = "RefrescarSesionApple", Description = "Permite refrescar la sesión de un usuario con su cuenta de Apple")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Operación exitosa", typeof(Respuesta<Sesion>))]
+        public IActionResult RefrescarSesionApple([FromBody] RefrescarSesionAppleRequestBody requestBody)
+        {
+            string aliasUsuario = TokenHelper.ObtenerUsuarioDeAccessToken(requestBody.AccessToken);
+
+            var accessTokenNuevo = TokenHelper.GenerarAccessToken(aliasUsuario, _autService, _genService);
+            var refreshTokenNuevo = TokenHelper.GenerarRefreshToken();
+
+            var respuesta = _autService.RefrescarSesion(requestBody.AccessToken, requestBody.RefreshToken, accessTokenNuevo, refreshTokenNuevo, OrigenSesion.Apple);
+            return ProcesarRespuesta(respuesta);
+        }
+
         [HttpPost("BloquearUsuario")]
         [SwaggerOperation(OperationId = "BloquearUsuario", Summary = "BloquearUsuario", Description = "Permite bloquear a un usuario")]
         [Produces(MediaTypeNames.Application.Json)]
