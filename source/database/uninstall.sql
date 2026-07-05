@@ -66,6 +66,7 @@ prompt
 drop package k_monitoreo_fan;
 drop package k_puntajes_fan;
 drop package k_importacion_fan;
+drop package k_open_ai_fan;
 drop package k_imagenes_fan;
 drop package k_datos_fan;
 drop package k_servicio_fan;

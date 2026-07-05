@@ -20,7 +20,9 @@ create table T_PARTIDOS
   id_grupo              NUMBER(3),
   descripcion           VARCHAR2(50),
   nombre_club_local     VARCHAR2(100),
-  nombre_club_visitante VARCHAR2(100)
+  nombre_club_visitante VARCHAR2(100),
+  contexto_previo       CLOB,
+  fecha_ultimo_contexto TIMESTAMP(0) WITH TIME ZONE
 )
 ;
 comment on table T_PARTIDOS
@@ -45,6 +47,10 @@ comment on column T_PARTIDOS.nombre_club_local
   is 'Nombre del club local';
 comment on column T_PARTIDOS.nombre_club_visitante
   is 'Nombre del club visitante';
+comment on column T_PARTIDOS.contexto_previo
+  is 'Contexto previo del partido generado por IA';
+comment on column T_PARTIDOS.fecha_ultimo_contexto
+  is 'Fecha de ultima consulta del contexto previo';
 alter table T_PARTIDOS
   add constraint PK_PARTIDOS primary key (ID_PARTIDO);
 alter table T_PARTIDOS
@@ -65,4 +71,3 @@ alter table T_PARTIDOS
 alter table T_PARTIDOS
   add constraint FK_PARTIDOS_TORNEO_JORNADAS foreign key (ID_TORNEO, ID_JORNADA)
   references T_TORNEO_JORNADAS (ID_TORNEO, ID_JORNADA);
-
