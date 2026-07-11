@@ -69,6 +69,7 @@ prompt
 @@sequences/s_id_dispositivo.seq
 
 @@sequences/s_id_partido.seq
+@@sequences/s_id_partido_incidencia.seq
 @@sequences/s_id_grupo.seq
 @@sequences/s_id_grupo_mensaje.seq
 @@sequences/s_id_amistad.seq
@@ -131,6 +132,7 @@ prompt
 @@tables/t_torneo_grupos.tab
 @@tables/t_torneo_jornadas.tab
 @@tables/t_partidos.tab
+@@tables/t_partido_incidencias.tab
 @@tables/t_predicciones.tab
 @@tables/t_grupos.tab
 @@tables/t_grupo_torneos.tab
@@ -264,6 +266,7 @@ prompt
 
 @@triggers/gf_planteles.trg
 @@triggers/gs_partidos.trg
+@@triggers/gs_partido_incidencias.trg
 @@triggers/gs_grupos.trg
 @@triggers/gs_grupo_mensajes.trg
 @@triggers/gs_amigos.trg

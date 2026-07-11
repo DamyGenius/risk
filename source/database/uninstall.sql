@@ -155,6 +155,7 @@ drop table t_grupo_usuarios cascade constraints;
 drop table t_grupo_torneos cascade constraints;
 drop table t_grupos cascade constraints;
 drop table t_predicciones cascade constraints;
+drop table t_partido_incidencias cascade constraints;
 drop table t_partidos cascade constraints;
 drop table t_torneo_jornadas cascade constraints;
 drop table t_torneo_grupos cascade constraints;
@@ -217,6 +218,7 @@ drop sequence s_id_amistad_mensaje;
 drop sequence s_id_amistad;
 drop sequence s_id_grupo_mensaje;
 drop sequence s_id_grupo;
+drop sequence s_id_partido_incidencia;
 drop sequence s_id_partido;
 
 drop sequence s_id_pais;

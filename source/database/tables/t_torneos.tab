@@ -13,7 +13,9 @@ create table T_TORNEOS
   importado                VARCHAR2(1) default 'N',
   fecha_ultima_importacion TIMESTAMP(0) WITH TIME ZONE,
   id_importacion           NUMBER(15),
-  desc_importacion         VARCHAR2(200)
+  desc_importacion         VARCHAR2(200),
+  incluir_alineaciones     VARCHAR2(1) default 'N' not null,
+  incluir_incidencias      VARCHAR2(1) default 'N' not null
 )
 ;
 comment on table T_TORNEOS
@@ -32,6 +34,10 @@ comment on column T_TORNEOS.id_importacion
   is 'Identificador del torneo importado.';
 comment on column T_TORNEOS.desc_importacion
   is 'Descripción del torneo importado.';
+comment on column T_TORNEOS.incluir_alineaciones
+  is '¿El torneo incluye alineaciones del partido en el proceso de importación? (S/N)';
+comment on column T_TORNEOS.incluir_incidencias
+  is '¿El torneo incluye incidencias del partido en el proceso de importación? (S/N)';
 alter table T_TORNEOS
   add constraint PK_TORNEOS primary key (ID_TORNEO);
 alter table T_TORNEOS

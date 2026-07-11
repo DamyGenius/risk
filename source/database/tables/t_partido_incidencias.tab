@@ -1,0 +1,61 @@
+create table T_PARTIDO_INCIDENCIAS
+(
+  id_partido_incidencia NUMBER(15) not null,
+  id_partido            NUMBER(10) not null,
+  orden                 NUMBER(3),
+  local_visitante       VARCHAR2(1) not null,
+  periodo               VARCHAR2(3) not null,
+  tiempo                VARCHAR2(10),
+  incidencia            VARCHAR2(50),
+  detalle               VARCHAR2(100),
+  jugador_sale          VARCHAR2(100),
+  jugador_entra         VARCHAR2(100),
+  id_importacion        NUMBER(15) not null,
+  notificado            VARCHAR2(1) default 'N' not null,
+  anulado               VARCHAR2(1) default 'N' not null
+)
+;
+comment on table T_PARTIDO_INCIDENCIAS
+  is 'Incidencias de partidos';
+comment on column T_PARTIDO_INCIDENCIAS.id_partido_incidencia
+  is 'Identificador de la incidencia del partido';
+comment on column T_PARTIDO_INCIDENCIAS.id_partido
+  is 'Identificador del partido';
+comment on column T_PARTIDO_INCIDENCIAS.orden
+  is 'Orden cronologico de la incidencia dentro del partido';
+comment on column T_PARTIDO_INCIDENCIAS.local_visitante
+  is 'L - Local, V - Visitante';
+comment on column T_PARTIDO_INCIDENCIAS.periodo
+  is 'Periodo de juego.';
+comment on column T_PARTIDO_INCIDENCIAS.tiempo
+  is 'Tiempo de juego.';
+comment on column T_PARTIDO_INCIDENCIAS.incidencia
+  is 'Descripcion de la incidencia';
+comment on column T_PARTIDO_INCIDENCIAS.detalle
+  is 'Detalle relacionado a la incidencia';
+comment on column T_PARTIDO_INCIDENCIAS.jugador_sale
+  is 'Jugador que sale en una sustitucion';
+comment on column T_PARTIDO_INCIDENCIAS.jugador_entra
+  is 'Jugador que entra en una sustitucion';
+comment on column T_PARTIDO_INCIDENCIAS.id_importacion
+  is 'Identificador externo de la incidencia importada';
+comment on column T_PARTIDO_INCIDENCIAS.notificado
+  is 'Indica si la incidencia ya fue notificada (S/N)';
+comment on column T_PARTIDO_INCIDENCIAS.anulado
+  is 'Indica si la incidencia fue anulada (S/N)';
+alter table T_PARTIDO_INCIDENCIAS
+  add constraint PK_PARTIDO_INCIDENCIAS primary key (ID_PARTIDO_INCIDENCIA);
+alter table T_PARTIDO_INCIDENCIAS
+  add constraint UK_PAR_INC_ID_PAR_ID_IMP unique (ID_PARTIDO, ID_IMPORTACION);
+alter table T_PARTIDO_INCIDENCIAS
+  add constraint FK_PAR_INC_PARTIDOS foreign key (ID_PARTIDO)
+  references T_PARTIDOS (ID_PARTIDO);
+alter table T_PARTIDO_INCIDENCIAS
+  add constraint CK_PAR_INC_LOCAL_VISITANTE
+  check (LOCAL_VISITANTE IN ('L', 'V'));
+alter table T_PARTIDO_INCIDENCIAS
+  add constraint CK_PAR_INC_NOTIFICADO
+  check (NOTIFICADO IN ('S', 'N'));
+alter table T_PARTIDO_INCIDENCIAS
+  add constraint CK_PAR_INC_ANULADO
+  check (ANULADO IN ('S', 'N'));
