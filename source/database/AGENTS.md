@@ -1,6 +1,7 @@
 # Database Folder Instructions
 
 - Treat SQL and PL/SQL files under this folder as Windows-1252 / ANSI by default.
+- Use Windows line endings (CRLF) for database files.
 - Preserve the existing encoding of any file being edited. Do not silently convert legacy ANSI files to UTF-8.
 - For new database scripts and migrations, prefer Windows-1252 / ANSI. ASCII-only content is acceptable because it is compatible with Windows-1252.
 - Avoid accented characters in new migration text unless they are needed; if used, save them as Windows-1252.
@@ -10,3 +11,15 @@
 - Foreign keys use FK_<MAIN_TABLE_WITHOUT_T_PREFIX>_<REFERENCED_TABLE_WITHOUT_T_PREFIX>.
 - Unique keys use UK_<TABLE_WITHOUT_T_PREFIX>_<RELATED_FIELD(S)>.
 - Check constraints use CK_<TABLE_WITHOUT_T_PREFIX>_<RELATED_FIELD(S)>. If the name exceeds the Oracle limit, abbreviate the table name with the first three characters of each word, starting with the first word; for example T_PARTIDO_INCIDENCIAS becomes PAR_INC.
+- Database migrations live under `database/migrations/mig_######`.
+- A migration folder normally includes `install.sql` and `ins_t_migraciones.sql`.
+- `install.sql` should execute migration scripts first, then `ins_t_migraciones.sql`, then `commit;` and `/`.
+- When a migration creates or changes schema objects, keep the master schema files in sync:
+  - Tables: `database/tables`.
+  - Sequences: `database/sequences`.
+  - Triggers: `database/triggers`.
+  - Packages: `database/packages`.
+- When a migration changes an existing package, edit the master file in `database/packages` first, then copy that master version into the migration folder.
+- For clean installs, update `database/install.sql` when adding master sequences, tables, triggers, packages, views, procedures, or scripts.
+- For dropped objects or new objects that need uninstall support, update `database/uninstall.sql`.
+- Preserve unrelated files and user changes. If a file already has local changes, inspect and work with them instead of reverting.
