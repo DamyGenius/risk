@@ -1,0 +1,3 @@
+prompt Ampliando campo VALOR de T_PARAMETROS...
+alter table T_PARAMETROS modify valor VARCHAR2(4000);
+prompt Done.

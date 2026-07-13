@@ -1,0 +1,3 @@
+prompt Ampliando campo ID_EXTERNO de T_USUARIOS...
+alter table T_USUARIOS modify id_externo VARCHAR2(500);
+prompt Done.

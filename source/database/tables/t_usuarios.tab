@@ -7,7 +7,7 @@ create table T_USUARIOS
   direccion_correo VARCHAR2(320),
   numero_telefono  VARCHAR2(160),
   origen           VARCHAR2(1),
-  id_externo       VARCHAR2(160),
+  id_externo       VARCHAR2(500),
   fecha_creacion   DATE,
   prueba           VARCHAR2(1) default 'N'
 )
