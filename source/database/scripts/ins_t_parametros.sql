@@ -42,7 +42,7 @@ insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR, ID_DOMINIO)
 values ('URL_DATOS_SERVICIOS', 'URL base de los Servicios de Datos de Fantasy', 'https://www.rama.com.py/proyecto-ne-wsdatos', null);
 
 insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR, ID_DOMINIO)
-values ('URL_IMAGENES_SERVICIOS', 'URL base de los Servicios de Imágenes de Fantasy', 'https://www.rama.com.py/proyecto-ne-img', null);
+values ('URL_IMAGENES_SERVICIOS', 'URL base de los Servicios de Imágenes de Fantasy', 'https://www.retosports.com.py/proyecto-ne-img', null);
 
 insert into t_parametros (ID_PARAMETRO, DESCRIPCION, VALOR, ID_DOMINIO)
 values ('PAGINACION_CANTIDAD_DEFECTO_POR_PAGINA', 'Cantidad por defecto de elementos por página en paginación de listas', '30', null);
