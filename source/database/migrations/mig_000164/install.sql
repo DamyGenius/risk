@@ -22,15 +22,49 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 */
 
-@@dependencies/as_pdf3_4.txt
-@@dependencies/as_xlsx18.txt
-@@dependencies/as_zip10.txt
-@@dependencies/csv.sql
-@@dependencies/oos_util_totp.pks
-@@dependencies/oos_util_totp.pkb
-@@dependencies/ZT_QR.pks
-@@dependencies/ZT_QR.pkb
-@@dependencies/ZT_WORD.pks
-@@dependencies/ZT_WORD.pkb
-@@dependencies/fn_gen_inserts.sql
-@@dependencies/create_console_objects.sql
+spool install.log
+
+set feedback off
+set define off
+
+prompt ###################################
+prompt #   _____   _____   _____  _  __  #
+prompt #  |  __ \ |_   _| / ____|| |/ /  #
+prompt #  | |__) |  | |  | (___  | ' /   #
+prompt #  |  _  /   | |   \___ \ |  <    #
+prompt #  | | \ \  _| |_  ____) || . \   #
+prompt #  |_|  \_\|_____||_____/ |_|\_\  #
+prompt #                                 #
+prompt #          Proyecto RISK          #
+prompt #            jtsoya539            #
+prompt ###################################
+
+prompt
+prompt ===================================
+prompt Migracion iniciada
+prompt ===================================
+prompt
+
+prompt
+prompt Ejecutando migracion...
+prompt -----------------------------------
+prompt
+@@create_console_objects.sql
+@@k_imagenes_fan.pck
+@@compile_schema.sql
+
+prompt
+prompt Registrando migracion...
+prompt -----------------------------------
+prompt
+@@ins_t_migraciones.sql
+commit;
+/
+
+prompt
+prompt ===================================
+prompt Migracion finalizada
+prompt ===================================
+prompt
+
+spool off
