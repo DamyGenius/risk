@@ -233,6 +233,7 @@ prompt Creando vistas...
 prompt -----------------------------------
 prompt
 @@views/v_monitoreo_datos.sql
+@@views/v_operacion_logs.sql
 @@views/v_ranking_usuarios.sql
 
 prompt

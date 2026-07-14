@@ -100,6 +100,7 @@ prompt
 prompt Generando docs de vistas...
 prompt -----------------------------------
 prompt
+plugin plsqldoc generate v_operacion_logs;
 
 prompt
 prompt Generando docs de types...

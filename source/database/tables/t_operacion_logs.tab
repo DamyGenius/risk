@@ -1,11 +1,14 @@
 create table T_OPERACION_LOGS
 (
-  id_operacion_log NUMBER not null,
-  id_operacion     NUMBER,
-  contexto         CLOB,
-  version          VARCHAR2(100),
-  parametros       CLOB,
-  respuesta        CLOB
+  id_operacion_log  NUMBER not null,
+  id_operacion      NUMBER,
+  contexto          CLOB,
+  version           VARCHAR2(100),
+  parametros        CLOB,
+  respuesta         CLOB,
+  fecha_hora_inicio TIMESTAMP(2) WITH TIME ZONE,
+  fecha_hora_fin    TIMESTAMP(2) WITH TIME ZONE,
+  duracion          INTERVAL DAY(3) TO SECOND(2)
 )
 ;
 comment on table T_OPERACION_LOGS
@@ -22,6 +25,12 @@ comment on column T_OPERACION_LOGS.parametros
   is 'Parámetros recibidos';
 comment on column T_OPERACION_LOGS.respuesta
   is 'Respuesta enviada';
+comment on column T_OPERACION_LOGS.fecha_hora_inicio
+  is 'Fecha/hora de inicio de la ejecución de la operación';
+comment on column T_OPERACION_LOGS.fecha_hora_fin
+  is 'Fecha/hora de fin de la ejecución de la operación';
+comment on column T_OPERACION_LOGS.duracion
+  is 'Duración de la ejecución de la operación';
 alter table T_OPERACION_LOGS
   add constraint PK_OPERACION_LOGS primary key (ID_OPERACION_LOG);
 alter table T_OPERACION_LOGS

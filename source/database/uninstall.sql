@@ -57,6 +57,7 @@ prompt Borrando vistas...
 prompt -----------------------------------
 prompt
 drop view v_ranking_usuarios;
+drop view v_operacion_logs;
 drop view v_monitoreo_datos;
 
 prompt
